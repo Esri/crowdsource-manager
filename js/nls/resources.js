@@ -14,10 +14,35 @@
  | See the License for the specific language governing permissions and
  | limitations under the License.
  */
+//Lbl-Label, Txt-Text, Err-Error, Msg-Message
 define({
     root: ({
         map: {
             error: "Unable to create map"
+        },
+        main: {
+            anonymousUserName: "Anonymous"
+        },
+        mapViewer: {
+            locationBtnLbl: "Location",
+            detailsBtnLbl: "Details"
+        },
+        webMapList: {
+            owner: "Owner",
+            created: "Created",
+            modified: "Modified",
+            description: "Description",
+            snippet: "Summary",
+            licenseInfo: "Access and use constraints",
+            accessInformation: "Credits",
+            tags: "Tags",
+            numViews: "Number of views",
+            avgRating: "Rating",
+            noWebMapInGroup: "No maps found"
+        },
+        applicationHeader: {
+            signOutOption: "Sign Out",
+            pleaseSignInText: "Please Sign in"
         }
     }),
     "fr": 1

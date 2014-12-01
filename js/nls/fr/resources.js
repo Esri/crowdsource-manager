@@ -16,6 +16,30 @@
  */
 define(({
     map: {
-        error: "Impossible de créer la carte"
+        error: "@fr@ Impossible de créer la carte"
+    },
+    main: {
+        anonymousUserName: "@fr@ Anonymous"
+    },
+    mapViewer: {
+        locationBtnLbl: "@fr@ Location",
+        detailsBtnLbl: "@fr@ Details"
+    },
+    webMapList: {
+        owner: "@fr@ Owner",
+        created: "@fr@ Created",
+        modified: "@fr@ Modified",
+        description: "@fr@ Description",
+        snippet: "@fr@ Summary",
+        licenseInfo: "@fr@ Access and use constraints",
+        accessInformation: "@fr@ Credits",
+        tags: "@fr@ Tags",
+        numViews: "@fr@ Number of views",
+        avgRating: "@fr@ Rating",
+        noWebMapInGroup: "@fr@ No maps found"
+    },
+    applicationHeader: {
+        signOutOption: "@fr@ Sign Out",
+        pleaseSignInText: "@fr@ Please Sign in"
     }
 }));
