@@ -1,9 +1,8 @@
 ﻿<div data-dojo-attach-point="applicationHeaderParentContainer">
-    <div class="esriCTApplicationHeader esriCTBorderBottom">
+    <div class="esriCTApplicationHeader esriCTBorderBottom esriCTBGColor">
         <div class="esriCTheaderLeft">
             <div class="esriCTHomeIcon">
-                <img data-dojo-attach-point="applicationHeaderIcon" class="esriCTApplicationIcon"
-                    alt="Logo" title="Logo" />
+                <img data-dojo-attach-point="applicationHeaderIcon" class="esriCTApplicationIcon" alt="Logo" title="Logo" />
             </div>
             <div data-dojo-attach-point="applicationHeaderName" class="esriCTMenuTabLeft">
             </div>
@@ -22,9 +21,8 @@
                             </div>
                         </div>
                         <div class="esriCTOptions esriCTLoginOptionsDiv esriCTHidden" data-dojo-attach-point="esriCTLoginOptionsDiv">
-                            <div class="esriCTLogoutOption esriCTBorder" >
-                                <div class="esriCTItems" data-dojo-attach-point="esriCTHelpOption">
-                                </div>
+                            <div class="esriCTLogoutOption esriCTBorder">
+                              
                                 <div class="esriCTItems" data-dojo-attach-point="esriCTLogoutOption">
                                 </div>
                             </div>
@@ -35,8 +33,7 @@
                     <div data-dojo-attach-point="applicationHeaderWidgetsContainer">
                         <div class="esriCTHeaderIcons esriCTSettingsButton esriCTBGColor esriCTPointerCursor" data-dojo-attach-point="settingsDataViewerBtn">
                         </div>
-                        <div class="esriCTOptions esriCTSettingsOptions esriCTBorder esriCTPointerCursor esriCTApplicationColor  esriCTHidden"
-                            data-dojo-attach-point="esriCTSettingsOptionsItemDiv">
+                        <div class="esriCTOptions esriCTSettingsOptions esriCTBorder esriCTPointerCursor esriCTApplicationColor  esriCTHidden" data-dojo-attach-point="esriCTSettingsOptionsItemDiv">
                             <div class="esriCTItems esriCTHidden esriCTShowAll" data-dojo-attach-point="esriCTShowAll">
                             </div>
                             <div class="esriCTItems esriCTVisible esriCTShowSelected" data-dojo-attach-point="esriCTShowSelected">
@@ -48,8 +45,7 @@
                         </div>
                         <div class="esriCTHeaderIcons esriCTViewMode esriCTBGColor esriCTPointerCursor" data-dojo-attach-point="viewModeBtn">
                         </div>
-                        <div class="esriCTOptions esriCTOptionsViewMode esriCTBorder esriCTPointerCursor esriCTApplicationColor  esriCTHidden"
-                            data-dojo-attach-point="optionsViewMode">
+                        <div class="esriCTOptions esriCTOptionsViewMode esriCTBorder esriCTPointerCursor esriCTApplicationColor  esriCTHidden" data-dojo-attach-point="optionsViewMode">
                             <div class="esriCTViews esriCTItems" data-dojo-attach-point="mapView">
                             </div>
                             <div class="esriCTViews esriCTItems" data-dojo-attach-point="listView">
@@ -57,15 +53,20 @@
                             <div class="esriCTViews esriCTItems" data-dojo-attach-point="splitView">
                             </div>
                         </div>
-                        <div class="esriCTHeaderIcons esriCTSearch esriCTBGColor esriCTPointerCursor" data-dojo-attach-point="searchDataViewerRecords">
+                        <div class="esriCTHeaderIcons esriCTSearchDisable esriCTBGColor esriCTPointerCursor" data-dojo-attach-point="searchModeBtn">
                         </div>
-                        <div class="esriCTOptions esriCTOptionsSearchMode esriCTBorder esriCTPointerCursor esriCTApplicationColor esriCTHidden"
-                            data-dojo-attach-point="searchOptions">
-                            <div class="esriCTSearch" data-dojo-attach-point="search">
-                                <input type="text" class="esriCTSearchBox" placeholder="Coming soon..." />
-                                <div class="esriCTSearchButton esriCTBGColor esriCTPointerCursor" data-dojo-attach-point="searchClick">
+                        <div class="esriCTOptions esriCTOptionsSearchMode esriCTBorder esriCTApplicationColor esriCTHidden" data-dojo-attach-point="searchOptions">
+                            <div data-dojo-attach-point="search">
+                                <input type="text" class="esriCTSearchBox" placeholder="" />
+                                <div class="esriCTClearDiv">
+                                    <span class="esriCTClearBtn esriCTVisible" data-dojo-attach-point="clearTextContent">
+                                    </span>
+                                </div>
+                                <div class="esriCTSearchButton esriCTBGColor esriCTPointerCursor" data-dojo-attach-point="searchRecords">
                                 </div>
                             </div>
+                            <span class="esriCTHidden esriCTNoResults" data-dojo-attach-point="noResultsFound">
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -75,11 +76,9 @@
                 </div>
             </div>
             <div class="esriCTSignInButtonDiv" data-dojo-attach-point="esriCTSignInButtonDiv">
-                <div onclick="location.reload();" class="esriCTHeaderIcons esriCTSignInButton esriCTPointerCursor esriCTBGColor"
-                    data-dojo-attach-point="esriCTSignInButton">
+                <div onclick="location.reload();" class="esriCTHeaderIcons esriCTSignInButton esriCTPointerCursor esriCTBGColor" data-dojo-attach-point="esriCTSignInButton">
                 </div>
             </div>
         </div>
     </div>
 </div>
-

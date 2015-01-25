@@ -175,7 +175,7 @@ define(["dojo/_base/declare",
         _attachEvents: function () {
             try {
                 // resize map on window resize
-                on(window, "resize", lang.hitch(this, this._resizeMap));
+                on(window, "resize", lang.hitch(this, this._onWindowResize));
                 // resize map
                 this._mapViewer.resizeMap = lang.hitch(this, function () {
                     this._dataViewerWidget.isDetailsTabClicked = false;
@@ -185,6 +185,69 @@ define(["dojo/_base/declare",
                 this._mapViewer.onDetailsTabClick = lang.hitch(this, function () {
                     this._dataViewerWidget.showDetails();
                 });
+                // handle resize of containers
+                this._resizeUpperAndLowerContainer();
+            } catch (err) {
+                dojo.applicationUtils.showError(err.message);
+            }
+        },
+
+        /**
+        * Callback handler called on window resize
+        * @memberOf widgets/main/main
+        */
+        _onWindowResize: function () {
+            //on window resize reset the height of GridContainer and MapContainer to split view size's.
+            domStyle.set("LowerContainer", "height", "60%");
+            domStyle.set("UpperContainer", "height", "40%");
+            //since on resizeing the containers using handel lowercontainer will have width in px, so reset it to 100%.
+            domStyle.set("LowerContainer", "width", "100%");
+            //resize the map container so that will be fit in current window size.
+            this._resizeMap();
+        },
+
+        _dataTableObject: null,
+
+        /**
+        * This function is used to resize upper and lower container using resize handler
+        * @memberOf widgets/main/main
+        */
+        _resizeUpperAndLowerContainer: function () {
+            try {
+                //set jquery resizable on upper container
+                $("#UpperContainer").resizable({
+                    alsoResizeReverse: "#LowerContainer", //on resizeing upper container resize the lower map container
+                    handles: 's', //show resize handel only at the bottom of the grid container
+                    containment: "#esriCTMainContainer",
+                    maxHeight: 550,
+                    minHeight: 75
+                });
+
+                //handek resize stop event which will be fired on resize complete
+                //after completing resize of containers, resize the map so that it will be fit resized size
+                $("#UpperContainer").on("resizestop", lang.hitch(this, function (event, ui) {
+                    var mainContainerHeight, upperContainerHeight, lowerContainerHeight;
+                    mainContainerHeight = parseFloat(domStyle.get("esriCTMainContainer", "height"));
+                    upperContainerHeight = parseFloat(domStyle.get("UpperContainer", "height"));
+                    lowerContainerHeight = mainContainerHeight - upperContainerHeight;
+                    domStyle.set("LowerContainer", "height", lowerContainerHeight + "px");
+                    this._resizeMap();
+                    if (this._dataViewerWidget.isShowSelectedClicked) {
+                        this._dataViewerWidget.retainShowSelectedModeAfterResize();
+                    }
+                }));
+
+                $("#UpperContainer").on("resizestart", lang.hitch(this, function (event, ui) {
+                    var dataViewerParentDiv;
+                    this._dataTableObject = query(".esriCTDataViewerParentDiv")[0].childNodes[0];
+                    if (!this._dataViewerWidget.isDetailsTabClicked) {
+                        this._dataViewerWidget.destroyDataViewerTable();
+                        dataViewerParentDiv = query(".esriCTDataViewerParentDiv");
+                        if (dataViewerParentDiv.length > 0) {
+                            domConstruct.empty(dataViewerParentDiv[0]);
+                        }
+                    }
+                }));
             } catch (err) {
                 dojo.applicationUtils.showError(err.message);
             }
@@ -243,17 +306,18 @@ define(["dojo/_base/declare",
                 });
                 // display grid view
                 this._appHeader.onGridViewClick = lang.hitch(this, function () {
+                    $("#UpperContainer").resizable("disable");
                     this._isGridViewClicked = true;
                     this._dataViewerWidget.isMapViewClicked = false;
-                    domStyle.set("LowerContainer", "display", "none");
                     domStyle.set("UpperContainer", "display", "block");
+                    domStyle.set("LowerContainer", "height", "0%");
                     domStyle.set("UpperContainer", "height", "100%");
-                    this._dataViewerWidget.refreshDataViewer();
+                    this._dataViewerWidget.retainShowSelectedModeAfterResize();
                     this._setDataViewerHeight();
-
                 });
                 // display map view
                 this._appHeader.onMapViewClick = lang.hitch(this, function () {
+                    $("#UpperContainer").resizable("disable");
                     this._isGridViewClicked = false;
                     this._dataViewerWidget.isMapViewClicked = true;
                     domStyle.set("UpperContainer", "display", "none");
@@ -265,6 +329,7 @@ define(["dojo/_base/declare",
                 });
                 // display split view
                 this._appHeader.onGridMapViewClick = lang.hitch(this, function () {
+                    $("#UpperContainer").resizable("enable");
                     this._isGridViewClicked = false;
                     this._dataViewerWidget.isMapViewClicked = false;
                     domStyle.set("UpperContainer", "display", "block");
@@ -275,8 +340,13 @@ define(["dojo/_base/declare",
                     this._resizeMap();
                 });
                 // search records in data-viewer widget
-                this._appHeader.onSearchIconClick = lang.hitch(this, function () {
+                this._appHeader.onSearchRecordsClick = lang.hitch(this, function () {
                     this._dataViewerWidget.searchDataInDataViewer();
+                });
+
+                // clear content in search input control
+                this._appHeader.onClearContentClick = lang.hitch(this, function () {
+                    this._dataViewerWidget.clearSearchText();
                 });
             } catch (err) {
                 dojo.applicationUtils.showError(err.message);
@@ -329,6 +399,7 @@ define(["dojo/_base/declare",
                 this._webMapListWidget = new WebMapList(webMapListConfigData, domConstruct.create("div", {}, dom.byId('LeftContainer')));
                 // when new operational layer is selected show it in data-viewer
                 this._webMapListWidget.onOperationalLayerSelected = lang.hitch(this, function (details) {
+                    this._isGridViewClicked = false;
                     this.map = details.map;
                     this._mapViewer.addDetailsBtn();
                     this._createDataViewer(details);
@@ -340,6 +411,28 @@ define(["dojo/_base/declare",
                 });
                 // start web-map list widget
                 this._webMapListWidget.startup();
+            } catch (err) {
+                dojo.applicationUtils.showError(err.message);
+            }
+        },
+
+        /**
+        * This function is used to reset upper container
+        * @memberOf widgets/main/main
+        */
+        _resetUpperContainer: function () {
+            try {
+                var refNode, node;
+                domConstruct.empty("UpperContainer");
+                $("#UpperContainer").remove();
+                node = domConstruct.create("div", {
+                    "class": "esriCTUpperContainer esriCTBorderBottom",
+                    "id": "UpperContainer"
+                });
+                refNode = dom.byId("rightParentContainer");
+                domConstruct.place(node, refNode, "first");
+                domStyle.set(dom.byId("LowerContainer"), "height", "60%");
+                this._resizeUpperAndLowerContainer();
             } catch (err) {
                 dojo.applicationUtils.showError(err.message);
             }
@@ -358,14 +451,20 @@ define(["dojo/_base/declare",
                     "map": this.map,
                     "selectedOperationalLayerID": details.operationalLayerId,
                     "selectedOperationalLayerTitle": details.operationalLayerDetails.title,
-                    "popupInfo": details.operationalLayerDetails.popupInfo
+                    "popupInfo": details.operationalLayerDetails.popupInfo,
+                    "itemInfo": details.itemInfo,
+                    "lastSelectedWebMapExtent": this._webMapListWidget.lastSelectedWebMapExtent
                 };
-                domConstruct.empty("UpperContainer");
+
+                this._resetUpperContainer();
+
                 // instantiate data-viewer widget
                 this._dataViewerWidget = new DataViewer(dataViewerConfigData, domConstruct.create("div", {}, dom.byId("UpperContainer")));
+
                 setTimeout(lang.hitch(this, function () {
                     // create ui of data-viewer widget
                     this._dataViewerWidget.createDataViewerUI(true);
+                    this._resizeMap();
                 }), 1000);
                 // hide/show settings options
                 this._dataViewerWidget.toggleSelectionViewOption = lang.hitch(this, function (hideClearSelection) {

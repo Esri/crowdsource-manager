@@ -52,8 +52,8 @@ define({
     "zoomLevel": 12,
     // when web-map thumbnail icon is not available it will get replaced by this default icon
     "noThumbnailIcon": "/images/no-thumbnail.png",
-    // when web-map thumbnail icon is not available it will get replaced by this default icon
-    "noImageIcon": "/images/attachment-file.png",
+    // when attachment is not available it will get replaced by this default icon
+    "noAttachmentIcon": "/images/no-attachment.png",
     // to set description field whether it needs to be displayed or not in web-map description area
     "webMapInfoDescription": true,
     // to set snippet field whether it needs to be displayed or not in web-map description area
