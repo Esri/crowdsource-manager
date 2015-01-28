@@ -21,7 +21,7 @@ define({
     "appid": "",
     "oauthappid": null,
     //Group templates must support a group url parameter. This will contain the id of the group.
-    "group": "665fb06759374cd7971ff285e342167c",
+    "group": "e96bd5b249a04235bcd7399cb80ee3cf",
     //Enter the url to the proxy if needed by the application. See the 'Using the proxy page' help topic for details
     //http://developers.arcgis.com/en/javascript/jshelp/ags_proxy.html
     "proxyurl": "proxy.ashx",
@@ -31,7 +31,7 @@ define({
     "theme": "#d15706",
     "bingKey": "", //Enter the url to your organizations bing maps key if you want to use bing basemaps
     //Defaults to arcgis.com. Set this value to your portal or organization host name.
-    "sharinghost": location.protocol + "//" + "cssl.maps.arcgis.com/",
+    "sharinghost": location.protocol + "//" + "localgovdev.mapsdevext.arcgis.com/",
     //If your applcation needs to edit feature layer fields set this value to true. When false the map will
     //be treated with layers that are not set to editable which allows the FeatureLayer to load features optimally.
     "editable": false,
