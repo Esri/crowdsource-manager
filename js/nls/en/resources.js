@@ -19,7 +19,7 @@ define(({
             error: "Unable to create map"
         },
         main: {
-            noGroup: "No Group configured"
+            noGroup: "No group configured"
         },
         webMapList: {
             owner: "Owner",
@@ -37,7 +37,7 @@ define(({
         },
         applicationHeader: {
             signOutOption: "Sign Out",
-            pleaseSignInText: "Please Sign in",
+            pleaseSignInText: "Please sign in",
             showSelectedOption: "Show Selected",
             showAllOption: "Show All",
             clearSelectionOption: "Clear Selection",
