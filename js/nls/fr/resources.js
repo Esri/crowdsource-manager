@@ -19,7 +19,7 @@ define(({
         error: "@fr@ Impossible de créer la carte"
     },
     main: {
-        noGroup: "@fr@ No Group configured"
+        noGroup: "@fr@ No group configured"
     },
     webMapList: {
         owner: "@fr@ Owner",
@@ -37,8 +37,7 @@ define(({
     },
     applicationHeader: {
         signOutOption: "@fr@ Sign Out",
-        helpOption: "@fr@ Help",
-        pleaseSignInText: "@fr@ Please Sign in",
+        pleaseSignInText: "@fr@ Please sign in",
         showSelectedOption: "@fr@ Show Selected",
         showAllOption: "@fr@ Show All",
         clearSelectionOption: "@fr@ Clear Selection",
@@ -51,7 +50,7 @@ define(({
         searchModeBtnToolTip: "@fr@ Layer Search"
     },
     dataviewer: {
-        noFeaturesInCurrentExtent: "@fr@ No issues in current extent",
+        noFeaturesInCurrentExtent: "@fr@ No issues in current map area",
         singleFeatureSelection: "@fr@ Please select a single feature to view the item details",
         multipleFeatureSelection: "@fr@ Please select a single feature to view the item details",
         photoAttachmentHeader: "@fr@ Photo",
@@ -65,7 +64,7 @@ define(({
         moreInfolink: "@fr@ Link"
     },
     config: {
-        configNotDefined: "@fr@ Config is not defined"
+        configNotDefined: "@fr@ No configuration defined"
     },
     searchPanel: {
         noResultsFound: "@fr@ No results found"

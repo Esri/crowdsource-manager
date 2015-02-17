@@ -37,7 +37,6 @@ define(({
         },
         applicationHeader: {
             signOutOption: "Sign Out",
-            helpOption: "Help",
             pleaseSignInText: "Please Sign in",
             showSelectedOption: "Show Selected",
             showAllOption: "Show All",
@@ -51,7 +50,7 @@ define(({
             searchModeBtnToolTip: "Layer Search"
         },
         dataviewer: {
-            noFeaturesInCurrentExtent: "No issues in current extent",
+            noFeaturesInCurrentExtent: "No issues in current map area",
             singleFeatureSelection: "Please select a single feature to view the item details",
             multipleFeatureSelection: "Please select a single feature to view the item details",
             photoAttachmentHeader: "Photo",
@@ -65,7 +64,7 @@ define(({
             moreInfolink: "Link"
         },
         config: {
-            configNotDefined: "Config is not defined"
+            configNotDefined: "No configuration defined"
         },
         searchPanel: {
             noResultsFound: "No results found"
