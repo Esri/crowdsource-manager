@@ -1,5 +1,5 @@
 /*global define,location */
-/*jslint sloppy:true */
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /*
  | Copyright 2014 Esri
  |
@@ -17,38 +17,61 @@
  */
 define({
     //Default configuration settings for the application. This is where you'll define things like a bing maps key,
-    //default web map, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
+    //default group, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
     "appid": "",
-    "webmap": "24e01ef45d40423f95300ad2abc5038a",
-    "oauthappid": null, //"AFTKRmv16wj14N3z",
+    "oauthappid": null,
     //Group templates must support a group url parameter. This will contain the id of the group.
-    "group": "",
+    "group": "d3e11b4398984ec481d3ae9bde0d2810",
     //Enter the url to the proxy if needed by the application. See the 'Using the proxy page' help topic for details
     //http://developers.arcgis.com/en/javascript/jshelp/ags_proxy.html
-    "proxyurl": "",
+    "proxyurl": "proxy.ashx",
     //Example of a template specific property. If your template had several color schemes
     //you could define the default here and setup configuration settings to allow users to choose a different
     //color theme.
-    "theme": "blue",
+    "theme": "#d15706",
     "bingKey": "", //Enter the url to your organizations bing maps key if you want to use bing basemaps
     //Defaults to arcgis.com. Set this value to your portal or organization host name.
-    "sharinghost": location.protocol + "//" + "www.arcgis.com",
-    "units": null,
+    "sharinghost": location.protocol + "//" + "arcgis.com/",
     //If your applcation needs to edit feature layer fields set this value to true. When false the map will
-    //be dreated with layers that are not set to editable which allows the FeatureLayer to load features optimally. 
+    //be treated with layers that are not set to editable which allows the FeatureLayer to load features optimally.
     "editable": false,
     "helperServices": {
         "geometry": {
-            "url": null
-        },
-        "printTask": {
-            "url": null
-        },
-        "elevationSync": {
-            "url": null
-        },
-        "geocode": [{
-            "url": null
-        }]
-    }
+            "url": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer"
+        }
+    },
+    // name of the application
+    "applicationName": "",
+    // application icon
+    "applicationIcon": "/images/app-icon.png",
+    // application favicon icon
+    "applicationFavicon": "/images/favicon.ico",
+    // to display any null values
+    "showNullValueAs": "",
+    // to set zoom level of map when single feature is selected
+    "zoomLevel": 12,
+    // when web-map thumbnail icon is not available it will get replaced by this default icon
+    "noThumbnailIcon": "/images/no-thumbnail.png",
+    // when attachment is not available it will get replaced by this default icon
+    "noAttachmentIcon": "/images/no-attachment.png",
+    // to set description field whether it needs to be displayed or not in web-map description area
+    "webMapInfoDescription": true,
+    // to set snippet field whether it needs to be displayed or not in web-map description area
+    "webMapInfoSnippet": false,
+    // to set owner field whether it needs to be displayed or not in web-map description area
+    "webMapInfoOwner": true,
+    // to set created field whether it needs to be displayed or not in web-map description area
+    "webMapInfoCreated": false,
+    // to set modified field whether it needs to be displayed or not in web-map description area
+    "webMapInfoModified": false,
+    // to set license info field whether it needs to be displayed or not in web-map description area
+    "webMapInfoLicenseInfo": false,
+    // to set access information field whether it needs to be displayed or not in web-map description area
+    "webMapInfoAccessInformation": false,
+    // to set tags field whether it needs to be displayed or not in web-map description area
+    "webMapInfoTags": false,
+    // to set views field whether it needs to be displayed or not in web-map description area
+    "webMapInfoNumViews": false,
+    // to set rating field whether it needs to be displayed or not in web-map description area
+    "webMapInfoAvgRating": false
 });
