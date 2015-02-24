@@ -24,9 +24,8 @@ Crowdsource Manager, a companion group template to Crowdsource Reporter, allows 
 ## Instructions
 
 ### General Help
-*[New to Github? Get started here.][]
-
-*[Want more info on this app? Check out the documentation.][]
+* [New to Github? Get started here.][]
+* [Want more info on this app? Check out the documentation.][]
 
 ## Requirements
 
@@ -61,7 +60,7 @@ This application uses the 3.13 version of [Esri's ArcGIS API for JavaScript][]; 
   - Portal Example where `arcgis` is the name of the Web Adaptor: `"sharinghost": location.protocol + "//" + "webadaptor.domain.com/arcgis"`
 4. If you are using Portal or a local install of the ArcGIS API for JavaScript, change all references to the ArcGIS API for JavaScript in index.html to refer to your local copy of the API. Search for the references containing `"//js.arcgis.com/3.13"` and replace this portion of the reference with the url to your local install.
   - For example: `"//webadaptor.domain.com/arcgis/jsapi/jsapi"` where `arcgis` is the name of your Web Adaptor.
-5. Copy a map or group ID from Portal/ArcGIS Online and replace the default web map ID in the application’s index.html page. You can now run the application on your web server or customize the application further.
+5. Copy a group ID from Portal/ArcGIS Online and replace the default group ID in the application’s default.js file. You can now run the application on your web server or configure the application further.
 
 > **Note:** If your application edits features in a feature service, contains secure services or web maps that aren't shared publicly, or generate requests that exceed 200 characters, you may need to set up and use a proxy page. Common situations where you may exceed the URL length are using complex polygons as input to a task or specifying a spatial reference using well-known text (WKT). For details on installing and configuring a proxy page see [Using the proxy](https://developers.arcgis.com/javascript/jshelp/ags_proxy.html). If you do not have an Internet connection, you will need to access and deploy the ArcGIS API for JavaScript documentation from [developers.arcgis.com](https://developers.arcgis.com/).
 
