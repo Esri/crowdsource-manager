@@ -1,8 +1,4 @@
-﻿body
-{
-}
-
-.esriCTApplicationColor, .esriCTApplicationHeader
+﻿.esriCTApplicationColor, .esriCTApplicationHeader
 {
     color: ${SelectedThemeColor} !important;
 }
@@ -25,3 +21,12 @@
 }
 
 /* esri API End of Overriden Styles */
+
+/* Data viewer */
+
+.esriCTRowActivated
+{
+    background-color:${ActivatedRowColor}  !important;
+}
+
+/* End of data viewer */

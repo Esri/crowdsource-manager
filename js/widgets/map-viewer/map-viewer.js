@@ -1,20 +1,20 @@
 ﻿/*global define,dojo,alert */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /** @license
-| Copyright 2013 Esri
-|
-| Licensed under the Apache License, Version 2.0 (the "License");
-| you may not use this file except in compliance with the License.
-| You may obtain a copy of the License at
-|
-|    http://www.apache.org/licenses/LICENSE-2.0
-|
-| Unless required by applicable law or agreed to in writing, software
-| distributed under the License is distributed on an "AS IS" BASIS,
-| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-| See the License for the specific language governing permissions and
-| limitations under the License.
-*/
+ | Copyright 2013 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+ */
 //============================================================================================================================//
 define([
     "dojo/_base/declare",
@@ -49,14 +49,13 @@ define([
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
-        config: null, // configuration data
 
         /**
         * This function is called when widget is constructed
         * @name widgets/mapviewer/mapviewer
         */
-        constructor: function (data, domnode) {
-            this.config = data;
+        constructor: function (options, srcRefNode) {
+            lang.mixin(this, options);
         },
 
         /**
@@ -64,18 +63,14 @@ define([
         * @name widgets/mapviewer/mapviewer
         */
         postCreate: function () {
-            try {
-                this.inherited(arguments);
-                domAttr.set(this.locationButton, "title", dojo.configData.i18n.mapViewer.locationBtnToolTip);
-                // to show map panel & resize map
-                on(this.locationButton, "click", lang.hitch(this, function () {
-                    dojo.applicationUtils.showLoadingIndicator();
-                    this.switchViewer("location");
-                    this.resizeMap();
-                }));
-            } catch (err) {
-                dojo.applicationUtils.showError(err.message);
-            }
+            this.inherited(arguments);
+            domAttr.set(this.locationButton, "title", this.appConfig.i18n.mapViewer.locationBtnToolTip);
+            // to show map panel & resize map
+            on(this.locationButton, "click", lang.hitch(this, function () {
+                this.appUtils.showLoadingIndicator();
+                this.switchViewer("location");
+                this.resizeMap();
+            }));
         },
 
         /**
@@ -111,36 +106,32 @@ define([
         * @name widgets/mapviewer/mapviewer
         */
         addDetailsBtn: function () {
-            try {
-                var incrementButton, detailsDiv, decrementButton;
-                domConstruct.destroy("detailsBtnDiv");
-                // details tab button that needs to be added
-                detailsDiv = domConstruct.create("div", {
-                    "class": "esriCTBGColor esriCTDetailsButton",
-                    "id": "detailsBtnDiv",
-                    "title": dojo.configData.i18n.mapViewer.detailsBtnToolTip
-                });
-                incrementButton = query(".esriSimpleSliderIncrementButton", dom.byId("mapDiv"));
-                decrementButton = query(".esriSimpleSliderDecrementButton", dom.byId("mapDiv"));
-                if (incrementButton.length > 0) {
-                    domAttr.set(incrementButton[0], "title", dojo.configData.i18n.mapViewer.zoomInToolTip);
-                }
-                if (decrementButton.length > 0) {
-                    domAttr.set(decrementButton[0], "title", dojo.configData.i18n.mapViewer.zoomOutToolTip);
-                }
-                // to place details button on top of zoom in button of map
-                if (dom.byId("mapDiv")) {
-                    if (incrementButton.length > 0) {
-                        domConstruct.place(detailsDiv, incrementButton[0], "before");
-                    }
-                }
-                // to show details tab
-                on(detailsDiv, "click", lang.hitch(this, function (evt) {
-                    this.onDetailsTabClick();
-                }));
-            } catch (err) {
-                dojo.applicationUtils.showError(err.message);
+            var incrementButton, detailsDiv, decrementButton;
+            domConstruct.destroy("detailsBtnDiv");
+            // details tab button that needs to be added
+            detailsDiv = domConstruct.create("div", {
+                "class": "esriCTBGColor esriCTDetailsBtnDisabled",
+                "id": "detailsBtnDiv",
+                "title": this.appConfig.i18n.mapViewer.detailsBtnToolTip
+            });
+            incrementButton = query(".esriSimpleSliderIncrementButton", dom.byId("mapDiv"));
+            decrementButton = query(".esriSimpleSliderDecrementButton", dom.byId("mapDiv"));
+            if (incrementButton.length > 0) {
+                domAttr.set(incrementButton[0], "title", this.appConfig.i18n.mapViewer.zoomInToolTip);
             }
+            if (decrementButton.length > 0) {
+                domAttr.set(decrementButton[0], "title", this.appConfig.i18n.mapViewer.zoomOutToolTip);
+            }
+            // to place details button on top of zoom in button of map
+            if (dom.byId("mapDiv")) {
+                if (incrementButton.length > 0) {
+                    domConstruct.place(detailsDiv, incrementButton[0], "before");
+                }
+            }
+            // to show details tab
+            on(detailsDiv, "click", lang.hitch(this, function (evt) {
+                this.onDetailsTabClick();
+            }));
         }
     });
 });

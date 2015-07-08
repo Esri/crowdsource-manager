@@ -71,7 +71,7 @@
     {
         margin-top: 22px;
         height: 30px;
-        width: calc(100% - 460px);
+        width: calc(100% - 490px);
     }
 
     .esriCTLoginDetailsDiv
@@ -139,6 +139,11 @@
     .esriCTDetailsButton
     {
         background-image: url('../images/details-2x.png') !important;
+    }
+
+    .esriCTDetailsBtnDisabled
+    {
+        background-image: url('../images/details-disabled-2x.png') !important;
     }
 
     .esriCTLocationButton

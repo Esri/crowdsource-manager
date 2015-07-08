@@ -1,68 +1,84 @@
 ﻿<!DOCTYPE html>
 <html>
-	<head>
-		<title>Crowdsource Manager</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		
-		<link type="image/ico" rel="shortcut icon" href="//resources.esri.com/favicon.ico">
-		<link type="image/ico" rel="icon"  href="//resources.esri.com/favicon.ico">
-		<link rel="stylesheet" type="text/css" href="css/layout.css">
-
-	</head>
-	<body>
-		<div id="content" style='display:block;'>
-
-			<div id="header">
-				<img id="titleImg" src="images/titleText.jpg" alt="Map Tour Template">
-				<a id="esri-logo" href="http://esri.com" target="_blank">Esri</a>
-			</div><!--/header-->
-
-			<table class="featurePane first">
-				<tr>
-					<td>
-						<img class="screenshot leftSide" src="images/image01.png" alt="">
-					</td>
-					<td>
-						<p class="featureText">Crowdsource Manager, a companion group template to <a href='http://solutions.arcgis.com/local-government/help/crowdsource-reporter/' target='_blank'>Crowdsource Reporter</a>, is a responsive group application template (desktop and tablet devices) that allows users within an organization to review problems/observations submitted through the Manager app.</p>
-					</td>
-				</tr>
-			</table>
-
-			<hr>
-
-			<table class="featurePane second">
-				<tr>
-					<td>
-						<p class="featureText">The app presents one or more maps for users to review a problem or observation. Users can look for patterns and clusters, review problem details, update status, and assign responsibility.</p>
-					</td>
-					<td>
-						<img class="screenshot rightSide" src="images/image02.png" alt="">
-					</td>
-				</tr>
-			</table>
-
-			<hr>
-
-			<table class="featurePane third">
-				<tr>
-					<td>
-						<img class="screenshot leftSide" src="images/image03.png" alt="">
-					</td>
-					<td>
-						<p class="featureText">The application source code can be downloaded for further configuration. This additional configuration of the application can be applied back to an ArcGIS Online configurable web application item or hosted on your own web server.<br/>For more information on configuring this app, see the <a href='http://solutions.arcgis.com/local-government/help/crowdsource-manager/' target='_blank'>Crowdsource Manager</a> documentation.</p>
-						
-					</td>
-				</tr>
-			</table>
-
-			<hr>
-
-		</div><!--content-->
-
-		<div id="backgroundStripe">
-			<img id="backgroundImg" src="images/stripeImage.jpg" alt="">
-		</div>
-	</body>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+</head>
+<body>
+    <div id="content" style='display: block;'>
+        <div id="header">
+            <img id="titleImg" src="images/title-text.jpg" alt="" />
+            <a id="esri-logo" href="http://esri.com" target="_blank"></a>
+        </div>
+        <!--header-->
+        <table class="esriCTFeaturePane esriCTFirst">
+            <tr>
+                <td>
+                    <img class="esriCTScreenShot esriCTLeftSide" src="images/main-screen.png" alt="" />
+                </td>
+                <td>
+                    <p class="esriCTFeatureText" id="section1">
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <hr />
+        <table class="esriCTFeaturePane esriCTSecond">
+            <tr>
+                <td>
+                    <p class="esriCTFeatureText" id="section2">
+                    </p>
+                </td>
+                <td>
+                    <img class="esriCTScreenShot esriCTRightSide" src="images/details-tab.png" alt="" />
+                </td>
+            </tr>
+        </table>
+        <hr />
+        <table class="esriCTFeaturePane esriCTThird">
+            <tr>
+                <td>
+                    <img class="esriCTScreenShot esriCTLeftSide" src="images/map-view.png" alt="" />
+                </td>
+                <td>
+                    <p class="esriCTFeatureText" id="section3">
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <hr />
+    </div>
+    <!--content-->
+    <div id="backgroundStripe">
+        <img id="backgroundImg" src="images/stripe-image.jpg" alt="" />
+    </div>
+    <script type="text/javascript">
+        var root = location.href.slice(0, location.href.lastIndexOf('resources/preview'));
+        dojoConfig = {
+            parseOnLoad: true,
+            async: true,
+            baseURL: root,
+            packages: [{
+                name: "application",
+                location: root + 'js'
+            }]
+        };
+    </script>
+    <script type="text/javascript" src="//js.arcgis.com/3.14/"></script>
+    <script type="text/javascript">
+        require([
+            "dojo/i18n!application/nls/resources",
+            "dojo/dom"
+        ], function (
+            i18n,
+            dom
+        ) {
+            dom.byId("section1").innerHTML = i18n.preview.section1;
+            dom.byId("section2").innerHTML = i18n.preview.section2;
+            dom.byId("section3").innerHTML = i18n.preview.section3;
+        });
+    </script>
+</body>
 </html>

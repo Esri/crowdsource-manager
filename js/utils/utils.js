@@ -1,28 +1,29 @@
 /*global define,document,alert,dojo */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /*
-| Copyright 2014 Esri
-|
-| Licensed under the Apache License, Version 2.0 (the "License");
-| you may not use this file except in compliance with the License.
-| You may obtain a copy of the License at
-|
-|    http://www.apache.org/licenses/LICENSE-2.0
-|
-| Unless required by applicable law or agreed to in writing, software
-| distributed under the License is distributed on an "AS IS" BASIS,
-| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-| See the License for the specific language governing permissions and
-| limitations under the License.
-*/
-define(["dojo/dom",
+ | Copyright 2014 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+ */
+define([
+    "dojo/dom",
     "dojo/_base/fx",
     "dojo/dom-class",
     "dojo/text!css/theme-template.css",
     "dojo/string",
     "dojo/dom-construct",
     "dojo/query"
-    ], function (
+], function (
     dom,
     coreFx,
     domClass,
@@ -69,15 +70,17 @@ define(["dojo/dom",
 
         /**
         * This function is used to load application theme.
+        * @param{object} application configuration
         * @memberOf utils/utils
         */
-        loadApplicationTheme: function () {
+        loadApplicationTheme: function (appConfig) {
             var cssString, head, style;
             //if theme is configured
-            if (dojo.configData.theme) {
+            if (appConfig.theme) {
                 //substitute theme color values in theme template
                 cssString = string.substitute(ThemeCss, {
-                    SelectedThemeColor: dojo.configData.theme
+                    SelectedThemeColor: appConfig.theme,
+                    ActivatedRowColor: appConfig.activeRow
                 });
                 //Create Style using theme template and append it to head
                 //On Lower versions of IE10 Style tag is read only so create theme using styleSheet.cssText
@@ -91,13 +94,14 @@ define(["dojo/dom",
                     domConstruct.create("style", {
                         "type": "text/css",
                         "innerHTML": cssString
-                    }, dojo.query("head")[0]);
+                    }, query("head")[0]);
                 }
             }
         },
 
         /**
         * This function is used to get format of date
+        * @param{string} type of date
         * @memberOf utils/utils
         */
         getDateFormat: function (type) {
@@ -168,6 +172,7 @@ define(["dojo/dom",
 
         /**
         * This function is used to convert number to thousand seperator
+        * @param{integer} number that needs to be converted into thousand seperator
         * @memberOf utils/utils
         */
         convertNumberToThousandSeperator: function (number) {
