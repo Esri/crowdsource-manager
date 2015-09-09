@@ -211,7 +211,13 @@ define([
             } else {
                 domClass.add(query(".esriCTSettingsButtonDisabled")[0], "esriCTHidden");
             }
+            if (query(".esriCTSettingsButtonCaretIcon")[0]) {
+                domClass.add(query(".esriCTSettingsButtonCaretIcon")[0], "esriCTHidden");
+            } else {
+                domClass.add(query(".esriCTSettingsButtonCaretIconDisabled")[0], "esriCTHidden");
+            }
             domClass.add(query(".esriCTViewMode")[0], "esriCTHidden");
+            domClass.add(query(".esriCTViewModeCaretIcon")[0], "esriCTHidden");
             domClass.add(query(".esriCTSearchDisable")[0], "esriCTHidden");
             domClass.add(query(".esriCTManualRefreshButton")[0], "esriCTHidden");
             domClass.remove(dom.byId("esriCTNoWebMapParentDiv"), "esriCTHidden");
@@ -248,6 +254,14 @@ define([
         * @memberOf widgets/main/main
         */
         _onWindowResize: function () {
+            // Due to high resolution of iPad long username was not getting displayed properly.
+            // So it detects orientation in iPad and long username gets displayed properly in landscape & potrait mode.
+            // This is done by changing the width of username dynamically.
+            if ((ApplicationUtils.isIos()) && (window.orientation === 0 || window.orientation === 180)) { // landscape mode
+                domClass.remove(query(".esriCTLoginUserNameDiv")[0], "esriCTLoginUserNamePotraitMode");
+            } else if ((ApplicationUtils.isIos()) && (window.orientation === 90 || window.orientation === -90)) { // potrait mode
+                domClass.add(query(".esriCTLoginUserNameDiv")[0], "esriCTLoginUserNamePotraitMode");
+            }
             if (this._isEditingOnAndroid) {
                 this._dataViewerWidget.OnEditingComplete();
             }
@@ -272,6 +286,10 @@ define([
                 this._setDataViewerHeight();
                 this._resizeMap();
             }
+            this._appHeader.resetOperationalLayerNameWidth();
+            this._appHeader.resetViewModeOptionsPosition();
+            this._appHeader.resetSettingsOptionsPosition();
+            this._appHeader.resetDataSearchPosition();
         },
 
         /**
@@ -373,11 +391,11 @@ define([
             });
             // display grid view
             this._appHeader.onGridViewClick = lang.hitch(this, function () {
-                //after switching to gridView by clicking on List-view mode always refresh it's UI
-                this._showOnlyGridView(true);
+                // after switching to grid view always refresh it's UI
+                this._showGridView(true);
             });
             // display map view
-            this._appHeader.onMapViewClick = lang.hitch(this, this._showOnlyMapView);
+            this._appHeader.onMapViewClick = lang.hitch(this, this._showMapView);
             // display split view
             this._appHeader.onGridMapViewClick = lang.hitch(this, this._showSplitView);
             // search records in data-viewer widget
@@ -390,16 +408,7 @@ define([
             });
             // manual refresh the selected layer
             this._appHeader.onManualRefreshClick = lang.hitch(this, function () {
-                $("#UpperContainer").resizable("enable");
-                this._isMapViewClicked = false;
-                this._isGridViewClicked = false;
-                this._isSplitViewClicked = true;
-                this._dataViewerWidget.isMapViewClicked = false;
-                this._dataViewerWidget.isGridViewClicked = false;
-                domStyle.set("UpperContainer", "display", "block");
-                domStyle.set("LowerContainer", "display", "block");
-                this._setDefaultHeightOfUpperAndLowerContainer();
-                this._dataViewerWidget._doManualRefresh();
+                this._dataViewerWidget.doManualRefresh();
             });
             // sign in user on click of sign-in option
             this._appHeader.signInUser = lang.hitch(this, function () {
@@ -425,6 +434,14 @@ define([
                 this._identityManagerCancelHandler = on(IdentityManager, "dialog-cancel", lang.hitch(this, function (evt) {
                     this._isCancelButtonClicked = true;
                 }));
+            });
+            // This function is used to display placeholder text in search bar
+            this._appHeader.displayPlaceHolderText = lang.hitch(this, function () {
+                this._dataViewerWidget.displayPlaceHolderText();
+            });
+            // This function is used to remove placeholder text in search bar
+            this._appHeader.removePlaceHolderText = lang.hitch(this, function () {
+                this._dataViewerWidget.removePlaceHolderText();
             });
         },
 
@@ -465,7 +482,7 @@ define([
         * @param{boolean} refreshGridViewUI set to true will refresh the UI of Grid-view.
         * @memberOf widgets/main/main
         */
-        _showOnlyGridView: function (refreshGridViewUI) {
+        _showGridView: function (refreshGridViewUI) {
             $("#UpperContainer").resizable("disable");
             this._isMapViewClicked = false;
             this._isGridViewClicked = true;
@@ -485,7 +502,7 @@ define([
         * This function is used to set the view of application to map-view only.
         * @memberOf widgets/main/main
         */
-        _showOnlyMapView: function () {
+        _showMapView: function () {
             $("#UpperContainer").resizable("disable");
             this._isMapViewClicked = true;
             this._isGridViewClicked = false;
@@ -717,6 +734,10 @@ define([
                         // a flag stating whether layer is refreshed after editing needs to be analysed
                         if (this._dataViewerWidget.isLayerRefreshed) {
                             this._dataViewerWidget.isLayerRefreshed = false;
+                            if (this._dataViewerWidget.isRowRemoved) {
+                                this._dataViewerWidget.isRowRemoved = false;
+                                this._dataViewerWidget.checkForNoFeatures();
+                            }
                         } else {
                             // create ui of data-viewer widget
                             if ((evt.target._defnExpr === this._existingDefinitionExpression) || (evt.target._defnExpr === null) || (evt.target._defnExpr === undefined)) {
@@ -759,7 +780,7 @@ define([
                 if (ApplicationUtils.isAndroid() && this._isSplitViewClicked) {
                     domStyle.set(this._mapViewer.mapDiv, "display", "none");
                     //Show only grid-view while editing in android devices
-                    this._showOnlyGridView(false);
+                    this._showGridView(false);
                     //Set Editing started on android after keyboard animation is done
                     setTimeout(lang.hitch(this, function () {
                         this._isEditingOnAndroid = true;
