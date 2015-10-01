@@ -184,7 +184,6 @@ th
     background-position: center center;
     background-image: url(../images/loading-indicator.gif);
     background-repeat: no-repeat;
-    background-size: 32px;
 }
 
 .esriCTHideLoadingIndicatorImage
