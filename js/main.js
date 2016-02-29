@@ -1,20 +1,20 @@
-/*global define,window,setTimeout,$ */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
+/*global define,document,setTimeout,window,dojo,$ */
+/*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
 define([
     "dojo/_base/declare",
     "dojo/_base/lang",
@@ -28,10 +28,13 @@ define([
     "widgets/webmap-list/webmap-list",
     "widgets/data-viewer/data-viewer",
     "dojo/dom-class",
-    "dojo/query",
     "esri/layers/FeatureLayer",
+    "widgets/time-slider/time-slider",
+    "widgets/details-panel/details-panel",
     "esri/arcgis/Portal",
-    "esri/IdentityManager",
+    "esri/tasks/query",
+    "dojo/query",
+    "esri/dijit/PopupTemplate",
     "dojo/domReady!"
 ], function (
     declare,
@@ -46,45 +49,36 @@ define([
     WebMapList,
     DataViewer,
     domClass,
-    query,
     FeatureLayer,
+    TimeSlider,
+    DetailsPanel,
     esriPortal,
-    IdentityManager
+    EsriQuery,
+    query,
+    PopupTemplate
 ) {
     return declare(null, {
-        appConfig: {},
-        boilerPlateTemplate: null,
-        _webMapListWidget: null, // store object of web map list widget
-        _dataViewerWidget: null, // store object of data-viewer widget
-        _appHeader: null, // store object of application header widget
-        _mapViewer: null, // store object of map-viewer widget
-        _groupItems: [],
-        _isMapViewClicked: false, // track whether map view is clicked or not
-        _isGridViewClicked: false, // track whether grid view is clicked or not
-        _isSplitViewClicked: true, // track whether split view is clicked or not
-        _isEditingOnAndroid: false, // track whether editing is started on android devices
+        _boilerPlateTemplate: null, // to store object of boilerplate
+        _loggedInUser: null, // to store details of logged in user
+        _applicationHeader: null, // to store object of application header widget
+        _webMapListWidget: null, // to store object of webmap list widget
+        _timeSliderWidget: null, // to store object of time slider widget
+        _dataViewerWidget: null, // to store object of data viewer widget
+        _detailsPanelWidget: null, // to store object of details panel widget
+        _existingDefinitionExpression: null, // to store existing definition expression of layer,
+        _dataViewerFeatureLayerUpdateEndHandle: null, // update end handle of feature layer
+        _itemInfo: null, // to store item info of webmap
         _featureLayerClickHandle: null, // click handle of feature layer
-        _dataViewerFeatureLayerSelectionCompleteHandle: null, // selection complete handle of feature layer
-        _dataViewerFeatureLayerSelectionClearHandle: null, // selection clear handle of feature layer
-        _selectRowGraphicsAddHandle: null, // adding graphics handle of selected layer
-        _selectRowGraphicsRemoveHandle: null, // removing graphics handle of selected layer
-        _selectRowGraphicsClearHandle: null, // clearing graphics handle of selected layer
+        _mapPanelWidget: null, // to store object of map panel widget
+        _layerSelectionDetails: null, // to store details when new operational layer is selected
         _selectRowGraphicsClickHandle: null, // graphics click handle to select a feature
-        _activeRowGraphicsAddHandle: null, // adding graphics handle of active row graphics layer
-        _activeRowGraphicsRemoveHandle: null, // removing graphics handle of active row graphics layer
-        _activeRowClearHandle: null, // clearing graphics handle of active row graphics layer
-        _activeRowGraphicsClickHandle: null, // graphics click handle to activate a feature
-        _existingDefinitionExpression: null, // to store existing definition expression of layer
-        _loggedInUser: null, // to store details of user that is signed in
-        _isCancelButtonClicked: false, // track whether cancel button is clicked or not in identity manager
-        _identityManagerCancelHandler: null, // stores cancel button click handler of identity manager
-        _selectedOperationalLayer: null, // stores selected operational layer
-
-        /** WIDGET INSTANTIATION **/
+        _refinedOperationalLayer: null, // to store object of layer which is added in snapshot mode
+        _timeInfo: null, // to store time info object of a layer
+        _mapResizeHandle: null, // to store resize handle of a map
 
         /**
-        * This function is called when user needs to start operation of widget
-        * @param{object} configuration details
+        * This method is designed to handle processing after any DOM fragments have been actually added to the document.
+        * @param{object} boilerplate template object
         * @param{object} logged in user details
         * @memberOf widgets/main/main
         */
@@ -95,7 +89,7 @@ define([
             // and application id
             // any url parameters and any application specific configuration information.
             if (boilerPlateTemplateObject) {
-                this.boilerPlateTemplate = boilerPlateTemplateObject;
+                this._boilerPlateTemplate = boilerPlateTemplateObject;
                 this.appConfig = boilerPlateTemplateObject.config;
                 // if login details are not available set it to anonymousUserName
                 if (this._loggedInUser) {
@@ -104,32 +98,23 @@ define([
                         "token": this._loggedInUser.credential.token
                     };
                     queryParams.token = this._loggedInUser.credential.token;
-                } else {
-                    this.appConfig.logInDetails = {
-                        "userName": this.appConfig.i18n.applicationHeader.signInOption,
-                        "token": ""
-                    };
                 }
                 // enable queryForGroupItems in templateconfig
-                this.boilerPlateTemplate.templateConfig.queryForGroupItems =
-                    true;
-                // construct the query params if found in group info
-                //mixin configured group params so that in case of private group where we dont get the gropu info, items will be loaded as configured in templateconfig
-                lang.mixin(queryParams, this.boilerPlateTemplate.templateConfig
-                    .groupParams);
-                if (this.appConfig.groupInfo.results && this.appConfig.groupInfo
-                    .results.length > 0) {
+                this._boilerPlateTemplate.templateConfig.queryForGroupItems = true;
+                // construct the query params. If found in group info mixin configured group params
+                // so that in case of private group where we dont get the group info, items will be loaded as configured in templateconfig
+                lang.mixin(queryParams, this._boilerPlateTemplate.templateConfig.groupParams);
+                if (this.appConfig.groupInfo.results && this.appConfig.groupInfo.results.length > 0) {
                     if (this.appConfig.groupInfo.results[0].sortField) {
-                        queryParams.sortField = this.appConfig.groupInfo.results[
-                            0].sortField;
+                        queryParams.sortField = this.appConfig.groupInfo.results[0].sortField;
                     }
                     if (this.appConfig.groupInfo.results[0].sortOrder) {
-                        queryParams.sortOrder = this.appConfig.groupInfo.results[
-                            0].sortOrder;
+                        queryParams.sortOrder = this.appConfig.groupInfo.results[0].sortOrder;
                     }
                 }
                 // pass the newly constructed queryparams from groupinfo.
-                // if query params not available in groupinfo or proup is private items will be sorted according to modified date.
+                // if query params not available in groupinfo or group is private
+                // items will be sorted according to modified date.
                 this._groupItems = [];
                 this._loadGroupItems(queryParams);
             } else {
@@ -137,18 +122,13 @@ define([
             }
         },
 
-        /** WIDGET INSTANTIATION **/
-
-        /** GROUP ITEMS **/
-
         /**
         * This function is used to load group items
         * @param{object} parameter used to query group items
         * @memberOf widgets/main/main
         */
         _loadGroupItems: function (queryParams) {
-            this.boilerPlateTemplate.queryGroupItems(queryParams).then(lang
-                .hitch(this, this._groupItemsLoaded));
+            this._boilerPlateTemplate.queryGroupItems(queryParams).then(lang.hitch(this, this._groupItemsLoaded));
         },
 
         /**
@@ -157,8 +137,7 @@ define([
         * @memberOf widgets/main/main
         */
         _groupItemsLoaded: function (response) {
-            this._groupItems.push.apply(this._groupItems, response.groupItems
-                .results);
+            this._groupItems.push.apply(this._groupItems, response.groupItems.results);
             if (response.groupItems.nextQueryParams.start < 0) {
                 if (!this.appConfig.groupItems) {
                     this.appConfig.groupItems = {};
@@ -171,504 +150,87 @@ define([
             }
         },
 
-        /** GROUP ITEMS **/
-
-        /** LOAD APPLICATION **/
-
         /**
         * This function is used to load application
         * @memberOf widgets/main/main
         */
         _loadApplication: function () {
-            // set Application Theme
-            ApplicationUtils.loadApplicationTheme(this.appConfig);
-            // set Application header
-            this._createApplicationHeader();
-            var mapViewerParameter;
-            mapViewerParameter = {
-                "appConfig": this.appConfig,
-                "appUtils": ApplicationUtils
-            };
-            // load MapViewer
-            this._mapViewer = new MapViewer(mapViewerParameter,
-                domConstruct.create("div", {}, dom.byId("LowerContainer")));
-            // load web map list
             if (this.appConfig.groupItems.results.length > 0) {
-                domClass.add(dom.byId("esriCTNoWebMapParentDiv"),
-                    "esriCTHidden");
-                domClass.remove(dom.byId("esriCTMainContainer"),
-                    "esriCTHidden");
+                // executes when window is resized
+                on(window, "resize", lang.hitch(this, this._onWindowResize));
+                // set Application Theme
+                ApplicationUtils.loadApplicationTheme(this.appConfig);
+                // create Application header
+                this._createApplicationHeader();
+                // create map panel
+                this._createMapPanel();
+                // to instantiate resize handle
+                this._resizeUpperAndLowerContainer();
+                // load web map list
+                domClass.add(dom.byId("noWebMapParentContainer"), "esriCTHidden");
+                domClass.remove(dom.byId("mainWrapperContainer"), "esriCTHidden");
+                // create webmap list
                 this._createWebMapList();
+                this._handleEmptyDetailsPanel();
             } else {
-                this._handleNoWebMapToDsiplay();
-            }
-            // attach event handlers
-            this._attachEvents();
-        },
-
-        /**
-        * This function is used to handle scenario when there is no web map
-        * @memberOf widgets/main/main
-        */
-        _handleNoWebMapToDsiplay: function () {
-            domClass.add(dom.byId("esriCTMainContainer"), "esriCTHidden");
-            if (query(".esriCTSettingsButton")[0]) {
-                domClass.add(query(".esriCTSettingsButton")[0],
-                    "esriCTHidden");
-            } else {
-                domClass.add(query(".esriCTSettingsButtonDisabled")[0],
-                    "esriCTHidden");
-            }
-            if (query(".esriCTSettingsButtonCaretIcon")[0]) {
-                domClass.add(query(".esriCTSettingsButtonCaretIcon")[0],
-                    "esriCTHidden");
-            } else {
-                domClass.add(query(".esriCTSettingsButtonCaretIconDisabled")[
-                    0], "esriCTHidden");
-            }
-            domClass.add(query(".esriCTViewMode")[0], "esriCTHidden");
-            domClass.add(query(".esriCTViewModeCaretIcon")[0],
-                "esriCTHidden");
-            domClass.add(query(".esriCTSearchDisable")[0], "esriCTHidden");
-            domClass.add(query(".esriCTManualRefreshButton")[0],
-                "esriCTHidden");
-            domClass.remove(dom.byId("esriCTNoWebMapParentDiv"),
-                "esriCTHidden");
-            dom.byId("esriCTNoWebMapChildDiv").innerHTML = this.appConfig.i18n
-                .webMapList.noWebMapInGroup;
-            ApplicationUtils.hideLoadingIndicator();
-        },
-
-        /**
-        * This function is used to attach events
-        * @memberOf widgets/main/main
-        */
-        _attachEvents: function () {
-            // resize map on window resize
-            on(window, "resize", lang.hitch(this, this._onWindowResize));
-            // resize map
-            this._mapViewer.resizeMap = lang.hitch(this, function () {
-                this._dataViewerWidget.isDetailsTabClicked = false;
-                this._resizeMap();
-            });
-            // display details tab
-            this._mapViewer.onDetailsTabClick = lang.hitch(this, function () {
-                this._dataViewerWidget.showDetails();
-            });
-            // handle resize of containers
-            this._resizeUpperAndLowerContainer();
-        },
-
-        /**
-        * This function is used to hide webmap list panel
-        * @memberOf widgets/main/main
-        */
-        _hideWebMapListPanel: function () {
-            var webMapPanel = query(".esriCTLeftContainer")[0];
-            domClass.add(webMapPanel, "esriCTHidden");
-        },
-
-        /**
-        * This function is used to re-locate right container which includes map & data viewer
-        * @memberOf widgets/main/main
-        */
-        _reLocateRightContainer: function (webMapListDisplayStatus) {
-            var rightContainer = query(".esriCTRightContainer")[0];
-            if (webMapListDisplayStatus) {
-                domClass.remove(rightContainer,
-                    "esriCTRightContainerFullWidth");
-                this._resizeMap();
-            } else {
-                domClass.add(rightContainer, "esriCTRightContainerFullWidth");
-                this._resizeMap();
+                // handle case when there id no webmap to display
+                this._handleNoWebMapToDisplay();
             }
         },
 
-        /** LOAD APPLICATION **/
-
-        /** RESIZE **/
-
         /**
-        * This function is used to handle views on orientation change
+        * This function is executed when window is resized
         * @memberOf widgets/main/main
         */
         _onWindowResize: function () {
-            // Due to high resolution of iPad long username was not getting displayed properly.
-            // So it detects orientation in iPad and long username gets displayed properly in landscape & potrait mode.
-            // This is done by changing the width of username dynamically.
-            if ((ApplicationUtils.isIos()) && (window.orientation === 0 ||
-                    window.orientation === 180)) { // landscape mode
-                domClass.remove(query(".esriCTLoginUserNameDiv")[0],
-                    "esriCTLoginUserNamePotraitMode");
-            } else if ((ApplicationUtils.isIos()) && (window.orientation ===
-                    90 || window.orientation === -90)) { // potrait mode
-                domClass.add(query(".esriCTLoginUserNameDiv")[0],
-                    "esriCTLoginUserNamePotraitMode");
+            if (this._applicationHeader) {
+                this._applicationHeader._setWidthOfApplicationNameContainer();
             }
-            if (this._isEditingOnAndroid) {
-                this._dataViewerWidget.OnEditingComplete();
-            }
-            if (this._isMapViewClicked) {
-                domStyle.set("UpperContainer", "display", "none");
-                domStyle.set("LowerContainer", "display", "block");
-                domStyle.set("LowerContainer", "height", "100%");
-                this._setDataViewerHeight();
-                this._resizeMap();
-            }
-            if (this._isGridViewClicked) {
-                this._dataViewerWidget.isOrientationChangedInListView = true;
-                domStyle.set("UpperContainer", "display", "block");
-                domStyle.set("LowerContainer", "height", "0%");
-                domStyle.set("UpperContainer", "height", "100%");
-                this._setDataViewerHeight();
-            }
-            if (this._isSplitViewClicked) {
-                domStyle.set("UpperContainer", "display", "block");
-                domStyle.set("LowerContainer", "display", "block");
-                this._setDefaultHeightOfUpperAndLowerContainer();
-                this._setDataViewerHeight();
-                this._resizeMap();
-            }
-            this._appHeader.resetOperationalLayerNameWidth();
-            this._appHeader.resetViewModeOptionsPosition();
-            this._appHeader.resetSettingsOptionsPosition();
-            this._appHeader.resetDataSearchPosition();
+            this._resizeMap();
         },
 
         /**
-        * This function is used to resize upper and lower container using resize handler
-        * @memberOf widgets/main/main
-        */
-        _resizeUpperAndLowerContainer: function () {
-            //set jquery resizable on upper container
-            $("#UpperContainer").resizable({
-                alsoResizeReverse: "#LowerContainer", //on resizeing upper container resize the lower map container
-                handles: 's', //show resize handel only at the bottom of the grid container
-                containment: "#esriCTMainContainer",
-                maxHeight: 550,
-                minHeight: 75
-            });
-
-            //handle resize stop event which will be fired on resize complete
-            //after completing resize of containers, resize the map so that it will be fit resized size
-            $("#UpperContainer").on("resizestop", lang.hitch(this, function () {
-                var mainContainerHeight, upperContainerHeight,
-                    lowerContainerHeight;
-                mainContainerHeight = parseFloat(domStyle.get(
-                    "esriCTMainContainer", "height"));
-                upperContainerHeight = parseFloat(domStyle.get(
-                    "UpperContainer", "height"));
-                lowerContainerHeight = mainContainerHeight -
-                    upperContainerHeight;
-                domStyle.set("LowerContainer", "height",
-                    lowerContainerHeight + "px");
-                this._resizeMap();
-                this._dataViewerWidget.createDataViewerUI(false);
-                if (this._dataViewerWidget.isShowSelectedClicked) {
-                    this._dataViewerWidget.retainShowSelectedModeAfterResize();
-                }
-            }));
-
-            $("#UpperContainer").on("resizestart", lang.hitch(this,
-                function () {
-                    var dataViewerParentDiv;
-                    if (!this._dataViewerWidget.isDetailsTabClicked) {
-                        this._dataViewerWidget.destroyDataViewerTable();
-                        dataViewerParentDiv = query(
-                            ".esriCTDataViewerParentDiv");
-                        if (dataViewerParentDiv.length > 0) {
-                            domConstruct.empty(dataViewerParentDiv[0]);
-                        }
-                    }
-                }));
-        },
-
-        /**
-        * This function is used to handle resize of map.
-        * @memberOf widgets/main/main
-        */
-        _resizeMap: function () {
-            // only resize map in map & split view
-            if (!this._isGridViewClicked) {
-                var mapCenter;
-                if (this.map && domStyle.get(this._mapViewer.mapDiv,
-                        "display") === "block") {
-                    mapCenter = this.map.extent.getCenter();
-                    domStyle.set(dom.byId("mapDiv"), "height", "100%");
-                    domStyle.set(dom.byId("mapDiv"), "width", "100%");
-                }
-                setTimeout(lang.hitch(this, function () {
-                    if (this.map && domStyle.get(this._mapViewer.mapDiv,
-                            "display") === "block") {
-                        this.map.resize();
-                        this.map.reposition();
-                        this.map.centerAt(mapCenter);
-                    }
-                }), 500);
-            }
-        },
-
-        /** RESIZE **/
-
-        /** APPLICATION HEADER CREATION **/
-
-        /**
-        * This function is used to create application header.
+        * This function is used to instantiate application header.
         * @memberOf widgets/main/main
         */
         _createApplicationHeader: function () {
             var appHeaderParameter;
+            this._destroyApplicationHeaderWidget();
+            // parameters needed for instantiating application header
             appHeaderParameter = {
                 "appConfig": this.appConfig,
                 "appUtils": ApplicationUtils,
                 "loggedInUser": this._loggedInUser
             };
-            this._appHeader = new ApplicationHeader(appHeaderParameter,
-                domConstruct.create("div", {}, dom.byId('headerContainer'))
-            );
-            // display selected records
-            this._appHeader.onShowSelectedRecordsClick = lang.hitch(this,
-                function () {
-                    this._dataViewerWidget.showSelectedRecords();
-                });
-            // display all records
-            this._appHeader.onShowAllRecordsClick = lang.hitch(this,
-                function () {
-                    this._dataViewerWidget.showAllRecords();
-                });
-            // clears the selected records
-            this._appHeader.onClearSelectionClick = lang.hitch(this,
-                function () {
-                    this._dataViewerWidget.clearSelection();
-                });
-            // zoom to selected record
-            this._appHeader.onZoomToSelectedClick = lang.hitch(this,
-                function () {
-                    this._dataViewerWidget.zoomToSelected();
-                });
-            // display grid view
-            this._appHeader.onGridViewClick = lang.hitch(this, function () {
-                // after switching to grid view always refresh it's UI
-                this._showGridView(true);
-            });
-            // display map view
-            this._appHeader.onMapViewClick = lang.hitch(this, this._showMapView);
-            // display split view
-            this._appHeader.onGridMapViewClick = lang.hitch(this, this._showSplitView);
-            // search records in data-viewer widget
-            this._appHeader.onSearchRecordsClick = lang.hitch(this,
-                function () {
-                    this._dataViewerWidget.searchDataInDataViewer();
-                });
-            // clear content in search input control
-            this._appHeader.onClearContentClick = lang.hitch(this, function () {
-                this._dataViewerWidget.clearSearchText();
-            });
-            // manual refresh the selected layer
-            this._appHeader.onManualRefreshClick = lang.hitch(this,
-                function () {
-                    this._dataViewerWidget.doManualRefresh();
-                });
-            // sign in user on click of sign-in option
-            this._appHeader.signInUser = lang.hitch(this, function () {
-                ApplicationUtils.showLoadingIndicator();
-                if (this._identityManagerCancelHandler) {
-                    this._identityManagerCancelHandler.remove();
-                }
-                var portal = new esriPortal.Portal(this.appConfig.sharinghost);
-                portal.on("load", lang.hitch(this, function () {
-                    ApplicationUtils.hideLoadingIndicator();
-                    portal.signIn().then(lang.hitch(this, function (
-                        logInDetails) {
-                        this._destroyWidgets();
-                        this.reload(logInDetails);
-                    }), lang.hitch(this, function (err) {
-                        if (this._isCancelButtonClicked) {
-                            this._isCancelButtonClicked = false;
-                        } else {
-                            ApplicationUtils.showError(err.message);
-                            location.reload();
-                        }
-                    }));
-                }));
-                this._identityManagerCancelHandler = on(IdentityManager,
-                    "dialog-cancel", lang.hitch(this, function () {
-                        this._isCancelButtonClicked = true;
-                    }));
-            });
-            // This function is used to display placeholder text in search bar
-            this._appHeader.displayPlaceHolderText = lang.hitch(this,
-                function () {
-                    this._dataViewerWidget.displayPlaceHolderText();
-                });
-            // This function is used to remove placeholder text in search bar
-            this._appHeader.removePlaceHolderText = lang.hitch(this,
-                function () {
-                    this._dataViewerWidget.removePlaceHolderText();
-                });
+            // loading application header
+            this._applicationHeader = new ApplicationHeader(appHeaderParameter, domConstruct.create("div", {}, dom.byId('applicationHeaderWrapperContainer')));
+            this._applicationHeader.startup();
         },
 
         /**
-        * This function is used to destroy the widgets
+        * This function is used to destroy application header widget.
         * @memberOf widgets/main/main
         */
-        _destroyWidgets: function () {
-            if (this._webMapListWidget) {
-                this._webMapListWidget.destroy();
-            }
-            if (this._dataViewerWidget) {
-                this._dataViewerWidget.destroy();
-            }
-            if (this._appHeader) {
-                this._appHeader.destroy();
-            }
-            if (this._mapViewer) {
-                this._mapViewer.destroy();
+        _destroyApplicationHeaderWidget: function () {
+            if (this._applicationHeader) {
+                this._applicationHeader.destroy();
             }
         },
 
         /**
-        * This function is used to reload the application
-        * @param{object} details of logged-in user
+        * This function is used to instantiate map panel
         * @memberOf widgets/main/main
         */
-        reload: function (logInDetails) {
-            return logInDetails;
+        _createMapPanel: function () {
+            var mapViewerParameter;
+            // parameters needed for instantiating map viewer panel
+            mapViewerParameter = {
+                "appConfig": this.appConfig,
+                "appUtils": ApplicationUtils
+            };
+            // load map viewer panel
+            this._mapPanelWidget = new MapViewer(mapViewerParameter, domConstruct.create("div", {}, dom.byId("mapPanelWrapperContainer")));
         },
-
-        /** APPLICATION HEADER CREATION **/
-
-        /** VIEWS **/
-
-        /**
-        * This function is used to set the view of application to grid-view only.
-        * @param{boolean} refreshGridViewUI set to true will refresh the UI of Grid-view.
-        * @memberOf widgets/main/main
-        */
-        _showGridView: function (refreshGridViewUI) {
-            $("#UpperContainer").resizable("disable");
-            this._isMapViewClicked = false;
-            this._isGridViewClicked = true;
-            this._isSplitViewClicked = false;
-            this._dataViewerWidget.isMapViewClicked = false;
-            this._dataViewerWidget.isGridViewClicked = true;
-            domStyle.set("UpperContainer", "display", "block");
-            domStyle.set("LowerContainer", "height", "0%");
-            domStyle.set("UpperContainer", "height", "100%");
-            if (refreshGridViewUI) {
-                this._dataViewerWidget.retainShowSelectedModeAfterResize();
-            }
-            this._setDataViewerHeight();
-        },
-
-        /**
-        * This function is used to set the view of application to map-view only.
-        * @memberOf widgets/main/main
-        */
-        _showMapView: function () {
-            $("#UpperContainer").resizable("disable");
-            this._isMapViewClicked = true;
-            this._isGridViewClicked = false;
-            this._isSplitViewClicked = false;
-            this._dataViewerWidget.isMapViewClicked = true;
-            this._dataViewerWidget.isGridViewClicked = false;
-            domStyle.set("UpperContainer", "display", "none");
-            domStyle.set("LowerContainer", "display", "block");
-            domStyle.set("LowerContainer", "height", "100%");
-            this._setDataViewerHeight();
-            this._resizeMap();
-        },
-
-        /**
-        * This function is used to set the view of application to split-view.
-        * In which Grid-view will be 40% and map-view will be 60% of the screen height.
-        * @memberOf widgets/main/main
-        */
-        _showSplitView: function () {
-            var objectId;
-            $("#UpperContainer").resizable("enable");
-            this._isMapViewClicked = false;
-            this._isGridViewClicked = false;
-            this._isSplitViewClicked = true;
-            this._dataViewerWidget.isMapViewClicked = false;
-            this._dataViewerWidget.isGridViewClicked = false;
-            domStyle.set("UpperContainer", "display", "block");
-            domStyle.set("LowerContainer", "display", "block");
-            this._setDefaultHeightOfUpperAndLowerContainer();
-            this._setDataViewerHeight();
-            this._dataViewerWidget.removeControlsFromPreviousRow();
-            this._resizeMap();
-            if ((this.map.getLayer("activeRowGraphicsLayer").graphics.length ===
-                    1) && (this._selectedOperationalLayer)) {
-                objectId = this.map.getLayer("activeRowGraphicsLayer").graphics[
-                    0].attributes[this._selectedOperationalLayer.objectIdField];
-                this._dataViewerWidget.highlightRowOnFeatureClick(objectId,
-                    false);
-            }
-        },
-
-        /** VIEWS **/
-
-        /** DATA-GRID/MAP PANEL **/
-
-        /**
-        * This function is used to set default height of upper and lower container
-        * @memberOf widgets/main/main
-        */
-        _setDefaultHeightOfUpperAndLowerContainer: function () {
-            domStyle.set("UpperContainer", "height", "40%");
-            domStyle.set("LowerContainer", "height", "60%");
-        },
-
-        /**
-        * This function is used to set width of upper and lower container
-        * @memberOf widgets/main/main
-        */
-        _setWidthOfUpperAndLowerContainer: function () {
-            domStyle.set("UpperContainer", "width", "100%");
-            domStyle.set("LowerContainer", "width", "100%");
-        },
-
-        /**
-        * This function is used to set data viewer height in split view & list view
-        * @memberOf widgets/main/main
-        */
-        _setDataViewerHeight: function () {
-            var tableBodyNodes = query(".dataTables_scrollBody");
-            if (tableBodyNodes.length > 0) {
-                if (this._isGridViewClicked) {
-                    domClass.replace(tableBodyNodes[0],
-                        "dataTables_listViewHeight",
-                        "dataTables_splitViewHeight");
-                } else {
-                    domClass.replace(tableBodyNodes[0],
-                        "dataTables_splitViewHeight",
-                        "dataTables_listViewHeight");
-                }
-            }
-        },
-
-        /**
-        * This function is used to reset upper container
-        * @memberOf widgets/main/main
-        */
-        _resetUpperContainer: function () {
-            var refNode, node;
-            domConstruct.empty("UpperContainer");
-            $("#UpperContainer").remove();
-            node = domConstruct.create("div", {
-                "class": "esriCTUpperContainer esriCTBorderBottom",
-                "id": "UpperContainer"
-            });
-            refNode = dom.byId("rightParentContainer");
-            domConstruct.place(node, refNode, "first");
-            domStyle.set(dom.byId("LowerContainer"), "height", "60%");
-            this._resizeUpperAndLowerContainer();
-        },
-
-        /** DATA-GRID/MAP PANEL **/
-
-        /** WEBMAP-LIST WIDGET CREATION **/
 
         /**
         * This function is used to instantiate webMapList widget.
@@ -676,6 +238,7 @@ define([
         */
         _createWebMapList: function () {
             var webMapDescriptionFields, webMapListConfigData;
+            this._addWebMapListToggleIcon();
             // hide/show info fields of web-map
             webMapDescriptionFields = {
                 "description": this.appConfig.webMapInfoDescription,
@@ -699,119 +262,274 @@ define([
                 "autoResize": false
             };
             // instantiate web-map list widget
-            this._webMapListWidget = new WebMapList(webMapListConfigData,
-                domConstruct.create("div", {}, dom.byId('LeftContainer')));
-            // when new operational layer is selected show it in data-viewer
-            this._webMapListWidget.onOperationalLayerSelected = lang.hitch(
-                this,
-                function (details) {
-                    setTimeout(lang.hitch(this, function () {
-                        ApplicationUtils.showLoadingIndicator();
-                        this._isGridViewClicked = false;
-                        this.map = details.map;
-                        this._selectedOperationalLayer = this.map.getLayer(
-                            details.operationalLayerDetails.id);
-                        this._mapViewer.addDetailsBtn();
-                        this._createDataViewer(details);
-                        this._appHeader.setLayerTitle(details.operationalLayerDetails
-                            .title);
-                    }), 10);
-                });
-            // show message when there is no web map to display
-            this._webMapListWidget.noMapsFound = lang.hitch(this, function () {
-                this._handleNoWebMapToDsiplay();
-            });
-            // to hide webmap list panel once operational layer is selected
-            this._webMapListWidget.hideWebMapListPanel = lang.hitch(this,
-                function () {
-                    this._hideWebMapListPanel();
-                    this._reLocateRightContainer(false);
-                });
-            // set upper and lower container's to default height
-            this._webMapListWidget.setDefaultHeightOfContainers = lang.hitch(
-                this,
-                function () {
-                    this._setDefaultHeightOfUpperAndLowerContainer();
-                });
-            // start web-map list widget
+            this._webMapListWidget = new WebMapList(webMapListConfigData, domConstruct.create("div", {}, dom.byId('webMapListContainer')));
+            this._attachWebMapListEventListener();
             this._webMapListWidget.startup();
         },
 
-        /** WEBMAP-LIST WIDGET CREATION **/
+        /**
+        * This function is used listen events raised by webmap list widget
+        * @memberOf widgets/main/main
+        */
+        _attachWebMapListEventListener: function () {
+            var timeAnimation;
+            // when new operational layer is selected show it in data-viewer
+            this._webMapListWidget.onOperationalLayerSelected = lang.hitch(this, function (details) {
+                setTimeout(lang.hitch(this, function () {
+                    ApplicationUtils.showLoadingIndicator();
+                    this._enableHeaderIcons();
+                    if (this.appConfig.i18n.direction === "rtl") {
+                        //Remove disable class from webmap list toggle button
+                        domClass.replace(dom.byId("webmapListToggleButton"), "esriCTPointerCursor", "esriCTWebMapPanelToggleButtonCloseDisabled");
+                    } else {
+                        //Remove disable class from webmap list toggle button
+                        domClass.replace(dom.byId("webmapListToggleButton"), "esriCTPointerCursor", "esriCTWebMapPanelToggleButtonOpenDisabled");
+                    }
+                    //Show initial load message when user is yet to select a feature
+                    if (query(".esriCTNoContentDetailsPanelWrapperContainer")[0]) {
+                        domClass.remove(query(".esriCTNoContentDetailsPanelWrapperContainer")[0], "esriCTHidden");
+                    }
+                    this.map = details.map;
+                    this._layerSelectionDetails = details;
+                    this._itemInfo = details.itemInfo;
+                    this._timeInfo = details.operationalLayerDetails.layerObject.timeInfo;
+                    this._addOperationalLayerInSnapShotMode();
+                    this._setApplicationHeaderTitle();
+                    if (this._mapResizeHandle) {
+                        this._mapResizeHandle.remove();
+                    }
+                    this._mapResizeHandle = on(this.map, "resize", lang.hitch(this, function () {
+                        this._resizeMap();
+                    }));
+                    this._removeFeatureLayerHandle();
+                    this._createFeatureLayerHandle();
+                    timeAnimation = this._checkTimeAnimation(this._itemInfo.itemData);
+                    if (this._itemInfo.itemData.widgets && this._itemInfo.itemData.widgets.timeSlider && this._itemInfo.itemData.widgets.timeSlider.properties) {
+                        this._displayContainerOfTimeSlider();
+                        this._createTimeSlider();
+                    } else {
+                        this._destroyTimeSliderWidget();
+                        this._hideContainerOfTimeSlider();
+                    }
+                    this.map.addLayer(this._refinedOperationalLayer);
+                }), 10);
+            });
+            // show message when there is no web map to display
+            this._webMapListWidget.noMapsFound = lang.hitch(this, function () {
+                this._handleNoWebMapToDisplay();
+            });
+            // to disable header icons
+            this._webMapListWidget.displayInitalLoad = lang.hitch(this, function () {
+                this._disableHeaderIcons();
+            });
+        },
 
-        /** DATA-VIEWER WIDGET CREATION **/
+        /**
+        * This function is used to enable header icons
+        * @memberOf widgets/main/main
+        */
+        _enableHeaderIcons: function () {
+            this._applicationHeader.enableHeaderIcons();
+        },
+
+        /**
+        * This function is used to display the container of time slider
+        * @memberOf widgets/main/main
+        */
+        _displayContainerOfTimeSlider: function () {
+            domClass.replace(dom.byId("upperContainer"), "esriCTUpperContainer", "esriCTUpperContainerEmptySlider");
+            domClass.replace(dom.byId("lowerContainer"), "esriCTLowerContainer", "esriCTLowerContainerEmptySlider");
+            domClass.replace(dom.byId("dataViewerWrapperContainer"), "esriCTDataViewerWrapperContainer", "esriCTDataViewerWrapperContainerEmptySlider");
+            domClass.remove(dom.byId("timeSliderWrapperContainer"), "esriCTHidden");
+            this._resizeMap();
+        },
+
+        /**
+        * This function is used to hide the container of time slider
+        * @memberOf widgets/time-slider/time-slider
+        */
+        _hideContainerOfTimeSlider: function () {
+            domClass.replace(dom.byId("upperContainer"), "esriCTUpperContainerEmptySlider", "esriCTUpperContainer");
+            domClass.replace(dom.byId("lowerContainer"), "esriCTLowerContainerEmptySlider", "esriCTLowerContainer");
+            domClass.replace(dom.byId("dataViewerWrapperContainer"), "esriCTDataViewerWrapperContainerEmptySlider", "esriCTDataViewerWrapperContainer");
+            domClass.add(dom.byId("timeSliderWrapperContainer"), "esriCTHidden");
+            this._resizeMap();
+        },
+
+        /**
+        * This function is used to check time animation in webmap Json.
+        * @param{object} parameters to check time animation
+        * @memberOf widgets/main/main
+        */
+        _checkTimeAnimation: function (itemData) {
+            var isEnableTimeAnimation = true,
+                timeAnimationKey = "timeAnimation",
+                i;
+            for (i = 0; i < itemData.operationalLayers.length; i++) {
+                if (itemData.operationalLayers[i].id === this._refinedOperationalLayer.id) {
+                    if (itemData.operationalLayers[i][timeAnimationKey] === false) {
+                        isEnableTimeAnimation = false;
+                    }
+                    break;
+                }
+            }
+            return isEnableTimeAnimation;
+        },
+
+        /**
+        * This function is used add selected operational layer in snapshot mode
+        * @memberOf widgets/main/main
+        */
+        _addOperationalLayerInSnapShotMode: function () {
+            var opLayerInfo;
+            //get selected operation layer details
+            opLayerInfo = this._layerSelectionDetails.operationalLayerDetails;
+            //remove selected layer from map
+            this.map.removeLayer(this.map.getLayer(opLayerInfo.id));
+            //create feature layer in 'snapshot' mode
+            this._refinedOperationalLayer = new FeatureLayer(opLayerInfo.url, {
+                mode: FeatureLayer.MODE_SNAPSHOT,
+                id: opLayerInfo.id,
+                outFields: ["*"]
+            });
+            //set definition expression configured in webmap
+            if (opLayerInfo.layerDefinition && opLayerInfo.layerDefinition.definitionExpression) {
+                this._refinedOperationalLayer.setDefinitionExpression(opLayerInfo.layerDefinition.definitionExpression);
+            }
+            //set layer renderer configured in webmap
+            if (opLayerInfo.layerDefinition && opLayerInfo.layerDefinition.drawingInfo && opLayerInfo.layerDefinition.drawingInfo.renderer) {
+                this._refinedOperationalLayer.setRenderer(opLayerInfo.layerDefinition.drawingInfo.renderer);
+            }
+            //set popupInfo template configured in webmap
+            if (opLayerInfo.popupInfo) {
+                this._refinedOperationalLayer.setInfoTemplate(new PopupTemplate(opLayerInfo.popupInfo));
+            }
+            //set layer opacity configured in webmap
+            this._refinedOperationalLayer.setOpacity(opLayerInfo.opacity);
+        },
+
+        /**
+        * This function is used disable header icons
+        * @memberOf widgets/main/main
+        */
+        _disableHeaderIcons: function () {
+            this._addOrganizationBaseMap();
+        },
+
+        /**
+        * This function is used add first basemap of organization on initial load
+        * @memberOf widgets/main/main
+        */
+        _addOrganizationBaseMap: function () {
+            var webMapListObj, portal, params;
+            webMapListObj = this._webMapListWidget;
+            params = {
+                q: this.appConfig.orgInfo.basemapGalleryGroupQuery
+            };
+            portal = new esriPortal.Portal(this.appConfig.sharinghost);
+            portal.queryGroups(params).then(function (groups) {
+                params = {
+                    q: "group:" + groups.results[0].id + " AND" + ' type:"Web Map" -type:"Web Mapping Application"'
+                };
+                portal.queryItems(params).then(lang.hitch(this, function (results) {
+                    webMapListObj._createMap(results.results[0].id, "mapDiv");
+                    ApplicationUtils.hideLoadingIndicator();
+                }));
+            });
+        },
+
+        /**
+        * This function is used to add webmap toggle button
+        * @memberOf widgets/main/main
+        */
+        _addWebMapListToggleIcon: function () {
+            if (this.appConfig.i18n.direction === "rtl") {
+                dojo.addClass(dom.byId('webmapListToggleButton'), "esriCTWebMapPanelToggleButtonClose");
+            } else {
+                dojo.addClass(dom.byId('webmapListToggleButton'), "esriCTWebMapPanelToggleButtonOpen");
+            }
+        },
+
+        /**
+        * This function is used to handle scenario when there is no web map
+        * @memberOf widgets/main/main
+        */
+        _handleNoWebMapToDisplay: function () {
+            var error = {};
+            error.message = this.appConfig.i18n.webMapList.noWebMapInGroup;
+            this._displayErrorMessageScreen(error);
+            ApplicationUtils.hideLoadingIndicator();
+        },
+
+        /**
+        * This function is used to set application header title after selection of operational layer
+        * @memberOf widgets/main/main
+        */
+        _setApplicationHeaderTitle: function () {
+            dojo.byId("operationalLayerName").innerHTML = this._layerSelectionDetails.operationalLayerDetails.title;
+        },
 
         /**
         * This function is used to instantiate data-viewer widget.
         * @param{object} details of newly selected layer
         * @memberOf widgets/main/main
         */
-        _createDataViewer: function (details) {
-            var dataViewerConfigData, selectedOperationalLayer, layerUrl,
-                layerID, cloneRenderer, cloneInfoTemplate, layerOpacity;
+        _createDataViewer: function () {
+            var dataViewerConfigData, layerDefinition;
+            layerDefinition = this._layerSelectionDetails.operationalLayerDetails.layerDefinition;
             // parameters that are passed to data-viewer widget
             dataViewerConfigData = {
                 "appConfig": this.appConfig,
                 "map": this.map,
-                "selectedOperationalLayerID": details.operationalLayerId,
-                "selectedOperationalLayerTitle": details.operationalLayerDetails
-                    .title,
-                "popupInfo": details.operationalLayerDetails.popupInfo,
-                "itemInfo": details.itemInfo,
+                "selectedOperationalLayerID": this._layerSelectionDetails.operationalLayerId,
+                "selectedOperationalLayerTitle": this._layerSelectionDetails.operationalLayerDetails.title,
+                "popupInfo": this._layerSelectionDetails.operationalLayerDetails.popupInfo,
+                "definitionExpression": layerDefinition && layerDefinition.definitionExpression,
+                "itemInfo": this._layerSelectionDetails.itemInfo,
                 "lastSelectedWebMapExtent": this._webMapListWidget.lastSelectedWebMapExtent,
                 "lastMapZoomLevel": this.map.getZoom(),
                 "lastMapScale": this.map.getScale(),
-                "appUtils": ApplicationUtils
+                "appUtils": ApplicationUtils,
+                "selectedOperationalLayer": this._refinedOperationalLayer
             };
-            selectedOperationalLayer = this.map.getLayer(details.operationalLayerDetails
-                .id);
-            layerOpacity = selectedOperationalLayer.opacity;
-            layerUrl = selectedOperationalLayer.url;
-            layerID = details.operationalLayerDetails.id;
-            cloneRenderer = lang.clone(selectedOperationalLayer.renderer);
-            cloneInfoTemplate = lang.clone(selectedOperationalLayer.infoTemplate);
-            this._getExistingDefinitionExpression(details.itemInfo,
-                selectedOperationalLayer);
-            this.map.removeLayer(selectedOperationalLayer);
-            selectedOperationalLayer = new FeatureLayer(layerUrl, {
-                mode: FeatureLayer.MODE_SNAPSHOT,
-                id: layerID,
-                outFields: ["*"],
-                definitionExpression: this._existingDefinitionExpression
-            });
-            selectedOperationalLayer.setRenderer(cloneRenderer);
-            selectedOperationalLayer.setInfoTemplate(cloneInfoTemplate);
-            selectedOperationalLayer.setOpacity(layerOpacity);
-            this._removeHandles();
-            this._createHandles(selectedOperationalLayer);
-            this._resetUpperContainer();
+            this._destroyDataViewerWidget();
+            this._destroyDetailsPanelWidget();
             // instantiate data-viewer widget
-            this._dataViewerWidget = new DataViewer(dataViewerConfigData,
-                domConstruct.create("div", {}, dom.byId("UpperContainer")));
-            this.map.addLayer(selectedOperationalLayer);
+            this._dataViewerWidget = new DataViewer(dataViewerConfigData, domConstruct.create("div", {}, dom.byId("dataViewerWrapperContainer")));
             this._attachDataViewerEventListener();
+            this._dataViewerWidget.startup(true);
         },
 
         /**
-        * This function is used to remove event handles
+        * This function is used to listen events raised by data viewer widget
         * @memberOf widgets/main/main
         */
-        _removeHandles: function () {
-            // removes previous feature layer click handle
-            if (this._featureLayerClickHandle) {
-                this._featureLayerClickHandle.remove();
-            }
-            // removes previous feature layer selection complete handle
-            if (this._dataViewerFeatureLayerSelectionCompleteHandle) {
-                this._dataViewerFeatureLayerSelectionCompleteHandle.remove();
-            }
-            // removes previous feature layer clear selection handle
-            if (this._dataViewerFeatureLayerSelectionClearHandle) {
-                this._dataViewerFeatureLayerSelectionClearHandle.remove();
-            }
-            // removes previous feature layer update end handle
-            if (this._dataViewerFeatureLayerUpdateEndHandle) {
-                this._dataViewerFeatureLayerUpdateEndHandle.remove();
+        _attachDataViewerEventListener: function () {
+            this._dataViewerWidget.showDetailsPanel = lang.hitch(this, function (featureSet) {
+                //Hide initial load message when user selects feature
+                if (query(".esriCTNoContentDetailsPanelWrapperContainer")[0]) {
+                    domClass.add(query(".esriCTNoContentDetailsPanelWrapperContainer")[0], "esriCTHidden");
+                }
+                // create details panel
+                this._createDetailsPanel(featureSet);
+            });
+            this._dataViewerWidget.attachEventToGraphicsLayer = lang.hitch(this, function (graphicsLayer) {
+                // to select graphics on click of activated feature
+                this._selectRowGraphicsClickHandle = on(graphicsLayer, "click", lang.hitch(this, function (evt) {
+                    if (evt.graphic.geometry.type !== "point") {
+                        this._dataViewerWidget.onFeatureClick(evt);
+                    }
+                }));
+            });
+        },
+
+        /**
+        * This function is used to destroy data-viewer widget.
+        * @memberOf widgets/main/main
+        */
+        _destroyDataViewerWidget: function () {
+            if (this._dataViewerWidget) {
+                this._dataViewerWidget.destroy();
             }
         },
 
@@ -820,206 +538,94 @@ define([
         * @param{object} operational layer to which event needs to be attached
         * @memberOf widgets/main/main
         */
-        _createHandles: function (selectedOperationalLayer) {
-            // attach click event to feature layer
-            if (selectedOperationalLayer) {
+        _createFeatureLayerHandle: function () {
+            if (this._refinedOperationalLayer) {
                 // to enable/disable details button on click of feature layer
-                this._featureLayerClickHandle = on(selectedOperationalLayer,
-                    "click", lang.hitch(this, function (evt) {
-                        this._dataViewerWidget.onFeatureClick(evt);
-                    }));
-                this._dataViewerFeatureLayerUpdateEndHandle = on(
-                    selectedOperationalLayer, "update-end", lang.hitch(this,
-                        function (evt) {
-                            if (!this._isEditingFeatureOn()) {
-                                // When a row is removed in partially editing mode. Multiple operations like creating & editing
-                                // are performed in andriod enviroment. When layer is refreshed after editing its graphics are not rendered in
-                                // layer instantly. Due to which there are no graphics available in layer. When datatable is created without any
-                                // graphics then by default it creates a single row stating no data is available in table. To forbid this scenario
-                                // a flag stating whether layer is refreshed after editing needs to be analysed
-                                if (this._dataViewerWidget.isLayerRefreshed) {
-                                    this._dataViewerWidget.isLayerRefreshed = false;
-                                    if (this._dataViewerWidget.isRowRemoved) {
-                                        this._dataViewerWidget.isRowRemoved = false;
-                                        this._dataViewerWidget.checkForNoFeatures();
-                                    }
-                                } else {
-                                    // create ui of data-viewer widget
-                                    if ((evt.target._defnExpr === this._existingDefinitionExpression) ||
-                                        (evt.target._defnExpr === null) || (evt.target._defnExpr ===
-                                            undefined)) {
-                                        this._dataViewerWidget.createDataViewerUI(true);
-                                    } else {
-                                        if (evt.target.graphics.length === 0) {
-                                            this._dataViewerWidget.noResultFound = true;
-                                            this._dataViewerWidget.displaySearchData();
-                                        } else {
-                                            this._dataViewerWidget.displaySearchData();
-                                            this._dataViewerWidget.createDataViewerUI(
-                                                false);
-                                        }
-                                    }
-                                }
-                            }
+                this._featureLayerClickHandle = on(this._refinedOperationalLayer, "click", lang.hitch(this, function (evt) {
+                    this._dataViewerWidget.onFeatureClick(evt);
+                }));
+                this._dataViewerFeatureLayerUpdateEndHandle = on(this._refinedOperationalLayer, "update-end", lang.hitch(this, function () {
+                    //Check if time slider widget exsist, if yes then query and fetch features within current time extent
+                    if (this._timeSliderWidget) {
+                        var timeExtent, timeQuery;
+                        timeExtent = this._timeSliderWidget._createTimeExtent(this._timeSliderWidget.currentTimeInfo);
+                        timeQuery = new EsriQuery();
+                        timeQuery.timeExtent = timeExtent;
+                        timeQuery.where = "1=1";
+                        this._refinedOperationalLayer.queryFeatures(timeQuery, lang.hitch(this, function (featureSet) {
+                            //Change graphics of layer with latest featched features
+                            this._refinedOperationalLayer.graphics = featureSet.features || [];
+                            this._createDataViewer();
                         }));
+                    } else {
+                        this._createDataViewer();
+                    }
+                }));
             }
         },
 
         /**
-        * This function is used to attach event handlers
+        * This function is used to instantiate time slider widget.
         * @memberOf widgets/main/main
         */
-        _attachDataViewerEventListener: function () {
-            // hide/show settings options
-            this._dataViewerWidget.toggleSelectionViewOption = lang.hitch(
-                this,
-                function () {
-                    this._appHeader.toggleSelectionViewOption();
-                });
-            // show details panel
-            this._dataViewerWidget.showDetailsTab = lang.hitch(this,
-                function () {
-                    this._mapViewer.switchViewer("details");
-                });
-            // show map panel
-            this._dataViewerWidget.showLocationTab = lang.hitch(this,
-                function () {
-                    this._mapViewer.switchViewer("location");
-                });
-            // Handle Edit start and complete event
-            this._dataViewerWidget.OnEditingStart = lang.hitch(this,
-                function () {
-                    //check if it's android device and user is in split-view then only switch to only grid-view
-                    if (ApplicationUtils.isAndroid() && this._isSplitViewClicked) {
-                        domStyle.set(this._mapViewer.mapDiv, "display", "none");
-                        //Show only grid-view while editing in android devices
-                        this._showGridView(false);
-                        //Set Editing started on android after keyboard animation is done
-                        setTimeout(lang.hitch(this, function () {
-                            this._isEditingOnAndroid = true;
-                        }), 500);
-                    }
-                });
-            // Handle Edit start and complete event
-            this._dataViewerWidget.OnEditingComplete = lang.hitch(this,
-                function () {
-                    if (ApplicationUtils.isAndroid() && this._isEditingOnAndroid) {
-                        //reset the flag to false once editing is done
-                        this._isEditingOnAndroid = false;
-                        //set the display of the map to true so that it is visible after keyboard is hidden
-                        domStyle.set(this._mapViewer.mapDiv, "display", "block");
-                        //after editing move to split-view
-                        this._showSplitView(false);
-                    }
-                });
-            this._dataViewerWidget.attachEventToGraphicsLayer = lang.hitch(
-                this,
-                function (graphicsLayer) {
-                    // removes previous graphic's add handle
-                    if (this._selectRowGraphicsAddHandle) {
-                        this._selectRowGraphicsAddHandle.remove();
-                    }
-                    // removes previous graphic's remove handle
-                    if (this._selectRowGraphicsRemoveHandle) {
-                        this._selectRowGraphicsRemoveHandle.remove();
-                    }
-                    // removes previous graphic's clear handle
-                    if (this._selectRowGraphicsClearHandle) {
-                        this._selectRowGraphicsClearHandle.remove();
-                    }
-                    if (this._selectRowGraphicsClickHandle) {
-                        this._selectRowGraphicsClickHandle.remove();
-                    }
-                    // to enable/disable details button on add of graphics in graphics layer
-                    this._selectRowGraphicsAddHandle = on(graphicsLayer,
-                        "graphic-add", lang.hitch(this, function () {
-                            this._dataViewerWidget.changeDetailsButtonMode();
-                        }));
-                    // to enable/disable details button on remove of graphics in graphics layer
-                    this._selectRowGraphicsRemoveHandle = on(graphicsLayer,
-                        "graphic-remove", lang.hitch(this, function () {
-                            this._dataViewerWidget.changeDetailsButtonMode();
-                        }));
-                    // to enable/disable details button on clearing of graphics
-                    this._selectRowGraphicsClearHandle = on(graphicsLayer,
-                        "graphics-clear", lang.hitch(this, function () {
-                            this._dataViewerWidget.changeDetailsButtonMode();
-                        }));
-                    // to select graphics on click of activated feature
-                    this._selectRowGraphicsClickHandle = on(graphicsLayer,
-                        "click", lang.hitch(this, function (evt) {
-                            if (evt.graphic.geometry.type !== "point") {
-                                this._dataViewerWidget.onFeatureClick(evt);
-                            }
-                        }));
-                });
-            this._dataViewerWidget.attachEventToActiveRowLayer = lang.hitch(
-                this,
-                function (graphicsLayer) {
-                    // removes previous graphic's add handle
-                    if (this._activeRowGraphicsAddHandle) {
-                        this._activeRowGraphicsAddHandle.remove();
-                    }
-                    // removes previous graphic's remove handle
-                    if (this._activeRowGraphicsRemoveHandle) {
-                        this._activeRowGraphicsRemoveHandle.remove();
-                    }
-                    // removes previous graphic's clear handle
-                    if (this._activeRowClearHandle) {
-                        this._activeRowClearHandle.remove();
-                    }
-                    // removes previous graphic's click handle
-                    if (this._activeRowGraphicsClickHandle) {
-                        this._activeRowGraphicsClickHandle.remove();
-                    }
-                    // to enable/disable details button on add of graphics in graphics layer
-                    this._activeRowGraphicsAddHandle = on(graphicsLayer,
-                        "graphic-add", lang.hitch(this, function () {
-                            this._dataViewerWidget.changeDetailsButtonMode();
-                        }));
-                    // to enable/disable details button on remove of graphics in graphics layer
-                    this._activeRowGraphicsRemoveHandle = on(graphicsLayer,
-                        "graphic-remove", lang.hitch(this, function () {
-                            this._dataViewerWidget.changeDetailsButtonMode();
-                        }));
-                    // to enable/disable details button on clearing of graphics
-                    this._activeRowClearHandle = on(graphicsLayer,
-                        "graphics-clear", lang.hitch(this, function () {
-                            this._dataViewerWidget.changeDetailsButtonMode();
-                        }));
-                    // to select graphics on click of activated feature
-                    this._activeRowGraphicsClickHandle = on(graphicsLayer,
-                        "click", lang.hitch(this, function (evt) {
-                            if (evt.graphic.geometry.type !== "point") {
-                                this._dataViewerWidget.onFeatureClick(evt);
-                            }
-                        }));
-                });
-            // resize map
-            this._dataViewerWidget.resizeMap = lang.hitch(this, function () {
-                this._dataViewerWidget.isDetailsTabClicked = false;
-                this._resizeMap();
-            });
+        _createTimeSlider: function () {
+            this._destroyTimeSliderWidget();
+            var timeSliderParameters;
+            timeSliderParameters = {
+                "appConfig": this.appConfig,
+                "appUtils": ApplicationUtils,
+                "webmapJSON": this._layerSelectionDetails.itemInfo,
+                "map": this.map,
+                "selectedLayer": this._refinedOperationalLayer,
+                "timeInfo": this._timeInfo
+            };
+            this._timeSliderWidget = new TimeSlider(timeSliderParameters, domConstruct.create("div", {}, dom.byId('timeSliderWrapperContainer')));
+            this._timeSliderWidget.startup();
+        },
+
+        /**
+        * This function is used to destroy time slider widget.
+        * @memberOf widgets/main/main
+        */
+        _destroyTimeSliderWidget: function () {
+            if (this._timeSliderWidget) {
+                this._timeSliderWidget.destroy();
+            }
+        },
+
+        /**
+        * This function is used to resize the map when its container is resized.
+        * @memberOf widgets/main/main
+        */
+        _resizeMap: function () {
+            var mapCenter;
+            if ((this.map) && (domStyle.get(dom.byId("mapDiv"), "display") === "block")) {
+                mapCenter = this.map.extent.getCenter();
+                domStyle.set(dom.byId("mapDiv"), "height", "100%");
+                domStyle.set(dom.byId("mapDiv"), "width", "100%");
+            }
+            setTimeout(lang.hitch(this, function () {
+                if ((this.map) && (domStyle.get(dom.byId("mapDiv"), "display") === "block")) {
+                    this.map.resize();
+                    this.map.reposition();
+                    this.map.centerAt(mapCenter);
+                }
+            }), 500);
         },
 
         /**
         * This function is used to set existing definition expression.
         * @param{object} item info of selected operational layer
         * @param{object} selected operational layer
-        * @memberOf widgets/data-viewer/data-viewer
+        * @memberOf widgets/main/main
         */
-        _getExistingDefinitionExpression: function (itemInfo,
-            selectedOperationalLayer) {
+        _getExistingDefinitionExpression: function (itemInfo) {
             var j;
             // Initially, if a layer has some definition expression than store it
             for (j = 0; j < itemInfo.itemData.operationalLayers.length; j++) {
-                if (selectedOperationalLayer.id === itemInfo.itemData.operationalLayers[
-                        j].id) {
-                    if (itemInfo.itemData.operationalLayers[j].layerDefinition &&
-                        itemInfo.itemData.operationalLayers[j].layerDefinition.definitionExpression
-                    ) {
-                        this._existingDefinitionExpression = itemInfo.itemData.operationalLayers[
-                            j].layerDefinition.definitionExpression;
+                if (this._refinedOperationalLayer.id === itemInfo.itemData.operationalLayers[j].id) {
+                    if (itemInfo.itemData.operationalLayers[j].layerDefinition && itemInfo.itemData.operationalLayers[j].layerDefinition.definitionExpression) {
+                        this._existingDefinitionExpression = itemInfo.itemData.operationalLayers[j].layerDefinition.definitionExpression;
                     } else {
                         this._existingDefinitionExpression = null;
                     }
@@ -1028,21 +634,107 @@ define([
         },
 
         /**
-        * This function is used to track whether, user is currently editing any feature or not
-        * @memberOf widgets/data-viewer/data-viewer
+        * This function is used to instantiate details panel widget.
+        * @memberOf widgets/main/main
         */
-        _isEditingFeatureOn: function () {
-            var textInput, dropDown, datePicker;
-            textInput = $(".esriCTTextInput");
-            dropDown = $(".esriCTCodedDomain");
-            datePicker = $(".esriCTDateInputField");
-            if ((textInput.length === 0) && (dropDown.length === 0) && (
-                    datePicker.length === 0)) {
-                return false;
-            }
-            return true;
-        }
+        _createDetailsPanel: function (featureSet) {
+            this._destroyDetailsPanelWidget();
+            var detailsPanelParameters;
+            detailsPanelParameters = {
+                "appConfig": this.appConfig,
+                "selectedFeatureSet": featureSet,
+                "selectedOperationalLayer": this._refinedOperationalLayer,
+                "map": this.map,
+                "appUtils": ApplicationUtils,
+                "itemInfo": this._itemInfo
+            };
+            this._detailsPanelWidget = new DetailsPanel(detailsPanelParameters, domConstruct.create("div", {}, dom.byId("detailsPanelWrapperContainer")));
+            this._detailsPanelWidget.startup();
+        },
 
-        /** DATA-VIEWER WIDGET CREATION **/
+        /**
+        * This function is used to destroy details panel widget.
+        * @memberOf widgets/main/main
+        */
+        _destroyDetailsPanelWidget: function () {
+            if (this._detailsPanelWidget) {
+                this._detailsPanelWidget.destroyPopupWidget();
+                this._detailsPanelWidget.destroyMediaWidget();
+                this._detailsPanelWidget.destroyCommentsWidget();
+                this._detailsPanelWidget.destroy();
+            }
+        },
+
+        /**
+        * This function is used to resize upper and lower container using resize handler
+        * @memberOf widgets/main/main
+        */
+        _resizeUpperAndLowerContainer: function () {
+            //set jquery resizable on upper container
+            $("#upperContainer").resizable({
+                alsoResizeReverse: "#lowerContainer", //on resizeing upper container resize the lower map container
+                handles: 's', //show resize handel only at the bottom of the grid container
+                containment: "#UpperAndLowerWrapperContainer",
+                maxHeight: 550,
+                minHeight: 75
+            });
+
+            //handle resize stop event which will be fired on resize complete
+            //after completing resize of containers, resize the map so that it will be fit resized size
+            $("#upperContainer").on("resizestop", lang.hitch(this, function () {
+                ApplicationUtils.showLoadingIndicator();
+                var mainContainerHeight, upperContainerHeight, lowerContainerHeight;
+                mainContainerHeight = parseFloat(domStyle.get("UpperAndLowerWrapperContainer", "height"));
+                upperContainerHeight = parseFloat(domStyle.get("upperContainer", "height"));
+                lowerContainerHeight = mainContainerHeight - upperContainerHeight;
+                domStyle.set("lowerContainer", "height", lowerContainerHeight + "px");
+                this._resizeMap();
+                ApplicationUtils.hideLoadingIndicator();
+            }));
+        },
+
+        /**
+        * This function is used to remove event handles
+        * @memberOf widgets/main/main
+        */
+        _removeFeatureLayerHandle: function () {
+            // removes previous feature layer click handle
+            if (this._featureLayerClickHandle) {
+                this._featureLayerClickHandle.remove();
+            }
+            // removes previous feature layer update end handle
+            if (this._dataViewerFeatureLayerUpdateEndHandle) {
+                this._dataViewerFeatureLayerUpdateEndHandle.remove();
+            }
+        },
+
+        /**
+        * This function is used to show appropriate message when deatils panel is empty
+        * @memberOf widgets/main/main
+        */
+        _handleEmptyDetailsPanel: function () {
+            var noContentWrapperContainer;
+            noContentWrapperContainer = domConstruct.create("div", { "class": "esriCTNoContentDetailsPanelWrapperContainer" }, dom.byId("detailsPanelWrapperContainer"));
+            domConstruct.create("div", { "class": "esriCTNoContentDetailsPanelContainer", "innerHTML": this.appConfig.selectFeatureMessage }, noContentWrapperContainer);
+        },
+
+        /**
+        * This function is used to screen of error message
+        * @memberOf widgets/main/main
+        */
+        _displayErrorMessageScreen: function (error) {
+            var errorMessage, node;
+            domClass.add("mainWrapperContainer", "esriCTHidden");
+            errorMessage = this.appConfig.i18n.map.error;
+            if (error && error.message) {
+                errorMessage = error.message;
+            }
+            // remove loading class from body
+            domClass.remove(document.body, "app-loading");
+            domClass.add(document.body, "app-error");
+            domClass.add(query(".loading-indicator")[0], "esriCTWhiteBackGround");
+            node = dom.byId("loading_message");
+            node.innerHTML = errorMessage;
+        }
     });
 });
