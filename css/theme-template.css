@@ -25,6 +25,11 @@
     background-color: ${SelectedThemeColor} !important;
 }
 
+.esriCTBGLightColor
+{
+    background-color : ${LighterShadeThemeColor} !important;
+}
+
 /** Background ends **/
 
 /** Border starts **/
@@ -60,6 +65,16 @@
 {
     border-top-color: ${SelectedThemeColor};
     background-color: ${LighterShadeThemeColor} !important;
+}
+
+.esriCTPostPopupButton:hover, .esriCTPostPopupButton, .esriCTPostCommentButton, .esriCTPostCommentButton:hover
+{
+      background-color: ${SelectedThemeColor} !important;
+}
+
+.esriCTCancelPopupButton:hover,.esriCTCancelCommentButton:hover
+{
+    color: ${SelectedThemeColor} !important;
 }
 
 /* Details panel ends */

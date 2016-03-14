@@ -21,14 +21,18 @@ define([
     "dojo/string",
     "dojo/dom-construct",
     "dojo/query",
-    "dojo/dom"
+    "dojo/number",
+    "dojo/dom",
+    "dojo/_base/Color"
 ], function (
     domClass,
     ThemeCss,
     string,
     domConstruct,
     query,
-    dom
+    numberformatter,
+    dom,
+    Color
 ) {
     return {
         /**
@@ -80,13 +84,16 @@ define([
         * @memberOf utils/utils
         */
         loadApplicationTheme: function (appConfig) {
-            var cssString, head, style, link;
+            var cssString, head, style, link, rgbColor;
             //if theme is configured
             if (appConfig.theme) {
+                //Convert hex color to rgb and add opacity to get ligher shade of configured color
+                rgbColor = new Color(appConfig.theme);
+                rgbColor.a = 0.6;
                 //substitute theme color values in theme template
                 cssString = string.substitute(ThemeCss, {
                     SelectedThemeColor: appConfig.theme,
-                    LighterShadeThemeColor: this.colorLuminance(appConfig.theme, 0.9), // Light shade :- 0.1 to 1.0 and dark shade :- -0.1 to -1.0
+                    LighterShadeThemeColor: rgbColor,
                     HighlightedRowColor: appConfig.highlightRow
                 });
                 //Create Style using theme template and append it to head
@@ -143,6 +150,14 @@ define([
                 obj.dateFormat = "MM/DD/YYYY h:mm:ss a";
                 obj.showTime = true;
                 return obj;
+            case "shortDateLongTime24":
+                obj.dateFormat = "M/DD/YYYY HH:mm:ss";
+                obj.showTime = true;
+                return obj;
+            case "shortDateLELongTime24":
+                obj.dateFormat = "D/M/YYYY HH:mm:ss";
+                obj.showTime = true;
+                return obj;
             case "shortDateLELongTime":
                 obj.dateFormat = "DD/MM/YYYY h:mm:ss a";
                 obj.showTime = true;
@@ -187,8 +202,8 @@ define([
         * @param{integer} number that needs to be converted into thousand seperator
         * @memberOf utils/utils
         */
-        convertNumberToThousandSeperator: function (number) {
-            return number.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+        convertNumberToThousandSeperator: function (number, decimalPlace) {
+            return numberformatter.format(number, { places: decimalPlace });
         },
 
         /**
@@ -209,31 +224,6 @@ define([
         isIos: function () {
             var ua = navigator.userAgent.toLowerCase();
             return ua.indexOf("ipad") > -1;
-        },
-
-
-        /**
-        * This function returns ligher/darker shade of configured theme color
-        * @returns {string, number} configured theme color and lighter/darker shade value in number
-        * @memberOf utils/utils
-        */
-        colorLuminance: function (hex, lum) {
-            // validate hex string
-            hex = String(hex).replace(/[^0-9a-f]/gi, ''); //ignore jslint
-            if (hex.length < 6) {
-                hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-            }
-            lum = lum || 0;
-
-            // convert to decimal and change luminosity
-            var rgb = "#", c, i;
-            for (i = 0; i < 3; i++) {
-                c = parseInt(hex.substr(i * 2, 2), 16);
-                c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
-                rgb += ("00" + c).substr(c.length);
-            }
-
-            return rgb;
         }
     };
 });

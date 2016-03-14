@@ -127,6 +127,11 @@
             "fieldName": "selectFeatureMessage",
             "label": "Details panel message",
             "tooltip": "This message is displayed in details panel when no feature is selected in data viewer"
+        }, {
+            "type": "boolean",
+            "fieldName": "enableFilter",
+            "label": "Show filters with default value",
+            "tooltip": "If this field is true default value of filters will be displayed else empty values will be displayed"
         }],
         "values": {
             "group": "d3e11b4398984ec481d3ae9bde0d2810",
@@ -147,7 +152,8 @@
             "webMapInfoTags": false,
             "webMapInfoNumViews": false,
             "webMapInfoAvgRating": false,
-            "selectFeatureMessage": "Select a feature to get started"
+            "selectFeatureMessage": "Select a feature to get started",
+            "enableFilter": true
         }
     }]
 }

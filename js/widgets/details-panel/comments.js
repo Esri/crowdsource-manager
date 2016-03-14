@@ -30,6 +30,7 @@ define([
     "dojo/dom-class",
     "dojo/dom",
     "dojo/dom-attr",
+    "dojo/dom-style",
     "esri/dijit/PopupTemplate",
     "dijit/layout/ContentPane",
     "widgets/details-panel/comment-form",
@@ -50,6 +51,7 @@ define([
     domClass,
     dom,
     domAttr,
+    domStyle,
     PopupTemplate,
     ContentPane,
     CommentForm,
@@ -75,7 +77,7 @@ define([
         * @memberOf widgets/details-panel/comments
         */
         startup: function () {
-            this._showComments(this.selectedFeatureSet.features[0], this.commentsContainer);
+            this._showComments(this.multipleFeatures[0], this.commentsContainer);
         },
 
         /**
@@ -91,7 +93,6 @@ define([
                 // Construct the related table URL form operational layer URL and the related table id
                 // We are considering only first related table although the layer has many related table.
                 // Hence, we are fetching relatedTableId from relationships[0] ie:"operationalLayer.relationships[0].relatedTableId"
-
                 // Create Comments table if not exist from the first related table of the layer
                 if (!this._commentsTable) {
                     relatedTableURL = this.selectedOperationalLayer.url.substr(0, this.selectedOperationalLayer.url.lastIndexOf('/') + 1) + this.selectedOperationalLayer.relationships[0].relatedTableId;
@@ -124,9 +125,9 @@ define([
         * @memberOf widgets/details-panel/comments
         */
         _loadCommentsIfExist: function (graphic, parentDiv) {
-            if ((this.appConfig.usePopupConfigurationForComment) && (this._commentPopupTable)) {
+            if ((this.appConfig.usePopupConfigurationForComment) && (this._commentPopupTable) && (this._hasEditableField())) {
                 this._fetchComments(graphic, parentDiv);
-            } else if ((!this.appConfig.usePopupConfigurationForComment) && (this._hasCommentsField())) {
+            } else if ((!this.appConfig.usePopupConfigurationForComment) && (this._hasCommentsField() && (this._hasEditableField()))) {
                 this._fetchComments(graphic, parentDiv);
             } else {
                 this.hideCommentsTab();
@@ -135,12 +136,28 @@ define([
         },
 
         /**
+        * This function is used to check whether one of the field is editable or not
+        * @memberOf widgets/details-panel/comments
+        */
+        _hasEditableField: function () {
+            var hasEditableField = false, k;
+            if (this._commentPopupTable && this._commentPopupTable.popupInfo) {
+                for (k = 0; k < this._commentPopupTable.popupInfo.fieldInfos.length; k++) {
+                    if (this._commentPopupTable.popupInfo.fieldInfos[k].isEditable) {
+                        hasEditableField = true;
+                        break;
+                    }
+                }
+            }
+            return hasEditableField;
+        },
+
+        /**
         * This function is used to check whether comment's field that is configured is available in comments table or not.
         * @memberOf widgets/details-panel/comments
         */
         _hasCommentsField: function () {
-            var k, hasCommentField;
-            hasCommentField = false;
+            var k, hasCommentField = false;
             if (this.appConfig.commentField) {
                 // if the related table contains comment field set commentIconFlag to true
                 for (k = 0; k < this._commentsTable.fields.length; k++) {
@@ -154,65 +171,17 @@ define([
         },
 
         /**
-        * This function is used to fetch comments from table
+        * This function is used to create common popup comment contents
         * @memberOf widgets/details-panel/comments
         */
-        _fetchComments: function (graphic, parentDiv) {
-            var relatedQuery, currentID;
-            currentID = graphic.attributes[this.selectedOperationalLayer.objectIdField];
-            relatedQuery = new RelationshipQuery();
-            relatedQuery.outFields = ["*"];
-            relatedQuery.relationshipId = this.selectedOperationalLayer.relationships[0].id;
-            relatedQuery.objectIds = [currentID];
-            // Query for related features and showing comments
-            this.selectedOperationalLayer.queryRelatedFeatures(relatedQuery,
-                lang.hitch(this, function (relatedFeatures) {
-                    var commentsParentDiv, pThis, commentsContainerDiv, commentContentPaneContainer, commentContentPane, i;
-                    pThis = this;
-                    this._relatedRecords = relatedFeatures;
-                    commentsContainerDiv = domConstruct.create("div", { "class": "esriCTcommentsContainerDiv" }, parentDiv);
-                    commentsParentDiv = domConstruct.create("div", { "class": "esriCTcommentsParentDiv" }, commentsContainerDiv);
-                    domConstruct.create("div", { "innerHTML": this.appConfig.i18n.commentsPanel.commentsText, "class": "esriCTDetailsFieldHeader" }, commentsParentDiv);
-
-                    function sortComments(a, b) {
-                        if (a.attributes[pThis._commentsTable.objectIdField] >
-                                b.attributes[pThis._commentsTable.objectIdField]) {
-                            return -1; // order a before b
-                        }
-                        if (a.attributes[pThis._commentsTable.objectIdField] <
-                                b.attributes[pThis._commentsTable.objectIdField]) {
-                            return 1; // order b before a
-                        }
-                        return 0; // a & b have same date, so relative order doesn't matter
-                    }
-
-                    if (this._relatedRecords[currentID] && this._relatedRecords[currentID].features && this._relatedRecords[currentID].features.length > 0) {
-                        this._relatedRecords[currentID].features.sort(sortComments);
-                        for (i = 0; i < this._relatedRecords[currentID].features.length; i++) {
-                            if (this.appConfig.usePopupConfigurationForComment) {
-
-                                this._relatedRecords[currentID].features[i].setInfoTemplate(new PopupTemplate(this._commentPopupTable.popupInfo));
-                                commentContentPaneContainer = domConstruct.create("div", { "class": "esriCTCommentsPopup" }, commentsParentDiv);
-                                commentContentPane = new ContentPane({}, commentContentPaneContainer);
-                                commentContentPane.startup();
-                                commentContentPane.set('content', this._relatedRecords[currentID].features[i].getContent());
-                                this._createCommentButton(commentContentPaneContainer, currentID, this._relatedRecords[currentID].features[i].attributes[this.selectedOperationalLayer.objectIdField], graphic);
-                            } else {
-                                if (this.appConfig.commentField && this._relatedRecords[currentID].features[i].attributes[this.appConfig.commentField]) {
-                                    domConstruct.create("div", { "class": "esriCTDetailsFieldValue", "innerHTML": this._relatedRecords[currentID].features[i].attributes[this.appConfig.commentField] }, commentsParentDiv);
-                                } else {
-                                    this.hideCommentsTab();
-                                }
-                            }
-                        }
-                        this.showCommentsTab();
-                    } else {
-                        this.hideCommentsTab();
-                    }
-                    this.appUtils.hideLoadingIndicator();
-                }), lang.hitch(this, function () {
-                    this.appUtils.hideLoadingIndicator();
-                }));
+        _createPopUpContent: function (currentFeature, commentsParentDiv, currentID) {
+            var commentContentPaneContainer, commentContentPane;
+            currentFeature.setInfoTemplate(new PopupTemplate(this._commentPopupTable.popupInfo));
+            commentContentPaneContainer = domConstruct.create("div", { "class": "esriCTCommentsPopup" }, commentsParentDiv);
+            commentContentPane = new ContentPane({}, commentContentPaneContainer);
+            commentContentPane.startup();
+            commentContentPane.set('content', currentFeature.getContent());
+            this._createCommentButton(commentContentPaneContainer, currentID, currentFeature.attributes[this.selectedOperationalLayer.objectIdField], currentFeature);
         },
 
         /**
@@ -223,6 +192,7 @@ define([
             var commentBtnnDiv = domConstruct.create("div", { "class": "esriCTCommentButton" }, parentDiv);
             on(commentBtnnDiv, "click", lang.hitch(this, function () {
                 this._createCommentForm(graphic);
+                domStyle.set(this.commentsContainer, "display", "none");
             }));
         },
 
@@ -247,43 +217,45 @@ define([
         * @memberOf widgets/details-panel/comments
         */
         _createCommentForm: function (item) {
-            if (!this._commentformInstance) {
-                domConstruct.empty(dom.byId("commentformContainer"));
-                //Create new instance of CommentForm
-                this._commentformInstance = new CommentForm({
-                    config: this.appConfig,
-                    commentTable: this._commentsTable,
-                    commentPopupTable: this._commentPopupTable,
-                    itemInfos: this.itemInfo,
-                    appUtils: this.appUtils,
-                    nls: this.appConfig.i18n,
-                    item: item,
-                    selectedLayer: this.selectedOperationalLayer
-                }, domConstruct.create("div", {}, dom.byId("commentformContainer")));
-
-                // attach cancel button click event
-                this._commentformInstance.onCancelButtonClick = lang.hitch(this, function () {
-                    this._showPanel(dom.byId("commentformContainer"));
-                    this._commentformInstance._clearFormFields();
-                    this.isCommentFormOpen = false;
-                    //Check if application is running on android devices, and show/hide the details panel
-                    //This resolves the jumbling of content in details panel on android devices
-                    if (this.appUtils.isAndroid()) {
-                        this.toggleDetailsPanel();
-                    }
-                });
-                this._commentformInstance.onCommentFormSubmitted = lang.hitch(this, function (item) {
-                    //close the comment form after submitting new comment
-                    this._showPanel(dom.byId("commentformContainer"));
-                    this._commentformInstance._clearFormFields();
-                    this.isCommentFormOpen = false;
-                    //update comment list
-                    this._queryComments(item);
-                });
-            } else {
-                //Hide error message div, if it is visible
-                this._commentformInstance.clearHeaderMessage();
+            if (this._commentformInstance) {
+                this._commentformInstance.destroy();
             }
+            domConstruct.empty(dom.byId("commentformContainer"));
+            //Create new instance of CommentForm
+            this._commentformInstance = new CommentForm({
+                config: this.appConfig,
+                commentTable: this._commentsTable,
+                commentPopupTable: this._commentPopupTable,
+                itemInfos: this.itemInfo,
+                appUtils: this.appUtils,
+                nls: this.appConfig.i18n,
+                item: item,
+                selectedLayer: this.selectedOperationalLayer
+            }, domConstruct.create("div", {}, dom.byId("commentformContainer")));
+
+            // attach cancel button click event
+            this._commentformInstance.onCancelButtonClick = lang.hitch(this, function () {
+                this._showPanel(dom.byId("commentformContainer"));
+                this.isCommentFormOpen = false;
+                //Check if application is running on android devices, and show/hide the details panel
+                //This resolves the jumbling of content in details panel on android devices
+                if (this.appUtils.isAndroid()) {
+                    this.toggleDetailsPanel();
+                }
+                domStyle.set(this.commentsContainer, "display", "block");
+                //SCroll to top position when clicked cancel need ID to use scrollTop
+                dom.byId("tabContent").scrollTop = 0;
+
+            });
+            this._commentformInstance.onCommentFormSubmitted = lang.hitch(this, function (item) {
+                //close the comment form after submitting new comment
+                this._showPanel(dom.byId("commentformContainer"));
+                this.isCommentFormOpen = false;
+                //update comment list
+                domConstruct.empty(this.commentsContainer);
+                this._showComments(this.multipleFeatures[0], this.commentsContainer);
+                domStyle.set(this.commentsContainer, "display", "block");
+            });
             this._showPanel(dom.byId("commentformContainer"));
             //If Comment form is close, update the comment form open flag
             if (domClass.contains(dom.byId("commentformContainer"), "esriCTHidden")) {
@@ -316,13 +288,97 @@ define([
         },
 
         /**
+        * This function is used to fetch comments from table
+        * @memberOf widgets/details-panel/comments
+        */
+        _fetchComments: function (graphic, parentDiv) {
+            var relatedQuery, currentID;
+            currentID = graphic.attributes[this.selectedOperationalLayer.objectIdField];
+            relatedQuery = new RelationshipQuery();
+            relatedQuery.outFields = ["*"];
+            relatedQuery.relationshipId = this.selectedOperationalLayer.relationships[0].id;
+            relatedQuery.objectIds = [currentID];
+            // Query for related features and showing comments
+            this.selectedOperationalLayer.queryRelatedFeatures(relatedQuery,
+                lang.hitch(this, function (relatedFeatures) {
+                    var commentsParentDiv, pThis, commentsContainerDiv, i;
+                    pThis = this;
+                    this._relatedRecords = relatedFeatures;
+                    commentsContainerDiv = domConstruct.create("div", {}, parentDiv);
+                    commentsParentDiv = domConstruct.create("div", { "class": "esriCTcommentsParentDiv" }, commentsContainerDiv);
+
+                    function sortComments(a, b) {
+                        if (a.attributes[pThis._commentsTable.objectIdField] >
+                                b.attributes[pThis._commentsTable.objectIdField]) {
+                            return -1; // order a before b
+                        }
+                        if (a.attributes[pThis._commentsTable.objectIdField] <
+                                b.attributes[pThis._commentsTable.objectIdField]) {
+                            return 1; // order b before a
+                        }
+                        return 0; // a & b have same date, so relative order doesn't matter
+                    }
+
+                    if (this._relatedRecords[currentID] && this._relatedRecords[currentID].features && this._relatedRecords[currentID].features.length > 0) {
+                        this._relatedRecords[currentID].features.sort(sortComments);
+                        for (i = 0; i < this._relatedRecords[currentID].features.length; i++) {
+                            if (!this.appConfig.usePopupConfigurationForComment) {
+                                this._createPopUpForSingleField(this._relatedRecords[currentID].features[i], currentID);
+                            }
+                            this._createPopUpContent(this._relatedRecords[currentID].features[i], commentsParentDiv, currentID);
+                        }
+                        this.showCommentsTab();
+                    } else {
+                        this.hideCommentsTab();
+                    }
+                    this.appUtils.hideLoadingIndicator();
+                }), lang.hitch(this, function () {
+                    this.appUtils.hideLoadingIndicator();
+                }));
+        },
+
+        /**
+        * This function is used to create popup template for single field
+        * @memberOf widgets/details-panel/comments
+        */
+        _createPopUpForSingleField: function (currentFeature, currentID) {
+            var popupInfo = {}, k, singlefieldComment;
+            popupInfo.fieldInfos = [];
+            popupInfo.mediaInfos = [];
+            popupInfo.showAttachments = false;
+            popupInfo.title = "";
+            for (k = 0; k < this._commentsTable.fields.length; k++) {
+                if (this._commentsTable.fields[k].name === this.appConfig.commentField && this._commentsTable.fields[k].editable && this._commentsTable.fields[k].type === "esriFieldTypeString") {
+                    popupInfo.fieldInfos.push({
+                        fieldName: this._commentsTable.fields[k].name,
+                        format: null,
+                        isEditable: this._commentsTable.fields[k].editable,
+                        label: this._commentsTable.fields[k].alias,
+                        stringFieldOption: "textarea",
+                        tooltip: "",
+                        visible: true
+                    });
+                    //check for blank single field comment and handle space for pencil icon
+                    singlefieldComment = currentFeature.attributes[this.appConfig.commentField];
+                    if (singlefieldComment && singlefieldComment !== "") {
+                        popupInfo.description = "{" + this.appConfig.commentField + "}" + "\n <div class='commentRow'></div>";
+                    } else {
+                        popupInfo.description = "{" + this.appConfig.commentField + "}" + "\n <div class='commentRow'>&nbsp</div>";
+                    }
+                    break;
+                }
+            }
+            this._commentPopupTable.popupInfo = popupInfo;
+        },
+
+        /**
         * Retrieves the comments associated with an item.
         * @param {objectID} item Item whose comments are sought
         * @return {publish} "updatedCommentsList" with results of query
         */
         _queryComments: function (item) {
             var updateQuery = new RelationshipQuery();
-            updateQuery.objectIds = [item.attributes[this.selectedOperationalLayer.objectIdField]];
+            updateQuery.objectIds = [this.multipleFeatures[0].attributes[this.selectedOperationalLayer.objectIdField]];
             updateQuery.returnGeometry = true;
             updateQuery.outFields = ["*"];
             updateQuery.relationshipId = this.selectedOperationalLayer.relationships[0].id;
@@ -341,7 +397,7 @@ define([
                     return 0;  // a & b have same date, so relative order doesn't matter
                 }
 
-                fset = results[item.attributes[this.selectedOperationalLayer.objectIdField]];
+                fset = results[this.multipleFeatures[0].attributes[this.selectedOperationalLayer.objectIdField]];
                 features = fset ? fset.features : [];
 
                 if (features.length > 0) {
@@ -350,14 +406,14 @@ define([
 
                     // Add the comment table popup
                     for (i = 0; i < features.length; ++i) {
-                        features[i].setInfoTemplate(new PopupTemplate(this.commentPopupTable.popupInfo));
+                        features[i].setInfoTemplate(new PopupTemplate(this._commentPopupTable.popupInfo));
                     }
                 }
                 this._clearComments();
                 if (features.length > 0) {
                     // Sort by descending OID order
                     features.sort(sortByOID);
-                    this._setComments(results[item.attributes[this.selectedOperationalLayer.objectIdField]].features);
+                    this._setComments(results[this.multipleFeatures[0].attributes[this.selectedOperationalLayer.objectIdField]].features);
                     domClass.add(this.noCommentsDiv, "esriCTHidden");
                 } else {
                     domClass.remove(this.noCommentsDiv, "esriCTHidden");
@@ -377,6 +433,7 @@ define([
         * @param {commentsArr} item Item whose comments are sought
         */
         _setComments: function (commentsArr) {
+            domConstruct.empty(this.commentsContainer);
             arrayUtil.forEach(commentsArr, lang.hitch(this, this._buildCommentDiv));
         },
 
@@ -387,7 +444,7 @@ define([
         */
         _buildCommentDiv: function (comment) {
             var commentDiv;
-            commentDiv = domConstruct.create('div', { 'class': 'comment' }, this.commentsList);
+            commentDiv = domConstruct.create('div', { 'class': 'comment' }, this.commentsContainer);
             new ContentPane({ 'class': 'content small-text', 'content': comment.getContent() }, commentDiv).startup();
         }
     });

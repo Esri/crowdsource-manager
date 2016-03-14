@@ -16,7 +16,7 @@
 | limitations under the License.
 */
 //============================================================================================================================//
-var package_path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+var package_path = location.href.slice(0, location.href.lastIndexOf('/'));
 var dojoConfig = {
     parseOnLoad: true,
     async: true,

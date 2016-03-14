@@ -43,6 +43,7 @@ define([
     "dojo/dom-style",
     "dojo/query",
     "dojo/_base/array",
+    "dojo/dom-geometry",
     "dojo/domReady!"
 ], function (
     declare,
@@ -71,11 +72,12 @@ define([
     Filter,
     domStyle,
     query,
-    array
+    array,
+    domGeom
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
-        _table: null,
+        _table: null, // to store data viewer table node
         _filterWidgetObj: null, // to store object of filter widget
         _selectedOperationalLayer: null, // store object of feature layer that is selected by user
         _selectRowGraphicsLayer: null, // store object of graphics layer needed for highlighting point feature
@@ -84,6 +86,7 @@ define([
         _features: [], // store features that are selected
         _featureObjectID: null, // store objectid of feature selected
         _isRowFound: false, // keeps track whether row is available in grid when user selects feature from map
+        _manualRefreshDataObj: {}, // keep the track of last sorting and the column number on which sorting performed
 
         /**
         * This function is called when widget is constructed
@@ -157,6 +160,9 @@ define([
                 this._selectRowGraphicsLayer = new GraphicsLayer({
                     "id": "selectedRowGraphicsLayer"
                 });
+                if (this.popupInfo) {
+                    this._selectRowGraphicsLayer.setInfoTemplate(new PopupTemplate(this.popupInfo));
+                }
                 this.attachEventToGraphicsLayer(this._selectRowGraphicsLayer);
                 // Create and add a graphic layer on the map
                 this.map.addLayer(this._selectRowGraphicsLayer);
@@ -217,11 +223,9 @@ define([
                             // Tracks whether a number formatter is applied or not
                             if ((this.popupInfo.fieldInfos[i].format) && (this.popupInfo
                                     .fieldInfos[i].format.digitSeparator) && (this.popupInfo
-                                    .fieldInfos[i].format.places)) {
+                                    .fieldInfos[i].format.hasOwnProperty("places"))) {
                                 // If places is applied to number formatter.
-                                if (this.popupInfo.fieldInfos[i].format.places > 0) {
-                                    obj.numberFormat = this.popupInfo.fieldInfos[i].format;
-                                }
+                                obj.numberFormat = this.popupInfo.fieldInfos[i].format;
                             }
                             obj.length = this._selectedOperationalLayer.fields[j].length;
                             obj.fieldName = this.popupInfo.fieldInfos[i].fieldName;
@@ -256,9 +260,48 @@ define([
             this._createDataViewerHeaderPanel();
             this._createDataViewerDataPanel();
             this._bindTableSorterEvent();
-            colums = query("th", this._table);
+            colums = query(".tableFloatingHeaderOriginal th", this._table);
+            // loop through columns to create filter container for each table headers
             for (i = 0; i < colums.length; i++) {
-                this._createHeaderOptionContainer(i, colums[i]);
+                this._createHeaderOptionContainer(i);
+            }
+            this._bindDataViewerScrollEvent();
+            // if last table sorting column number and sorting order is set before
+            // manual refresh invoke the sorting function with the same parameters to sort them
+            if (this.isManualRefreshedClicked) {
+                if (this._manualRefreshDataObj && this._manualRefreshDataObj.columnNumber && this._manualRefreshDataObj.sortingOrder) {
+                    this._sortByColoumn(this._manualRefreshDataObj.columnNumber, this._manualRefreshDataObj.sortingOrder);
+                }
+                // if last table vertical position captured before manual refresh invoke the scroll top
+                // function to bring the focus of table at same position
+                if (this._manualRefreshDataObj && this._manualRefreshDataObj.lastVerticalScrollPosition && (!this.updatedFeature)) {
+                    this._scrollToActivatedFeature(0, true);
+                }
+            }
+            this._highlightUpdatedFeature();
+        },
+
+        /**
+        * highlight table row for the respective updated feature
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        _highlightUpdatedFeature: function () {
+            if (this.updatedFeature) {
+                this._selectFeatureOnMapClick({ graphic: this.updatedFeature });
+            } else {
+                this.isManualRefreshedClicked = false;
+            }
+        },
+
+        /**
+        * highlight table row for the last selected feature
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        highlightSelectedFeature: function (feature) {
+            if (feature) {
+                this._clearSelection();
+                this._deselectTableRows();
+                this._selectFeatureOnMapClick({ graphic: feature });
             }
         },
 
@@ -272,21 +315,28 @@ define([
             var i, tr, tbody, j, td;
             // to create table headers
             tbody = domConstruct.create("tbody", {}, this._table);
+            // if feature data array is found
             if (entireFeatureDataArr.length > 0) {
+                // looping through the entire feature data array to create tr for the features
                 for (i = 0; i < entireFeatureDataArr.length; i++) {
                     tr = domConstruct.create("tr", { "class": "esriCTPointerCursor" }, tbody);
+                    // looping through the entire feature data array to create td of records for each columns
                     for (j = 0; j < entireFeatureDataArr[i].length; j++) {
                         domAttr.set(tr, "OBJID", entireFeatureDataArr[i][objectIdIndex]);
-                        if (j === objectIdIndex) {
+                        // if objectId field flag visible not true on pop up and this column is of object id fields
+                        // then hide this column
+                        if ((j === objectIdIndex) && (!this._displayColumn[j].showObjectIdField)) {
                             td = domConstruct.create("td", { "class": "esriCTHiddenColumn" });
                         } else {
                             td = domConstruct.create("td", { "class": "esriCTDataViewerTableCellContent" });
                         }
+                        // if this field data is date field then create hidden span for the epoch date data else
+                        // render field value as it is.
                         if (entireFeatureDataArr[i][j] && entireFeatureDataArr[i][j].formatedDate && entireFeatureDataArr[i][j].formatedDate !== "") {
                             domConstruct.create("span", { "class": "esriCTHiddenColumn", "innerHTML": entireFeatureDataArr[i][j].epoch }, td);
                             domConstruct.create("span", { "innerHTML": entireFeatureDataArr[i][j].formatedDate }, td);
                         } else {
-                            td.innerHTML = entireFeatureDataArr[i][j];
+                            td.innerHTML = entireFeatureDataArr[i][j] || "";
                         }
                         tr.appendChild(td);
                     }
@@ -295,7 +345,6 @@ define([
             }
             this.dataViewerContainer.appendChild(this._table);
             this.appUtils.hideLoadingIndicator();
-            this.appUtils.hideOverlayContainer();
         },
 
         /**
@@ -404,8 +453,7 @@ define([
                                 if (this._displayColumn[j].numberFormat) {
                                     if (value || value === 0) {
                                         if (this._displayColumn[j].numberFormat.digitSeparator) {
-                                            number = value.toFixed(this._displayColumn[j].numberFormat.places);
-                                            number = this.appUtils.convertNumberToThousandSeperator(number);
+                                            number = this.appUtils.convertNumberToThousandSeperator(value, this._displayColumn[j].numberFormat.places);
                                             dataSet.push(number);
                                         } else {
                                             dataSet.push(value.toFixed(this._displayColumn[j].numberFormat.places));
@@ -433,32 +481,62 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _createDataViewerHeaderPanel: function () {
-            var columnHeader, thead, tr, i, theadClass;
+            var columnHeader, thead, tr, i, theadClass, thTitleContainer, column, caretIcon, filterIcon;
             domConstruct.empty(this.dataViewerContainer);
-            this._table = domConstruct.create("table", { "id": "myTable", "class": "table table-striped table-bordered", "cellspacing": "0", "cellpadding": "0" }, this.dataViewerContainer);
-
-            //            this._bindTableSorterEvent();
+            this._table = domConstruct.create("table", { "class": "table table-striped table-bordered", "cellspacing": "0", "cellpadding": "0" }, this.dataViewerContainer);
             thead = domConstruct.create("thead", {}, this._table);
             tr = domConstruct.create("tr", {}, thead);
-            // to create table headers
+            // if length of feature array is greater than 0 then
             if (this._features.length > 0) {
                 this._getFieldProperties();
+                // loop through the this._displayColumn array for creating header columns of table
                 for (i = 0; i < this._displayColumn.length; i++) {
-                    theadClass = this._createClassName(this._displayColumn[i].label);
-                    if (this._displayColumn[i].type === "esriFieldTypeOID") {
+                    theadClass = this._createClassName(this._displayColumn[i].fieldName);
+                    // if objectId field flag visible not true on pop up and this column is of object id fields
+                    // then hide this column
+                    if ((this._displayColumn[i].type === "esriFieldTypeOID") && (!this._displayColumn[i].showObjectIdField)) {
                         columnHeader = domConstruct.create("th", { "class": "esriCTHiddenColumn " + theadClass, "style": "min-width:300px;" });
+                        domAttr.set(columnHeader, "colid", i);
                     } else {
-                        columnHeader = domConstruct.create("th", { "class": "esriCTTableHeaderDiv esriCTDataViewerTableCellContent " + theadClass });
+                        columnHeader = domConstruct.create("th", { "class": "esriCTTableHeaderDiv " + theadClass });
+                        domAttr.set(columnHeader, "colid", i);
                     }
-                    domConstruct.create("div", { "class": "esriCTTableHeader", "innerHTML": this._displayColumn[i].label }, columnHeader);
-                    domConstruct.create("div", { "class": "esriCTBlackCaretIcon esriCTSortAsc esriCTHiddenColumn", "innerHTML": "&#9660;" }, columnHeader);
-                    domConstruct.create("div", { "class": "esriCTFilterIcon  esriCTSortDesc esriCTHiddenColumn" }, columnHeader);
-
+                    thTitleContainer = domConstruct.create("div", { "class": "esriCTThTitleContainer" }, columnHeader);
+                    column = domConstruct.create("div", { "class": "esriCTTableHeader " + theadClass, "innerHTML": this._displayColumn[i].label }, thTitleContainer);
+                    caretIcon = domConstruct.create("div", { "class": "esriCTBlackCaretIcon esriCTSortAsc " + theadClass, "innerHTML": "&#9660;" }, thTitleContainer);
+                    filterIcon = domConstruct.create("div", { "class": "esriCTFilterIcon  esriCTSortDesc esriCTHiddenColumn " + theadClass }, thTitleContainer);
                     tr.appendChild(columnHeader);
+                    // To set filter or Caret icon on column header
+                    this._toggleFilterCaretIcon(caretIcon, filterIcon, this._displayColumn[i].fieldName);
                     // Attach header click event
-                    this._attachHeaderClickEvent(columnHeader, this._displayColumn[i].label);
-
+                    this._attachHeaderClickEvent(columnHeader, this._displayColumn[i].fieldName);
                 }
+            }
+        },
+
+        /**
+        * This function set filter or Caret icon on column header
+        * To show or hide filter container div for corresponding clicked header title
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        _toggleFilterCaretIcon: function (caretIcon, filterIcon, columnClassName) {
+            if (this.itemInfo && this.itemInfo.itemData && this.itemInfo.itemData.operationalLayers) {
+                array.forEach(this.itemInfo.itemData.operationalLayers, lang.hitch(this, function (layer) {
+                    if (this.selectedOperationalLayer.id === layer.id && layer.definitionEditor) {
+                        array.forEach(layer.definitionEditor.inputs, lang.hitch(this, function (input, index) {
+                            if ((this.appConfig && this.appConfig.enableFilter) || (this.appConfig._filterObject && this.appConfig._filterObject.inputs[index] && this.appConfig._filterObject.inputs[index].parameters[0].enableFilter)) {
+                                if (input.parameters[0].fieldName === columnClassName) {
+                                    if (caretIcon && !domClass.contains(caretIcon, "esriCTHiddenColumn")) {
+                                        domClass.add(caretIcon, "esriCTHiddenColumn");
+                                    }
+                                    if (filterIcon && domClass.contains(filterIcon, "esriCTHiddenColumn")) {
+                                        domClass.remove(filterIcon, "esriCTHiddenColumn");
+                                    }
+                                }
+                            }
+                        }));
+                    }
+                }));
             }
         },
 
@@ -468,23 +546,33 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _attachHeaderClickEvent: function (header, headerTitle) {
-            var childNode, currentChildNode, node;
-            this.own(on(header, "click", lang.hitch(this, function () {
-                // Display none all other filter containers except the current header's filter container
-                array.forEach(this._displayColumn, lang.hitch(this, function (columnName) {
-                    if (columnName.label !== headerTitle) {
-                        var className = this._createClassName(columnName.label);
-                        node = query("." + className)[0];
-                        if (node) {
-                            childNode = query(".esriCTFilterParentContainer", node)[0];
-                            domStyle.set(childNode, "display", "none");
-                        }
+            var currentChildNode;
+            // binding click event for filter container on table header
+            this.own(on(header, "click", lang.hitch(this, function (event) {
+                this.hideWebMapList();
+                var headerCoordinates, xCoordinate, title;
+                array.some(event.currentTarget.attributes, lang.hitch(this, function (currentAttribute) {
+                    if (currentAttribute.name === "colid") {
+                        currentChildNode = $("[filterParentContainerColumnID=" + currentAttribute.value + "]")[0];
+                        return true;
                     }
                 }));
-                currentChildNode = query(".esriCTFilterParentContainer", header)[0];
-                var title = this._createClassName(headerTitle);
-                if (domClass.contains(header, title) && domStyle.get(currentChildNode, "display") !== "block") {
-                    domStyle.set(currentChildNode, "display", "block");
+                if (domStyle.get(currentChildNode, "display") === "block") {
+                    domStyle.set(currentChildNode, "display", "none");
+                    this._filterWidgetObj._showAppliedFilterValue(headerTitle);
+                } else {
+                    $(".esriCTFilterParentContainer").css("display", "none");
+                    title = this._createClassName(headerTitle);
+                    if (domClass.contains(header, title) && domStyle.get(currentChildNode, "display") !== "block") {
+                        headerCoordinates = domGeom.position(event.currentTarget, false);
+                        if (this.appConfig.i18n.direction === "ltr") {
+                            xCoordinate = ((headerCoordinates.x + headerCoordinates.w) - 270);
+                        } else {
+                            xCoordinate = headerCoordinates.x + 20;
+                        }
+                        domStyle.set(currentChildNode, "left", parseInt(xCoordinate, 10) + "px");
+                        domStyle.set(currentChildNode, "display", "block");
+                    }
                 }
             })));
         },
@@ -493,18 +581,19 @@ define([
         * This function is used to display details panel
         * @memberOf widgets/data-viewer/data-viewer
         */
-        showDetailsPanel: function (featureSet) {
-            return featureSet;
+        showDetailsPanel: function (showDetailsPanelDataObj) {
+            return showDetailsPanelDataObj;
         },
 
         /**
         * This function is used to create container for table header options
         * @memberOf widgets/data-viewer/data-viewer
         */
-        _createHeaderOptionContainer: function (i, tableHeader) {
+        _createHeaderOptionContainer: function (i) {
             var filterParentContainer, ascFlagContainer, descFlagContainer, columnNumber;
             // Creating a div which contains 'Ascending' and 'Descending' flag titles div
-            filterParentContainer = domConstruct.create("div", { "class": "esriCTFilterParentContainer" }, tableHeader);
+            filterParentContainer = domConstruct.create("div", { "class": "esriCTFilterParentContainer" }, $("#filterContainerWrapper")[0]);
+            domAttr.set(filterParentContainer, "filterParentContainerColumnID", i);
             // 'Ascending' flag title div
             ascFlagContainer = domConstruct.create("div", { "innerHTML": this.appConfig.i18n.dataviewer.ascendingFlagTitle, "class": "esriCTAscDescTitleDiv esriCTAsc" }, filterParentContainer);
             // 'Descending' flag title div
@@ -512,17 +601,19 @@ define([
             domAttr.set(ascFlagContainer, "colID", i);
             domAttr.set(descFlagContainer, "colID", i);
 
-            on(query(".esriCTAsc", tableHeader)[0], "click", lang.hitch(this, function () {
+            // binding click event of table sorting in ascending order
+            on(ascFlagContainer, "click", lang.hitch(this, function () {
                 columnNumber = parseInt(domAttr.get(ascFlagContainer, "colID"), 10);
                 this._sortByColoumn(columnNumber, "ASC");
             }));
-            on(query(".esriCTDesc", tableHeader)[0], "click", lang.hitch(this, function () {
+
+            // binding click event of table sorting in descending order
+            on(descFlagContainer, "click", lang.hitch(this, function () {
                 columnNumber = parseInt(domAttr.get(descFlagContainer, "colID"), 10);
                 this._sortByColoumn(columnNumber, "DESC");
             }));
             // creating Filter widget, only if the field contains 'ask for value' filter checked on the layer
-            // TODO : Filter widget coming soon... //ignore jslint
-            // this._createFilterWidget(filterParentContainer, i, this._displayColumn[i].fieldName);
+            this._createFilterWidget(filterParentContainer, i, this._displayColumn[i].fieldName);
         },
 
         /**
@@ -534,6 +625,7 @@ define([
             // filter widget parameters
             filterParameters = {
                 "appConfig": this.appConfig,
+                "appUtils": this.appUtils,
                 "filterParentContainer": filterParentContainer,
                 "index": index,
                 "itemInfo": this.itemInfo,
@@ -560,16 +652,16 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _bindTableSorterEvent: function () {
-            $("#myTable").tablesorter({
+            $(this._table).tablesorter({
                 headers: {
-                    // disable sorting of the first & second column - before we would have to had made two entries
-                    // note that "first-name" is a class on the span INSIDE the first column th cell
+                    // disable default sorting event on table header click
                     'table thead th': {
                         // disable it by setting the property sorter to false
                         sorter: false
                     }
                 }
             });
+            $("table").stickyTableHeaders({ container: ".esriCTDataViewerContainer" });
         },
 
         /**
@@ -578,11 +670,17 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _sortByColoumn: function (columnNumber, sortingOrder) {
+            // if the sorting flag is set as "ASC" the sort in ascending order
+            // otherwise sort in descending order
             if (sortingOrder === "ASC") {
+                this._manualRefreshDataObj.sortingOrder = "ASC";
                 $('table').trigger('sorton', [[[columnNumber, 0]]]);
             } else {
+                this._manualRefreshDataObj.sortingOrder = "DESC";
                 $('table').trigger('sorton', [[[columnNumber, 1]]]);
             }
+            this._manualRefreshDataObj.columnNumber = columnNumber;
+            this._hideFilterContainer();
         },
 
         /**
@@ -590,7 +688,10 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _onRowClick: function (tr) {
+            // click event binded on table rows for feature selection
             on(tr, "click", lang.hitch(this, function (evt) {
+                this.hideWebMapList();
+                this._hideFilterContainer();
                 this.appUtils.showLoadingIndicator();
                 this._featureObjectID = parseInt(domAttr.get(evt.currentTarget, "OBJID"), 10);
                 this._highLightFeatureOnRowClick(this._featureObjectID, evt);
@@ -612,6 +713,7 @@ define([
         _deselectTableRows: function () {
             var selectedRow;
             selectedRow = query(".esriCTRowHighlighted", this._table);
+            // querying and looping through all the highlighted rows for de selecting if already selected
             array.forEach(selectedRow, lang.hitch(this, function (key) {
                 domClass.remove(key, "esriCTRowHighlighted");
             }));
@@ -623,6 +725,7 @@ define([
         */
         onFeatureClick: function (evt) {
             this.appUtils.showLoadingIndicator();
+            this._hideFilterContainer();
             this._selectFeatureOnMapClick(evt);
         },
 
@@ -632,7 +735,7 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _selectFeatureOnMapClick: function (evt) {
-            var objectId, featureQuery, featureLayer, feature, ctrlFlag = false, selectFlag;
+            var objectId, featureQuery, featureLayer, feature, ctrlFlag = false, selectFlag, definitionExpression;
             featureQuery = new Query();
             feature = evt.graphic;
             objectId = feature.attributes[this._selectedOperationalLayer.objectIdField];
@@ -645,28 +748,53 @@ define([
             // So to maintain updated value of the selected feature, a new object of the feature layer is required.
             // If a new object is not created than the previous value of feature appears and not the updated one.
             featureLayer = new FeatureLayer(this._selectedOperationalLayer.url);
-            if (this.definitionExpression) {
-                featureLayer.setDefinitionExpression(this.definitionExpression);
+            definitionExpression = this._selectedOperationalLayer.getDefinitionExpression();
+            if (definitionExpression) {
+                featureLayer.setDefinitionExpression(definitionExpression);
             }
             if (this.popupInfo) {
                 featureLayer.setInfoTemplate(new PopupTemplate(this.popupInfo));
             }
             featureLayer.queryFeatures(featureQuery, lang.hitch(this, function (featureSet) {
+
                 this._getSelectedLayerOnTop();
+                // if ctrl key is pressed for multiple feature selection
+                // then set ctrlFlag to true else keep it as false
                 if (!evt.ctrlKey) {
                     this._clearSelection();
                 } else {
                     ctrlFlag = true;
                 }
-                selectFlag = this._selectRowOnFeatureClick(objectId, true, ctrlFlag);
-                if (selectFlag) {
-                    this._selectRowGraphicsLayer.add(this._getHighLightSymbol(featureSet.features[0], false));
-                    if (!this._isRowFound) {
-                        this.createDataViewerUI(false);
+
+                if (this.updatedfeature) {
+                    this.updatedfeature = null;
+                }
+
+                if (this.isManualRefreshedClicked) {
+                    this.isManualRefreshedClicked = false;
+                    selectFlag = this._selectRowOnFeatureClick(objectId, false, ctrlFlag);
+                } else {
+                    selectFlag = this._selectRowOnFeatureClick(objectId, true, ctrlFlag);
+                }
+
+                if (featureSet.features && featureSet.features.length > 0) {
+                    // feature is selected on table row click
+                    if (selectFlag) {
+                        // if feature geometry found them show selected feature on map else
+                        // show error message
+                        if (featureSet.features[0].geometry) {
+                            this._selectRowGraphicsLayer.add(this._getHighLightSymbol(featureSet.features[0], false));
+                        } else {
+                            this._selectRowGraphicsLayer.add(featureSet.features[0]);
+                            this.appUtils.showMessage(this.appConfig.i18n.dataviewer.noFeatureGeometry);
+                        }
                     }
                 }
                 //open details panel with feature information
-                this.showDetailsPanel(featureSet);
+                var showDetailsPanelDataObj = {};
+                showDetailsPanelDataObj.singleFeature = featureSet;
+                showDetailsPanelDataObj.multipleFeature = this._selectRowGraphicsLayer.graphics;
+                this.showDetailsPanel(showDetailsPanelDataObj);
                 this.appUtils.hideLoadingIndicator();
             }), lang.hitch(this, function () {
                 this.appUtils.hideLoadingIndicator();
@@ -679,7 +807,7 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _highLightFeatureOnRowClick: function (objectId, evt) {
-            var featureQuery, featureLayer, ctrlFlag = false, selectFlag;
+            var featureQuery, featureLayer, ctrlFlag = false, selectFlag, definitionExpression;
             featureQuery = new Query();
             featureQuery.outSpatialReference = this.map.spatialReference;
             featureQuery.objectIds = [parseInt(objectId, 10)];
@@ -690,8 +818,9 @@ define([
             // So to maintain updated value of the selected feature, a new object of the feature layer is required.
             // If a new object is not created than the previous value of feature appears and not the updated one.
             featureLayer = new FeatureLayer(this._selectedOperationalLayer.url);
-            if (this.definitionExpression) {
-                featureLayer.setDefinitionExpression(this.definitionExpression);
+            definitionExpression = this._selectedOperationalLayer.getDefinitionExpression();
+            if (definitionExpression) {
+                featureLayer.setDefinitionExpression(definitionExpression);
             }
             if (this.popupInfo) {
                 featureLayer.setInfoTemplate(new PopupTemplate(this.popupInfo));
@@ -699,30 +828,41 @@ define([
             featureLayer.queryFeatures(featureQuery, lang.hitch(this,
                 function (featureSet) {
                     this._getSelectedLayerOnTop();
+                    // if ctrl key is pressed for multiple feature selection
+                    // then set ctrlFlag to true else keep it as false
                     if (!evt.ctrlKey) {
                         this._clearSelection();
                     } else {
                         ctrlFlag = true;
                     }
                     selectFlag = this._selectRowOnFeatureClick(objectId, false, ctrlFlag);
-                    if (selectFlag) {
-                        if (featureSet.features[0].geometry) {
-                            this._selectRowGraphicsLayer.add(this._getHighLightSymbol(featureSet.features[0]));
-                        } else {
-                            this._selectRowGraphicsLayer.add(featureSet.features[0]);
-                            this.appUtils.showMessage(this.appConfig.i18n.dataviewer.noFeatureGeometry);
+                    if (featureSet.features && featureSet.features.length > 0) {
+                        // feature is selected on table row click
+                        if (selectFlag) {
+                            // if feature geometry found them show selected feature on map else
+                            // show error message
+                            if (featureSet.features[0] && featureSet.features[0].geometry) {
+                                this._selectRowGraphicsLayer.add(this._getHighLightSymbol(featureSet.features[0]));
+                            } else {
+                                this._selectRowGraphicsLayer.add(featureSet.features[0]);
+                                this.appUtils.showMessage(this.appConfig.i18n.dataviewer.noFeatureGeometry);
+                            }
                         }
-                    }
-                    if (!ctrlFlag) {
-                        if (this._isPointLayer) {
-                            this.map.setLevel(this.appConfig.zoomLevel);
-                            this.map.centerAt(featureSet.features[0].geometry);
-                        } else {
-                            this.map.setExtent(featureSet.features[0].geometry.getExtent(), true);
+                        // if single feature selection event occurs
+                        if (!ctrlFlag && featureSet.features[0].geometry) {
+                            if (this._isPointLayer) {
+                                this.map.setLevel(this.appConfig.zoomLevel);
+                                this.map.centerAt(featureSet.features[0].geometry);
+                            } else {
+                                this.map.setExtent(featureSet.features[0].geometry.getExtent(), true);
+                            }
                         }
                     }
                     //open details panel with feature information
-                    this.showDetailsPanel(featureSet);
+                    var showDetailsPanelDataObj = {};
+                    showDetailsPanelDataObj.singleFeature = featureSet;
+                    showDetailsPanelDataObj.multipleFeature = this._selectRowGraphicsLayer.graphics;
+                    this.showDetailsPanel(showDetailsPanelDataObj);
                     this.appUtils.hideLoadingIndicator();
                 }), lang.hitch(this, function () { this.appUtils.hideLoadingIndicator(); }));
         },
@@ -739,17 +879,34 @@ define([
                 if (objectId === selectedRowObjID) {
                     this._isRowFound = true;
                     rowNumber = i;
-                    if (!domClass.contains(this._table.rows[i], "esriCTRowHighlighted")) {
-                        if (!ctrlFlag) {
+                    if (domClass.contains(this._table.rows[i], "esriCTRowHighlighted")) {
+                        if (ctrlFlag) {
+                            this._removeHighLightedFeatureOnRowClick(objectId);
+                            domClass.remove(this._table.rows[i], "esriCTRowHighlighted");
+                            isRowSelected = false;
+                        } else {
+                            if (query(".esriCTRowHighlighted", this._table).length > 1) {
+                                this._clearSelection();
+                                this._deselectTableRows();
+                                domClass.add(this._table.rows[i], "esriCTRowHighlighted");
+                                isRowSelected = true;
+                            } else {
+                                this._clearSelection();
+                                this._deselectTableRows();
+                                domClass.remove(this._table.rows[i], "esriCTRowHighlighted");
+                                isRowSelected = false;
+                            }
+                        }
+                    } else {
+                        if (ctrlFlag) {
+                            domClass.add(this._table.rows[i], "esriCTRowHighlighted");
+                            isRowSelected = true;
+                        } else {
                             this._clearSelection();
                             this._deselectTableRows();
+                            domClass.add(this._table.rows[i], "esriCTRowHighlighted");
+                            isRowSelected = true;
                         }
-                        domClass.add(this._table.rows[i], "esriCTRowHighlighted");
-                        isRowSelected = true;
-                    } else {
-                        this._removeHighLightedFeatureOnRowClick(objectId);
-                        domClass.remove(this._table.rows[i], "esriCTRowHighlighted");
-                        isRowSelected = false;
                     }
                     break;
                 }
@@ -783,24 +940,30 @@ define([
         },
 
         /**
-        * This function is used to scroll data-viewer to activated row
+        * This function is used to scroll data-viewer to selected feature row
         * @param{integer} row number of data-viewer grid
         * @memberOf widgets/data-viewer/data-viewer
         */
-        _scrollToActivatedFeature: function (rowNumber) {
+        _scrollToActivatedFeature: function (rowNumber, manualRefreshScroll) {
+            var scrollTopValue;
             $('.esriCTDataViewerContainer').animate({
                 scrollTop: 0
             }, 0);
-            setTimeout(lang.hitch(this, function () {
-                if ($('.esriCTDataViewerContainer tr:eq(' + rowNumber + ')').offset() && $('.esriCTDataViewerContainer tr:eq(' + rowNumber + ')').offset().top) {
+            if ($('.esriCTDataViewerContainer tr:eq(' + rowNumber + ')').offset() && $('.esriCTDataViewerContainer tr:eq(' + rowNumber + ')').offset().top) {
+                // if last vertical scroll position is set before manual refresh then set scroll
+                // position same as it was earlier else set the scroll top to the selected row
+                if (this._manualRefreshDataObj && this._manualRefreshDataObj.lastVerticalScrollPosition && manualRefreshScroll) {
+                    scrollTopValue = this._manualRefreshDataObj.lastVerticalScrollPosition;
+                } else {
                     // Get row position by index
-                    var scrollTopValue = $('.esriCTDataViewerContainer tr:eq(' + rowNumber + ')').offset().top;
-                    $('.esriCTDataViewerMainContainer').animate({
-                        scrollTop: $('.esriCTDataViewerMainContainer').scrollTop() + scrollTopValue - 100
-                    }, 400);
+                    scrollTopValue = $('.esriCTDataViewerContainer tr:eq(' + rowNumber + ')').offset().top;
+                    scrollTopValue = scrollTopValue - 150;
                 }
-                this.appUtils.hideLoadingIndicator();
-            }), 10);
+                $('.esriCTDataViewerContainer').animate({
+                    scrollTop: $('.esriCTDataViewerContainer').scrollTop() + scrollTopValue
+                }, 400);
+            }
+            this.appUtils.hideLoadingIndicator();
         },
 
         /**
@@ -973,6 +1136,63 @@ define([
                 symbol.yoffset = layerSymbol.yoffset;
             }
             return symbol;
+        },
+
+        /**
+        * This function is used to hide webmap list
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        hideWebMapList: function () {
+            return;
+        },
+
+        /**
+        * This function is used to store data needed to retain when user does manual refresh
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        storeDataForManualRefresh: function () {
+            var manualRefreshDataObj = {};
+            manualRefreshDataObj.lastVerticalScrollPosition = (this._manualRefreshDataObj && this._manualRefreshDataObj.lastVerticalScrollPosition) ? this._manualRefreshDataObj.lastVerticalScrollPosition : 0;
+            manualRefreshDataObj.lastSelectedField = (this._manualRefreshDataObj && this._manualRefreshDataObj.columnNumber) ? this._manualRefreshDataObj.columnNumber : "";
+            manualRefreshDataObj.lastSelectedFieldOrder = (this._manualRefreshDataObj && this._manualRefreshDataObj.sortingOrder) ? this._manualRefreshDataObj.sortingOrder : "";
+            this.updateManualRefreshData(manualRefreshDataObj);
+        },
+
+        /**
+        * This function is used to update manual refresh data
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        updateManualRefreshData: function (manualRefreshDataObj) {
+            return manualRefreshDataObj;
+        },
+
+        /**
+        * This function binds on scroll event to hide the FilterParentContainer's
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        _bindDataViewerScrollEvent: function () {
+            var lastPos = 0;
+            // binding on scroll event on data viewer parent container
+            on(this.dataViewerContainer, "scroll", lang.hitch(this, function (event) {
+                this._manualRefreshDataObj.lastVerticalScrollPosition = event.currentTarget.scrollTop;
+                this._hideFilterContainer();
+                var currPos = $(this.dataViewerContainer).scrollLeft();
+                if (lastPos < currPos) {
+                    this._hideFilterContainer();
+                }
+                if (lastPos > currPos) {
+                    this._hideFilterContainer();
+                }
+                lastPos = currPos;
+            }));
+        },
+
+        /**
+        * This function hides all the FilterParentContainer's
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        _hideFilterContainer: function () {
+            $(".esriCTFilterParentContainer").css("display", "none");
         }
     });
 });

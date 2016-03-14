@@ -1,4 +1,4 @@
-﻿/*global define,dojo,alert,moment,$ */
+﻿/*global define,dojo,alert,moment,$,confirm */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -19,12 +19,13 @@ define([
     "dojo/_base/declare",
     "dijit/_WidgetBase",
     "dojo/_base/lang",
+    "dojo/dom-class",
     "dojo/domReady!"
 ], function (
     declare,
     _WidgetBase,
-    lang
-
+    lang,
+    domClass
 ) {
     return declare([_WidgetBase], {
         /**
@@ -41,7 +42,60 @@ define([
         * @memberOf widgets/manual-refresh/manual-refresh
         */
         startup: function () {
-            this.appUtils.showMessage("Manual refresh coming soon...");
+            this._manualRefreshApplication();
+        },
+
+        /**
+        * This function is used to enable manual refresh icon
+        * @memberOf widgets/manual-refresh/manual-refresh
+        */
+        enableManualRefreshIcon: function (manualRefreshParameter) {
+            this._mixinSearchParameter(manualRefreshParameter);
+            domClass.replace(this.refreshButton, "esriCTManualRefreshIconContainer", "esriCTManualRefreshIconContainerDisable");
+            domClass.replace(this.refreshButton, "esriCTPointerCursor", "esriCTDefaultCursor");
+        },
+
+        /**
+        * This function is used to mixin search parameter
+        * @memberOf widgets/manual-refresh/manual-refresh
+        */
+        _mixinSearchParameter: function (options) {
+            lang.mixin(this, options);
+        },
+
+        /**
+        * This function is used to do manual refresh
+        * @memberOf widgets/manual-refresh/manual-refresh
+        */
+        _manualRefreshApplication: function () {
+            var searchEnabledIcon, confirmValue;
+            confirmValue = confirm(this.appConfig.i18n.manualRefresh.confirmManualRefeshText);
+            if (confirmValue) {
+                this.appUtils.showLoadingIndicator();
+                this.confirmedManualRefresh();
+                searchEnabledIcon = dojo.query(".esriCTSearchIconContainer");
+                if ((searchEnabledIcon) && (searchEnabledIcon.length > 0)) {
+                    this.refreshLayerWithSearchDefExpression();
+                } else {
+                    this.selectedOperationalLayer.refresh();
+                }
+            }
+        },
+
+        /**
+        * This function is used to publish confirmation of manual refresh to other widget
+        * @memberOf widgets/manual-refresh/manual-refresh
+        */
+        confirmedManualRefresh: function () {
+            return;
+        },
+
+        /**
+        * This function is used to refresh  layer
+        * @memberOf widgets/manual-refresh/manual-refresh
+        */
+        refreshLayerWithSearchDefExpression: function () {
+            return;
         }
     });
 });

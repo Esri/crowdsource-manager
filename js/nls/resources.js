@@ -60,9 +60,11 @@ define({
             attachmentUploadStatus: "${failed} of ${total} attachment(s) failed to upload", // Shown when there is error while uploading the attachment, while submitting the geoform
             geoLocationError: "Current location not available", // Shown when the browser returns an error instead of the current geographical position
             geoLocationOutOfExtent: "Current location is out of basemap extent", // Shown when the current geographical position is out of the basemap extent
-            submitButtonTooltip: "Report It", // Command button to open the geoform
+            submitButtonTooltip: "Save", // Command button to open the geoform
             cancelButtonTooltip: "Cancel", //tooltip for cancel button
-            geoformBackButtonTooltip: "Go to the report list" //tooltip for Geoform back button
+            geoformBackButtonTooltip: "Go to the report list", //tooltip for Geoform back button
+            updateFeaturesConfirmationMsg: "${count} features will be updated", //confirmation essage to be displayed before updating the features
+            attachmentHeaderText: "Attachments"//attachment header Text
         },
         mapViewer: {
             zoomInToolTip: "Zoom in", // Display tool-tip on command button to zoom in map
@@ -71,20 +73,18 @@ define({
         dataviewer: {
             noIssuesReported: "No reports available", // Appears when no issues are available in current extent
             noFeatureGeometry: "Feature cannot be displayed", // Appears when user selects/activates a feature and geometry is available for that
-            ascendingFlagTitle: "Ascending", // Appears as a label for Ascending flag as a sorting option
-            descendingFlagTitle: "Descending", // Appears as a label for Descending flag as a sorting option
+            ascendingFlagTitle: "Sort in ascending order", // Appears as a label for Ascending flag as a sorting option
+            descendingFlagTitle: "Sort in descending order", // Appears as a label for Descending flag as a sorting option
             filterLabel: "Filter", // Appears as a label for Filter container
             valueRadioButtonLabel: "Value", // Appears as a label for 'Value' radio button in filter container
-            uniqueRadioButtonLabel: "Unique" // Appears as a label for 'Unique' radio button in filter container
-        },
-        commentsPanel: {
-            commentsText: "Comments" // Appears when comments are available for display in details tab
+            uniqueRadioButtonLabel: "Unique", // Appears as a label for 'Unique' radio button in filter container
+            selectLayerToBegin: "Please select a layer to begin with" // for showing default message on application load
         },
         timeSlider: {
             timeSliderLabel: "Time range" // Appears beside time slider widget
         },
         comment: {
-            commentsFormSubmitButton: "Submit Comment", // Displayed on submit button to display comments
+            commentsFormSubmitButton: "Save", // Displayed on submit button to display comments
             commentsFormCancelButton: "Cancel", // Displayed on cancel button to cancel comments
             errorInSubmittingComment: "Comment could not be submitted.", // Shown when user is unable to add comments
             emptyCommentMessage: "Please enter a comment.", // Shown when user submits a comment without any text/character
@@ -97,17 +97,28 @@ define({
             noGroup: "No group configured" // Appears when no group is configured
         },
         search: {
-            searchIconTooltip: "Search this layer"
+            searchIconTooltip: "Search this layer",
+            noResultFoundText: "No results found"
         },
         manualRefresh: {
-            manualRefreshIconTooltip: "Refresh"
+            manualRefreshIconTooltip: "Refresh",
+            confirmManualRefeshText: "All selections and unsaved changes will be discarded" // Appears when user wants to do manual refresh
         },
         help: {
             helpIconTooltip: "Help"
         },
-        commentsTab: {},
-        popupTab: {},
-        mediaTab: {}
+        mediaTab: {
+            noFeatureAvailabe: "No Media Content available"
+        },
+        filter: {
+            noFeatureFoundText: "No feature found for this input value.",
+            distinctQueryFalied: "No distinct values found for the field."
+        },
+        detailsPanel: {
+            popupTabText: "Popup", // Display on popup tab text
+            mediaTabText: "Media", // Display on media tab text
+            commentsTabText: "Comments" // Display on comments tab text
+        }
     }),
     "fr": 1,
     "he": 1

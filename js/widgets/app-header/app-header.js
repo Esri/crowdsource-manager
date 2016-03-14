@@ -77,7 +77,7 @@ define([
         * @memberOf widgets/app-header/app-header
         */
         _onApplicationIconLoad: function () {
-            on(this.applicationHeaderIcon, "load", lang.hitch(this, function () {
+            on(this.applicationHeaderIcon, "load, error", lang.hitch(this, function () {
                 this._setWidthOfApplicationNameContainer();
                 this._setApplicationName();
                 this._setApplicationShortcutIcon();
@@ -86,6 +86,33 @@ define([
                 this._initializeHelpWidget();
                 this._setToolTip();
             }));
+        },
+
+        /**
+        * This function is used to set shortcut icon of an application.
+        * @memberOf widgets/app-header/app-header
+        */
+        _setApplicationShortcutIcon: function () {
+            this._loadIcons("shortcut icon", this.applicationHeaderIcon.src);
+        },
+
+        /**
+        * This function is used to load icons.
+        * @param{string} rel specifies the relationship between documents
+        * @param{string} iconPath shows path of image
+        * @memberOf widgets/app-header/app-header
+        */
+        _loadIcons: function (rel, iconPath) {
+            var icon;
+            icon = domConstruct.create("link");
+            icon.rel = rel;
+            icon.type = "image/x-icon";
+            if (iconPath.indexOf("http") === 0) {
+                icon.href = iconPath;
+            } else {
+                icon.href = dojoConfig.baseURL + iconPath;
+            }
+            document.getElementsByTagName('head')[0].appendChild(icon);
         },
 
         /**
@@ -121,6 +148,7 @@ define([
         * @memberOf widgets/app-header/app-header
         */
         _setApplicationIcon: function () {
+            var applicationIcon;
             // first check if application icon is configured than display that
             // second check if group icon is available than display that
             // third default fallback icon will be displayed if above both scenario are not available
@@ -143,6 +171,8 @@ define([
             } else {
                 domAttr.set(this.applicationHeaderIcon, "src", dojoConfig.baseURL + "/images/app-icon.png");
             }
+            applicationIcon = domAttr.get(this.applicationHeaderIcon, "src");
+            this._loadIcons("apple-touch-icon-precomposed", applicationIcon);
         },
 
         /**
@@ -188,33 +218,6 @@ define([
         },
 
         /**
-        * This function is used to set shortcut icon of an application.
-        * @memberOf widgets/app-header/app-header
-        */
-        _setApplicationShortcutIcon: function () {
-            this._loadIcons("shortcut icon", this.applicationHeaderIcon.src);
-        },
-
-        /**
-        * This function is used to load icons.
-        * @param{string} rel specifies the relationship between documents
-        * @param{string} iconPath shows path of image
-        * @memberOf widgets/app-header/app-header
-        */
-        _loadIcons: function (rel, iconPath) {
-            var icon;
-            icon = domConstruct.create("link");
-            icon.rel = rel;
-            icon.type = "image/x-icon";
-            if (iconPath.indexOf("http") === 0) {
-                icon.href = iconPath;
-            } else {
-                icon.href = dojoConfig.baseURL + iconPath;
-            }
-            document.getElementsByTagName('head')[0].appendChild(icon);
-        },
-
-        /**
         * This function is used to create help widget
         * @memberOf widgets/app-header/app-header
         */
@@ -228,6 +231,7 @@ define([
             this._helpWidgetObj = new Help(helpParameters);
             // On click of help icon, open help modal
             on(this.helpButton, "click", lang.hitch(this, function () {
+                this.hideWebMapList();
                 this._helpWidgetObj.startup();
             }));
         },
@@ -253,11 +257,14 @@ define([
                 "appUtils": this.appUtils
             };
             // Initialize search widget
-            this._searchWidgetObj = new Search(searchParameters);
+            this._searchWidgetObj = new Search(searchParameters, domConstruct.create("div", {}, this.searchContainer));
             // On click of search icon, open search panel
             on(this.searchButton, "click", lang.hitch(this, function () {
                 if (domClass.contains(this.searchButton, "esriCTSearchIconContainer")) {
-                    this._searchWidgetObj.startup();
+                    this.hideWebMapList();
+                    if (this._searchWidgetObj) {
+                        this._searchWidgetObj.startup();
+                    }
                 }
             }));
         },
@@ -277,20 +284,51 @@ define([
             // On click of manual refresh icon, proceed with manual refresh functionality
             on(this.refreshButton, "click", lang.hitch(this, function () {
                 if (domClass.contains(this.refreshButton, "esriCTManualRefreshIconContainer")) {
+                    this.hideWebMapList();
                     this._manualRefreshWidgetObj.startup();
                 }
             }));
+            this._manualRefreshWidgetObj.confirmedManualRefresh = lang.hitch(this, function () {
+                this.confirmedManualRefresh();
+            });
+
+            this._manualRefreshWidgetObj.refreshLayerWithSearchDefExpression = lang.hitch(this, function () {
+                this._searchWidgetObj.searchFeatureRecords();
+            });
         },
 
         /**
-        * This method is used to enable header icons
+        * This method is used to toggle manual refresh icon
         * @memberOf widgets/app-header/app-header
         */
-        enableHeaderIcons: function () {
-            domClass.replace(this.refreshButton, "esriCTManualRefreshIconContainer", "esriCTManualRefreshIconContainerDisable");
-            domClass.replace(this.refreshButton, "esriCTPointerCursor", "esriCTDefaultCursor");
-            domClass.replace(this.searchButton, "esriCTSearchIconContainer", "esriCTSearchIconContainerDisabled");
-            domClass.replace(this.searchButton, "esriCTPointerCursor", "esriCTDefaultCursor");
+        toggleManualRefreshIcon: function (manualRefreshParameter) {
+            manualRefreshParameter.refreshButton = this.refreshButton;
+            this._manualRefreshWidgetObj.enableManualRefreshIcon(manualRefreshParameter);
+        },
+
+        /**
+        * This method is used to enable/disable search icon based on it configuration
+        * @memberOf widgets/app-header/app-header
+        */
+        toggleSearchIcon: function (searchParameter) {
+            searchParameter.searchButton = this.searchButton;
+            this._searchWidgetObj.resetSearchPanel(searchParameter);
+        },
+
+        /**
+        * This function is used to hide webmap list
+        * @memberOf widgets/app-header/app-header
+        */
+        hideWebMapList: function () {
+            return;
+        },
+
+        /**
+        * This function is used to publish confirmation of manual refresh to other widget
+        * @memberOf widgets/manual-refresh/manual-refresh
+        */
+        confirmedManualRefresh: function () {
+            return;
         }
     });
 });

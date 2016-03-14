@@ -1,4 +1,4 @@
-﻿/*global define,require,alert,dojo,$,window,moment,console,setTimeout*/
+﻿/*global define,require,alert,dojo,$,window,moment,console,setTimeout,confirm*/
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -29,7 +29,7 @@ define([
     "dojo/on",
     'dojo/dom-attr',
     "esri/graphic",
-    "dojo/text!./templates/comment-form.html"
+    "dojo/text!./templates/popup-form.html"
 ], function (
     declare,
     _WidgetBase,
@@ -44,26 +44,29 @@ define([
     on,
     domAttr,
     Graphic,
-    commentForm
+    popupForm
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
-        templateString: commentForm,
+        templateString: popupForm,
         _sortedFields: [],
         i18n: {},
+        item: null,
         _rangeHelpText: null,
         _layerHasReportedByField: false,
+        selectedLayer: null,
+        _featureAttributes: {},
 
         /**
         * This function is called when widget is constructed.
         * @param{object} configData
         * @constructor
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
-        constructor: function (commentData) {
+        constructor: function (popupData) {
             this.inherited(arguments);
             // check if configData is present, then merge it with config object
-            if (commentData) {
-                lang.mixin(this, commentData);
+            if (popupData) {
+                lang.mixin(this, popupData);
             }
             this.i18n = this.config.i18n;
         },
@@ -71,42 +74,65 @@ define([
         /**
         * Widget post-create, called automatically in widget creation
         * life cycle, after constructor. Sets class variables.
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         postCreate: function () {
             this.inherited(arguments);
-            this._initializeCommentForm();
-            // click event for submit comment form on submit button click
-            on(this.postCommentButton, 'click', lang.hitch(this, function () {
-                this._submitCommentForm();
+            this._featureAttributes = lang.clone(this.selectedFeatures[0].attributes);
+            if (this.selectedFeatures.length > 1) {
+                this._filterCommonAttributes();
+            }
+            this._initializePopupForm();
+            // click event for submit popup form on submit button click
+            on(this.postPopupButton, 'click', lang.hitch(this, function () {
+                this._submitPopupForm();
             }));
-            on(this.cancelCommentButton, 'click', lang.hitch(this, function (evt) {
+            on(this.cancelPopupButton, 'click', lang.hitch(this, function (evt) {
                 this.onCancelButtonClick(evt);
             }));
         },
 
         /**
         * This function is designed to handle processing after any DOM fragments have been actually added to the document.
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         startup: function () {
             this.inherited(arguments);
         },
 
         /**
-        * This function is designed to handle creation of comment form.
-        * @memberOfwidgets/details-panel/comment-form
+        * This function is designed to handle creation of popup form.
+        * @memberOfwidgets/details-panel/popup-form
         */
-        _initializeCommentForm: function () {
+        _initializePopupForm: function () {
             this._filterLayerFields();
             // Sort fields array by type
             this._sortedTypeFormElement();
         },
 
         /**
+        * fetch common attribute values from the selected features
+        * @memberOf widgets/details-panel/popup-form
+        */
+        _filterCommonAttributes: function () {
+            var field, i;
+            for (field in this._featureAttributes) {
+                if (this._featureAttributes.hasOwnProperty(field)) {
+                    for (i = 0; i < this.selectedFeatures.length; i++) {
+                        if (this.selectedFeatures[i].attributes && this.selectedFeatures[i].attributes.hasOwnProperty(field)) {
+                            if (this.selectedFeatures[i].attributes[field] !== this._featureAttributes[field]) {
+                                this._featureAttributes[field] = "";
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        /**
         * Select fields from info pop up
         * @param{object} Map response
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _filterLayerFields: function () {
             var layerFields = [],
@@ -119,11 +145,11 @@ define([
                 //To maintain the order of the fields form pop up configuration first get all fields info in layerFields array
                 //then iterate through popupInfo and create fields to be shown in geo form.
                 // Create layerFields Key value pair according to fieldName
-                array.forEach(this.commentTable.fields, lang.hitch(this, function (layerField) {
+                array.forEach(this.selectedLayer.fields, lang.hitch(this, function (layerField) {
                     layerFields[layerField.name] = layerField;
                 }));
-                // Iterate through all the fields in popup info,Merge field info from layer details and popup details and create _sortedFields array.
-                array.forEach(this.commentPopupTable.popupInfo.fieldInfos, lang.hitch(this, function (popupField) {
+                // Iterate through all the fields in popup info,Merge field info from layer details and popup details and create sortedFields array.
+                array.forEach(this.popupInfo.fieldInfos, lang.hitch(this, function (popupField) {
                     // If 'ReportedBy' field is present in the layer, set _layerHasReportedByField flag
                     if (popupField.fieldName === this.config.reportedByField) {
                         this._layerHasReportedByField = true;
@@ -141,8 +167,8 @@ define([
                             layerField.format = popupField.format;
                         }
                         // if layer has type field set subTypes else set typeField as false
-                        if (layerField.name === this.commentTable.typeIdField) {
-                            layerField.subTypes = this.commentTable.types;
+                        if (layerField.name === this.selectedLayer.typeIdField) {
+                            layerField.subTypes = this.selectedLayer.types;
                             layerField.typeField = true;
                         } else {
                             layerField.typeField = false;
@@ -155,14 +181,14 @@ define([
 
         /**
         * Sort form elements by type
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _sortedTypeFormElement: function () {
             var hasDomainValue, hasDefaultValue;
             array.forEach(this._sortedFields, lang.hitch(this, function (currentField, index) {
                 // Set true/false value to property 'isTypeDependent' of the field.
                 currentField.isTypeDependent = false;
-                array.forEach(this.commentTable.types, function (currentType) {
+                array.forEach(this.selectedLayer.types, function (currentType) {
                     hasDomainValue = null;
                     hasDefaultValue = null;
                     hasDomainValue = currentType.domains[currentField.name];
@@ -186,27 +212,63 @@ define([
 
         /**
         * This function is called when click event occurs on submit buttons click
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
-        _submitCommentForm: function () {
-            var featureData, editedFields = [], key, picker, datePicker, value, erroneousFields = [];
+        _submitPopupForm: function () {
+            var erroneousFields = [], featureArray = [], updatedAttributes = {}, confirmationMsg, isConfirmed = true;
             erroneousFields = this._checkForFields();
             if (erroneousFields.length !== 0) {
-                // //scroll to that field if error exists
-                $('#tabContent').animate({ scrollTop: erroneousFields[0].offsetTop }, 1000);
+                // Scroll to the erroneous field node
+                $('#tabContent').animate({
+                    scrollTop: erroneousFields[0].offsetTop
+                }, 1000);
             } else {
-                // Create instance of graphic
-                featureData = new Graphic();
-                // create an empty array object
-                featureData.attributes = {};
-                // for all the fields
-                array.forEach(query(".commentFormQuestionare .form-control", this.enterCommentContainer), function (currentField) {
+                //get confirmation from user if multiple features are selected to update
+                if (this.selectedFeatures.length > 1) {
+                    confirmationMsg = string.substitute(this.config.i18n.geoform.updateFeaturesConfirmationMsg, {
+                        count: this.selectedFeatures.length
+                    });
+                    //display confirmation message
+                    isConfirmed = confirm(confirmationMsg);
+                }
+                if (isConfirmed) {
+                    //get update attribute values
+                    updatedAttributes = this._getUpdatedAttributes();
+                    //get features to be updated on layer
+                    featureArray = this._getFeaturesToBeUpdated(updatedAttributes);
+                    //Show loading indicator
+                    this.appUtils.showLoadingIndicator();
+                    // Add the popup to the popup table
+                    this.selectedLayer.applyEdits(null, featureArray, null, lang.hitch(this, function () {
+                        //send last feature to the handler
+                        this.onPopupFormSubmitted(this.selectedFeatures[this.selectedFeatures.length - 1]);
+                    }), lang.hitch(this, function (err) {
+                        //Hide loading indicator
+                        this.appUtils.hideLoadingIndicator();
+                        // Show error message
+                        this.appUtils.showError(err);
+                        // Show error message in header
+                        this._showHeaderMessageDiv();
+                    }));
+                } else {
+                    this.appUtils.hideLoadingIndicator();
+                }
+            }
+        },
+
+        /**
+        * get updated attributes from the form input elements
+        * @memberOf widgets/details-panel/popup-form
+        */
+        _getUpdatedAttributes: function () {
+            var key, value, attributes = {}, datePicker;
+            array.forEach(query(".popupFormQuestionare .form-control", this.enterPopupContainer), lang.hitch(this, function (currentField) {
+                if (currentField.value !== "" || this.selectedFeatures.length === 1) {
                     // get id of the field
                     key = domAttr.get(currentField, "id");
                     // check for date time picker and assign value
                     if (domClass.contains(currentField, "hasDatetimepicker")) {
-                        picker = $(currentField.parentNode).data('DateTimePicker');
-                        datePicker = picker.date();
+                        datePicker = $(currentField.parentNode).data('DateTimePicker').date();
                         if (datePicker) {
                             // need to get time of date in ms for service
                             value = datePicker.valueOf();
@@ -223,56 +285,42 @@ define([
                         }
                     }
                     // Assign value to the attributes
-                    featureData.attributes[key] = value;
-                    editedFields.push(key);
-                });
-
-                // If layer has ReportedBy Field then Add logged in username in it
-                // Add ReportedBy field to editedFields array so that it will not get the default value from template
-                if (this._layerHasReportedByField) {
-                    featureData.attributes[this.config.reportedByField] = this.config.logInDetails.processedUserName;
-                    editedFields.push(key);
+                    attributes[key] = value;
                 }
-                //Show loading indicator
-                this.appUtils.showLoadingIndicator();
-
-                this._primaryKeyField = this.selectedLayer.relationships[0].keyField;
-                this._foreignKeyField = this.commentTable.relationships[0].keyField;
-                featureData.attributes[this._foreignKeyField] = this.item.attributes[this._primaryKeyField];
-                //as we are updating feature we need object Id field inside for successful updation
-                featureData.attributes[this.selectedLayer.objectIdField] = this.item.attributes[this.selectedLayer.objectIdField];
-
-                // Add the comment to the comment table
-                this.commentTable.applyEdits(null, [featureData], null, lang.hitch(this, function (addResult, updateResult, deleteResult) { //ignore jslint
-                    //Hide loading indicator
-                    this.appUtils.hideLoadingIndicator();
-                    //for update we only need updateResult parameter
-                    if (updateResult && updateResult.length > 0 && updateResult[0].success) {
-                        this.onCommentFormSubmitted(this.item);
-                    } else {
-                        // Show error message in header
-                        this._showHeaderMessageDiv();
-                    }
-                }), lang.hitch(this, function (err) {
-                    //Hide loading indicator
-                    this.appUtils.hideLoadingIndicator();
-                    // Show error message
-                    this.appUtils.showError(err);
-                    // Show error message in header
-                    this._showHeaderMessageDiv();
-                }));
-            }
+            }));
+            return attributes;
         },
 
         /**
+        * get selected features to be updated on layer
+        * @memberOf widgets/details-panel/popup-form
+        */
+        _getFeaturesToBeUpdated: function (updatedAttributes) {
+            var featureArray = [], featureData, fieldName;
+            array.forEach(this.selectedFeatures, lang.hitch(this, function (feature) {
+                // Create instance of graphic
+                featureData = new Graphic();
+                // create an empty array object
+                featureData.attributes = {};
+                for (fieldName in updatedAttributes) { //ignore jslint
+                    if (updatedAttributes.hasOwnProperty(fieldName)) {
+                        featureData.attributes[fieldName] = updatedAttributes[fieldName];
+                    }
+                }
+                featureData.attributes[this.selectedLayer.objectIdField] = feature.attributes[this.selectedLayer.objectIdField];
+                featureArray.push(featureData);
+            }));
+            return featureArray;
+        },
+        /**
         * This function is called when click event occurs on submit buttons click
-        * to check for errors, all the fields in comment form
-        * @memberOf widgets/details-panel/comment-form
+        * to check for errors, all the fields in Popup form
+        * @memberOf widgets/details-panel/popup-form
         */
         _checkForFields: function () {
             var erroneousFields = [];
-            // for all the fields in comment form
-            array.forEach(query(".commentFormQuestionare"), lang.hitch(this, function (currentField) {
+            // for all the fields in popup form
+            array.forEach(query(".popupFormQuestionare"), lang.hitch(this, function (currentField) {
                 // to check for errors in form before submitting.
                 if ((query(".form-control", currentField)[0])) {
                     // condition to check if the entered values are erroneous.
@@ -295,7 +343,7 @@ define([
         * Create error message container
         * @param{string} errorMessage, error massage which need to show on error
         * @param{object} errorMessageNode, node to bind error massage
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _showErrorMessageDiv: function (errorMessage, errorMessageNode) {
             var errorNode, place = "after";
@@ -310,7 +358,7 @@ define([
 
         /**
         * Display message on header of form
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _showHeaderMessageDiv: function () {
             on(this.headerMessageButton, "click", lang.hitch(this, function () {
@@ -326,7 +374,7 @@ define([
         /**
         * Remove the error message container.
         * @param{object} node, node to bind error massage
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _removeErrorNode: function (node) {
             if (domClass.contains(node, "errorMessage")) {
@@ -340,11 +388,11 @@ define([
         * @param{object} currentField, object of current field in the info pop
         * @param{int} index, index of current field in the array
         * @param{object} referenceNode, Parent Node for dependent field
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _createFormElement: function (currentField, index, referenceNode) {
             var fieldname, labelContent, fieldLabelText, formContent, requireField, userFormNode, fieldAttribute;
-            userFormNode = this.commentForm;
+            userFormNode = this.popupForm;
             //code to put asterisk mark for mandatory fields and also to give it a mandatory class.
             formContent = domConstruct.create("div", {}, userFormNode);
             // If dependent field has Reference Node
@@ -357,13 +405,13 @@ define([
             }
             // If fields are not null able set to mandatory fields
             if (!currentField.nullable || currentField.typeField) {
-                domClass.add(formContent, "form-group commentFormQuestionare mandatory");
+                domClass.add(formContent, "form-group popupFormQuestionare mandatory");
                 requireField = domConstruct.create("small", {
                     className: 'esriCTRequireFieldStyle',
                     innerHTML: this.config.i18n.geoform.requiredField
                 }, formContent);
             } else {
-                domClass.add(formContent, "form-group commentFormQuestionare");
+                domClass.add(formContent, "form-group popupFormQuestionare");
             }
             // If field has alias
             // else Set field name
@@ -386,12 +434,12 @@ define([
                 domConstruct.place(requireField, labelContent, "last");
             }
             // set default Values to the fields
-            if (this.commentTable.templates[0] && !currentField.defaultValue) {
-                for (fieldAttribute in this.commentTable.templates[0].prototype.attributes) {
-                    if (this.commentTable.templates[0].prototype.attributes.hasOwnProperty(fieldAttribute)) {
+            if (this.selectedLayer.templates[0] && !currentField.defaultValue) {
+                for (fieldAttribute in this.selectedLayer.templates[0].prototype.attributes) {
+                    if (this.selectedLayer.templates[0].prototype.attributes.hasOwnProperty(fieldAttribute)) {
                         if (fieldAttribute.toLowerCase() === fieldname.toLowerCase()) {
-                            if (this.commentTable.templates[0].prototype.attributes[fieldAttribute] !== null && lang.trim(this.commentTable.templates[0].prototype.attributes[fieldAttribute].toString()) !== "") {
-                                currentField.defaultValue = this.commentTable.templates[0].prototype.attributes[fieldAttribute];
+                            if (this.selectedLayer.templates[0].prototype.attributes[fieldAttribute] !== null && lang.trim(this.selectedLayer.templates[0].prototype.attributes[fieldAttribute].toString()) !== "") {
+                                currentField.defaultValue = this.selectedLayer.templates[0].prototype.attributes[fieldAttribute];
                             }
                         }
                     }
@@ -413,7 +461,7 @@ define([
         * @param{object} currentField, object of current field in the info pop
         * @param{object} formContent, Parent Node of the field inside geo form
         * @param{string} fieldname, name of the field
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _createRangeText: function (currentField, formContent, fieldname) {
             var options = {};
@@ -448,7 +496,7 @@ define([
         * @param{object} currentField, object of current field in the info pop
         * @param{object} formContent, Parent Node of the field inside geo form
         * @param{string} fieldname, name of the field
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _createDomainValueFormElements: function (currentField, formContent, fieldname) {
             var inputRangeDateGroupContainer, defaultValue, fieldValue;
@@ -456,7 +504,7 @@ define([
                 this._createCodedValueFormElements(currentField, formContent, fieldname);
             } else {
                 //get field value
-                defaultValue = this.item.attributes[fieldname];
+                defaultValue = this._featureAttributes[fieldname];
                 // if field type is date create date field
                 if (currentField.type === "esriFieldTypeDate") {
                     // create notation Icon for date field
@@ -492,7 +540,7 @@ define([
         * @param{object} currentField, object of current field in the info pop
         * @param{object} formContent, Parent Node of the field inside geo form
         * @param{string} fieldname, name of the field
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _createCodedValueFormElements: function (currentField, formContent, fieldname) {
             var selectOptions;
@@ -515,7 +563,7 @@ define([
                     selectOptions.innerHTML = currentOption.name;
                     selectOptions.value = currentOption.code;
                     // if field contain default value, make that option selected
-                    if (this.item.attributes[fieldname] === currentOption.code) {
+                    if (this._featureAttributes[fieldname] === currentOption.code) {
                         // set attribute value selected in the select list
                         domAttr.set(this.inputContent, "value", currentOption.code);
                         domClass.add(this.inputContent.parentNode, "has-success");
@@ -528,7 +576,7 @@ define([
                     selectOptions.innerHTML = currentOption.name;
                     selectOptions.value = currentOption.id;
                     // if field contain default value, make that option selected
-                    if (this.item.attributes[fieldname] === currentOption.id) {
+                    if (this._featureAttributes[fieldname] === currentOption.id) {
                         domAttr.set(this.inputContent, "value", currentOption.id);
                         domClass.add(this.inputContent.parentNode, "has-success");
                     }
@@ -543,7 +591,7 @@ define([
         /**
         * Take appropriate actions on selection of a subtype
         * @param{object} currentField, object of current field in the info pop
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _codedValueOnChange: function (currentField) {
             // event on change
@@ -571,7 +619,7 @@ define([
         * Validate fields defined within subtypes
         * @param{object} currentTarget, on change event current target field
         * @param{object} currentField, object of current field in the info pop
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _validateTypeFields: function (evt, currentField) {
             var selectedType, defaultValue, referenceNode, currentTarget = evt.currentTarget || evt.srcElement;
@@ -596,7 +644,7 @@ define([
                 });
 
                 // initial point of reference to put elements
-                referenceNode = dom.byId(this.commentTable.typeIdField).parentNode;
+                referenceNode = dom.byId(this.selectedLayer.typeIdField).parentNode;
                 // code to populate type dependent fields
                 array.forEach(this._sortedFields, lang.hitch(this, function (currentInput, index) {
                     var field = null,
@@ -606,7 +654,7 @@ define([
                         return true;
                     }
                     // mixin array of sorted field and info pop field
-                    array.some(this.commentTable.fields, function (layerField) {
+                    array.some(this.selectedLayer.fields, function (layerField) {
                         if (layerField.name === currentInput.name) {
                             field = lang.clone(lang.mixin(layerField, currentInput));
                             return true;
@@ -638,7 +686,7 @@ define([
         * @param{array} field, an array of field details
         * @param{object} referenceNode, parent node for dependent field
         * @param{int} index , field index
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _validateTypeFieldsValue: function (selectedType, field, referenceNode, index) {
             var switchDomainType, i;
@@ -686,7 +734,7 @@ define([
         /**
         * Reset subtype fields
         * @param{object} currentInput, parent node to destroy dependent field
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _resetSubTypeFields: function (currentInput) {
             if (currentInput.type === "esriFieldTypeDate" || ((currentInput.type === "esriFieldTypeSmallFloat" || currentInput.type === "esriFieldTypeSmallInteger" || currentInput.type === "esriFieldTypeDouble" || currentInput.type === "esriFieldTypeInteger") && (currentInput.domain && currentInput.domain.type && currentInput.domain.type === "range"))) {
@@ -705,7 +753,7 @@ define([
         * @param{object} currentField, object of current field in the info pop
         * @param{object} formContent, Parent Node of the field inside geo form
         * @param{string} fieldname, name of the field
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _setRangeForm: function (currentField, formContent, fieldname) {
             var setStep, stepDivisibility = 'none',
@@ -735,7 +783,7 @@ define([
             }
             // Set Touch Spinner for domain coded numeric values
             inputcontentSpinner = $(this.inputContent).TouchSpin({
-                initval: this.item.attributes[fieldname],
+                initval: this._featureAttributes[fieldname],
                 min: currentField.domain.minValue.toString(),
                 max: currentField.domain.maxValue.toString(),
                 forcestepdivisibility: stepDivisibility,
@@ -764,7 +812,7 @@ define([
         * Event to address validations for manual entry in the touch-spinner input
         * @param{object} inputcontentSpinner, container of TouchSpin
         * @param{object} currentField, object of current field in the info pop
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _inputTouchspinOnKeyup: function (inputcontentSpinner, currentField) {
             // Touch Spinner on keyup event
@@ -793,7 +841,7 @@ define([
         * @param{object} currentField, object of current field in the info pop
         * @param{object} formContent, Parent Node of the field inside geo form
         * @param{string} fieldname, name of the field
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _createInputFormElements: function (currentField, formContent, fieldname) {
             var inputDateGroupContainer;
@@ -865,7 +913,7 @@ define([
 
         /**
         * Clear header message
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         clearHeaderMessage: function () {
             //Hide error message div, if it is visible
@@ -878,12 +926,12 @@ define([
         * Add default values to the fields
         * @param{object} currentField, object of current field in the info pop
         * @param{object} formContent, Parent Node of the field inside geo form
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _addInputElementsValue: function (currentField, formContent) {
             var fieldValue, defaultValue;
             //get default field value if t is not exist in feature attributes
-            defaultValue = this.item.attributes[this.inputContent.id];
+            defaultValue = this._featureAttributes[this.inputContent.id];
             //check field type and set the value for respective fields
             if (currentField.type !== "esriFieldTypeDate") {
                 domAttr.set(this.inputContent, "value", defaultValue);
@@ -915,7 +963,7 @@ define([
         * @param{object} currentNode, apply validation on current node
         * @param{object} currentField, object of current field in the info pop
         * @param{Boolean} iskeyPress, set Boolean value true or false
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _validateField: function (currentNode, currentField, iskeyPress) {
             var inputType, inputValue, node, typeCastedInputValue, error, targetNode = currentNode.target || currentNode.currentTarget || currentNode.srcElement,
@@ -944,7 +992,7 @@ define([
                 typeCastedInputValue = parseInt(inputValue, 10);
                 if ((inputValue.match(decimal) && typeCastedInputValue >= -32768 && typeCastedInputValue <= 32767) && inputValue.length !== 0) {
                     this._validateUserInput(false, node, inputValue);
-                    this._setFormatToValue(currentField, typeCastedInputValue, currentNode.target);
+                    this._setFormatToValue(currentField, typeCastedInputValue, targetNode);
                 } else {
                     error = string.substitute(this.config.i18n.geoform.invalidSmallNumber, {
                         openStrong: "<strong>",
@@ -957,7 +1005,7 @@ define([
                 typeCastedInputValue = parseInt(inputValue, 10);
                 if ((inputValue.match(decimal) && typeCastedInputValue >= -2147483648 && typeCastedInputValue <= 2147483647) && inputValue.length !== 0) {
                     this._validateUserInput(false, node, inputValue, iskeyPress);
-                    this._setFormatToValue(currentField, typeCastedInputValue, currentNode.target);
+                    this._setFormatToValue(currentField, typeCastedInputValue, targetNode);
                 } else {
                     error = string.substitute(this.config.i18n.geoform.invalidNumber, {
                         openStrong: "<strong>",
@@ -974,7 +1022,7 @@ define([
                 typeCastedInputValue = parseFloat(inputValue);
                 if (((inputValue.match(decimal) || inputValue.match(floatVal)) && typeCastedInputValue >= -3.4 * Math.pow(10, 38) && typeCastedInputValue <= 1.2 * Math.pow(10, 38)) && inputValue.length !== 0) {
                     this._validateUserInput(false, node, inputValue, iskeyPress);
-                    this._setFormatToValue(currentField, typeCastedInputValue, currentNode.target);
+                    this._setFormatToValue(currentField, typeCastedInputValue, targetNode);
                 } else {
                     error = string.substitute(this.config.i18n.geoform.invalidFloat, {
                         openStrong: "<strong>",
@@ -987,7 +1035,7 @@ define([
                 typeCastedInputValue = parseFloat(inputValue);
                 if (((inputValue.match(decimal) || inputValue.match(floatVal)) && typeCastedInputValue >= -2.2 * Math.pow(10, 308) && typeCastedInputValue <= 1.8 * Math.pow(10, 38)) && inputValue.length !== 0) {
                     this._validateUserInput(false, node, inputValue, iskeyPress);
-                    this._setFormatToValue(currentField, typeCastedInputValue, currentNode.target);
+                    this._setFormatToValue(currentField, typeCastedInputValue, targetNode);
                 } else {
                     error = string.substitute(this.config.i18n.geoform.invalidDouble, {
                         openStrong: "<strong>",
@@ -1021,7 +1069,7 @@ define([
         * @param{object} node, parent node to add and remove classes based on validation
         * @param{string} inputValue , input value
         * @param{string} iskeyPress, check for flag
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _validateUserInput: function (error, node, inputValue, iskeyPress) {
             if (query(".errorMessage", node)[0]) {
@@ -1047,7 +1095,7 @@ define([
         * Add calendar notation icon
         * @param{object} formContent, Parent Node to attached field
         * @param{string} imageIconClass,default class of image icon calendar
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _addNotationIcon: function (formContent, imageIconClass) {
             var inputIconGroupContainer, inputIconGroupAddOn;
@@ -1071,7 +1119,7 @@ define([
         * @param{Boolean} isRangeField, set flag true or false depends on range
         * @param{string} fieldname, name of the field
         * @param{object} currentField, object of Current Field Details
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _createDateField: function (parentNode, isRangeField, fieldname, currentField) {
             var dateInputField, picker, selectedDate, minVlaue, maxValue, value, dateFormat;
@@ -1111,30 +1159,30 @@ define([
                 if (selectedDate === null) {
                     query("input", this)[0].value = "";
                 }
-                if (query(".errorMessage", query(evt.target).parents(".commentFormQuestionare")[0])[0]) {
-                    domConstruct.destroy(query(".errorMessage", query(evt.target).parents(".commentFormQuestionare")[0])[0]);
+                if (query(".errorMessage", query(evt.target).parents(".popupFormQuestionare")[0])[0]) {
+                    domConstruct.destroy(query(".errorMessage", query(evt.target).parents(".popupFormQuestionare")[0])[0]);
                 }
-                domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-error");
-                domClass.add(query(evt.target).parents(".commentFormQuestionare")[0], "has-success");
+                domClass.remove(query(evt.target).parents(".popupFormQuestionare")[0], "has-error");
+                domClass.add(query(evt.target).parents(".popupFormQuestionare")[0], "has-success");
                 if (query("input", this)[0].value === "") {
-                    domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-success");
-                    domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-error");
+                    domClass.remove(query(evt.target).parents(".popupFormQuestionare")[0], "has-success");
+                    domClass.remove(query(evt.target).parents(".popupFormQuestionare")[0], "has-error");
                 }
             }).on('dp.error', function (evt) {
                 // on error
                 evt.target.value = '';
-                domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-success");
-                domClass.add(query(evt.target).parents(".commentFormQuestionare")[0], "has-error");
+                domClass.remove(query(evt.target).parents(".popupFormQuestionare")[0], "has-success");
+                domClass.add(query(evt.target).parents(".popupFormQuestionare")[0], "has-error");
             }).on("dp.hide", function (evt) {
                 // on Datetime picker hide event
                 if (query("input", this)[0].value === "") {
-                    domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-success");
-                    domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-error");
+                    domClass.remove(query(evt.target).parents(".popupFormQuestionare")[0], "has-success");
+                    domClass.remove(query(evt.target).parents(".popupFormQuestionare")[0], "has-error");
                 }
             }).on('dp.change', function (evt) {
                 // on change
-                domClass.add(query(evt.target).parents(".commentFormQuestionare")[0], "has-success");
-                domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-error");
+                domClass.add(query(evt.target).parents(".popupFormQuestionare")[0], "has-success");
+                domClass.remove(query(evt.target).parents(".popupFormQuestionare")[0], "has-error");
             });
             // if isRangeField is set to true for range Domain value then assign maximum and minimum value to the date time picker
             if (isRangeField) {
@@ -1151,17 +1199,17 @@ define([
         },
 
         /**
-        * Callback after comment form is submmited
+        * Callback after popup form is submitted
         * @param{item} selected item
-        * @memberOf widgets/details-panel/comment-form
+        * @memberOf widgets/details-panel/popup-form
         */
-        onCommentFormSubmitted: function (item) {
-            return item;
+        onPopupFormSubmitted: function (feature) {
+            return feature;
         },
 
         /**
-        * Callback after clicking cancel button of comment form
-        * @memberOf widgets/details-panel/comment-form
+        * Callback after clicking cancel button of popup form
+        * @memberOf widgets/details-panel/popup-form
         */
         onCancelButtonClick: function (evt) {
             return evt;

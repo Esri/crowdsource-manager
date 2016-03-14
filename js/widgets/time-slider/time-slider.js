@@ -75,7 +75,13 @@ define([
                     "thumbCount": timeInfoData.thumbCount
                 }, this.timeSliderContainer);
             timeSlider.setThumbIndexes([0, 1]);
-            timeSlider.createTimeStopsByTimeInterval(timeExtent, timeInfoData.timeStopInterval.interval, timeInfoData.timeStopInterval.units);
+            //Check the configuration of time slider in webmap, if timeStopInterval is available use it otherwise
+            //create time slider ticks/interval by numberOfStops property
+            if (timeInfoData.timeStopInterval) {
+                timeSlider.createTimeStopsByTimeInterval(timeExtent, timeInfoData.timeStopInterval.interval, timeInfoData.timeStopInterval.units);
+            } else {
+                timeSlider.createTimeStopsByCount(timeExtent, timeInfoData.numberOfStops);
+            }
             timeSlider.on("time-extent-change", lang.hitch(this, this._showSliderInfo));
             domAttr.set(this.timeSliderTextContainer, "innerHTML", this.appConfig.i18n.timeSlider.timeSliderLabel);
             timeSlider.startup();
@@ -106,18 +112,24 @@ define([
         * @memberOf widgets/time-slider/time-slider
         */
         _showSliderInfo: function (sliderValue) {
+            var displayDate, dateTimeDiaplayPattern, startDate, endDate;
             this.appUtils.showLoadingIndicator();
             this.currentTimeInfo = sliderValue;
-            var dateTimeDiaplayPattern = "MM/dd/yyyy HH:MM a",
-                startDate = locale.format(new Date(sliderValue.startTime), {
-                    datePattern: dateTimeDiaplayPattern,
-                    selector: "date"
-                }).replace(",", " "),
-                endDate = locale.format(new Date(sliderValue.endTime), {
-                    datePattern: dateTimeDiaplayPattern,
-                    selector: "date"
-                }).replace(",", " "),
+            dateTimeDiaplayPattern = "MM/dd/yyyy HH:MM a";
+            startDate = locale.format(new Date(sliderValue.startTime), {
+                datePattern: dateTimeDiaplayPattern,
+                selector: "date"
+            }).replace(",", " ");
+            endDate = locale.format(new Date(sliderValue.endTime), {
+                datePattern: dateTimeDiaplayPattern,
+                selector: "date"
+            }).replace(",", " ");
+            //Check for the configuration of time slider, and accordingly set the date string
+            if (this.timeInfoData.thumbCount > 1) {
                 displayDate = startDate + " - " + endDate;
+            } else {
+                displayDate = endDate;
+            }
             domAttr.set(this.timeSliderDateContainer, "innerHTML", displayDate);
         }
     });

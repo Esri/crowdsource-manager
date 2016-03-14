@@ -18,6 +18,7 @@
 define([
     "dojo/_base/declare",
     "dojo/_base/lang",
+    "dojo/_base/array",
     "dojo/dom",
     "dojo/dom-style",
     "dojo/dom-construct",
@@ -39,6 +40,7 @@ define([
 ], function (
     declare,
     lang,
+    array,
     dom,
     domStyle,
     domConstruct,
@@ -75,6 +77,9 @@ define([
         _refinedOperationalLayer: null, // to store object of layer which is added in snapshot mode
         _timeInfo: null, // to store time info object of a layer
         _mapResizeHandle: null, // to store resize handle of a map
+        _mapClickHandle: null, // to store click handle of a map
+        _isManualRefreshedClicked: false, // to keep track whether to do manual refresh or not
+        _manualRefreshDataObj: null, // to store data needed for manual refresh
 
         /**
         * This method is designed to handle processing after any DOM fragments have been actually added to the document.
@@ -172,6 +177,7 @@ define([
                 // create webmap list
                 this._createWebMapList();
                 this._handleEmptyDetailsPanel();
+                this._handleEmptyDataViewerPanel();
             } else {
                 // handle case when there id no webmap to display
                 this._handleNoWebMapToDisplay();
@@ -204,7 +210,24 @@ define([
             };
             // loading application header
             this._applicationHeader = new ApplicationHeader(appHeaderParameter, domConstruct.create("div", {}, dom.byId('applicationHeaderWrapperContainer')));
+            this._attachApplicationHeaderEventListener();
             this._applicationHeader.startup();
+        },
+
+        /**
+        * This function is used to attach event listener to applicaation header widget
+        * @memberOf widgets/main/main
+        */
+        _attachApplicationHeaderEventListener: function () {
+            this._applicationHeader.hideWebMapList = lang.hitch(this, function () {
+                if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
+                    this._webMapListWidget.hideWebMapList();
+                }
+            });
+            this._applicationHeader.confirmedManualRefresh = lang.hitch(this, function () {
+                this._isManualRefreshedClicked = true;
+                this._dataViewerWidget.storeDataForManualRefresh();
+            });
         },
 
         /**
@@ -277,7 +300,12 @@ define([
             this._webMapListWidget.onOperationalLayerSelected = lang.hitch(this, function (details) {
                 setTimeout(lang.hitch(this, function () {
                     ApplicationUtils.showLoadingIndicator();
-                    this._enableHeaderIcons();
+                    ApplicationUtils.hideOverlayContainer();
+                    // Reset last updated feature array
+                    this.updatedFeature = null;
+                    // Reset filter state object for a new layer
+                    // Filter state object will always became empty when a new operational layer is selected from the list
+                    this.appConfig._filterObject = null;
                     if (this.appConfig.i18n.direction === "rtl") {
                         //Remove disable class from webmap list toggle button
                         domClass.replace(dom.byId("webmapListToggleButton"), "esriCTPointerCursor", "esriCTWebMapPanelToggleButtonCloseDisabled");
@@ -285,26 +313,23 @@ define([
                         //Remove disable class from webmap list toggle button
                         domClass.replace(dom.byId("webmapListToggleButton"), "esriCTPointerCursor", "esriCTWebMapPanelToggleButtonOpenDisabled");
                     }
-                    //Show initial load message when user is yet to select a feature
-                    if (query(".esriCTNoContentDetailsPanelWrapperContainer")[0]) {
-                        domClass.remove(query(".esriCTNoContentDetailsPanelWrapperContainer")[0], "esriCTHidden");
+                    if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
+                        this._webMapListWidget.hideWebMapList();
                     }
+                    this._toggleNoFeatureFoundDiv(true);
                     this.map = details.map;
                     this._layerSelectionDetails = details;
                     this._itemInfo = details.itemInfo;
                     this._timeInfo = details.operationalLayerDetails.layerObject.timeInfo;
+                    this._isManualRefreshedClicked = false;
                     this._addOperationalLayerInSnapShotMode();
+                    this._enableHeaderIcons();
                     this._setApplicationHeaderTitle();
-                    if (this._mapResizeHandle) {
-                        this._mapResizeHandle.remove();
-                    }
-                    this._mapResizeHandle = on(this.map, "resize", lang.hitch(this, function () {
-                        this._resizeMap();
-                    }));
+                    this._attachMapEvents();
                     this._removeFeatureLayerHandle();
                     this._createFeatureLayerHandle();
                     timeAnimation = this._checkTimeAnimation(this._itemInfo.itemData);
-                    if (this._itemInfo.itemData.widgets && this._itemInfo.itemData.widgets.timeSlider && this._itemInfo.itemData.widgets.timeSlider.properties) {
+                    if (this._timeInfo && this._itemInfo.itemData.widgets && this._itemInfo.itemData.widgets.timeSlider && this._itemInfo.itemData.widgets.timeSlider.properties && timeAnimation) {
                         this._displayContainerOfTimeSlider();
                         this._createTimeSlider();
                     } else {
@@ -324,12 +349,70 @@ define([
             });
         },
 
+        _mapZoomInHandle: null,
+        _mapZoomOutHandle: null,
+
+        /**
+        * This function is used to attach event listener to map
+        * @memberOf widgets/main/main
+        */
+        _attachMapEvents: function () {
+            if (this._mapResizeHandle) {
+                this._mapResizeHandle.remove();
+            }
+
+            if (this._mapClickHandle) {
+                this._mapClickHandle.remove();
+            }
+
+            if (this._mapZoomInHandle) {
+                this._mapZoomInHandle.remove();
+            }
+
+            if (this._mapZoomOutHandle) {
+                this._mapZoomOutHandle.remove();
+            }
+
+            this._mapResizeHandle = on(this.map, "resize", lang.hitch(this, function () {
+                this._resizeMap();
+            }));
+
+            this._mapClickHandle = on(this.map, "click", lang.hitch(this, function () {
+                if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
+                    this._webMapListWidget.hideWebMapList();
+                }
+            }));
+
+            this._mapZoomInHandle = on(query(".esriSimpleSliderIncrementButton")[0], "click", lang.hitch(this, function () {
+                if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
+                    this._webMapListWidget.hideWebMapList();
+                }
+            }));
+
+            this._mapZoomOutHandle = on(query(".esriSimpleSliderDecrementButton")[0], "click", lang.hitch(this, function () {
+                if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
+                    this._webMapListWidget.hideWebMapList();
+                }
+            }));
+        },
+
         /**
         * This function is used to enable header icons
         * @memberOf widgets/main/main
         */
         _enableHeaderIcons: function () {
-            this._applicationHeader.enableHeaderIcons();
+            var searchParameter, manualRefreshParameter;
+            searchParameter = {
+                "itemInfo": this._itemInfo,
+                "selectedOperationalLayerID": this._layerSelectionDetails.operationalLayerId,
+                "selectedOperationalLayer": this._refinedOperationalLayer,
+                "map": this.map
+            };
+            this._applicationHeader.toggleSearchIcon(searchParameter);
+            manualRefreshParameter = {
+                "selectedOperationalLayer": this._refinedOperationalLayer
+            };
+            this._applicationHeader.toggleManualRefreshIcon(manualRefreshParameter);
         },
 
         /**
@@ -381,7 +464,7 @@ define([
         * @memberOf widgets/main/main
         */
         _addOperationalLayerInSnapShotMode: function () {
-            var opLayerInfo;
+            var opLayerInfo, staticDefinitionExpression;
             //get selected operation layer details
             opLayerInfo = this._layerSelectionDetails.operationalLayerDetails;
             //remove selected layer from map
@@ -392,9 +475,14 @@ define([
                 id: opLayerInfo.id,
                 outFields: ["*"]
             });
-            //set definition expression configured in webmap
-            if (opLayerInfo.layerDefinition && opLayerInfo.layerDefinition.definitionExpression) {
-                this._refinedOperationalLayer.setDefinitionExpression(opLayerInfo.layerDefinition.definitionExpression);
+            if (this.appConfig.enableFilter || !opLayerInfo.definitionEditor) {
+                //set definition expression configured in webmap
+                if (opLayerInfo.layerDefinition && opLayerInfo.layerDefinition.definitionExpression) {
+                    this._refinedOperationalLayer.setDefinitionExpression(opLayerInfo.layerDefinition.definitionExpression);
+                }
+            } else {
+                staticDefinitionExpression = this._extractStaticExpression(opLayerInfo);
+                this._refinedOperationalLayer.setDefinitionExpression(staticDefinitionExpression);
             }
             //set layer renderer configured in webmap
             if (opLayerInfo.layerDefinition && opLayerInfo.layerDefinition.drawingInfo && opLayerInfo.layerDefinition.drawingInfo.renderer) {
@@ -427,15 +515,15 @@ define([
                 q: this.appConfig.orgInfo.basemapGalleryGroupQuery
             };
             portal = new esriPortal.Portal(this.appConfig.sharinghost);
-            portal.queryGroups(params).then(function (groups) {
+            portal.queryGroups(params).then(lang.hitch(this, function (groups) {
                 params = {
-                    q: "group:" + groups.results[0].id + " AND" + ' type:"Web Map" -type:"Web Mapping Application"'
+                    q: "group:" + groups.results[0].id + " AND title:" + '"' + this.appConfig.orgInfo.defaultBasemap.title + '"' + " AND" + ' type:"Web Map" -type:"Web Mapping Application"'
                 };
                 portal.queryItems(params).then(lang.hitch(this, function (results) {
                     webMapListObj._createMap(results.results[0].id, "mapDiv");
                     ApplicationUtils.hideLoadingIndicator();
                 }));
-            });
+            }));
         },
 
         /**
@@ -490,14 +578,30 @@ define([
                 "lastMapZoomLevel": this.map.getZoom(),
                 "lastMapScale": this.map.getScale(),
                 "appUtils": ApplicationUtils,
-                "selectedOperationalLayer": this._refinedOperationalLayer
+                "selectedOperationalLayer": this._refinedOperationalLayer,
+                "isManualRefreshedClicked": this._isManualRefreshedClicked,
+                "manualRefreshDataObj": this._manualRefreshDataObj,
+                "updatedFeature": this.updatedFeature
             };
             this._destroyDataViewerWidget();
             this._destroyDetailsPanelWidget();
             // instantiate data-viewer widget
             this._dataViewerWidget = new DataViewer(dataViewerConfigData, domConstruct.create("div", {}, dom.byId("dataViewerWrapperContainer")));
+            this._isManualRefreshedClicked = false;
+            this.updatedFeature = null;
+            this._removeDataViewerHandle();
             this._attachDataViewerEventListener();
             this._dataViewerWidget.startup(true);
+        },
+
+        /**
+        * This function is used to remove handle attched with data viewer widget
+        * @memberOf widgets/main/main
+        */
+        _removeDataViewerHandle: function () {
+            if (this._selectRowGraphicsClickHandle) {
+                this._selectRowGraphicsClickHandle.remove();
+            }
         },
 
         /**
@@ -505,21 +609,29 @@ define([
         * @memberOf widgets/main/main
         */
         _attachDataViewerEventListener: function () {
-            this._dataViewerWidget.showDetailsPanel = lang.hitch(this, function (featureSet) {
-                //Hide initial load message when user selects feature
-                if (query(".esriCTNoContentDetailsPanelWrapperContainer")[0]) {
-                    domClass.add(query(".esriCTNoContentDetailsPanelWrapperContainer")[0], "esriCTHidden");
-                }
+            this._dataViewerWidget.showDetailsPanel = lang.hitch(this, function (showDetailsPanelDataObj) {
+                this._toggleNoFeatureFoundDiv(false);
                 // create details panel
-                this._createDetailsPanel(featureSet);
+                this._createDetailsPanel(showDetailsPanelDataObj);
             });
             this._dataViewerWidget.attachEventToGraphicsLayer = lang.hitch(this, function (graphicsLayer) {
                 // to select graphics on click of activated feature
                 this._selectRowGraphicsClickHandle = on(graphicsLayer, "click", lang.hitch(this, function (evt) {
+                    // Reset last updated feature array
+                    this.updatedFeature = null;
                     if (evt.graphic.geometry.type !== "point") {
                         this._dataViewerWidget.onFeatureClick(evt);
                     }
                 }));
+            });
+            this._dataViewerWidget.hideWebMapList = lang.hitch(this, function () {
+                if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
+                    this._webMapListWidget.hideWebMapList();
+                }
+            });
+            // to store data needed for manual refresh like scroll position, field order etc...
+            this._dataViewerWidget.updateManualRefreshData = lang.hitch(this, function (data) {
+                this._manualRefreshDataObj = data;
             });
         },
 
@@ -528,6 +640,8 @@ define([
         * @memberOf widgets/main/main
         */
         _destroyDataViewerWidget: function () {
+            domConstruct.empty(dom.byId("filterContainerWrapper"));
+            domConstruct.empty(dom.byId("dataViewerWrapperContainer"));
             if (this._dataViewerWidget) {
                 this._dataViewerWidget.destroy();
             }
@@ -545,6 +659,7 @@ define([
                     this._dataViewerWidget.onFeatureClick(evt);
                 }));
                 this._dataViewerFeatureLayerUpdateEndHandle = on(this._refinedOperationalLayer, "update-end", lang.hitch(this, function () {
+                    this._toggleNoFeatureFoundDiv(true);
                     //Check if time slider widget exsist, if yes then query and fetch features within current time extent
                     if (this._timeSliderWidget) {
                         var timeExtent, timeQuery;
@@ -614,42 +729,48 @@ define([
         },
 
         /**
-        * This function is used to set existing definition expression.
-        * @param{object} item info of selected operational layer
-        * @param{object} selected operational layer
-        * @memberOf widgets/main/main
-        */
-        _getExistingDefinitionExpression: function (itemInfo) {
-            var j;
-            // Initially, if a layer has some definition expression than store it
-            for (j = 0; j < itemInfo.itemData.operationalLayers.length; j++) {
-                if (this._refinedOperationalLayer.id === itemInfo.itemData.operationalLayers[j].id) {
-                    if (itemInfo.itemData.operationalLayers[j].layerDefinition && itemInfo.itemData.operationalLayers[j].layerDefinition.definitionExpression) {
-                        this._existingDefinitionExpression = itemInfo.itemData.operationalLayers[j].layerDefinition.definitionExpression;
-                    } else {
-                        this._existingDefinitionExpression = null;
-                    }
-                }
-            }
-        },
-
-        /**
         * This function is used to instantiate details panel widget.
         * @memberOf widgets/main/main
         */
-        _createDetailsPanel: function (featureSet) {
+        _createDetailsPanel: function (showDetailsPanelDataObj) {
             this._destroyDetailsPanelWidget();
             var detailsPanelParameters;
             detailsPanelParameters = {
                 "appConfig": this.appConfig,
-                "selectedFeatureSet": featureSet,
+                "selectedFeatureSet": showDetailsPanelDataObj.singleFeature,
                 "selectedOperationalLayer": this._refinedOperationalLayer,
                 "map": this.map,
                 "appUtils": ApplicationUtils,
-                "itemInfo": this._itemInfo
+                "itemInfo": this._itemInfo,
+                "popupInfo": this._layerSelectionDetails.operationalLayerDetails.popupInfo,
+                "multipleFeatures": showDetailsPanelDataObj.multipleFeature
             };
             this._detailsPanelWidget = new DetailsPanel(detailsPanelParameters, domConstruct.create("div", {}, dom.byId("detailsPanelWrapperContainer")));
+            this._attachDetailsPanelEventListener();
             this._detailsPanelWidget.startup();
+        },
+
+        /**
+        * This function is used to attach event listener to details panel widget
+        * @memberOf widgets/main/main
+        */
+        _attachDetailsPanelEventListener: function () {
+            this._detailsPanelWidget.hideWebMapList = lang.hitch(this, function () {
+                if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
+                    this._webMapListWidget.hideWebMapList();
+                }
+            });
+
+            this._detailsPanelWidget.onFeatureUpdated = lang.hitch(this, function (updatedfeature) {
+                this.updatedFeature = updatedfeature;
+                //refresh selected layer to get updated features
+                this._refinedOperationalLayer.refresh();
+            });
+
+            this._detailsPanelWidget.onMultipleFeatureEditCancel = lang.hitch(this, function (feature) {
+                //highlight selected feature's row in table
+                this._dataViewerWidget.highlightSelectedFeature(feature);
+            });
         },
 
         /**
@@ -663,6 +784,7 @@ define([
                 this._detailsPanelWidget.destroyCommentsWidget();
                 this._detailsPanelWidget.destroy();
             }
+            domClass.add(dom.byId("detailsPanelWrapperContainer"), "esriCTHideTabList");
         },
 
         /**
@@ -689,6 +811,9 @@ define([
                 lowerContainerHeight = mainContainerHeight - upperContainerHeight;
                 domStyle.set("lowerContainer", "height", lowerContainerHeight + "px");
                 this._resizeMap();
+                if (query(".esriCTDataViewerMainContainer") && (query(".esriCTDataViewerMainContainer").length > 0) && query(".esriCTDataViewerMainContainer")[0].clientHeight) {
+                    domStyle.set(this._dataViewerWidget.dataViewerContainer, "height", query(".esriCTDataViewerMainContainer")[0].clientHeight + "px");
+                }
                 ApplicationUtils.hideLoadingIndicator();
             }));
         },
@@ -719,6 +844,15 @@ define([
         },
 
         /**
+        * This function is used to show appropriate message when Data viewer panel is empty
+        * @memberOf widgets/main/main
+        */
+        _handleEmptyDataViewerPanel: function () {
+            var noDataWrapperContainer;
+            noDataWrapperContainer = domConstruct.create("div", { "class": "esriCTNoDataDataViewerPanelContainer", "innerHTML": this.appConfig.i18n.dataviewer.selectLayerToBegin }, dom.byId("dataViewerWrapperContainer"));
+        },
+
+        /**
         * This function is used to screen of error message
         * @memberOf widgets/main/main
         */
@@ -735,6 +869,71 @@ define([
             domClass.add(query(".loading-indicator")[0], "esriCTWhiteBackGround");
             node = dom.byId("loading_message");
             node.innerHTML = errorMessage;
+        },
+
+        /**
+        * This function is used to show/hide state of empty details panel
+        * @memberOf widgets/main/main
+        */
+        _toggleNoFeatureFoundDiv: function (isVisible) {
+            //Show/hide initial load message
+            if (query(".esriCTNoContentDetailsPanelWrapperContainer")[0]) {
+                if (isVisible) {
+                    domClass.remove(query(".esriCTNoContentDetailsPanelWrapperContainer")[0], "esriCTHidden");
+                } else {
+                    domClass.add(query(".esriCTNoContentDetailsPanelWrapperContainer")[0], "esriCTHidden");
+                }
+            }
+        },
+
+        /**
+        * This function is used to extract statice definition expression of layer
+        * @memberOf widgets/main/main
+        */
+        _extractStaticExpression: function (opLayerInfo) {
+            var arrayList = [], parameterizedExpression, expressionArray = [], expressionValue, andExpression = false, newExpression = "";
+            parameterizedExpression = opLayerInfo.definitionEditor.parameterizedExpression;
+            // split and check if multiple filters are applied
+            if (parameterizedExpression.split(") AND (").length > 1) {
+                // if the expression is an 'ALL' expression
+                andExpression = true;
+                // if 'yes' then slice substring to set values accordingly
+                expressionValue = parameterizedExpression.substring(1, (parameterizedExpression.length - 1));
+                // split the parameterizedExpression to set values to set current definition expression
+                arrayList = expressionValue.split(") AND (");
+            } else if (parameterizedExpression.split(") OR (").length > 1) {
+                // if the expression is an 'ANY' expression
+                andExpression = false;
+                // if 'yes' then slice substring to set values accordingly
+                expressionValue = parameterizedExpression.substring(1, (parameterizedExpression.length - 1));
+                // split the parameterizedExpression to set values to set current definition expression
+                arrayList = expressionValue.split(") OR (");
+            } else {
+                // if it is a single parameter expression
+                arrayList[0] = parameterizedExpression;
+            }
+            array.forEach(arrayList, lang.hitch(this, function (arrayElement) {
+                // for dynamic filtering option
+                if (arrayElement.split("{").length <= 1) {
+                    // for static filter
+                    expressionArray.push(arrayElement);
+                }
+            }));
+            //Create definition expression
+            array.forEach(expressionArray, lang.hitch(this, function (currentExpression, index) {
+                if (andExpression) {
+                    newExpression += "(" + currentExpression + ")";
+                    if (index !== expressionArray.length - 1) {
+                        newExpression += " AND ";
+                    }
+                } else {
+                    newExpression += "(" + currentExpression + ")";
+                    if (index !== expressionArray.length - 1) {
+                        newExpression += " OR ";
+                    }
+                }
+            }));
+            return newExpression;
         }
     });
 });

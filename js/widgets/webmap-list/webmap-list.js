@@ -120,7 +120,7 @@ define([
         */
         _createFilteredWebMapArr: function () {
             var i, itemInfo, requestArray = [],
-                dl, results = this.appConfig.groupItems.results;
+                dl, results = this.appConfig.groupItems.results, mapContainerID;
             for (i = 0; i < results.length; i++) {
                 itemInfo = results[i];
                 // Set the itemInfo config option. This can be used when calling createMap instead of the webmap id
@@ -133,7 +133,12 @@ define([
                 this._filterWebMaps(response);
                 // if atleast 1 web-map is available than display it
                 if (this._filteredWebMapResponseArr.length > 0) {
-                    this._createMap(this._filteredWebMapResponseArr[0][1].itemInfo.item.id, "webMapListMapDiv").then(lang.hitch(this, function (response) {
+                    if ((this._filteredWebMapResponseArr.length === 1) && (this._filteredWebMapResponseArr[0][1].itemInfo.itemData.operationalLayers.length === 1)) {
+                        mapContainerID = this.mapDivID;
+                    } else {
+                        mapContainerID = "webMapListMapDiv";
+                    }
+                    this._createMap(this._filteredWebMapResponseArr[0][1].itemInfo.item.id, mapContainerID).then(lang.hitch(this, function (response) {
                         this.lastSelectedWebMapExtent = response.map.extent;
                         this.lastSelectedWebMapItemInfo = response.itemInfo;
                         this._createWebMapListUI();
@@ -286,7 +291,7 @@ define([
         * @memberOf widgets/webmap-list/webmap-list
         */
         _createWebMapListUI: function () {
-            var parentDiv, i, templateString, thumbnailSrc, tokenString, infoDescription, editCapabilityLayerCount;
+            var parentDiv, i, templateString, thumbnailSrc, tokenString, infoDescription, editCapabilityLayerCount, operationalLayersLength, obj;
             thumbnailSrc = "";
             infoDescription = "";
             for (i = 0; i < this._filteredWebMapResponseArr.length; i++) {
@@ -344,7 +349,26 @@ define([
                     this._createOperationalLayerList(query('.esriCTLayerList', parentDiv)[0], this._filteredWebMapResponseArr[i][1]);
                 }
             }
-            this.displayInitalLoad();
+            if ((this._filteredWebMapResponseArr.length === 1) && (this._filteredWebMapResponseArr[0][1].itemInfo.itemData.operationalLayers.length > 0)) {
+                operationalLayersLength = this._filteredWebMapResponseArr[0][1].itemInfo.itemData.operationalLayers.length;
+                obj = {
+                    "webMapId": this._filteredWebMapResponseArr[0][1].itemInfo.item.id,
+                    "operationalLayerId": this._filteredWebMapResponseArr[0][1].itemInfo.itemData.operationalLayers[operationalLayersLength - 1].id,
+                    "operationalLayerDetails": this._filteredWebMapResponseArr[0][1].itemInfo.itemData.operationalLayers[operationalLayersLength - 1],
+                    "itemInfo": this._filteredWebMapResponseArr[0][1].itemInfo
+                };
+                if (operationalLayersLength === 1) {
+                    // by default select first webmap in list
+                    this._selectWebMapItem(this._filteredWebMapResponseArr[0][1].itemInfo.item.id);
+                    this._displaySelectedOperationalLayer(obj);
+                    this.hideWebMapList();
+                } else {
+                    this._handleWebmapToggling(parentDiv, this._filteredWebMapResponseArr[0][1].itemInfo.itemData.operationalLayers[0]);
+                    this.displayInitalLoad();
+                }
+            } else {
+                this.displayInitalLoad();
+            }
         },
 
         /**
@@ -518,6 +542,7 @@ define([
                 this.appUtils.hideLoadingIndicator();
             } else {
                 if (this._lastWebMapSelected !== webMapId) {
+                    this.hideWebMapList();
                     this.setDefaultHeightOfContainers();
                     this._selectWebMapItem(webMapId);
                     operationalLayerId = domAttr.get(node, "operationalLayerID");
@@ -731,29 +756,42 @@ define([
             }
             this.own(on(toggleButton, "click", lang.hitch(this, function () {
                 if (!domClass.contains(toggleButton, requiredClass)) {
-                    if (this.appConfig.i18n.direction === "rtl") {
-                        if (domClass.contains(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen")) {
-                            domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListClose", "esriCTWebMapListOpen");
-                            domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonOpen", "esriCTWebMapPanelToggleButtonClose");
-                            this._setTooltip(toggleButton, false);
-                        } else {
-                            domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen", "esriCTWebMapListClose");
-                            domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonClose", "esriCTWebMapPanelToggleButtonOpen");
-                            this._setTooltip(toggleButton, true);
-                        }
-                    } else {
-                        if (domClass.contains(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen")) {
-                            domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListClose", "esriCTWebMapListOpen");
-                            domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonClose", "esriCTWebMapPanelToggleButtonOpen");
-                            this._setTooltip(toggleButton, false);
-                        } else {
-                            domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen", "esriCTWebMapListClose");
-                            domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonOpen", "esriCTWebMapPanelToggleButtonClose");
-                            this._setTooltip(toggleButton, true);
-                        }
-                    }
+                    this._animateWebMapList();
                 }
             })));
+        },
+
+        /**
+        * This function is used to animate webmap list
+        * @memberOf widgets/webmap-list/webmap-list
+        */
+        _animateWebMapList: function () {
+            var toggleButton = dom.byId("webmapListToggleButton");
+            if (this.appConfig.i18n.direction === "rtl") {
+                if (domClass.contains(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen")) { // close webmap list
+                    domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListClose", "esriCTWebMapListOpen");
+                    domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonOpen", "esriCTWebMapPanelToggleButtonClose");
+                    domClass.add(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    this._setTooltip(toggleButton, false);
+                } else { // open webmap list
+                    domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen", "esriCTWebMapListClose");
+                    domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonClose", "esriCTWebMapPanelToggleButtonOpen");
+                    domClass.remove(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    this._setTooltip(toggleButton, true);
+                }
+            } else {
+                if (domClass.contains(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen")) { // close webmap list
+                    domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListClose", "esriCTWebMapListOpen");
+                    domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonClose", "esriCTWebMapPanelToggleButtonOpen");
+                    domClass.add(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    this._setTooltip(toggleButton, false);
+                } else { // open webmap list
+                    domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen", "esriCTWebMapListClose");
+                    domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonOpen", "esriCTWebMapPanelToggleButtonClose");
+                    domClass.remove(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    this._setTooltip(toggleButton, true);
+                }
+            }
         },
 
         /**
@@ -781,6 +819,29 @@ define([
                 domAttr.set(toggleButton, "title", this.appConfig.i18n.webMapList.closeWebmapList);
             } else {
                 domAttr.set(toggleButton, "title", this.appConfig.i18n.webMapList.openWebmapList);
+            }
+        },
+
+        /**
+        * This function is used to hide webmap list
+        * @memberOf widgets/webmap-list/webmap-list
+        */
+        hideWebMapList: function () {
+            var toggleButton = dom.byId("webmapListToggleButton");
+            if (this.appConfig.i18n.direction === "rtl") {
+                if (domClass.contains(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen")) { // close webmap list
+                    domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListClose", "esriCTWebMapListOpen");
+                    domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonOpen", "esriCTWebMapPanelToggleButtonClose");
+                    domClass.add(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    this._setTooltip(toggleButton, false);
+                }
+            } else {
+                if (domClass.contains(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen")) { // close webmap list
+                    domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListClose", "esriCTWebMapListOpen");
+                    domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonClose", "esriCTWebMapPanelToggleButtonOpen");
+                    domClass.add(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    this._setTooltip(toggleButton, false);
+                }
             }
         }
     });
