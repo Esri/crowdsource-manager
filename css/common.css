@@ -1,4 +1,4 @@
-﻿/* Common style CSS starts */
+﻿/* Common style */
 
 .esriCTEllipsis
 {
@@ -27,14 +27,50 @@
     display: block;
 }
 
+.esriCTVisibilityHidden
+{
+    visibility: hidden;
+}
+
+.esriCTFullHeightWidth
+{
+    height: 100%;
+    width: 100%;
+}
+
+.esriCTFontGrayColor
+{
+    color: #696969;
+}
+
+.esriCTBorderWhite
+{
+    border: 1px solid #fff;
+}
+
 .esriCTBorder
 {
-    border: 1px solid #ffffff;
+    border: 1px solid #fff;
 }
 
-.esriCTWhiteBackGround
+.esriCTBorderLeft
 {
-    background-color: #ffffff;
+    border-left: 1px solid #fff;
 }
 
-/* Common style CSS ends */
+.esriCTBorderTop
+{
+    border-top: 1px solid #fff;
+}
+
+.esriCTBorderRight
+{
+    border-right: 1px solid #fff;
+}
+
+.esriCTBorderBottom
+{
+    border-bottom: 1px solid #fff;
+}
+
+/* End of Common style */

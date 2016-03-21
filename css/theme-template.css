@@ -1,67 +1,37 @@
-﻿/* Theme style CSS starts */
-
-/** Application color starts **/
-
-.esriCTApplicationColor
+﻿.esriCTApplicationColor, .esriCTApplicationHeader
 {
     color: ${SelectedThemeColor} !important;
 }
 
-/** Application color ends **/
-
-/** Application header starts **/
-
-.esriCTApplicationHeaderContainer
+.esriCTBGColor, .esriCTCustomButtonInner
 {
     background-color: ${SelectedThemeColor} !important;
 }
-
-/** Application header ends **/
-
-/** Background starts **/
-
-.esriCTBGColor
-{
-    background-color: ${SelectedThemeColor} !important;
-}
-
-/** Background ends **/
-
-/** Border starts **/
 
 .esriCTBorder, .esriCTBorderLeft, .esriCTBorderTop, .esriCTBorderRight, .esriCTBorderBottom
 {
     border-color: ${SelectedThemeColor} !important;
 }
 
-/** Border ends **/
-
-/** Time Slider start **/
-
-.claro .dijitSlider .dijitSliderProgressBarH
+.esriCTheaderRight
 {
     background-color: ${SelectedThemeColor} !important;
 }
 
-/** Time Slider Ends **/
+/* ESRI API Overridden Styles */
+
+.esriSimpleSliderDecrementButton, .esriSimpleSliderIncrementButton
+{
+    background-color: ${SelectedThemeColor} !important;
+}
+
+/* End of ESRI API Overridden Styles */
 
 /* Data viewer */
 
-.esriCTRowHighlighted
+.esriCTRowActivated
 {
-    background-color: ${HighlightedRowColor} !important;
+    background-color: ${ActivatedRowColor} !important;
 }
 
-/* Data viewer ends */
-
-/* Details panel starts */
-
-.esriCTDetailsPanelWrapperContainer .nav-tabs>li>a:hover
-{
-    border-top-color: ${SelectedThemeColor};
-    background-color: ${LighterShadeThemeColor} !important;
-}
-
-/* Details panel ends */
-
-/* Theme style CSS ends */
+/* End of Data viewer */
