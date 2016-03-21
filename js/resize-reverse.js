@@ -1,20 +1,20 @@
 ﻿/*global $*/
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4*/
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
 $(window).load(function () {
     $.ui.plugin.add("resizable", "alsoResizeReverse", {
 
@@ -33,8 +33,7 @@ $(window).load(function () {
                     });
                 };
 
-            if (typeof (o.alsoResizeReverse) === "object" && !o.alsoResizeReverse
-                .parentNode) {
+            if (typeof (o.alsoResizeReverse) === "object" && !o.alsoResizeReverse.parentNode) {
                 if (o.alsoResizeReverse.length) {
                     o.alsoResizeReverse = o.alsoResizeReverse[0];
                     _store(o.alsoResizeReverse);
@@ -63,11 +62,9 @@ $(window).load(function () {
                 _alsoResizeReverse = function (exp, c) {
                     $(exp).each(function () {
                         var el = $(this),
-                            start = $(this).data(
-                                "ui-resizable-alsoresize-reverse"),
+                            start = $(this).data("ui-resizable-alsoresize-reverse"),
                             style = {},
-                            css = c && c.length ? c : el.parents(ui.originalElement[
-                                0]).length ? ["width", "height", "top", "left"] : [
+                            css = c && c.length ? c : el.parents(ui.originalElement[0]).length ? ["width", "height", "top", "left"] : [
                                 "width", "height", "top", "left"
                             ];
 
@@ -83,8 +80,7 @@ $(window).load(function () {
                     });
                 };
 
-            if (typeof (o.alsoResizeReverse) === "object" && !o.alsoResizeReverse
-                .nodeType) {
+            if (typeof (o.alsoResizeReverse) === "object" && !o.alsoResizeReverse.nodeType) {
                 $.each(o.alsoResizeReverse, function (exp, c) {
                     _alsoResizeReverse(exp, c);
                 });

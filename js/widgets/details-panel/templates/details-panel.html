@@ -1,0 +1,26 @@
+﻿<div class="esriCTFullHeightWidth">
+    <div data-dojo-attach-point="esriCTDetailsPanelTabContainer" class="esriCTDetailsPanelTabContainer">
+        <ul class="nav nav-tabs nav-justified" data-dojo-attach-point="tabList" style="display: none;">
+            <li id="popupTab" class="active"><a data-toggle="pill" href="#popupTabPanel">${i18n.detailsPanel.popupTabText}
+            </a></li>
+            <li id="mediaTab" style="display: none;"><a data-toggle="pill" href="#mediaTabPanel">
+                ${i18n.detailsPanel.mediaTabText}</a></li>
+            <li id="commentsTab" style="display: none;"><a data-toggle="pill" href="#commentsTabPanel">
+                ${i18n.detailsPanel.commentsTabText}</a></li>
+        </ul>
+        <div class="tab-content" id="tabContent">
+            <div id="popupTabPanel" class="tab-pane fade active in">
+                <div id="popupWrapperContainer">
+                </div>
+            </div>
+            <div id="mediaTabPanel" class="tab-pane fade">
+                <div id="mediaWrapperContainer" class="esriCTmediaWrapperContainer">
+                </div>
+            </div>
+            <div id="commentsTabPanel" class="tab-pane fade">
+                <div id="commentsWrapperContainer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
