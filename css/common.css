@@ -37,4 +37,9 @@
     background-color: #ffffff;
 }
 
+.esriCTTextAlignCenter
+{
+    text-align: center;
+}
+
 /* Common style CSS ends */

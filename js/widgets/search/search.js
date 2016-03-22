@@ -102,8 +102,9 @@ define([
                 domClass.add(this.searchOptions, "esriCTHidden");
             }
             $(".esriCTNoResults").addClass("esriCTHidden");
-            // If the value/search string exists than search it
+            // If the value/search string exists then search it
             if ((lang.trim(this.searchBox.value) !== "")) {
+                this.appUtils.showLoadingIndicator();
                 this.searchBox.value = lang.trim(this.searchBox.value);
                 this._searchedFieldValue = this.searchBox.value;
                 // Search records based on the value entered by the user
@@ -115,15 +116,18 @@ define([
                 if (!this._searchedFromSearchWidget) {
                     this.selectedOperationalLayer.refresh();
                 }
+                this.appUtils.hideLoadingIndicator();
             }
         },
+
+        _lastDefinitionExprAppliedBySearch: null,
 
         /**
         * This function is used to search the value of field entered by user
         * @memberOf widgets/search/search
         */
         _searchField: function () {
-            this.appUtils.showLoadingIndicator();
+            this._getExistingDefinitionExpression();
             // If the search string exists.
             if (this._searchedFieldValue) {
                 this._newDefinitionExpression = this._getNewDefinitionExpression();
@@ -132,6 +136,7 @@ define([
                 this._newDefinitionExpression = this._existingDefinitionExpression;
             }
             this._resetDefinitionExpression();
+            this.onSearchApplied(this._lastDefinitionExprAppliedBySearch);
         },
 
         /**
@@ -143,6 +148,8 @@ define([
             query = new Query();
             queryTask = new QueryTask(this.selectedOperationalLayer.url);
             query.where = this._newDefinitionExpression;
+            //Clear all selected features of feature layer
+            this.selectedOperationalLayer.clearSelection();
             queryTask.executeForCount(query, lang.hitch(this, function (results) {
                 if (results > 0) {
                     if (this._searchedFromSearchWidget) {
@@ -191,7 +198,7 @@ define([
         * @memberOf widgets/search/search
         */
         _getNewDefinitionExpression: function () {
-            var layerObject, i, definitionExpression = null;
+            var layerObject, i, definitionExpression = null, searchDefinitionExpression;
             // After user search for a particular value that definition expression, including the default one if merged together and returned
             if (this.itemInfo.itemData.applicationProperties.viewing.search && this.itemInfo.itemData.applicationProperties.viewing.search.enabled) {
                 for (i = 0; i < this.itemInfo.itemData.applicationProperties.viewing.search.layers.length; i++) {
@@ -201,18 +208,26 @@ define([
                             definitionExpression = this._existingDefinitionExpression;
                             if (layerObject.field.exactMatch) {
                                 // For exact match case
-                                definitionExpression += " AND " + "UPPER(" + layerObject.field.name + ")" + " = '" + lang.trim(this._searchedFieldValue).toUpperCase() + "'";
+                                searchDefinitionExpression = " AND " + "UPPER(" + layerObject.field.name + ")" + " = '" + lang.trim(this._searchedFieldValue).toUpperCase() + "'";
+                                this._lastDefinitionExprAppliedBySearch = searchDefinitionExpression;
+                                definitionExpression += searchDefinitionExpression;
                             } else {
                                 // For contains case
-                                definitionExpression += " AND " + "UPPER(" + layerObject.field.name + ")" + " LIKE '%" + lang.trim(this._searchedFieldValue).toUpperCase() + "%'";
+                                searchDefinitionExpression = " AND " + "UPPER(" + layerObject.field.name + ")" + " LIKE '%" + lang.trim(this._searchedFieldValue).toUpperCase() + "%'";
+                                this._lastDefinitionExprAppliedBySearch = searchDefinitionExpression;
+                                definitionExpression += searchDefinitionExpression;
                             }
                         } else {
                             if (layerObject.field.exactMatch) {
                                 // For exact match case
-                                definitionExpression = "UPPER(" + layerObject.field.name + ")" + " = '" + lang.trim(this._searchedFieldValue).toUpperCase() + "'";
+                                searchDefinitionExpression = "UPPER(" + layerObject.field.name + ")" + " = '" + lang.trim(this._searchedFieldValue).toUpperCase() + "'";
+                                this._lastDefinitionExprAppliedBySearch = searchDefinitionExpression;
+                                definitionExpression = searchDefinitionExpression;
                             } else {
                                 // For contains case
-                                definitionExpression = "UPPER(" + layerObject.field.name + ")" + " LIKE '%" + lang.trim(this._searchedFieldValue).toUpperCase() + "%'";
+                                searchDefinitionExpression = "UPPER(" + layerObject.field.name + ")" + " LIKE '%" + lang.trim(this._searchedFieldValue).toUpperCase() + "%'";
+                                this._lastDefinitionExprAppliedBySearch = searchDefinitionExpression;
+                                definitionExpression = searchDefinitionExpression;
                             }
                         }
                         return definitionExpression;
@@ -240,9 +255,10 @@ define([
                     this.appUtils.showLoadingIndicator();
                     this._newDefinitionExpression = this._existingDefinitionExpression;
                     this.searchBox.value = "";
-                    this.selectedOperationalLayer.setDefinitionExpression(this._existingDefinitionExpression);
                     this._removeNoResultFoundMessage();
                     this._toggleOptions();
+                    this.selectedOperationalLayer.setDefinitionExpression(this._existingDefinitionExpression);
+                    this.selectedOperationalLayer.refresh();
                 } else {
                     this.appUtils.showLoadingIndicator();
                     if ((lang.trim(this.searchBox.value) !== "")) {
@@ -281,6 +297,7 @@ define([
             } else {
                 this._disableSearchIcon();
             }
+            return enableSearch;
         },
 
         /**
@@ -318,6 +335,12 @@ define([
         _getExistingDefinitionExpression: function () {
             if (this.selectedOperationalLayer._defnExpr) {
                 this._existingDefinitionExpression = this.selectedOperationalLayer._defnExpr;
+
+                if (this._lastDefinitionExprAppliedBySearch) {
+                    this._lastDefinitionExprAppliedBySearch = lang.trim(this._lastDefinitionExprAppliedBySearch);
+                    this._existingDefinitionExpression = this._existingDefinitionExpression.split(this._lastDefinitionExprAppliedBySearch).join("");
+                    this._existingDefinitionExpression = lang.trim(this._existingDefinitionExpression);
+                }
             }
         },
 
@@ -351,6 +374,14 @@ define([
             } else {
                 this.appUtils.hideLoadingIndicator();
             }
+        },
+
+        /**
+        * This function is used to return last searched string
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        onSearchApplied: function () {
+            return this._lastDefinitionExprAppliedBySearch;
         }
     });
 });

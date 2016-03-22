@@ -19,8 +19,11 @@ define([
     "dojo/_base/declare",
     "dojo/dom-construct",
     "dojo/_base/lang",
+    "dojo/on",
+    "dojo/dom",
+    "dojo/query",
     "dojo/dom-attr",
-    "dojo/date/locale",
+    "dojo/dom-class",
     "dojo/text!./templates/time-slider.html",
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
@@ -32,8 +35,11 @@ define([
     declare,
     domConstruct,
     lang,
+    on,
+    dom,
+    query,
     domAttr,
-    locale,
+    domClass,
     template,
     _WidgetBase,
     _TemplatedMixin,
@@ -58,6 +64,8 @@ define([
         * @memberOf widgets/time-slider/time-slider
         */
         startup: function () {
+            //Remove disable class id applied
+            domClass.add(dom.byId("disableTimeSliderWrapperContainer"), "esriCTHidden");
             var webmapWidgets;
             webmapWidgets = this.webmapJSON.itemData.widgets;
             this._createTimeSlider(webmapWidgets.timeSlider.properties);
@@ -86,6 +94,7 @@ define([
             domAttr.set(this.timeSliderTextContainer, "innerHTML", this.appConfig.i18n.timeSlider.timeSliderLabel);
             timeSlider.startup();
             this.map.setTimeSlider(timeSlider);
+            this._hideWebmapList();
         },
 
         /**
@@ -107,23 +116,81 @@ define([
         },
 
         /**
+        * This function is used to hide webmaplist on slider tick click
+        * @memberOf widgets/time-slider/time-slider
+        */
+        _hideWebmapList: function () {
+            var sliderHandle = query(".dijitSliderImageHandleH"), i;
+            if (sliderHandle && sliderHandle.length > 0) {
+                for (i = 0; i < sliderHandle.length; i++) {
+                    // Binding event for the hiding web map list on time slider buttons click
+                    on(sliderHandle[i], "click", lang.hitch(this, this.hideWebMapList));
+                }
+            }
+        },
+
+        /**
+        * This function is used to hide webmap list
+        * @memberOf widgets/time-slider/time-slider
+        */
+        hideWebMapList: function () {
+            return;
+        },
+
+        /**
         * This function is used to show current slider date/time info.
         * @param{object} parameters to create timeSlider
         * @memberOf widgets/time-slider/time-slider
         */
         _showSliderInfo: function (sliderValue) {
-            var displayDate, dateTimeDiaplayPattern, startDate, endDate;
+            var startDate, endDate;
             this.appUtils.showLoadingIndicator();
             this.currentTimeInfo = sliderValue;
-            dateTimeDiaplayPattern = "MM/dd/yyyy HH:MM a";
-            startDate = locale.format(new Date(sliderValue.startTime), {
-                datePattern: dateTimeDiaplayPattern,
-                selector: "date"
-            }).replace(",", " ");
-            endDate = locale.format(new Date(sliderValue.endTime), {
-                datePattern: dateTimeDiaplayPattern,
-                selector: "date"
-            }).replace(",", " ");
+            startDate = new Date(sliderValue.startTime);
+            endDate = new Date(sliderValue.endTime);
+            this._getWebmapFormattedDate(startDate, endDate);
+        },
+
+        /**
+        * This function is use to handle enabling/disabling of time slider
+        * @param{stirng} selected feature length
+        * @memberOf widgets/time-slider/time-slider
+        */
+        _handleTimeSliderVisibility: function (featureLength) {
+            if (featureLength > 1) {
+                domClass.remove(dom.byId("disableTimeSliderWrapperContainer"), "esriCTHidden");
+            } else {
+                domClass.add(dom.byId("disableTimeSliderWrapperContainer"), "esriCTHidden");
+            }
+        },
+
+        /**
+        * This function is use to convert date in webmap format
+        * @param{stirng} start and end date to display
+        * @memberOf widgets/time-slider/time-slider
+        */
+        _getWebmapFormattedDate: function (startDate, endDate) {
+            var webmapTimeSliderInfo, timeDiff, diffDays, intervalUnit;
+            webmapTimeSliderInfo = this.webmapJSON.itemData.widgets.timeSlider.properties;
+            intervalUnit = webmapTimeSliderInfo && webmapTimeSliderInfo.timeStopInterval && webmapTimeSliderInfo.timeStopInterval.units;
+            timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+            diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            if (webmapTimeSliderInfo && (diffDays > 365) && (intervalUnit === "esriTimeUnitsYears" || intervalUnit === "esriTimeUnitsDecades")) {
+                this._displayDateTime(startDate.getFullYear(), endDate.getFullYear());
+            } else if (intervalUnit === "esriTimeUnitsHours") {
+                this._displayDateTime(startDate.toLocaleString(), endDate.toLocaleString());
+            } else {
+                this._displayDateTime(startDate.toLocaleDateString(), endDate.toLocaleDateString());
+            }
+        },
+
+        /**
+        * This function is use to display date in webmap format
+        * @param{string} start and end date to display
+        * @memberOf widgets/time-slider/time-slider
+        */
+        _displayDateTime: function (startDate, endDate) {
+            var displayDate;
             //Check for the configuration of time slider, and accordingly set the date string
             if (this.timeInfoData.thumbCount > 1) {
                 displayDate = startDate + " - " + endDate;
@@ -131,6 +198,7 @@ define([
                 displayDate = endDate;
             }
             domAttr.set(this.timeSliderDateContainer, "innerHTML", displayDate);
+            this.hideWebMapList();
         }
     });
 });

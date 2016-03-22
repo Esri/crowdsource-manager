@@ -26,6 +26,7 @@ define([
     "dojo/on",
     "dojo/_base/array",
     "esri/tasks/RelationshipQuery",
+    "esri/tasks/query",
     "dojo/dom-construct",
     "dojo/dom-class",
     "dojo/dom",
@@ -47,6 +48,7 @@ define([
     on,
     array,
     RelationshipQuery,
+    Query,
     domConstruct,
     domClass,
     dom,
@@ -175,13 +177,20 @@ define([
         * @memberOf widgets/details-panel/comments
         */
         _createPopUpContent: function (currentFeature, commentsParentDiv, currentID) {
-            var commentContentPaneContainer, commentContentPane;
-            currentFeature.setInfoTemplate(new PopupTemplate(this._commentPopupTable.popupInfo));
-            commentContentPaneContainer = domConstruct.create("div", { "class": "esriCTCommentsPopup" }, commentsParentDiv);
-            commentContentPane = new ContentPane({}, commentContentPaneContainer);
-            commentContentPane.startup();
-            commentContentPane.set('content', currentFeature.getContent());
-            this._createCommentButton(commentContentPaneContainer, currentID, currentFeature.attributes[this.selectedOperationalLayer.objectIdField], currentFeature);
+            var queryFeature, currentDateTime = new Date().getTime();
+            queryFeature = new Query();
+            queryFeature.objectIds = [parseInt(currentFeature.attributes[this.selectedOperationalLayer.objectIdField], 10)];
+            queryFeature.outFields = ["*"];
+            queryFeature.where = currentDateTime + "=" + currentDateTime;
+            this._commentsTable.setInfoTemplate(new PopupTemplate(this._commentPopupTable.popupInfo));
+            this._commentsTable.queryFeatures(queryFeature, lang.hitch(this, function (result) {
+                var commentContentPaneContainer, commentContentPane;
+                commentContentPaneContainer = domConstruct.create("div", { "class": "esriCTCommentsPopup" }, commentsParentDiv);
+                commentContentPane = new ContentPane({}, commentContentPaneContainer);
+                commentContentPane.startup();
+                commentContentPane.set('content', result.features[0].getContent());
+                this._createCommentButton(commentContentPaneContainer, currentID, currentFeature.attributes[this.selectedOperationalLayer.objectIdField], currentFeature);
+            }));
         },
 
         /**
@@ -189,7 +198,7 @@ define([
         * @memberOf widgets/details-panel/comments
         */
         _createCommentButton: function (parentDiv, relationID, objectID, graphic) {
-            var commentBtnnDiv = domConstruct.create("div", { "class": "esriCTCommentButton" }, parentDiv);
+            var commentBtnnDiv = domConstruct.create("div", { "class": "esriCTCommentButton", "title": this.appConfig.i18n.detailsPanel.editContentText }, parentDiv);
             on(commentBtnnDiv, "click", lang.hitch(this, function () {
                 this._createCommentForm(graphic);
                 domStyle.set(this.commentsContainer, "display", "none");
@@ -328,6 +337,7 @@ define([
                             this._createPopUpContent(this._relatedRecords[currentID].features[i], commentsParentDiv, currentID);
                         }
                         this.showCommentsTab();
+                        domAttr.set(dom.byId("commentsTotalCount"), "innerHTML", this._relatedRecords[currentID].features.length);
                     } else {
                         this.hideCommentsTab();
                     }

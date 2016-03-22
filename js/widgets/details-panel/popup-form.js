@@ -263,29 +263,23 @@ define([
         _getUpdatedAttributes: function () {
             var key, value, attributes = {}, datePicker;
             array.forEach(query(".popupFormQuestionare .form-control", this.enterPopupContainer), lang.hitch(this, function (currentField) {
-                if (currentField.value !== "" || this.selectedFeatures.length === 1) {
-                    // get id of the field
-                    key = domAttr.get(currentField, "id");
+                // get id of the field
+                key = domAttr.get(currentField, "id");
+                if (currentField.value !== "") {
                     // check for date time picker and assign value
                     if (domClass.contains(currentField, "hasDatetimepicker")) {
                         datePicker = $(currentField.parentNode).data('DateTimePicker').date();
                         if (datePicker) {
                             // need to get time of date in ms for service
                             value = datePicker.valueOf();
-                        } else {
-                            if (currentField && currentField.value === "") {
-                                value = null;
-                            }
                         }
                     } else {
-                        if (currentField.value === "") {
-                            value = null;
-                        } else {
-                            value = lang.trim(currentField.value);
-                        }
+                        value = lang.trim(currentField.value);
                     }
                     // Assign value to the attributes
                     attributes[key] = value;
+                } else if (currentField.value !== this._featureAttributes[key]) {
+                    attributes[key] = null;
                 }
             }));
             return attributes;

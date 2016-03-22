@@ -77,6 +77,8 @@ define([
                 if (query(".esriCTNoContentDetailsPanelWrapperContainer")[0]) {
                     domClass.remove(query(".esriCTNoContentDetailsPanelWrapperContainer")[0], "esriCTHidden");
                 }
+                //When no features are selected from data viewer, enable time slider, filter and search
+                this.popupEditModeEnabled(false);
                 return;
             }
             this._attachTabEvents();
@@ -104,6 +106,9 @@ define([
                 this.hideWebMapList();
                 //Scroll to top position
                 dom.byId("tabContent").scrollTop = 0;
+            }));
+            on(dom.byId("tabContent"), "scroll", lang.hitch(this, function () {
+                this.hideWebMapList();
             }));
         },
 
@@ -133,8 +138,8 @@ define([
             };
             // Initialize popup widget
             this._popupWidgetObj = new PopupTab(popupParameters, domConstruct.create("div", {}, dom.byId("popupWrapperContainer")));
-            this._popupWidgetObj.startup();
             this._attachPopupEventListener();
+            this._popupWidgetObj.startup();
         },
 
         /**
@@ -142,14 +147,20 @@ define([
         * @memberOf widgets/details-panel/details-panel
         */
         _attachPopupEventListener: function () {
-
             this._popupWidgetObj.onFeatureUpdated = lang.hitch(this, function (feature) {
                 this.onFeatureUpdated(feature);
             });
-
             this._popupWidgetObj.onMultipleFeatureEditCancel = lang.hitch(this, function (feature) {
                 this.onMultipleFeatureEditCancel(feature);
             });
+
+            this._popupWidgetObj.popupEditModeEnabled = lang.hitch(this, function (isEditMode) {
+                this.popupEditModeEnabled(isEditMode);
+            });
+        },
+
+        popupEditModeEnabled: function (isEditMode) {
+            return isEditMode;
         },
 
         /**
@@ -187,8 +198,8 @@ define([
                 };
                 // Initialize comments widget
                 this._mediaWidgetObj = new Media(mediaParameters, domConstruct.create("div", {}, dom.byId("mediaWrapperContainer")));
-                this._mediaWidgetObj.startup();
                 this._attachMediaTabEvents();
+                this._mediaWidgetObj.startup();
             } else {
                 this._hideDetailsPanelTab("media");
             }
@@ -272,7 +283,10 @@ define([
         * @memberOf widgets/details-panel/details-panel
         */
         _hideDetailsPanelTab: function (tabName) {
-            dom.byId(tabName + "Tab").style.display = "none";
+            var tab = dom.byId(tabName + "Tab");
+            if (tab) {
+                dom.byId(tabName + "Tab").style.display = "none";
+            }
         },
 
         /**
@@ -282,7 +296,10 @@ define([
         */
         _showDetailsPanelTab: function (tabName) {
             //TODO : check for appropriate display property since the tab goes to next line after setting "block" //ignore jslint
-            dom.byId(tabName + "Tab").style.display = "";
+            var tab = dom.byId(tabName + "Tab");
+            if (tab) {
+                dom.byId(tabName + "Tab").style.display = "";
+            }
         },
 
         /**

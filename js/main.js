@@ -36,6 +36,7 @@ define([
     "esri/tasks/query",
     "dojo/query",
     "esri/dijit/PopupTemplate",
+    "dojo/dom-attr",
     "dojo/domReady!"
 ], function (
     declare,
@@ -57,7 +58,8 @@ define([
     esriPortal,
     EsriQuery,
     query,
-    PopupTemplate
+    PopupTemplate,
+    domAttr
 ) {
     return declare(null, {
         _boilerPlateTemplate: null, // to store object of boilerplate
@@ -80,6 +82,10 @@ define([
         _mapClickHandle: null, // to store click handle of a map
         _isManualRefreshedClicked: false, // to keep track whether to do manual refresh or not
         _manualRefreshDataObj: null, // to store data needed for manual refresh
+        _mapZoomInHandle: null, // to store zoom in handle of map panel
+        _mapZoomOutHandle: null, // to store zoom out handle of map panel
+        _filterRefreshDataObj: null,
+        _isFilterRefreshClicked: false,
 
         /**
         * This method is designed to handle processing after any DOM fragments have been actually added to the document.
@@ -103,6 +109,11 @@ define([
                         "token": this._loggedInUser.credential.token
                     };
                     queryParams.token = this._loggedInUser.credential.token;
+                } else {
+                    this.appConfig.logInDetails = {
+                        "userName": this.appConfig.i18n.applicationHeader.signInOption,
+                        "token": ""
+                    };
                 }
                 // enable queryForGroupItems in templateconfig
                 this._boilerPlateTemplate.templateConfig.queryForGroupItems = true;
@@ -178,10 +189,56 @@ define([
                 this._createWebMapList();
                 this._handleEmptyDetailsPanel();
                 this._handleEmptyDataViewerPanel();
+                this._attachClickEventToDetailsPanel();
+                this._attachClickEventToApplicationHeader();
+                this._attachClickEventToOperationalLayerName();
             } else {
+                // executes when window is resized
+                on(window, "resize", lang.hitch(this, this._onWindowResize));
+                // set Application Theme
+                ApplicationUtils.loadApplicationTheme(this.appConfig);
+                // create Application header
+                this._createApplicationHeader(true);
+                // create map panel
+                this._createMapPanel();
                 // handle case when there id no webmap to display
                 this._handleNoWebMapToDisplay();
             }
+        },
+
+        /**
+        * This function is used to attach click event to details panel for closing filter UI.
+        * On click of details panel hide webmap list
+        * @memberOf widgets/main/main
+        */
+        _attachClickEventToDetailsPanel: function () {
+            on(dom.byId("detailsPanelWrapperContainer"), "click", lang.hitch(this, function () {
+                $(".esriCTFilterParentContainer").css("display", "none");
+                if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
+                    this._webMapListWidget.hideWebMapList();
+                }
+            }));
+
+        },
+
+        /**
+        * This function is used to attach click event to application header for closing filter UI.
+        * @memberOf widgets/main/main
+        */
+        _attachClickEventToApplicationHeader: function () {
+            on(dom.byId("applicationHeaderWrapperContainer"), "click", lang.hitch(this, function () {
+                $(".esriCTFilterParentContainer").css("display", "none");
+            }));
+        },
+
+        /**
+        * This function is used to attach click event to operational name container for closing filter UI.
+        * @memberOf widgets/main/main
+        */
+        _attachClickEventToOperationalLayerName: function () {
+            on(dom.byId("operationalLayerNameContainer"), "click", lang.hitch(this, function () {
+                $(".esriCTFilterParentContainer").css("display", "none");
+            }));
         },
 
         /**
@@ -199,14 +256,15 @@ define([
         * This function is used to instantiate application header.
         * @memberOf widgets/main/main
         */
-        _createApplicationHeader: function () {
+        _createApplicationHeader: function (displaySignInText) {
             var appHeaderParameter;
             this._destroyApplicationHeaderWidget();
             // parameters needed for instantiating application header
             appHeaderParameter = {
                 "appConfig": this.appConfig,
                 "appUtils": ApplicationUtils,
-                "loggedInUser": this._loggedInUser
+                "loggedInUser": this._loggedInUser,
+                "displaySignInText": displaySignInText
             };
             // loading application header
             this._applicationHeader = new ApplicationHeader(appHeaderParameter, domConstruct.create("div", {}, dom.byId('applicationHeaderWrapperContainer')));
@@ -219,15 +277,53 @@ define([
         * @memberOf widgets/main/main
         */
         _attachApplicationHeaderEventListener: function () {
+
             this._applicationHeader.hideWebMapList = lang.hitch(this, function () {
                 if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
                     this._webMapListWidget.hideWebMapList();
                 }
             });
+
             this._applicationHeader.confirmedManualRefresh = lang.hitch(this, function () {
                 this._isManualRefreshedClicked = true;
                 this._dataViewerWidget.storeDataForManualRefresh();
             });
+
+            this._applicationHeader.reload = lang.hitch(this, function (logInDetails) {
+                this._reloadSignedInUserDetails = logInDetails;
+            });
+
+            this._applicationHeader.destroyWidgets = lang.hitch(this, function () {
+                ApplicationUtils.showLoadingIndicator();
+                ApplicationUtils.showOverlayContainer();
+                this._destroyWidgets();
+                this.reload(this._reloadSignedInUserDetails);
+            });
+
+            this._applicationHeader.onSearchApplied = lang.hitch(this, function (lastSearchedString) {
+                this.appConfig._filterObject.lastSearchedString = lastSearchedString;
+            });
+        },
+
+        /**
+        * This method is used to reload the app
+        * @memberOf widgets/main/main
+        */
+        reload: function (logInDetails) {
+            return logInDetails;
+        },
+
+        /**
+        * This function is used to destroy all the widgets.
+        * @memberOf widgets/main/main
+        */
+        _destroyWidgets: function () {
+            this._destroyApplicationHeaderWidget();
+            this._destroyWebMapPanelWidget();
+            this._destroyTimeSliderWidget();
+            this._destroyDataViewerWidget();
+            this._destroyDetailsPanelWidget();
+            this._destroyMapPanelWidget();
         },
 
         /**
@@ -237,6 +333,16 @@ define([
         _destroyApplicationHeaderWidget: function () {
             if (this._applicationHeader) {
                 this._applicationHeader.destroy();
+            }
+        },
+
+        /**
+        * This function is used to destroy webmap panel widget.
+        * @memberOf widgets/main/main
+        */
+        _destroyWebMapPanelWidget: function () {
+            if (this._webMapListWidget) {
+                this._webMapListWidget.destroy();
             }
         },
 
@@ -253,6 +359,16 @@ define([
             };
             // load map viewer panel
             this._mapPanelWidget = new MapViewer(mapViewerParameter, domConstruct.create("div", {}, dom.byId("mapPanelWrapperContainer")));
+        },
+
+        /**
+        * This function is used to destroy map panel widget
+        * @memberOf widgets/main/main
+        */
+        _destroyMapPanelWidget: function () {
+            if (this._mapPanelWidget) {
+                this._mapPanelWidget.destroy();
+            }
         },
 
         /**
@@ -322,7 +438,13 @@ define([
                     this._itemInfo = details.itemInfo;
                     this._timeInfo = details.operationalLayerDetails.layerObject.timeInfo;
                     this._isManualRefreshedClicked = false;
+                    this._isFilterRefreshClicked = false;
                     this._addOperationalLayerInSnapShotMode();
+                    //Reset application header and search widget flags
+                    if (this._applicationHeader) {
+                        this._applicationHeader._isMultipleRecordsSelected = false;
+                        this._applicationHeader.isSearchActive = false;
+                    }
                     this._enableHeaderIcons();
                     this._setApplicationHeaderTitle();
                     this._attachMapEvents();
@@ -348,9 +470,6 @@ define([
                 this._disableHeaderIcons();
             });
         },
-
-        _mapZoomInHandle: null,
-        _mapZoomOutHandle: null,
 
         /**
         * This function is used to attach event listener to map
@@ -378,18 +497,21 @@ define([
             }));
 
             this._mapClickHandle = on(this.map, "click", lang.hitch(this, function () {
+                $(".esriCTFilterParentContainer").css("display", "none");
                 if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
                     this._webMapListWidget.hideWebMapList();
                 }
             }));
 
             this._mapZoomInHandle = on(query(".esriSimpleSliderIncrementButton")[0], "click", lang.hitch(this, function () {
+                $(".esriCTFilterParentContainer").css("display", "none");
                 if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
                     this._webMapListWidget.hideWebMapList();
                 }
             }));
 
             this._mapZoomOutHandle = on(query(".esriSimpleSliderDecrementButton")[0], "click", lang.hitch(this, function () {
+                $(".esriCTFilterParentContainer").css("display", "none");
                 if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
                     this._webMapListWidget.hideWebMapList();
                 }
@@ -581,13 +703,16 @@ define([
                 "selectedOperationalLayer": this._refinedOperationalLayer,
                 "isManualRefreshedClicked": this._isManualRefreshedClicked,
                 "manualRefreshDataObj": this._manualRefreshDataObj,
-                "updatedFeature": this.updatedFeature
+                "updatedFeature": this.updatedFeature,
+                "isFilterRefreshClicked": this._isFilterRefreshClicked,
+                "filterRefreshDataObj": this._filterRefreshDataObj
             };
             this._destroyDataViewerWidget();
             this._destroyDetailsPanelWidget();
             // instantiate data-viewer widget
             this._dataViewerWidget = new DataViewer(dataViewerConfigData, domConstruct.create("div", {}, dom.byId("dataViewerWrapperContainer")));
             this._isManualRefreshedClicked = false;
+            this._isFilterRefreshClicked = false;
             this.updatedFeature = null;
             this._removeDataViewerHandle();
             this._attachDataViewerEventListener();
@@ -633,6 +758,12 @@ define([
             this._dataViewerWidget.updateManualRefreshData = lang.hitch(this, function (data) {
                 this._manualRefreshDataObj = data;
             });
+
+            // to store data needed for filter refresh like scroll position, field order etc...
+            this._dataViewerWidget.updateFilterRefreshData = lang.hitch(this, function (data) {
+                this._isFilterRefreshClicked = true;
+                this._filterRefreshDataObj = data;
+            });
         },
 
         /**
@@ -640,8 +771,12 @@ define([
         * @memberOf widgets/main/main
         */
         _destroyDataViewerWidget: function () {
-            domConstruct.empty(dom.byId("filterContainerWrapper"));
-            domConstruct.empty(dom.byId("dataViewerWrapperContainer"));
+            if (dom.byId("filterContainerWrapper")) {
+                domConstruct.empty(dom.byId("filterContainerWrapper"));
+            }
+            if (dom.byId("dataViewerWrapperContainer")) {
+                domConstruct.empty(dom.byId("dataViewerWrapperContainer"));
+            }
             if (this._dataViewerWidget) {
                 this._dataViewerWidget.destroy();
             }
@@ -658,8 +793,17 @@ define([
                 this._featureLayerClickHandle = on(this._refinedOperationalLayer, "click", lang.hitch(this, function (evt) {
                     this._dataViewerWidget.onFeatureClick(evt);
                 }));
+
                 this._dataViewerFeatureLayerUpdateEndHandle = on(this._refinedOperationalLayer, "update-end", lang.hitch(this, function () {
                     this._toggleNoFeatureFoundDiv(true);
+                    //Enable time slider if it was disable
+                    if (this._timeSliderWidget) {
+                        this._timeSliderWidget._handleTimeSliderVisibility(0);
+                    }
+                    //Enable search if it was disable
+                    if (this._applicationHeader) {
+                        this._applicationHeader._handleSearchIconVisibility(0);
+                    }
                     //Check if time slider widget exsist, if yes then query and fetch features within current time extent
                     if (this._timeSliderWidget) {
                         var timeExtent, timeQuery;
@@ -668,7 +812,7 @@ define([
                         timeQuery.timeExtent = timeExtent;
                         timeQuery.where = "1=1";
                         this._refinedOperationalLayer.queryFeatures(timeQuery, lang.hitch(this, function (featureSet) {
-                            //Change graphics of layer with latest featched features
+                            //Change graphics of layer with latest fetched features
                             this._refinedOperationalLayer.graphics = featureSet.features || [];
                             this._createDataViewer();
                         }));
@@ -695,7 +839,20 @@ define([
                 "timeInfo": this._timeInfo
             };
             this._timeSliderWidget = new TimeSlider(timeSliderParameters, domConstruct.create("div", {}, dom.byId('timeSliderWrapperContainer')));
+
+            // handler for the hiding web map list on time slider buttons click
+            this._timeSliderWidget.hideWebMapList = lang.hitch(this, function () {
+                if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
+                    this._webMapListWidget.hideWebMapList();
+                }
+            });
+
             this._timeSliderWidget.startup();
+            //Show alert message when user try to interact with the time slider in edit mode
+            on(dom.byId("disableTimeSliderWrapperContainer"), "click", lang.hitch(this, function () {
+                ApplicationUtils.showMessage(this.appConfig.i18n.timeSlider.timeSliderInEditModeAlert);
+            }));
+
         },
 
         /**
@@ -771,6 +928,28 @@ define([
                 //highlight selected feature's row in table
                 this._dataViewerWidget.highlightSelectedFeature(feature);
             });
+
+            this._detailsPanelWidget.popupEditModeEnabled = lang.hitch(this, function (isEditMode) {
+                var featureLength;
+                if (isEditMode) {
+                    featureLength = 2;
+                    if (this._dataViewerWidget) {
+                        this._dataViewerWidget.isEditMode = true;
+                    }
+                } else {
+                    featureLength = 1;
+                    if (this._dataViewerWidget) {
+                        this._dataViewerWidget.isEditMode = false;
+                    }
+                }
+                if (this._timeSliderWidget) {
+                    this._timeSliderWidget._handleTimeSliderVisibility(featureLength);
+                }
+                //If search widget exsist, handle its visibility
+                if (this._applicationHeader) {
+                    this._applicationHeader._handleSearchIconVisibility(featureLength);
+                }
+            });
         },
 
         /**
@@ -784,7 +963,9 @@ define([
                 this._detailsPanelWidget.destroyCommentsWidget();
                 this._detailsPanelWidget.destroy();
             }
-            domClass.add(dom.byId("detailsPanelWrapperContainer"), "esriCTHideTabList");
+            if (dom.byId("detailsPanelWrapperContainer")) {
+                domClass.add(dom.byId("detailsPanelWrapperContainer"), "esriCTHideTabList");
+            }
         },
 
         /**
@@ -798,13 +979,14 @@ define([
                 handles: 's', //show resize handel only at the bottom of the grid container
                 containment: "#UpperAndLowerWrapperContainer",
                 maxHeight: 550,
-                minHeight: 75
+                minHeight: 140
             });
 
             //handle resize stop event which will be fired on resize complete
             //after completing resize of containers, resize the map so that it will be fit resized size
             $("#upperContainer").on("resizestop", lang.hitch(this, function () {
                 ApplicationUtils.showLoadingIndicator();
+                $(".esriCTFilterParentContainer").css("display", "none");
                 var mainContainerHeight, upperContainerHeight, lowerContainerHeight;
                 mainContainerHeight = parseFloat(domStyle.get("UpperAndLowerWrapperContainer", "height"));
                 upperContainerHeight = parseFloat(domStyle.get("upperContainer", "height"));
@@ -849,7 +1031,8 @@ define([
         */
         _handleEmptyDataViewerPanel: function () {
             var noDataWrapperContainer;
-            noDataWrapperContainer = domConstruct.create("div", { "class": "esriCTNoDataDataViewerPanelContainer", "innerHTML": this.appConfig.i18n.dataviewer.selectLayerToBegin }, dom.byId("dataViewerWrapperContainer"));
+            domConstruct.empty(dom.byId("overlayContainer"));
+            noDataWrapperContainer = domConstruct.create("div", { "class": "esriCTNoDataDataViewerPanelContainer", "innerHTML": this.appConfig.i18n.dataviewer.selectLayerToBegin }, dom.byId("overlayContainer"));
         },
 
         /**
@@ -857,18 +1040,18 @@ define([
         * @memberOf widgets/main/main
         */
         _displayErrorMessageScreen: function (error) {
-            var errorMessage, node;
-            domClass.add("mainWrapperContainer", "esriCTHidden");
+            var errorMessage, upperAndLowerWrapperContainerHeight;
+            domConstruct.empty("UpperAndLowerWrapperContainer");
             errorMessage = this.appConfig.i18n.map.error;
             if (error && error.message) {
                 errorMessage = error.message;
             }
-            // remove loading class from body
-            domClass.remove(document.body, "app-loading");
-            domClass.add(document.body, "app-error");
-            domClass.add(query(".loading-indicator")[0], "esriCTWhiteBackGround");
-            node = dom.byId("loading_message");
-            node.innerHTML = errorMessage;
+            upperAndLowerWrapperContainerHeight = $("#UpperAndLowerWrapperContainer").outerHeight(true);
+            upperAndLowerWrapperContainerHeight = parseFloat(upperAndLowerWrapperContainerHeight);
+            domStyle.set("UpperAndLowerWrapperContainer", "line-height", upperAndLowerWrapperContainerHeight + "px");
+            domClass.add("UpperAndLowerWrapperContainer", "esriCTTextAlignCenter");
+            domAttr.set("UpperAndLowerWrapperContainer", "innerHTML", errorMessage);
+            ApplicationUtils.hideLoadingIndicator();
         },
 
         /**

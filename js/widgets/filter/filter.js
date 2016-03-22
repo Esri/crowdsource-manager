@@ -116,7 +116,7 @@ define([
         * @memberOf widgets/filter/filter
         */
         _createFilterContainer: function (definitionEditorInput, index, displayColumn) {
-            var filterLabel, screenHeight, maxHeight, borderContainer;
+            var filterLabel, screenHeight, maxHeight, borderContainer, filterDisableContaner;
             if (displayColumn === definitionEditorInput.parameters[0].fieldName) {
                 this._isCodedValueColumn = this._hasCodedDomain(displayColumn);
                 this._isTypeIdfield = this._hasTypeIdfield(displayColumn);
@@ -124,6 +124,10 @@ define([
                 // checking if it is already created (i.e. when index > 0)
                 if (!this._filterContainer) {
                     this._filterContainer = domConstruct.create("div", { "class": "esriCTFilterContainer" }, this.filterParentContainer);
+                    filterDisableContaner = domConstruct.create("div", { "class": "esriCTDisableFilterContainer esriCTHidden" }, this.filterParentContainer);
+                    on(filterDisableContaner, "click", lang.hitch(this, function () {
+                        alert(this.appConfig.i18n.filter.filterInEditModeAlert);
+                    }));
                     filterLabel = domConstruct.create("div", { "innerHTML": this.appConfig.i18n.dataviewer.filterLabel, "class": "esriCTFilterLabel" }, this._filterContainer);
                     borderContainer = domConstruct.create("div", { "class": "esriCTBorderDiv" }, this._filterContainer);
                     this.filterAttributesContainer = domConstruct.create("div", { "class": "esriCTFilterAttributesContainer" }, this._filterContainer);
@@ -151,7 +155,6 @@ define([
             domConstruct.create("div", { "innerHTML": definitionEditorInput.prompt, "class": "esriCTFilterLabelDiv" }, baseFilterOptionDiv);
             // Check the data type of current input value
             if (definitionEditorInput.parameters[0].type !== "esriFieldTypeDate") {
-
                 if (!this._isCodedValueColumn && !this._isTypeIdfield) {
                     // Create text box container
                     // displays when 'value' radio button is selected (OR by default)
@@ -162,58 +165,68 @@ define([
                     closeTextBoxSpan = domConstruct.create("span", {
                         "class": "esriCTActiveCloseSpan " + displayColumn
                     }, textBoxDiv);
-                    this._createTextBoxContainer(textBoxDiv, definitionEditorInput, index, closeTextBoxSpan, displayColumn);
                 }
-                // Create dropdown container
-                // displays when 'unique' radio button is selected
-                selectOptionDiv = domConstruct.create("div", {
-                    "class": "esriCTSelectOptionDiv"
-                }, baseFilterOptionDiv);
-                // 'select' html tag is creating to show distinct values of the current field
-                selectOption = domConstruct.create("select", {
-                    "class": "esriCTSelectOption"
-                }, selectOptionDiv);
-                // create close icon for dropdown
-                closeDropDownSpan = domConstruct.create("span", {
-                    "class": "esriCTActiveCloseSpan esriCTHiddenColumn " + displayColumn
-                }, selectOptionDiv);
-                if (!this._isCodedValueColumn && !this._isTypeIdfield) {
-                    // Creating Radio buttons container
-                    radioButtonParentDiv = domConstruct.create("div", {
-                        "class": "esriCTRadioOptionParentDiv"
-                    }, baseFilterOptionDiv);
-                    radioButtonDiv = domConstruct.create("div", {
-                        "class": "esriCTRadioButtonDiv"
-                    }, radioButtonParentDiv);
 
-                    radioButtonObject = {
-                        "node": radioButtonDiv,
-                        "definitionEditorInput": definitionEditorInput,
-                        "index": index,
-                        "textBoxDiv": textBoxDiv,
-                        "selectOptionDiv": selectOptionDiv,
-                        "selectOption": selectOption,
-                        "closeDropDownSpan": closeDropDownSpan,
-                        "closeTextBoxSpan": closeTextBoxSpan,
-                        "displayColumn": displayColumn
-                    };
-                    // Create radio buttons for text value and unique drop down value
-                    this._createRadioButtons(radioButtonObject);
-                } else {
-                    domStyle.set(selectOptionDiv, "display", "block");
-                    if (closeDropDownSpan && domClass.contains(closeDropDownSpan, "esriCTHiddenColumn")) {
-                        domClass.remove(closeDropDownSpan, "esriCTHiddenColumn");
+                if (definitionEditorInput && definitionEditorInput.parameters && definitionEditorInput.parameters.length === 1) {
+                    if (!this._isCodedValueColumn && !this._isTypeIdfield) {
+                        // for creating single textbox field when length of parameters is 1
+                        this._createTextBoxContainer(textBoxDiv, definitionEditorInput, index, closeTextBoxSpan, displayColumn);
                     }
-                    this.appConfig._filterObject.inputs[index].parameters[0].showDropDown = true;
-                    radioParamObj = {
-                        "selectOption": selectOption,
-                        "index": index,
-                        "selectOptionDiv": selectOptionDiv,
-                        "closeDropDownSpan": closeDropDownSpan,
-                        "displayColumn": displayColumn
-                    };
-                    // if a radio button is called first time, then query distinct values of current field
-                    this._queryLayerForDistinctValues(radioParamObj);
+                    // Create dropdown container
+                    // displays when 'unique' radio button is selected
+                    selectOptionDiv = domConstruct.create("div", {
+                        "class": "esriCTSelectOptionDiv"
+                    }, baseFilterOptionDiv);
+                    // 'select' html tag is creating to show distinct values of the current field
+                    selectOption = domConstruct.create("select", {
+                        "class": "esriCTSelectOption"
+                    }, selectOptionDiv);
+                    // create close icon for dropdown
+                    closeDropDownSpan = domConstruct.create("span", {
+                        "class": "esriCTActiveCloseSpan esriCTHiddenColumn " + displayColumn
+                    }, selectOptionDiv);
+                    if (!this._isCodedValueColumn && !this._isTypeIdfield) {
+                        // Creating Radio buttons container
+                        radioButtonParentDiv = domConstruct.create("div", {
+                            "class": "esriCTRadioOptionParentDiv"
+                        }, baseFilterOptionDiv);
+                        radioButtonDiv = domConstruct.create("div", {
+                            "class": "esriCTRadioButtonDiv"
+                        }, radioButtonParentDiv);
+
+                        radioButtonObject = {
+                            "node": radioButtonDiv,
+                            "definitionEditorInput": definitionEditorInput,
+                            "index": index,
+                            "textBoxDiv": textBoxDiv,
+                            "selectOptionDiv": selectOptionDiv,
+                            "selectOption": selectOption,
+                            "closeDropDownSpan": closeDropDownSpan,
+                            "closeTextBoxSpan": closeTextBoxSpan,
+                            "displayColumn": displayColumn
+                        };
+
+                        // Create radio buttons for text value and unique drop down value
+                        this._createRadioButtons(radioButtonObject);
+                    } else {
+                        domStyle.set(selectOptionDiv, "display", "block");
+                        if (closeDropDownSpan && domClass.contains(closeDropDownSpan, "esriCTHiddenColumn")) {
+                            domClass.remove(closeDropDownSpan, "esriCTHiddenColumn");
+                        }
+                        this.appConfig._filterObject.inputs[index].parameters[0].showDropDown = true;
+                        radioParamObj = {
+                            "selectOption": selectOption,
+                            "index": index,
+                            "selectOptionDiv": selectOptionDiv,
+                            "closeDropDownSpan": closeDropDownSpan,
+                            "displayColumn": displayColumn
+                        };
+                        // if a radio button is called first time, then query distinct values of current field
+                        this._queryLayerForDistinctValues(radioParamObj);
+                    }
+                } else {
+                    // when parameter contains 2 parameters in case for between range
+                    this._createTextBoxRangeContainers(textBoxDiv, index, closeTextBoxSpan, displayColumn);
                 }
             } else {
                 // create date picker container div
@@ -232,6 +245,7 @@ define([
             }
             hintFilterContainer = domConstruct.create("div", { "class": "esriCTHintFilterContainer" }, baseFilterOptionDiv);
             domConstruct.create("div", { "innerHTML": "Hint: " + definitionEditorInput.hint }, hintFilterContainer);
+            // check active filter nodes
             this._checkFieldActiveNodes(displayColumn);
         },
 
@@ -293,8 +307,8 @@ define([
                 this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue = null;
                 this._resetDatePicker(closeDatePickerSpan, obj.index, obj.displayColumn);
             } else {
-                this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = $(parentNode).datetimepicker().data("DateTimePicker").date().toString();
-                this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue = $(parentNode).datetimepicker().data("DateTimePicker").date().toString();
+                this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = $(parentNode).data().date;
+                this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue = $(parentNode).data().date;
             }
             // Attach datetime picker to the container
             $(parentNode).datetimepicker().on('dp.change', lang.hitch(this, function (val) {
@@ -304,7 +318,9 @@ define([
                     this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = $(parentNode).data().date;
                     $(parentNode).data("DateTimePicker").hide();
                     domClass.replace(closeDatePickerSpan, "esriCTActiveCloseSpan", "esriCTDisabledCloseSpan");
+                    // check header icon on the basis of changes in the filter
                     this._onEditFilterOptionChangeIcon(obj.index, obj.displayColumn);
+                    // check active filter nodes
                     this._checkFieldActiveNodes(obj.displayColumn);
                     if (new Date(this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue).toString() !== new Date(this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue).toString()) {
                         this._setCurrentExpression();
@@ -394,7 +410,9 @@ define([
             on(radioParamObj.valueRadio, "change", lang.hitch(this, function () {
                 this.appUtils.showLoadingIndicator();
                 this._showTextBox(radioParamObj);
+                // check header icon on the basis of changes in the filter
                 this._onEditFilterOptionChangeIcon(radioParamObj.index, radioParamObj.displayColumn);
+                // check active filter nodes
                 this._checkFieldActiveNodes(radioParamObj.displayColumn);
                 this.appUtils.hideLoadingIndicator();
             }));
@@ -403,6 +421,7 @@ define([
                 this.appUtils.showLoadingIndicator();
                 // boolean value 'true' tells that radio button is checked
                 this._showDropDown(radioParamObj);
+                // check header icon on the basis of changes in the filter
                 this._onEditFilterOptionChangeIcon(radioParamObj.index, radioParamObj.displayColumn);
                 this.appUtils.hideLoadingIndicator();
             }));
@@ -477,6 +496,7 @@ define([
                         "displayColumn": radioParamObj.displayColumn
                     };
                     this._populateDropDownContainer(dropDownContainerObj);
+                    // check active filter nodes
                     this._checkFieldActiveNodes(radioParamObj.displayColumn);
                 }
             }), lang.hitch(this, function () {
@@ -498,10 +518,7 @@ define([
         */
         _createTextBoxContainer: function (node, definitionEditorInput, index, closeTextBoxSpan, displayColumn) {
             var inputTextBox, value;
-            inputTextBox = domConstruct.create("input", {
-                "type": "text",
-                "class": "esriCTInputTextBox"
-            }, node);
+            inputTextBox = this._createInputTextBox(node);
             // set default value to textbox
             this._setDefaultTextBoxValue(definitionEditorInput, inputTextBox, index, closeTextBoxSpan);
             // attach 'blur' event of input textbox
@@ -642,6 +659,7 @@ define([
                     domAttr.set(inputTextBox, "value", "");
                     domClass.replace(closeTextBoxSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
                 }
+                // check active filter nodes
                 this._checkFieldActiveNodes(displayColumn);
                 this._setCurrentExpression();
                 this._getFeatureCount(inputTextBox, index, closeTextBoxSpan, displayColumn, "textBox");
@@ -662,7 +680,9 @@ define([
                 if (domClass.contains(closeTextBoxSpan, "esriCTActiveCloseSpan")) {
                     this.appUtils.showLoadingIndicator();
                     this._setEmptyTextBox(inputTextBox, closeTextBoxSpan, index);
+                    // check header icon on the basis of changes in the filter
                     this._onEditFilterOptionChangeIcon(index, displayColumn);
+                    // check active filter nodes
                     this._checkFieldActiveNodes(displayColumn);
                     this.appConfig._filterObject.inputs[index].parameters[0].valueFrom = "textBox";
                     this._setParameterizedExpression();
@@ -694,7 +714,9 @@ define([
                         this.appConfig._filterObject.inputs[index].parameters[0].dropDownValue = null;
                         this.appConfig._filterObject.inputs[index].parameters[0].currentValue = null;
                     }
+                    // check header icon on the basis of changes in the filter
                     this._onEditFilterOptionChangeIcon(index, displayColumn);
+                    // check active filter nodes
                     this._checkFieldActiveNodes(displayColumn);
                     this._setCurrentExpression();
                     this._getFeatureCount(node, index, closeDropDownSpan, displayColumn, "dropDown");
@@ -716,7 +738,9 @@ define([
                 if (domClass.contains(closeDropDownSpan, "esriCTActiveCloseSpan")) {
                     this.appUtils.showLoadingIndicator();
                     this._resetDropDown(firstOption, index, closeDropDownSpan);
+                    // check header icon on the basis of changes in the filter
                     this._onEditFilterOptionChangeIcon(index, displayColumn);
+                    // check active filter nodes
                     this._checkFieldActiveNodes(displayColumn);
                     this.appConfig._filterObject.inputs[index].parameters[0].valueFrom = "dropDown";
                     this._setParameterizedExpression();
@@ -792,7 +816,9 @@ define([
                 if (domClass.contains(icon, "esriCTActiveCloseSpan")) {
                     this.appUtils.showLoadingIndicator();
                     this._resetDatePicker(icon, index, displayColumn);
+                    // check header icon on the basis of changes in the filter
                     this._onEditFilterOptionChangeIcon(index, displayColumn);
+                    // check active filter nodes
                     this._checkFieldActiveNodes(displayColumn);
                     this._setParameterizedExpression();
                 }
@@ -820,13 +846,16 @@ define([
         * @memberOf widgets/filter/filter
         */
         _onEditFilterOptionChangeIcon: function (index, displayColumn) {
-            var columnClassName, caretIconDiv, filterIconDiv;
+            var columnClassName, disableFilterIconDivOriginal, filterIconDiv, filterIconDivOriginal, disableFilterIconDiv;
             this.appConfig._filterObject.inputs[index].parameters[0].enableFilter = true;
             columnClassName = displayColumn;
             if (!this.appConfig.enableFilter) {
-                caretIconDiv = query(".esriCTBlackCaretIcon." + columnClassName)[0];
-                filterIconDiv = query(".esriCTFilterIcon." + columnClassName)[0];
-                this._enableFilterIcon(caretIconDiv, filterIconDiv);
+                disableFilterIconDivOriginal = query(".esriCTDisableFilterIcon." + columnClassName)[0];
+                disableFilterIconDiv = query(".esriCTDisableFilterIcon." + columnClassName)[1];
+                filterIconDivOriginal = query(".esriCTFilterIcon." + columnClassName)[0];
+                filterIconDiv = query(".esriCTFilterIcon." + columnClassName)[1];
+                this._enableFilterIcon(disableFilterIconDivOriginal, filterIconDivOriginal);
+                this._enableFilterIcon(disableFilterIconDiv, filterIconDiv);
             }
         },
 
@@ -848,27 +877,45 @@ define([
         */
         _resetFilterObjectParameters: function () {
             array.forEach(this.appConfig._filterObject.inputs, lang.hitch(this, function (input) {
-                if (input.parameters[0].dropDownValue) {
-                    input.parameters[0].dropDownValue = "";
-                    input.parameters[0].showDropDown = false;
-                }
-                if (input.parameters[0].textBoxValue) {
-                    input.parameters[0].textBoxValue = "";
-                    input.parameters[0].showTextBox = false;
-                }
-                if (input.parameters[0].prevTextBoxValue) {
-                    input.parameters[0].prevTextBoxValue = "";
+                if (input.parameters[0].dropDownValue !== undefined) {
+                    delete input.parameters[0].dropDownValue;
+                    delete input.parameters[0].showDropDown;
                 }
 
-                if (input.parameters[0].prevDropDownValue) {
-                    input.parameters[0].prevDropDownValue = null;
+                if (input.parameters[0].textBoxValue !== undefined) {
+                    delete input.parameters[0].textBoxValue;
+                    delete input.parameters[0].showTextBox;
                 }
 
-                if (input.parameters[0].currentValue) {
-                    input.parameters[0].currentValue = "";
+                if (input.parameters[0].prevTextBoxValue !== undefined) {
+                    delete input.parameters[0].prevTextBoxValue;
                 }
-                if (input.parameters[0].enableFilter) {
-                    input.parameters[0].enableFilter = false;
+
+                if (input.parameters[0].prevDropDownValue !== undefined) {
+                    delete input.parameters[0].prevDropDownValue;
+                }
+
+                if (input.parameters[0].currentValue !== undefined) {
+                    delete input.parameters[0].currentValue;
+                }
+
+                if (input.parameters[0].prevValue !== undefined) {
+                    delete input.parameters[0].prevValue;
+                }
+
+                if (input.parameters[1] && input.parameters[1].currentValue && input.parameters[1].currentValue !== undefined) {
+                    delete input.parameters[1].currentValue;
+                }
+
+                if (input.parameters[1] && input.parameters[1].prevValue && input.parameters[1].prevValue !== undefined) {
+                    delete input.parameters[1].prevValue;
+                }
+
+                if (input.parameters[0].enableFilter !== undefined) {
+                    delete input.parameters[0].enableFilter;
+                }
+                if (this.appConfig._filterObject.lastSearchedString !== undefined) {
+                    delete this.appConfig._filterObject.lastSearchedString;
                 }
             }));
         },
@@ -879,11 +926,13 @@ define([
         * @memberOf widgets/filter/filter
         */
         _checkFieldActiveNodes: function (displayColumn) {
-            var nodes = [], enableFilter = false, columnClassName, caretIconDiv, filterIconDiv;
+            var nodes = [], enableFilter = false, columnClassName, disableFilterIconDivOriginal, filterIconDivOriginal, disableFilterIconDiv, filterIconDiv;
             columnClassName = displayColumn;
             nodes = query("." + columnClassName);
-            caretIconDiv = query(".esriCTBlackCaretIcon." + columnClassName)[0];
-            filterIconDiv = query(".esriCTFilterIcon." + columnClassName)[0];
+            disableFilterIconDivOriginal = query(".esriCTDisableFilterIcon." + columnClassName)[0];
+            disableFilterIconDiv = query(".esriCTDisableFilterIcon." + columnClassName)[1];
+            filterIconDivOriginal = query(".esriCTFilterIcon." + columnClassName)[0];
+            filterIconDiv = query(".esriCTFilterIcon." + columnClassName)[1];
             array.some(nodes, lang.hitch(this, function (node) {
                 if (domClass.contains(node, "esriCTActiveCloseSpan") && !domClass.contains(node, "esriCTHiddenColumn")) {
                     enableFilter = true;
@@ -891,9 +940,11 @@ define([
                 }
             }));
             if (enableFilter) {
-                this._enableFilterIcon(caretIconDiv, filterIconDiv);
+                this._enableFilterIcon(disableFilterIconDivOriginal, filterIconDivOriginal);
+                this._enableFilterIcon(disableFilterIconDiv, filterIconDiv);
             } else {
-                this._enableCaretIcon(caretIconDiv, filterIconDiv);
+                this._disableFilterIcon(disableFilterIconDivOriginal, filterIconDivOriginal);
+                this._disableFilterIcon(disableFilterIconDiv, filterIconDiv);
             }
         },
 
@@ -902,12 +953,9 @@ define([
         * @param{filterIconDiv} contains a node with filter icon
         * @memberOf widgets/filter/filter
         */
-        _enableCaretIcon: function (caretIconDiv, filterIconDiv) {
-            if (caretIconDiv && domClass.contains(caretIconDiv, "esriCTHiddenColumn")) {
-                domClass.remove(caretIconDiv, "esriCTHiddenColumn");
-            }
-            if (filterIconDiv && !domClass.contains(filterIconDiv, "esriCTHiddenColumn")) {
-                domClass.add(filterIconDiv, "esriCTHiddenColumn");
+        _disableFilterIcon: function (disableFilterIconDiv, filterIconDiv) {
+            if (!disableFilterIconDiv && filterIconDiv) {
+                domClass.replace(filterIconDiv, "esriCTDisableFilterIcon", "esriCTFilterIcon");
             }
         },
 
@@ -916,12 +964,9 @@ define([
         * @param{filterIconDiv} contains a node with filter icon
         * @memberOf widgets/filter/filter
         */
-        _enableFilterIcon: function (caretIconDiv, filterIconDiv) {
-            if (caretIconDiv && !domClass.contains(caretIconDiv, "esriCTHiddenColumn")) {
-                domClass.add(caretIconDiv, "esriCTHiddenColumn");
-            }
-            if (filterIconDiv && domClass.contains(filterIconDiv, "esriCTHiddenColumn")) {
-                domClass.remove(filterIconDiv, "esriCTHiddenColumn");
+        _enableFilterIcon: function (disableFilterIconDiv, filterIconDiv) {
+            if (disableFilterIconDiv && !filterIconDiv) {
+                domClass.replace(disableFilterIconDiv, "esriCTFilterIcon", "esriCTDisableFilterIcon");
             }
         },
 
@@ -1020,7 +1065,7 @@ define([
                     if (valueFrom === "textBox") {
                         this._resetTextBoxPrevValue(index, closeSpan, displayColumn, node);
                     } else {
-                        this._resetPrevDropDownValue(index, closeSpan, displayColumn, node);
+                        this._resetToPrevDropDownValue(index, closeSpan, displayColumn, node);
                     }
                     alert(this.appConfig.i18n.filter.noFeatureFoundText);
                     this.appUtils.hideLoadingIndicator();
@@ -1031,7 +1076,7 @@ define([
                 if (valueFrom === "textBox") {
                     this._resetTextBoxPrevValue(index, closeSpan, displayColumn, node);
                 } else {
-                    this._resetPrevDropDownValue(index, closeSpan, displayColumn, node);
+                    this._resetToPrevDropDownValue(index, closeSpan, displayColumn, node);
                 }
                 if (!alertPoped) {
                     alert(this.appConfig.i18n.filter.noFeatureFoundText);
@@ -1045,58 +1090,139 @@ define([
         * @memberOf widgets/filter/filter
         */
         _setCurrentExpression: function () {
-            var arrayList = [], expressionArray = [], expressionValue, andExpression = false;
+            var outerSplitterArray = [], expressionValue, outerSplitBy = "";
             // split and check if multiple filters are applied
+            this._parameterizedExpression = this._parameterizedExpression.split("}'").join("}").split("'{").join("{");
+            this._parameterizedExpression = this._parameterizedExpression.split("}").join("}'").split("{").join("'{");
+            this._parameterizedExpression = this._parameterizedExpression.split("}'%'").join("}%'").split("'%'{").join("'%{");
             if (this._parameterizedExpression.split(") AND (").length > 1) {
-                // if the expression is an 'ALL' expression
-                andExpression = true;
                 // if 'yes' then slice substring to set values accordingly
                 expressionValue = this._parameterizedExpression.substring(1, (this._parameterizedExpression.length - 1));
                 // split the _parameterizedExpression to set values to set current definition expression
-                arrayList = expressionValue.split(") AND (");
+                outerSplitterArray = expressionValue.split(") AND (");
+                outerSplitBy = ") AND (";
+                this._createQueryExpression(outerSplitterArray, outerSplitBy);
             } else if (this._parameterizedExpression.split(") OR (").length > 1) {
                 // if the expression is an 'ANY' expression
-                andExpression = false;
                 // if 'yes' then slice substring to set values accordingly
                 expressionValue = this._parameterizedExpression.substring(1, (this._parameterizedExpression.length - 1));
                 // split the _parameterizedExpression to set values to set current definition expression
-                arrayList = expressionValue.split(") OR (");
+                outerSplitterArray = expressionValue.split(") OR (");
+                outerSplitBy = ") OR (";
+                this._createQueryExpression(outerSplitterArray, outerSplitBy);
             } else {
                 // if it is a single parameter expression
-                arrayList[0] = this._parameterizedExpression;
+                outerSplitterArray[0] = this._parameterizedExpression;
+                this._createQueryExpression(outerSplitterArray);
             }
-            array.forEach(this.appConfig._filterObject.inputs, lang.hitch(this, function (input, i) {
-                array.forEach(arrayList, lang.hitch(this, function (arrayElement) {
-                    // for dynamic filtering option
-                    if (arrayElement.split("{").length > 1) {
-                        if (arrayElement.split("{")[1].split("}")[0] === i.toString() && input.parameters[0].currentValue) {
-                            if (input.parameters[0].type === "esriFieldTypeDate") {
-                                arrayElement = arrayElement.split(i).join("0");
-                                arrayElement = arrayElement.split(i + 1).join("1");
-                                expressionArray.push(lang.replace(arrayElement, [input.parameters[0].currentValue.split(" ")[0] + " 00:00:00", input.parameters[0].currentValue.split(" ")[0] + " 23:59:59"]));
-                            } else {
-                                arrayElement = arrayElement.split(i).join("0");
-                                expressionArray.push(lang.replace(arrayElement, [input.parameters[0].currentValue]));
-                            }
-                        }
-                    } else {
-                        // for static filter
-                        expressionArray.push(arrayElement);
+        },
+
+        /**
+        * This function will create a definition expression for the layer
+        * @param{array} contains sub expressions
+        * @param{string} contains the splitter
+        * @memberOf widgets/filter/filter
+        */
+        _createQueryExpression: function (outerSplitterArray, outerSplitBy) {
+            var outerSplitterNewArray = [], innerSplitterArray = [], innerSplitBy, returnedString, x = 0;
+            // check inside expression
+            for (x = 0; x < outerSplitterArray.length; x++) {
+                //array.forEach(outerSplitterArray, lang.hitch(this, function(item){
+                if (outerSplitterArray[x].split(" OR ").length > 1) {
+                    innerSplitterArray = outerSplitterArray[x].split(" OR ");
+                    innerSplitBy = " OR ";
+                    returnedString = this._getSubQueryExpression(innerSplitterArray, innerSplitBy);
+                    if (lang.trim(returnedString) !== "") {
+                        outerSplitterNewArray.push(returnedString);
                     }
-                }));
-            }));
-            // if expressionArray length is greater than 1, then join stings by ') AND (' to set a valid expression
-            if (expressionArray.length > 1) {
-                if (andExpression) {
-                    this._currentExpression = expressionArray.join(") AND (");
+                } else if (outerSplitterArray[x].split(" AND ").length > 1) {
+                    innerSplitterArray = outerSplitterArray[x].split(" AND ");
+                    innerSplitBy = " AND ";
+                    returnedString = this._getSubQueryExpression(innerSplitterArray, innerSplitBy);
+                    if (lang.trim(returnedString) !== "") {
+                        outerSplitterNewArray.push(returnedString);
+                    }
                 } else {
-                    this._currentExpression = expressionArray.join(") OR (");
+                    returnedString = this._getSubQueryExpression([outerSplitterArray[x]]);
+                    if (lang.trim(returnedString) !== "") {
+                        outerSplitterNewArray.push(returnedString);
+                    }
                 }
+            }
+
+            if (outerSplitterNewArray.length > 1) {
+                this._currentExpression = outerSplitterNewArray.join(outerSplitBy);
                 this._currentExpression = "(" + this._currentExpression + ")";
             } else {
                 // if expressionArray length is equal to 1 and not empty, else set the expression to '1=1'
-                this._currentExpression = (expressionArray[0] && expressionArray[0] !== "") ? expressionArray[0] : "1=1";
+                this._currentExpression = (outerSplitterNewArray[0] && outerSplitterNewArray[0] !== "") ? outerSplitterNewArray[0] : "1=1";
             }
+            if (this.appConfig._filterObject.lastSearchedString) {
+                this._currentExpression = this._currentExpression + this.appConfig._filterObject.lastSearchedString;
+            }
+        },
+
+        /**
+        * This function will set a sub part of definition expression for the layer
+        * @param{array} contains sub expressions of the sub expression
+        * @param{string} contains the sub expression splitter
+        * @memberOf widgets/filter/filter
+        */
+        _getSubQueryExpression: function (innerSplitterArray, innerSplitBy) {
+            var innerSplitterNewArray = [], i = 0, j = 0, returningString = "", id;
+            for (i = 0; i < innerSplitterArray.length; i++) {
+                if (innerSplitterArray[i].split("{").length > 1) {
+                    if (!(innerSplitterArray[i].match(/^(\')/) || innerSplitterArray[i].match(/^(timestamp )/))) {
+                        for (j = 0; j < this.appConfig._filterObject.inputs.length; j++) {
+                            if (innerSplitterArray[i].split("{").length > 1) {
+                                if (!(innerSplitterArray[i].match(/^(\')/) || innerSplitterArray[i].match(/^(timestamp )/))) {
+                                    if (innerSplitterArray[i].split("{")[1].split("}")[0] === this.appConfig._filterObject.inputs[j].parameters[0].parameterId.toString() && this.appConfig._filterObject.inputs[j].parameters[0].currentValue) {
+                                        id = this.appConfig._filterObject.inputs[j].parameters[0].parameterId;
+                                        if (this.appConfig._filterObject.inputs[j].parameters[0].type === "esriFieldTypeDate") {
+                                            if (innerSplitBy === " AND ") {
+                                                innerSplitterArray[i] = innerSplitterArray[i].split(id).join("0");
+                                                innerSplitterArray[i + 1] = innerSplitterArray[i + 1].split(id + 1).join("0");
+                                                innerSplitterNewArray.push(lang.replace(innerSplitterArray[i], [this.appConfig._filterObject.inputs[j].parameters[0].currentValue.split(" ")[0] + " 00:00:00"]));
+                                                innerSplitterNewArray.push(lang.replace(innerSplitterArray[i + 1], [this.appConfig._filterObject.inputs[j].parameters[0].currentValue.split(" ")[0] + " 23:59:59"]));
+                                            } else {
+                                                innerSplitterArray[i] = innerSplitterArray[i].split(id).join("0").split(id + 1).join("1");
+                                                innerSplitterNewArray.push(lang.replace(innerSplitterArray[i], [this.appConfig._filterObject.inputs[j].parameters[0].currentValue.split(" ")[0] + " 00:00:00", this.appConfig._filterObject.inputs[j].parameters[0].currentValue.split(" ")[0] + " 23:59:59"]));
+                                            }
+                                        } else {
+                                            if (this.appConfig._filterObject.inputs[j].parameters.length === 1) {
+                                                innerSplitterArray[i] = innerSplitterArray[i].split(id).join("0");
+                                                innerSplitterNewArray.push(lang.replace(innerSplitterArray[i], [this.appConfig._filterObject.inputs[j].parameters[0].currentValue]));
+                                            } else {
+                                                if (innerSplitBy === " AND ") {
+                                                    innerSplitterArray[i] = innerSplitterArray[i].split(id).join("0");
+                                                    innerSplitterArray[i + 1] = innerSplitterArray[i + 1].split(id + 1).join("0");
+                                                    innerSplitterNewArray.push(lang.replace(innerSplitterArray[i], [this.appConfig._filterObject.inputs[j].parameters[0].currentValue]));
+                                                    innerSplitterNewArray.push(lang.replace(innerSplitterArray[i + 1], [this.appConfig._filterObject.inputs[j].parameters[1].currentValue]));
+                                                } else {
+                                                    innerSplitterArray[i] = innerSplitterArray[i].split(id).join("0").split(id + 1).join("1");
+                                                    innerSplitterNewArray.push(lang.replace(innerSplitterArray[i], [this.appConfig._filterObject.inputs[j].parameters[0].currentValue, this.appConfig._filterObject.inputs[j].parameters[1].currentValue]));
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    innerSplitterNewArray.push(innerSplitterArray[i]);
+                }
+            }
+            if (innerSplitBy) {
+                returningString = innerSplitterNewArray.join(innerSplitBy);
+            } else {
+                if (innerSplitterNewArray.length > 0) {
+                    returningString = innerSplitterNewArray[0];
+                } else {
+                    returningString = "";
+                }
+            }
+            return returningString;
         },
 
         /**
@@ -1104,8 +1230,17 @@ define([
         * @memberOf widgets/filter/filter
         */
         _applyParameterizedExpression: function () {
+            this.filterRefresh();
             this.selectedOperationalLayer.setDefinitionExpression(this._currentExpression);
             this.selectedOperationalLayer.refresh();
+        },
+
+        /**
+        * This function is used to update filter refresh data
+        * @memberOf widgets/filter/filter
+        */
+        filterRefresh: function (filterRefreshObj) {
+            return filterRefreshObj;
         },
 
         /**
@@ -1116,17 +1251,21 @@ define([
         */
         _showAppliedFilterValue: function (columnName) {
             array.forEach(this.appConfig._filterObject.inputs, lang.hitch(this, function (input, i) {
-                if (input.parameters[0].fieldName === columnName && input.parameters[0].type !== "esriFieldTypeDate") {
+                if (input.parameters[0].fieldName === columnName && input.parameters[0].type !== "esriFieldTypeDate" && input.parameters.length === 1) {
                     if (input.parameters[0].valueFrom === "dropDown") {
                         domAttr.set(this._openFilterParam[i].uniqueRadio, "checked", true);
                         // boolean value 'true' tells that radio button is checked
                         this._showDropDown(this._openFilterParam[i]);
-                    } else {
+                    } else if (input.parameters[0].valueFrom === "textBox") {
                         domAttr.set(this._openFilterParam[i].valueRadio, "checked", true);
                         this._showTextBox(this._openFilterParam[i]);
+                        // check active filter nodes
                         this._checkFieldActiveNodes(columnName);
                     }
-                    this._onEditFilterOptionChangeIcon(this._openFilterParam[i].index, columnName);
+                    if (input.parameters[0].valueFrom === "dropDown" || input.parameters[0].valueFrom === "textBox") {
+                        // check header icon on the basis of changes in the filter
+                        this._onEditFilterOptionChangeIcon(this._openFilterParam[i].index, columnName);
+                    }
                 }
             }));
         },
@@ -1149,6 +1288,7 @@ define([
                 } else {
                     domClass.replace(closeTextBoxSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
                 }
+                // check active filter nodes
                 this._checkFieldActiveNodes(displayColumn);
             }
         },
@@ -1161,7 +1301,7 @@ define([
         * @param{input} contains dropdown
         * @memberOf widgets/filter/filter
         */
-        _resetPrevDropDownValue: function (index, closeSpan, displayColumn, node) {
+        _resetToPrevDropDownValue: function (index, closeSpan, displayColumn, node) {
             var layerObj;
             if (this.appConfig._filterObject.inputs[index].parameters[0].prevDropDownValue === null || this.appConfig._filterObject.inputs[index].parameters[0].prevDropDownValue === "" || (this.appConfig._filterObject && this.appConfig._filterObject.inputs[index] && this.appConfig._filterObject.inputs[index].parameters[0].prevDropDownValue)) {
                 this.appConfig._filterObject.inputs[index].parameters[0].dropDownValue = this.appConfig._filterObject.inputs[index].parameters[0].prevDropDownValue;
@@ -1232,7 +1372,267 @@ define([
                 } else {
                     domClass.replace(queryDateObject.closeDatePickerSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
                 }
+                // check active filter nodes
                 this._checkFieldActiveNodes(queryDateObject.displayColumn);
+            }
+        },
+
+        /**
+        * This function will create textboxes for range fields
+        * @param{node} contains textBoxDiv a parent node
+        * @param{index} contains parameter id
+        * @param{icon} contains close icon to reset textboxes to empty values
+        * @param{string} contains field name
+        * @memberOf widgets/filter/filter
+        */
+        _createTextBoxRangeContainers: function (textBoxDiv, index, closeTextBoxSpan, displayColumn) {
+            var firstInputBox, secondInputBox, andSpan;
+            domClass.add(textBoxDiv, "esriCTRangeTextBoxContainer");
+            firstInputBox = this._createInputTextBox(textBoxDiv);
+            andSpan = domConstruct.create("div", { "innerHTML": this.appConfig.i18n.filter.andText, "class": "esriCTAndTextDiv" }, textBoxDiv);
+            secondInputBox = this._createInputTextBox(textBoxDiv);
+            // set default values in the textboxes on load on the basis of configuration settings
+            this._setDefaultRangeValues(index, firstInputBox, secondInputBox, closeTextBoxSpan);
+            // attach blur event for both textboxes
+            this._attachBlurEvents(index, firstInputBox, secondInputBox, closeTextBoxSpan, displayColumn);
+            // attach click event for close icon
+            this._attachCloseIconEvent(index, firstInputBox, secondInputBox, closeTextBoxSpan, displayColumn);
+            // check header icon on the basis of changes in the filter
+            this._onEditFilterOptionChangeIcon(index, displayColumn);
+            // check active filter nodes
+            this._checkFieldActiveNodes(displayColumn);
+            // reset the filter if filter is not enabled from config
+            if (!this.appConfig.enableFilter && !this.appConfig._filterObject.inputs[index].parameters[0].enableFilter) {
+                // set textbox values to empty
+                this._resetTextBoxes(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+            }
+        },
+
+
+        /**
+        * This function will create textbox
+        * @param{node} contains textBoxDiv a parent node
+        * @memberOf widgets/filter/filter
+        */
+        _createInputTextBox: function (node) {
+            var inputTextBox;
+            inputTextBox = domConstruct.create("input", {
+                "type": "text",
+                "class": "esriCTInputTextBox"
+            }, node);
+            return inputTextBox;
+        },
+
+        /**
+        * This function will create textboxes for range fields
+        * @param{index} contains parameter id
+        * @param{input} contains first range textbox
+        * @param{input} contains second range textbox
+        * @param{icon} contains close icon to reset textboxes to empty values
+        * @memberOf widgets/filter/filter
+        */
+        _setDefaultRangeValues: function (index, firstInputBox, secondInputBox, closeTextBoxSpan) {
+            var secondPrevValue, firstPrevValue;
+            firstPrevValue = this.appConfig._filterObject.inputs[index].parameters[0].prevValue;
+            secondPrevValue = this.appConfig._filterObject.inputs[index].parameters[1].prevValue;
+            if ((firstPrevValue && secondPrevValue) || (firstPrevValue === "" && secondPrevValue === "")) {
+                this._setPrevValues(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+            } else {
+                this._setDefalutValues(firstInputBox, secondInputBox, index);
+            }
+        },
+
+        /**
+        * This function will create textboxes for range fields
+        * @param{input} contains first range textbox
+        * @param{input} contains second range textbox
+        * @param{index} contains parameter id
+        * @param{icon} contains close icon to reset textboxes to empty values
+        * @memberOf widgets/filter/filter
+        */
+        _resetTextBoxes: function (firstInputBox, secondInputBox, index, closeTextBoxSpan) {
+            domAttr.set(firstInputBox, "value", "");
+            domAttr.set(secondInputBox, "value", "");
+            this.appConfig._filterObject.inputs[index].parameters[0].currentValue = "";
+            this.appConfig._filterObject.inputs[index].parameters[1].currentValue = "";
+            this.appConfig._filterObject.inputs[index].parameters[0].prevValue = "";
+            this.appConfig._filterObject.inputs[index].parameters[1].prevValue = "";
+            if (domClass.contains(closeTextBoxSpan, "esriCTActiveCloseSpan")) {
+                domClass.replace(closeTextBoxSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
+            }
+        },
+
+        /**
+        * This function will create textboxes for range fields
+        * @param{input} contains first range textbox
+        * @param{input} contains second range textbox
+        * @param{index} contains parameter id
+        * @param{icon} contains close icon to reset textboxes to empty values
+        * @param{string} contains field name
+        * @memberOf widgets/filter/filter
+        */
+        _attachBlurEvents: function (index, firstInputBox, secondInputBox, closeTextBoxSpan, displayColumn) {
+            on(firstInputBox, "blur", lang.hitch(this, function () {
+                if ((firstInputBox.value !== "" && secondInputBox.value !== "") || (firstInputBox.value === "" && secondInputBox.value === "")) {
+                    this.appUtils.showLoadingIndicator();
+                    if (firstInputBox.value === "" && secondInputBox.value === "") {
+                        // set textbox values to empty
+                        this._resetTextBoxes(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+                    }
+                    // check header icon on the basis of changes in the filter
+                    this._onEditFilterOptionChangeIcon(index, displayColumn);
+                    this._queryForRangeValue(index, firstInputBox, secondInputBox, closeTextBoxSpan, displayColumn);
+                }
+            }));
+            on(secondInputBox, "blur", lang.hitch(this, function () {
+                if ((firstInputBox.value !== "" && secondInputBox.value !== "") || (firstInputBox.value === "" && secondInputBox.value === "")) {
+                    this.appUtils.showLoadingIndicator();
+                    if (firstInputBox.value === "" && secondInputBox.value === "") {
+                        // set textbox values to empty
+                        this._resetTextBoxes(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+                    }
+                    // check header icon on the basis of changes in the filter
+                    this._onEditFilterOptionChangeIcon(index, displayColumn);
+                    this._queryForRangeValue(index, firstInputBox, secondInputBox, closeTextBoxSpan, displayColumn);
+                }
+            }));
+        },
+
+        /**
+        * This function will create textboxes for range fields
+        * @param{input} contains first range textbox
+        * @param{input} contains second range textbox
+        * @param{index} contains parameter id
+        * @param{icon} contains close icon to reset textboxes to empty values
+        * @param{string} contains field name
+        * @memberOf widgets/filter/filter
+        */
+        _attachCloseIconEvent: function (index, firstInputBox, secondInputBox, closeTextBoxSpan, displayColumn) {
+            on(closeTextBoxSpan, "click", lang.hitch(this, function () {
+                this.appUtils.showLoadingIndicator();
+                // set textbox values to empty
+                this._resetTextBoxes(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+                // check header icon on the basis of changes in the filter
+                this._onEditFilterOptionChangeIcon(index, displayColumn);
+                this._setParameterizedExpression();
+            }));
+        },
+
+        /**
+        * This function will create textboxes for range fields
+        * @param{index} contains parameter id
+        * @param{input} contains first range textbox
+        * @param{input} contains second range textbox
+        * @param{icon} contains close icon to reset textboxes to empty values
+        * @param{string} contains field name
+        * @memberOf widgets/filter/filter
+        */
+        _queryForRangeValue: function (index, firstInputBox, secondInputBox, closeTextBoxSpan, displayColumn) {
+            var firstTextValue, secondTextValue;
+            this.appUtils.showLoadingIndicator();
+            this.appConfig._filterObject.inputs[index].parameters[0].currentValue = firstInputBox.value;
+            this.appConfig._filterObject.inputs[index].parameters[1].currentValue = secondInputBox.value;
+            firstTextValue = lang.trim(firstInputBox.value);
+            secondTextValue = lang.trim(secondInputBox.value);
+            // Check whether the textbox value is empty and change close icon as per values
+            if (firstTextValue !== "" && secondTextValue !== "") {
+                domClass.replace(closeTextBoxSpan, "esriCTActiveCloseSpan", "esriCTDisabledCloseSpan");
+            } else {
+                domAttr.set(firstInputBox, "value", "");
+                domAttr.set(secondInputBox, "value", "");
+                domClass.replace(closeTextBoxSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
+            }
+            // check active filter nodes
+            this._checkFieldActiveNodes(displayColumn);
+            this._setCurrentExpression();
+            this._getFeatureCountForRange(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+        },
+
+        /**
+        * This function will create textboxes for range fields
+        * @param{input} contains first range textbox
+        * @param{input} contains second range textbox
+        * @param{index} contains parameter id
+        * @param{icon} contains close icon to reset textboxes to empty values
+        * @memberOf widgets/filter/filter
+        */
+        _getFeatureCountForRange: function (firstInputBox, secondInputBox, index, closeTextBoxSpan) {
+            var query, queryTask, deferred;
+            deferred = new Deferred();
+            query = new Query();
+            queryTask = new QueryTask(this.selectedOperationalLayer.url);
+            query.where = this._currentExpression;
+            queryTask.executeForCount(query, lang.hitch(this, function (results) {
+                deferred.resolve(results);
+                if (results > 0) {
+                    this.appConfig._filterObject.inputs[index].parameters[0].prevValue = firstInputBox.value;
+                    this.appConfig._filterObject.inputs[index].parameters[1].prevValue = secondInputBox.value;
+                    this._applyParameterizedExpression();
+                } else {
+                    // if the count of features is 0,
+                    // then show alert message to user,
+                    this._setPrevValues(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+                    alert(this.appConfig.i18n.filter.noFeatureFoundText);
+                    this.appUtils.hideLoadingIndicator();
+                }
+            }), lang.hitch(this, function () {
+                deferred.resolve();
+                this._setPrevValues(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+                alert(this.appConfig.i18n.filter.noFeatureFoundText);
+                this.appUtils.hideLoadingIndicator();
+            }));
+        },
+
+        /**
+        * This function will create textboxes for range fields
+        * @param{input} contains first range textbox
+        * @param{input} contains second range textbox
+        * @param{index} contains parameter id
+        * @param{icon} contains close icon to reset textboxes to empty values
+        * @memberOf widgets/filter/filter
+        */
+        _setPrevValues: function (firstInputBox, secondInputBox, index, closeTextBoxSpan) {
+            domAttr.set(firstInputBox, "value", this.appConfig._filterObject.inputs[index].parameters[0].prevValue);
+            domAttr.set(secondInputBox, "value", this.appConfig._filterObject.inputs[index].parameters[1].prevValue);
+            this.appConfig._filterObject.inputs[index].parameters[0].currentValue = this.appConfig._filterObject.inputs[index].parameters[0].prevValue;
+            this.appConfig._filterObject.inputs[index].parameters[1].currentValue = this.appConfig._filterObject.inputs[index].parameters[1].prevValue;
+            if (firstInputBox.value === "" && secondInputBox.value === "") {
+                // set textbox values to empty
+                this._resetTextBoxes(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+            }
+        },
+
+        /**
+        * This function will create textboxes for range fields
+        * @param{input} contains first range textbox
+        * @param{input} contains second range textbox
+        * @param{index} contains parameter id
+        * @memberOf widgets/filter/filter
+        */
+        _setDefalutValues: function (firstInputBox, secondInputBox, index) {
+            domAttr.set(firstInputBox, "value", this.appConfig._filterObject.inputs[index].parameters[0].defaultValue);
+            domAttr.set(secondInputBox, "value", this.appConfig._filterObject.inputs[index].parameters[1].defaultValue);
+            this.appConfig._filterObject.inputs[index].parameters[0].currentValue = this.appConfig._filterObject.inputs[index].parameters[0].defaultValue;
+            this.appConfig._filterObject.inputs[index].parameters[1].currentValue = this.appConfig._filterObject.inputs[index].parameters[1].defaultValue;
+            this.appConfig._filterObject.inputs[index].parameters[0].prevValue = this.appConfig._filterObject.inputs[index].parameters[0].defaultValue;
+            this.appConfig._filterObject.inputs[index].parameters[1].prevValue = this.appConfig._filterObject.inputs[index].parameters[1].defaultValue;
+        },
+
+        /**
+        * This function is use to handle enabling/disabling of filter container
+        * @param{object} filter container
+        * @param{stirng} selected feature length
+        * @memberOf widgets/filter/filter
+        */
+        _handleFilterComponentVisibilty: function (filterContainer, featureLength, isEditMode) {
+            if (featureLength > 1 || isEditMode) {
+                if (query(".esriCTDisableFilterContainer", filterContainer)[0]) {
+                    domClass.remove(query(".esriCTDisableFilterContainer", filterContainer)[0], "esriCTHidden");
+                }
+            } else {
+                if (query(".esriCTDisableFilterContainer", filterContainer)[0]) {
+                    domClass.add(query(".esriCTDisableFilterContainer", filterContainer)[0], "esriCTHidden");
+                }
             }
         }
     });

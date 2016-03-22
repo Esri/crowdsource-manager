@@ -6,7 +6,101 @@ html, body
     width: 100%;
     background-color: #fff;
     overflow: hidden; /*ie show scroll and search icon below down */
+    font-size: 15px;
+    font-family: "Avenir Next W01" , "Avenir Next" , Avenir, "Open Sans" , "Helvetica Neue" , Helvetica, Arial, sans-serif;
 }
+
+/* Open Sans Webfont Kit
+ * -------------------------- */
+/* Light 300
+ * -------------------------- */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('font/light/opensans-light-webfont.eot');
+  src: url('font/light/opensans-light-webfont.eot?#iefix') format('embedded-opentype'), url('font/light/opensans-light-webfont.woff') format('woff'), url('font/light/opensans-light-webfont.ttf') format('truetype'), url('font/light/opensans-light-webfont.svg#OpenSansLight') format('svg');
+  font-weight: 300;
+  font-style: normal; }
+
+/* Light 300 Italic
+ * -------------------------- */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('font/light-italic/opensans-light-italic-webfont.eot');
+  src: url('font/light-italic/opensans-light-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/light-italic/opensans-light-italic-webfont.woff') format('woff'), url('font/light-italic/opensans-light-italic-webfont.ttf') format('truetype'), url('font/light-italic/opensans-light-italic-webfont.svg#OpenSansLightItalic') format('svg');
+  font-weight: 300;
+  font-style: italic; }
+
+/* Regular 400
+ * -------------------------- */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('font/regular/opensans-regular-webfont.eot');
+  src: url('font/regular/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'), url('font/regular/opensans-regular-webfont.woff') format('woff'), url('font/regular/opensans-regular-webfont.ttf') format('truetype'), url('font/regular/opensans-regular-webfont.svg#OpenSansRegular') format('svg');
+  font-weight: normal;
+  font-style: normal; }
+
+/* Regular 400 Italic
+ * -------------------------- */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('font/italic/opensans-italic-webfont.eot');
+  src: url('font/italic/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/italic/opensans-italic-webfont.woff') format('woff'), url('font/italic/opensans-italic-webfont.ttf') format('truetype'), url('font/italic/opensans-italic-webfont.svg#OpenSansItalic') format('svg');
+  font-weight: normal;
+  font-style: italic; }
+
+/* Semibold 600
+ * -------------------------- */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('font/semibold/opensans-semibold-webfont.eot');
+  src: url('font/semibold/opensans-semibold-webfont.eot?#iefix') format('embedded-opentype'), url('font/semibold/opensans-semibold-webfont.woff') format('woff'), url('font/semibold/opensans-semibold-webfont.ttf') format('truetype'), url('font/semibold/opensans-semibold-webfont.svg#OpenSansSemibold') format('svg');
+  font-weight: 600;
+  font-style: normal; }
+
+/* Semi-Bold 600 Italic
+ * -------------------------- */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('font/semibold-italic/opensans-semibold-italic-webfont.eot');
+  src: url('font/semibold-italic/opensans-semibold-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/semibold-italic/opensans-semibold-italic-webfont.woff') format('woff'), url('font/semibold-italic/opensans-semibold-italic-webfont.ttf') format('truetype'), url('font/semibold-italic/opensans-semibold-italic-webfont.svg#OpenSansSemiboldItalic') format('svg');
+  font-weight: 600;
+  font-style: italic; }
+
+/* Bold 700
+ * -------------------------- */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('font/bold/opensans-bold-webfont.eot');
+  src: url('font/bold/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'), url('font/bold/opensans-bold-webfont.woff') format('woff'), url('font/bold/opensans-bold-webfont.ttf') format('truetype'), url('font/bold/opensans-bold-webfont.svg#OpenSansBold') format('svg');
+  font-weight: bold;
+  font-style: normal; }
+
+/* Bold 700 Italic
+ * -------------------------- */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('font/bold-italic/opensans-bold-italic-webfont.eot');
+  src: url('font/bold-italic/opensans-bold-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/bold-italic/opensans-bold-italic-webfont.woff') format('woff'), url('font/bold-italic/opensans-bold-italic-webfont.ttf') format('truetype'), url('font/bold-italic/opensans-bold-italic-webfont.svg#OpenSansItalic') format('svg');
+  font-weight: bold;
+  font-style: italic; }
+
+/* Extrabold 800
+ * -------------------------- */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('font/extrabold/opensans-extrabold-webfont.eot');
+  src: url('font/extrabold/opensans-extrabold-webfont.eot?#iefix') format('embedded-opentype'), url('font/extrabold/opensans-extrabold-webfont.woff') format('woff'), url('font/extrabold/opensans-extrabold-webfont.ttf') format('truetype'), url('font/extrabold/opensans-extrabold-webfont.svg#OpenSansExtrabold') format('svg');
+  font-weight: 800;
+  font-style: normal; }
+
+/* Extra-Bold 800 Italic
+ * -------------------------- */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('font/extrabold-italic/opensans-extrabold-italic-webfont.eot');
+  src: url('font/extrabold-italic/opensans-extrabold-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/extrabold-italic/opensans-extrabold-italic-webfont.woff') format('woff'), url('font/extrabold-italic/opensans-extrabold-italic-webfont.ttf') format('truetype'), url('font/extrabold-italic/opensans-extrabold-italic-webfont.svg#OpenSansExtraboldItalic') format('svg');
+  font-weight: 800;
+  font-style: italic; }
 
 .esriRTL label
 {
@@ -21,7 +115,7 @@ html, body
     display: none;
     height: 100%;
     width: 100%;
-    z-index: 1000;
+    z-index: 1001;
     position: absolute;
     top: 0;
     left: 0;
@@ -53,7 +147,7 @@ html, body
     padding-top: 60px;
     width: 100%;
     position: absolute;
-    z-index: 1000;
+    z-index: 1001;
     top: 40%;
     left: 0;
     text-align: center;
@@ -168,7 +262,7 @@ table
 .esriCTApplicationName
 {
     text-align: left;
-    font-size: 24pt;
+    font-size: 20pt;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -221,6 +315,53 @@ table
     height: 100%;
 }
 
+.esriCTSignInDetailContainer
+{
+    float: right;
+    display: table;
+    height: 100%;
+}
+
+.esriCTSignInUserNameDetails
+{
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: right;
+    color: #fff;
+    max-width: 135px;
+    line-height: 49px;
+    float: left;
+}
+
+.esriSignedInUserDetailsCaretIcon
+{
+    float: left;
+    line-height: 49px;
+    color: #fff;
+    padding-left: 2px;
+}
+
+.esriCTSignOutOption
+{
+    text-align: left;
+    position: absolute;
+    background-color: #FFF;
+    cursor: pointer;
+    width: auto;
+    right: 75px;
+    top: 50px;
+    padding: 5px;
+    border-top: 0 !important;
+    z-index: 999;
+    min-width: 100px;
+}
+
+.esriCTSignOutOptionErrorMode
+{
+    right: 0px;
+}
+
 /** Application header container ends **/
 
 /** Operational layer name container starts **/
@@ -240,6 +381,8 @@ table
     text-overflow: ellipsis;
     overflow: hidden;
     text-indent: 45px;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 /** Operational layer name container ends **/
@@ -249,6 +392,8 @@ table
 .esriCTNoDataDataViewerPanelContainer
 {
     text-align: center;
+    color: #FFF;
+    margin-top: 35px;
 }
 
 .esriCTDataViewerWrapperContainer
@@ -283,15 +428,37 @@ table
 
 .esriCTBlackCaretIcon
 {
-    height: 18px;
-    width: 18px;
+    height: 9px;
+    width: 9px;
     background-position: center;
     float: right;
-    margin-left: 5px;
     font-size: 12px;
     color: #000;
     cursor: pointer;
-    margin-top: 5px;
+}
+
+.esriCTSortAscDisable
+{
+    background-image: url('../images/up-disable-caret.png');
+    background-size: 9px 9px;
+}
+
+.esriCTSortDescDisable
+{
+    background-image: url('../images/down-disable-caret.png');
+    background-size: 9px 9px;
+}
+
+.esriCTSortAsc
+{
+    background-image: url('../images/up-enable-caret.png');
+    background-size: 9px 9px;
+}
+
+.esriCTSortDesc
+{
+    background-image: url('../images/down-enable-caret.png');
+    background-size: 9px 9px;
 }
 
 .esriCTFilterIcon
@@ -302,7 +469,19 @@ table
     background-size: 12px 12px;
     float: right;
     cursor: pointer;
-    margin-top: 7px;
+    margin-top: 4px;
+    margin-right: 5px;
+}
+
+.esriCTDisableFilterIcon
+{
+    width: 12px;
+    height: 12px;
+    background-image: url('../images/filter-disabled-icon.png');
+    background-size: 12px 12px;
+    float: right;
+    cursor: pointer;
+    margin-top: 4px;
     margin-right: 5px;
 }
 
@@ -315,6 +494,11 @@ table
 .esriCTHiddenColumn
 {
     display: none !important;
+}
+
+.esriCTVisibilityHidden
+{
+    visibility: hidden !important;
 }
 
 .esriCTDataViewerTableCellContent
@@ -342,30 +526,46 @@ table
 {
     height: 100%;
     width: 100%;
-    overflow: auto;
+    overflow: scroll; /* has to be scroll, not auto */
+    -webkit-overflow-scrolling: touch;
+    font-size: 15px;
 }
 
 .esriCTThTitleContainer
 {
     float: left;
     width: 100%;
+    cursor: pointer;
 }
 
 .esriCTTableHeader
 {
     float: left;
-    width: 90%;
+    width: 85%;
     overflow: hidden;
     font-weight: bold;
 }
+
+
 
 .tableFloatingHeader th
 {
     background-color: #fff;
 }
+
 /** Data viewer container ends **/
 
 /** Time Slider container start **/
+
+.esriCTTimeSliderDisableContainer
+{
+    background: #fff;
+    position: absolute;
+    z-index: 998;
+    height: 50px;
+    width: 100%;
+    opacity: 0.5;
+}
 
 .esriTimeSlider .tsPrevButton, .esriTimeSlider .tsPlayButton, .esriTimeSlider .tsNextButton, .esriTimeSlider .tsPauseButton
 {
@@ -378,7 +578,7 @@ table
     background-color: transparent !important;
 }
 
-.dijitToggleButton, .dijitButton, .dijitDropDownButton, .dijitComboButton
+.dijitToggleButton, .esriCTTimeSliderContainer .dijitButton, .dijitDropDownButton, .dijitComboButton
 {
     visibility: hidden;
 }
@@ -430,7 +630,7 @@ table
 .esriCTTimeSliderTextContainer
 {
     float: left;
-    width: 25%;
+    width: calc(50% - 260px);
     text-align: right;
     font-weight: bold;
     margin-left: 10px;
@@ -510,8 +710,9 @@ table
 {
     height: calc(100% - 40px);
     padding: 10px;
-    font-size: 14pt;
+    font-size: 15px;
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 .esriCTDetailsPanelTabContainer
 {
@@ -526,6 +727,11 @@ table
 .nav-tabs > li
 {
     top: 1px;
+}
+
+.nav-justified > li, .nav-tabs.nav-justified > li
+{
+    font-size: 15px;
 }
 
 .esriCTEditFeatureButton, .esriCTCommentButton
@@ -621,6 +827,12 @@ table
     position: relative;
     float: right;
 }
+.esriCTWebMapPanelToggleBtnPositionClose
+{
+    left: 40px;
+    position: relative;
+    float: right;
+}
 .esriCTWebMapPanelToggleButtonStyle
 {
     background-position: center;
@@ -666,12 +878,18 @@ table
     height: 35px;
     background-color: #f0f0f0;
 }
-
+.esriCTWebMapListBannerContainerFull
+{
+    width: 100%;
+    height: 35px;
+    background-color: #f0f0f0;
+}
 .esriCTWebMapListContainer
 {
     width: 100%;
     height: calc(100% - 35px);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     background: #fff;
 }
 .esriCTWebMapListContainerScrollIE11
@@ -711,6 +929,7 @@ table
     width: 100%;
     height: 100%;
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .esriCTDisplayList, .esriCTDisplayWebMapTemplate
@@ -792,6 +1011,7 @@ table
     color: #515151;
     padding: 3px 15px !important;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .esriCTMultiLineEllipsisdiv
@@ -864,25 +1084,6 @@ table
 
 /** Webmap list panel ends **/
 
-/** Animating webmap list panel starts **/
-
-.esriCTWebMapListWrapperContainer
-{
-    -webkit-transition: width 1s; /* Safari 3.1 to 6.0 */
-    transition: width 1s;
-}
-
-.esriCTWebMapListOpen
-{
-    width: 30%;
-}
-
-.esriCTWebMapListClose
-{
-    width: 0;
-}
-
-/** Animating webmap list panel ends **/
 
 /** Help Dialog panel starts**/
 
@@ -907,6 +1108,7 @@ table
 .esriCTModelDialog .modal-body
 {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     height: 250px;
     margin-bottom: 15px;
 }
@@ -956,6 +1158,16 @@ table
 
 /** Filter container starts **/
 
+.esriCTDisableFilterContainer
+{
+    position: absolute;
+    background-color: #fff;
+    width: calc(100% - 5px);
+    float: left;
+    height: calc(100% - 70px);
+    opacity: 0.5;
+}
+
 .esriCTFilterParentContainer
 {
     position: absolute;
@@ -963,15 +1175,16 @@ table
     background-color: #fff;
     border: 1px solid #cccccc;
     width: 250px;
-    z-index: 995;
     font-weight: normal;
-    font-size: 14px;
+    font-size: 15px;
     top: 27px;
-    padding: 5px 0 0 5px;
+    padding: 5px;
     box-shadow: 2px 2px 5px #a9a9a9;
     top: 115px;
     max-height: 75%;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 1000;
 }
 
 .esriCTTableHeaderContainer
@@ -1007,6 +1220,8 @@ table
 {
     clear: both;
     margin-top: 15px;
+    float: left;
+    width: 100%;
 }
 
 .esriCTBorderDiv
@@ -1023,7 +1238,7 @@ table
 
 .esriCTBaseFilterOptionDiv
 {
-    width: 97%;
+    width: 100%;
     clear: both;
     padding: 0px 10px;
     float: left;
@@ -1181,6 +1396,18 @@ input.esriCTRadioButton
     padding-top: 0;
 }
 
+.esriCTAndTextDiv
+{
+    float: left;
+    clear: both;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.esriCTRangeTextBoxContainer
+{
+    height: auto;
+}
 
 /** Filter container ends **/
 
@@ -1239,6 +1466,48 @@ input.esriCTRadioButton
 .esriCTCommentsContainer .mediaSection, .esriCTCommentsContainer .attachmentsSection
 {
     display: none;
+}
+
+.esriCTTabAnchor
+{
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.esriCTTabAnchor2
+{
+    width: 100%;
+}
+
+.nav-tabs-justified > li > a, .nav-tabs.nav-justified > li > a
+{
+    float: left;
+}
+
+.esriCTCommentsBadgeContainer
+{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 70%;
+    display: inline-block;
+    float: left;
+    vertical-align: middle;
+}
+
+.esriCTDetailsPanelTabContainer .badge
+{
+    margin-left: 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 25%;
+    width: auto;
+    float: left;
 }
 /** Comments tab container ends **/
 
@@ -1341,12 +1610,39 @@ input.esriCTRadioButton
 {
     cursor: pointer;
     height: 60px;
+}
+
+.esriCTNonImageName
+{
+    text-align: center;
+    height: 75px;
+    overflow: hidden;
     margin: 5px;
+    word-break: break-all;
+    cursor: pointer;
+}
+
+.esriCTNonImageContainer
+{
+    float: left;
+    margin: 5px;
+    background-color: #c4bd97;
+    height: 82px;
+    width: 83px;
+}
+
+.esriCTNonFileTypeContent
+{
+    text-align: center;
 }
 
 /* attachment styles end**/
 
 /* popup form styles start*/
+.esriCTPopupWrapperContainer
+{
+    font-size: 15px;
+}
 
 .esriCTPopupFormContainer
 {
@@ -1358,6 +1654,7 @@ input.esriCTRadioButton
 {
     padding-bottom: 15px;
     background-color: #f8f8f8;
+    font-size: 15px;
 }
 
 .esriCTEnterPopup
@@ -1432,14 +1729,29 @@ input.esriCTRadioButton
     height: 190px;
     overflow: hidden;
 }
-.carousel-inner > .item > img, .carousel-inner > .item > a > img
+
+.carousel-inner > .item > img, .esriViewPopup .gallery .frame img
 {
-    width: 90%;
-    height: 100%;
-    margin: auto 5%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 
-#esriCTChartContainer .mainSection, #esriCTChartContainer .attachmentsSection, #esriCTChartContainer .summary, #esriCTChartContainer .mediaHandle, #esriCTChartContainer .mediaSection .header
+#esriCTChartContainer
+{
+    overflow: hidden;
+    width: 250px;
+    height: 180px;
+    margin: 0 auto;
+}
+
+#esriCTChartContainer .mainSection, #esriCTChartContainer .attachmentsSection, #esriCTChartContainer .caption, #esriCTChartContainer .hzLine, #esriCTChartContainer .summary, #esriCTChartContainer .mediaHandle, #esriCTChartContainer .mediaSection .header
 {
     display: none;
 }
@@ -1455,6 +1767,7 @@ input.esriCTRadioButton
     height: 44px;
     width: 44px;
     cursor: pointer;
+    opacity: 1 !important;
 }
 
 .carousel-control.mediaRight
@@ -1469,29 +1782,13 @@ input.esriCTRadioButton
     height: 44px;
     width: 44px;
     cursor: pointer;
+    opacity: 1 !important;
 }
 
-.esriViewPopup .gallery
+.mediaLeft.carousel-control.disableLeftArrow, .mediaRight.carousel-control.disableRightArrow
 {
-    height: 100% !important;
-    width: 100% !important;
-}
-
-.esriViewPopup .gallery .frame div.chart
-{
-    height: 100% !important;
-    width: 100% !important;
-}
-
-.esriViewPopup .gallery .frame div.chart svg
-{
-    height: 100% !important;
-    width: 100% !important;
-}
-
-.esriCTDetailsFieldValue .claro .dijitContentPane
-{
-    overflow: hidden;
+    cursor: default !important;
+    opacity: 0.4 !important;
 }
 
 /** Media tab container ends **/
@@ -1523,8 +1820,10 @@ input.esriCTRadioButton
     border-radius: 0px;
     border: 1px solid #ddd;
     color: #555;
-    padding-left: 5px;
+    padding-left: 6px;
+    padding-right: 4px;
     line-height: 24px;
+    font-size: 14px;
 }
 
 .esriCTClearBtn
@@ -1532,7 +1831,7 @@ input.esriCTRadioButton
     background: url('../images/clear-text-24.png') no-repeat center;
     height: 24px;
     width: 24px;
-    background-size: 24px;
+    background-size: 16px;
     cursor: pointer;
     position: inherit;
     background-color: #fff;
@@ -1576,7 +1875,8 @@ input.esriCTRadioButton
 
 /* Search container ends */
 
-/* override calcite styles*/
+/* Override calcite styles */
+
 .esriCTDetailsPanelTabContainer .btn-default, .esriCTDetailsPanelTabContainer .btn-default:hover
 {
     border-color: #959595;
@@ -1594,7 +1894,7 @@ input.esriCTRadioButton
     background-color: #fff !important;
 }
 
-/* override calcite styles*/
+/* Override calcite styles*/
 
 .esriCTHideTabList .tab-content
 {
@@ -1605,3 +1905,21 @@ input.esriCTRadioButton
 {
     padding: 0px !important;
 }
+
+/* Sign out container starts */
+
+.esriCTSignOut
+{
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.esriCTSignOutParentDiv
+{
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+/* Sign out container ends */

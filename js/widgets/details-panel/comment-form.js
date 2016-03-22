@@ -944,7 +944,7 @@ define([
                 typeCastedInputValue = parseInt(inputValue, 10);
                 if ((inputValue.match(decimal) && typeCastedInputValue >= -32768 && typeCastedInputValue <= 32767) && inputValue.length !== 0) {
                     this._validateUserInput(false, node, inputValue);
-                    this._setFormatToValue(currentField, typeCastedInputValue, currentNode.target);
+                    this._setFormatToValue(currentField, typeCastedInputValue, targetNode);
                 } else {
                     error = string.substitute(this.config.i18n.geoform.invalidSmallNumber, {
                         openStrong: "<strong>",
@@ -957,7 +957,7 @@ define([
                 typeCastedInputValue = parseInt(inputValue, 10);
                 if ((inputValue.match(decimal) && typeCastedInputValue >= -2147483648 && typeCastedInputValue <= 2147483647) && inputValue.length !== 0) {
                     this._validateUserInput(false, node, inputValue, iskeyPress);
-                    this._setFormatToValue(currentField, typeCastedInputValue, currentNode.target);
+                    this._setFormatToValue(currentField, typeCastedInputValue, targetNode);
                 } else {
                     error = string.substitute(this.config.i18n.geoform.invalidNumber, {
                         openStrong: "<strong>",
@@ -974,7 +974,7 @@ define([
                 typeCastedInputValue = parseFloat(inputValue);
                 if (((inputValue.match(decimal) || inputValue.match(floatVal)) && typeCastedInputValue >= -3.4 * Math.pow(10, 38) && typeCastedInputValue <= 1.2 * Math.pow(10, 38)) && inputValue.length !== 0) {
                     this._validateUserInput(false, node, inputValue, iskeyPress);
-                    this._setFormatToValue(currentField, typeCastedInputValue, currentNode.target);
+                    this._setFormatToValue(currentField, typeCastedInputValue, targetNode);
                 } else {
                     error = string.substitute(this.config.i18n.geoform.invalidFloat, {
                         openStrong: "<strong>",
@@ -987,7 +987,7 @@ define([
                 typeCastedInputValue = parseFloat(inputValue);
                 if (((inputValue.match(decimal) || inputValue.match(floatVal)) && typeCastedInputValue >= -2.2 * Math.pow(10, 308) && typeCastedInputValue <= 1.8 * Math.pow(10, 38)) && inputValue.length !== 0) {
                     this._validateUserInput(false, node, inputValue, iskeyPress);
-                    this._setFormatToValue(currentField, typeCastedInputValue, currentNode.target);
+                    this._setFormatToValue(currentField, typeCastedInputValue, targetNode);
                 } else {
                     error = string.substitute(this.config.i18n.geoform.invalidDouble, {
                         openStrong: "<strong>",

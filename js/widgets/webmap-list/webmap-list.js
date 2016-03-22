@@ -676,20 +676,20 @@ define([
                             domClass.replace(layerList, "esriCTHidden", "esriCTDisplayList");
                         }
                         $('.esriCTDescription', this.parentElement.parentElement).slideDown({
-                            duration: 500,
+                            duration: 250,
                             easing: "linear"
                         });
                         setTimeout(lang.hitch(this, function () {
                             domClass.replace(descriptionDiv, "esriCTDisplayList", "esriCTHidden");
-                        }), 500);
+                        }), 250);
                     } else {
                         $('.esriCTDescription', this.parentElement.parentElement).slideUp({
-                            duration: 500,
+                            duration: 250,
                             easing: "linear"
                         });
                         setTimeout(lang.hitch(this, function () {
                             domClass.replace(descriptionDiv, "esriCTHidden", "esriCTDisplayList");
-                        }), 500);
+                        }), 250);
                     }
                 });
             } else {
@@ -755,6 +755,7 @@ define([
                 requiredClass = "esriCTWebMapPanelToggleButtonOpenDisabled";
             }
             this.own(on(toggleButton, "click", lang.hitch(this, function () {
+                $(".esriCTFilterParentContainer").css("display", "none");
                 if (!domClass.contains(toggleButton, requiredClass)) {
                     this._animateWebMapList();
                 }
@@ -772,24 +773,45 @@ define([
                     domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListClose", "esriCTWebMapListOpen");
                     domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonOpen", "esriCTWebMapPanelToggleButtonClose");
                     domClass.add(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPositionClose", "esriCTWebMapPanelToggleBtnPosition");
+                    domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainerFull", "esriCTWebMapListBannerContainer");
                     this._setTooltip(toggleButton, false);
+                    $('#webMapListWrapperContainer').animate({
+                        'right': "-30%" //moves left
+                    }, 1000);
                 } else { // open webmap list
                     domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen", "esriCTWebMapListClose");
                     domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonClose", "esriCTWebMapPanelToggleButtonOpen");
                     domClass.remove(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPosition", "esriCTWebMapPanelToggleBtnPositionClose");
+                    domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainer", "esriCTWebMapListBannerContainerFull");
                     this._setTooltip(toggleButton, true);
+                    $('#webMapListWrapperContainer').animate({
+                        'right': "0%" //moves left
+                    }, 1000);
                 }
             } else {
                 if (domClass.contains(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen")) { // close webmap list
                     domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListClose", "esriCTWebMapListOpen");
                     domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonClose", "esriCTWebMapPanelToggleButtonOpen");
                     domClass.add(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPositionClose", "esriCTWebMapPanelToggleBtnPosition");
+                    domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainerFull", "esriCTWebMapListBannerContainer");
                     this._setTooltip(toggleButton, false);
+
+                    $('#webMapListWrapperContainer').animate({
+                        'left': "-30%" //moves left
+                    }, 1000);
                 } else { // open webmap list
                     domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen", "esriCTWebMapListClose");
                     domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonOpen", "esriCTWebMapPanelToggleButtonClose");
                     domClass.remove(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPosition", "esriCTWebMapPanelToggleBtnPositionClose");
+                    domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainer", "esriCTWebMapListBannerContainerFull");
                     this._setTooltip(toggleButton, true);
+                    $('#webMapListWrapperContainer').animate({
+                        'left': "0%" //moves left
+                    }, 1000);
                 }
             }
         },
@@ -833,14 +855,24 @@ define([
                     domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListClose", "esriCTWebMapListOpen");
                     domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonOpen", "esriCTWebMapPanelToggleButtonClose");
                     domClass.add(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPositionClose", "esriCTWebMapPanelToggleBtnPosition");
+                    domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainerFull", "esriCTWebMapListBannerContainer");
                     this._setTooltip(toggleButton, false);
+                    $('#webMapListWrapperContainer').animate({
+                        'right': "-30%" //moves left
+                    }, 1000);
                 }
             } else {
                 if (domClass.contains(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListOpen")) { // close webmap list
                     domClass.replace(dom.byId("webMapListWrapperContainer"), "esriCTWebMapListClose", "esriCTWebMapListOpen");
                     domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonClose", "esriCTWebMapPanelToggleButtonOpen");
                     domClass.add(dom.byId("webMapListContainer"), "esriCTWebMapListContainerScrollIE11");
+                    domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPositionClose", "esriCTWebMapPanelToggleBtnPosition");
+                    domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainerFull", "esriCTWebMapListBannerContainer");
                     this._setTooltip(toggleButton, false);
+                    $('#webMapListWrapperContainer').animate({
+                        'left': "-30%" //moves left
+                    }, 1000);
                 }
             }
         }

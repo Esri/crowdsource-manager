@@ -1,20 +1,20 @@
 ﻿/*global define,dojoConfig,$,confirm,document */
 /*jslint sloppy:true */
 /*
-| Copyright 2014 Esri
-|
-| Licensed under the Apache License, Version 2.0 (the "License");
-| you may not use this file except in compliance with the License.
-| You may obtain a copy of the License at
-|
-|    http://www.apache.org/licenses/LICENSE-2.0
-|
-| Unless required by applicable law or agreed to in writing, software
-| distributed under the License is distributed on an "AS IS" BASIS,
-| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-| See the License for the specific language governing permissions and
-| limitations under the License.
-*/
+ | Copyright 2014 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+ */
 //============================================================================================================================//
 define([
     "dojo/_base/declare",
@@ -29,6 +29,7 @@ define([
     "dijit/_WidgetsInTemplateMixin",
     "widgets/search/search",
     "widgets/manual-refresh/manual-refresh",
+    "widgets/sign-in/sign-in",
     "widgets/help/help",
     "dojo/dom-class"
 ], function (
@@ -44,6 +45,7 @@ define([
     _WidgetsInTemplateMixin,
     Search,
     ManualRefresh,
+    SignIn,
     Help,
     domClass
 ) {
@@ -52,6 +54,9 @@ define([
         _helpWidgetObj: null, // to store object of help widget
         _searchWidgetObj: null, // to store object of search widget
         _manualRefreshWidgetObj: null, // to store object of manual refresh widget
+        _isMultipleRecordsSelected: false, // to check how many records are selected in data viewer/ map panel
+        _signInWidgetObj: null, // to store object of sign in widget
+        isSearchActive: false,
 
         /**
         * This function is called when widget is constructed
@@ -78,14 +83,40 @@ define([
         */
         _onApplicationIconLoad: function () {
             on(this.applicationHeaderIcon, "load, error", lang.hitch(this, function () {
+                this._displaySignedInUserDetails();
+                this._setSignOutOptionText();
                 this._setWidthOfApplicationNameContainer();
                 this._setApplicationName();
                 this._setApplicationShortcutIcon();
                 this._initializeSearchWidget();
                 this._initializeManualRefreshWidget();
+                this._initializeSignInWidget();
                 this._initializeHelpWidget();
                 this._setToolTip();
+                if (this.displaySignInText) {
+                    this._displaySignInText();
+                }
             }));
+        },
+
+        /**
+        * This function is used to display sign in text
+        * @memberOf widgets/app-header/app-header
+        */
+        _displaySignInText: function () {
+            domClass.add(this.helpButton, "esriCTHidden");
+            domClass.add(this.refreshButton, "esriCTHidden");
+            domClass.add(this.searchButton, "esriCTHidden");
+            this.applicationHeaderName.innerHTML = this.appConfig.i18n.applicationHeader.pleaseSignInText;
+            document.title = this.appConfig.i18n.applicationHeader.pleaseSignInText;
+        },
+
+        /**
+        * This function is used to set text of sign-out option
+        * @memberOf widgets/app-header/app-header
+        */
+        _setSignOutOptionText: function () {
+            this.signOutOption.innerHTML = this.appConfig.i18n.applicationHeader.signOutOption;
         },
 
         /**
@@ -126,20 +157,35 @@ define([
         },
 
         /**
+        * This function is used to display details of signed in user
+        * @memberOf widgets/app-header/app-header
+        */
+        _displaySignedInUserDetails: function () {
+            this.signedInUserDetails.innerHTML = this.appConfig.logInDetails.userName;
+            if (this.appConfig.logInDetails.userName !== this.appConfig.i18n.applicationHeader.signInOption) {
+                domClass.remove(this.signedInUserDetailsCaretIcon, "esriCTHidden");
+            }
+        },
+
+        /**
         * This function is used to set max width of the application icon container
         * @memberOf widgets/app-header/app-header
         */
         _setMaxWidthOfApplicationIcon: function () {
-            var searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth;
+            var searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth, signInTextWidth, signInCaretIcon;
             applicationHeaderContainerWidth = $(this.applicationHeaderContainer).outerWidth(true);
             applicationHeaderContainerWidth = parseFloat(applicationHeaderContainerWidth);
             searchIconWidth = $(this.searchButton).outerWidth(true);
             searchIconWidth = parseFloat(searchIconWidth);
             manualRefreshIconWidth = $(this.refreshButton).outerWidth(true);
             manualRefreshIconWidth = parseFloat(manualRefreshIconWidth);
+            signInTextWidth = $(this.signedInUserDetails).outerWidth(true);
+            signInTextWidth = parseFloat(signInTextWidth);
+            signInCaretIcon = $(this.signedInUserDetailsCaretIcon).outerWidth(true);
+            signInCaretIcon = parseFloat(signInCaretIcon);
             helpIconWidth = $(this.helpButton).outerWidth(true);
             helpIconWidth = parseFloat(helpIconWidth);
-            headerIconsWidth = searchIconWidth + manualRefreshIconWidth + helpIconWidth;
+            headerIconsWidth = searchIconWidth + manualRefreshIconWidth + helpIconWidth + signInTextWidth + signInCaretIcon;
             domStyle.set(this.applicationHeaderIconContainer, "max-width", (applicationHeaderContainerWidth - headerIconsWidth) + "px");
         },
 
@@ -180,7 +226,7 @@ define([
         * @memberOf widgets/app-header/app-header
         */
         _setWidthOfApplicationNameContainer: function () {
-            var applicationIconWidth, searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth, applicationNameContainerWidth;
+            var applicationIconWidth, searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth, applicationNameContainerWidth, signInTextWidth, signInCaretIcon;
             applicationHeaderContainerWidth = $(this.applicationHeaderContainer).outerWidth(true);
             applicationHeaderContainerWidth = parseFloat(applicationHeaderContainerWidth);
             applicationIconWidth = $(this.applicationHeaderIconContainer).outerWidth(true);
@@ -191,7 +237,11 @@ define([
             manualRefreshIconWidth = parseFloat(manualRefreshIconWidth);
             helpIconWidth = $(this.helpButton).outerWidth(true);
             helpIconWidth = parseFloat(helpIconWidth);
-            headerIconsWidth = applicationIconWidth + searchIconWidth + manualRefreshIconWidth + helpIconWidth;
+            signInTextWidth = $(this.signedInUserDetails).outerWidth(true);
+            signInTextWidth = parseFloat(signInTextWidth);
+            signInCaretIcon = $(this.signedInUserDetailsCaretIcon).outerWidth(true);
+            signInCaretIcon = parseFloat(signInCaretIcon);
+            headerIconsWidth = applicationIconWidth + searchIconWidth + manualRefreshIconWidth + helpIconWidth + signInTextWidth + signInCaretIcon;
             applicationNameContainerWidth = applicationHeaderContainerWidth - headerIconsWidth;
             applicationNameContainerWidth = applicationNameContainerWidth - 15;
             domStyle.set(this.applicationNameContainer, "width", applicationNameContainerWidth + "px");
@@ -265,8 +315,16 @@ define([
                     if (this._searchWidgetObj) {
                         this._searchWidgetObj.startup();
                     }
+                } else {
+                    if (this._isMultipleRecordsSelected) {
+                        this.appUtils.showMessage(this.appConfig.i18n.search.searchInEditModeAlert);
+                    }
                 }
             }));
+
+            this._searchWidgetObj.onSearchApplied = lang.hitch(this, function (lastSearchedString) {
+                this.onSearchApplied(lastSearchedString);
+            });
         },
 
         /**
@@ -312,7 +370,7 @@ define([
         */
         toggleSearchIcon: function (searchParameter) {
             searchParameter.searchButton = this.searchButton;
-            this._searchWidgetObj.resetSearchPanel(searchParameter);
+            this.isSearchActive = this._searchWidgetObj.resetSearchPanel(searchParameter);
         },
 
         /**
@@ -325,10 +383,93 @@ define([
 
         /**
         * This function is used to publish confirmation of manual refresh to other widget
-        * @memberOf widgets/manual-refresh/manual-refresh
+        * @memberOf widgets/app-header/app-header
         */
         confirmedManualRefresh: function () {
             return;
+        },
+
+        /**
+        * This function is used enable/disable search icon
+        * @memberOf widgets/app-header/app-header
+        */
+        _handleSearchIconVisibility: function (featureLength) {
+            if (this.isSearchActive) {
+                if (featureLength > 1) {
+                    domClass.add(this.searchButton, "esriCTSearchIconContainerDisabled");
+                    domClass.remove(this.searchButton, "esriCTSearchIconContainer");
+                    this._isMultipleRecordsSelected = true;
+                    if (!domClass.contains(this._searchWidgetObj.searchOptions, "esriCTHidden")) {
+                        domClass.add(this._searchWidgetObj.searchOptions, "esriCTHidden");
+                    }
+                } else {
+                    domClass.remove(this.searchButton, "esriCTSearchIconContainerDisabled");
+                    domClass.add(this.searchButton, "esriCTSearchIconContainer");
+                    this._isMultipleRecordsSelected = false;
+                }
+            }
+        },
+
+        /**
+        * This method is used to create sign in widget
+        * @memberOf widgets/app-header/app-header
+        */
+        _initializeSignInWidget: function () {
+            var signInParameters;
+            signInParameters = {
+                "appConfig": this.appConfig,
+                "appUtils": this.appUtils
+            };
+            // Initialize sign in widget
+            this._signInWidgetObj = new SignIn(signInParameters);
+            this._signInWidgetObj.destroyWidgets = lang.hitch(this, function () {
+                this.destroyWidgets();
+            });
+            this._signInWidgetObj.reload = lang.hitch(this, function (logInDetails) {
+                this.reload(logInDetails);
+            });
+            // On click of sign in text, open identity manager
+            on(this.signedInUserDetails, "click", lang.hitch(this, function () {
+                this._signInWidgetObj.startup();
+            }));
+            on(this.signedInUserDetailsCaretIcon, "click", lang.hitch(this, function () {
+                if ((domStyle.get(this.helpButton, "display") === "none") && (domStyle.get(this.refreshButton, "display") === "none") && (domStyle.get(this.searchButton, "display") === "none")) {
+                    domClass.add(this.signOutOptionParentContainer, "esriCTSignOutOptionErrorMode");
+                }
+                domClass.toggle(this.signOutOptionParentContainer, "esriCTHidden");
+            }));
+            on(this.signOutOptionParentContainer, "click", lang.hitch(this, function () {
+                var signOutParentDiv, signOutMessageDiv;
+                signOutParentDiv = domConstruct.create("div", { "class": "esriCTSignOutParentDiv" });
+                signOutMessageDiv = domConstruct.create("div", { "class": "esriCTSignOut" }, signOutParentDiv);
+                domConstruct.create("div", { "innerHTML": this.appConfig.i18n.signOutPage.signOutMessage }, signOutMessageDiv);
+                domConstruct.create("a", { "href": "", "innerHTML": this.appConfig.i18n.signOutPage.reSignInMessage }, signOutMessageDiv);
+                document.body.innerHTML = signOutParentDiv.outerHTML;
+            }));
+        },
+
+        /**
+        * This method is used to reload the app
+        * @memberOf widgets/app-header/app-header
+        */
+        reload: function (logInDetails) {
+            return logInDetails;
+        },
+
+        /**
+        * This method is used to destroy widgets
+        * @memberOf widgets/app-header/app-header
+        */
+        destroyWidgets: function () {
+            return;
+        },
+
+        /**
+        * This method is return last searched string from search
+        * @memberOf widgets/app-header/app-header
+        */
+        onSearchApplied: function (lastSearchedString) {
+            return lastSearchedString;
         }
     });
 });

@@ -1,4 +1,4 @@
-﻿/*global define,$ */
+﻿/*global define,$, window, setTimeout */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -19,6 +19,7 @@ define([
     "dojo/_base/declare",
     "dojo/on",
     "dojo/dom",
+    "dojo/query",
     "dojo/dom-class",
     "dojo/dom-style",
     "dojo/dom-attr",
@@ -34,6 +35,7 @@ define([
     declare,
     on,
     dom,
+    query,
     domClass,
     domStyle,
     domAttr,
@@ -47,6 +49,8 @@ define([
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
+        _firstLoadedSvg: true,
+        _eventCollection: [],
         _infoContent: null,
         _infoWidget: null,
         _chartInfo: null,
@@ -77,12 +81,10 @@ define([
         * @memberOf widgets/details-panel/media
         */
         _createMediaUI: function () {
-            if (this.selectedOperationalLayer.hasAttachments) {
-                this._infoContent = this.multipleFeatures[0].getContent();
-                this._chartInfo = this.popupInfo && this.popupInfo.mediaInfos;
-                this._infoWidget = registry.byId(this._infoContent.id);
-                this._showAttachments();
-            }
+            this._infoContent = this.multipleFeatures[0].getContent();
+            this._chartInfo = this.popupInfo && this.popupInfo.mediaInfos;
+            this._infoWidget = registry.byId(this._infoContent.id);
+            this._showAttachments();
         },
 
         /**
@@ -90,19 +92,23 @@ define([
         * @memberOf widgets/details-panel/media
         */
         _showAttachments: function () {
-            var objectID = this.multipleFeatures[0].attributes[this.selectedOperationalLayer.objectIdField];
-            /*show Loading indicator */
-            this.selectedOperationalLayer.queryAttachmentInfos(objectID,
-                lang.hitch(this, function (infos) {
-                    // if attachments found
-                    if ((infos && infos.length > 0) || (this._chartInfo && this._chartInfo.length > 0)) {
-                        this._createDynamicCasoul(infos);
-                    } else {
-                        this._showNoMedaiFound();
-                    }
-                }), lang.hitch(this, function () {
-                    /*hide Loading indicator */
-                }));
+            if (this.selectedOperationalLayer.hasAttachments) {
+                var objectID = this.multipleFeatures[0].attributes[this.selectedOperationalLayer.objectIdField];
+                /*show Loading indicator */
+                this.selectedOperationalLayer.queryAttachmentInfos(objectID,
+                    lang.hitch(this, function (infos) {
+                        // if attachments found
+                        if ((infos && infos.length > 0) || (this._chartInfo && this._chartInfo.length > 0)) {
+                            this._createDynamicCarousel(infos);
+                        } else {
+                            this._showNoMedaiFound();
+                        }
+                    }), lang.hitch(this, function () {
+                        /*hide Loading indicator */
+                    }));
+            } else {
+                this._createDynamicCarousel();
+            }
         },
 
         /**
@@ -110,14 +116,13 @@ define([
         * @param{object} parameters to create a carousel panel
         * @memberOf widgets/details-panel/media
         */
-        _createDynamicCasoul: function (infos) {
-            var slideCount = 0, i;
+        _createDynamicCarousel: function (infos) {
+            var slideCount = 0, i, resizeEvent;
             if (infos) {
                 for (i = 0; i < infos.length; i++) {
                     // add to carousel only if it is an image type
                     if (infos[i].contentType && infos[i].contentType.indexOf("image") > -1) {
-                        $('<div class="item"><img src="' + infos[i].url + '"><div class="carousel-caption"></div>   </div>').appendTo('.carousel-inner');
-                        //  $('<li data-target="#carousel-widget" data-slide-to="' + slideCount++ + '"></li>').appendTo('.carousel-indicators');
+                        $('<div class="item"><img onclick="window.open(this.src)" src="' + infos[i].url + '"></div>').appendTo('.carousel-inner');
                         slideCount++;
                     }
                 }
@@ -128,59 +133,84 @@ define([
             if (slideCount) {
                 this.showMediaTab();
                 $('.item').first().addClass('active');
-                // $('.carousel-indicators > li').first().addClass('active');
                 $('#carousel-widget').carousel({
-                    interval: false
+                    interval: false,    // to stop auto display animation
+                    wrap: false         // to stop circular rotation in carousel
                 });
+                this._enableDisableArrow(0, slideCount);
+                resizeEvent = on(dom.byId("mediaTab"), "click", lang.hitch(this, function () {
+                    resizeEvent.remove();
+                    this._openMediaImages();
+                    this._resizeMediaChart(0, slideCount);
+                }));
             } else {
                 this._showNoMedaiFound();
             }
         },
 
+        _openMediaImages: function () {
+            var mediaImages = $('#carousel-widget .esriViewPopup .gallery .frame img'), i;
+            for (i = 0; i < this._eventCollection.length; i++) {
+                this._eventCollection[i].remove && this._eventCollection[i].remove();
+            }
+            for (i = 0; i < mediaImages.length; i++) {
+                this._eventCollection.push(on(mediaImages[i], "click", function () {
+                    window.open(this.src);
+                }));
+            }
+        },
+
+        /**
+        * This function is used to add charts in crousel panel
+        * @param{number} parameters to add charts in crousel panel
+        * @memberOf widgets/details-panel/media
+        */
         _addChartsToCarousel: function (slideCount) {
             var chartContaner, popupContentPane, chartCount = slideCount;
             if (this._chartInfo && this._chartInfo.length > 0) {
-                $('<div class="item"><div id="esriCTChartContainer"></div><div class="carousel-caption"></div>   </div>').appendTo('.carousel-inner');
-                //  $('<li data-target="#carousel-widget" data-slide-to="' + slideCount + '"></li>').appendTo('.carousel-indicators');
+                $('<div class="item"><div id="esriCTChartContainer"></div></div>').appendTo('.carousel-inner');
 
                 chartContaner = dom.byId("esriCTChartContainer");
                 popupContentPane = new ContentPane({}, chartContaner);
                 popupContentPane.startup();
                 popupContentPane.set("content", this._infoContent);
                 this._attachNextPrevEvents(slideCount);
+                this._showMediaCaption(0, slideCount);
                 chartCount = slideCount + 1;
             }
             return chartCount;
         },
 
+        /**
+        * This function is used to attached event to display chart on next and previous buttons
+        * @param{number} parameters to add events for charts in crousel panel
+        * @memberOf widgets/details-panel/media
+        */
         _attachNextPrevEvents: function (slideCount) {
-            var i;
             on(this.slidePrev, "click", lang.hitch(this, function (evt) {
-                var currentIndex = $('#carousel-widget .carousel-inner .item.active').index(), i;
+                var currentIndex = $('#carousel-widget .carousel-inner .item.active').index();
+                this._resizeMediaChart(currentIndex, slideCount);
                 if (parseInt(currentIndex, 10) === slideCount && this._chartIndex !== 0) {
                     this._chartIndex--;
                     evt.stopPropagation();
                     this._infoWidget._goToPrevMedia();
-                } else if (parseInt(currentIndex, 10) === 0 && this._chartIndex === 0) {
-                    this._chartIndex = this._chartInfo.length - 1;
-                    for (i = 0; i < this._chartIndex; i++) {
-                        this._infoWidget._goToNextMedia();
-                    }
                 }
+                this._showMediaCaption(currentIndex, slideCount);
+                this._enableDisableArrow(currentIndex - 1, slideCount);
+                this._openMediaImages();
             }));
 
             on(this.slideNext, "click", lang.hitch(this, function (evt) {
                 var currentIndex = $('#carousel-widget .carousel-inner .item.active').index();
+                this._resizeMediaChart(currentIndex, slideCount);
                 if (parseInt(currentIndex, 10) === slideCount && this._chartIndex !== this._chartInfo.length - 1) {
                     this._chartIndex++;
                     evt.stopPropagation();
                     this._infoWidget._goToNextMedia();
-                } else if (parseInt(currentIndex, 10) === slideCount && this._chartIndex === this._chartInfo.length - 1) {
-                    for (i = 0; i < this._chartIndex; i++) {
-                        this._infoWidget._goToPrevMedia();
-                    }
-                    this._chartIndex = 0;
                 }
+                this._showMediaCaption(currentIndex, slideCount);
+                this._enableDisableArrow(currentIndex, slideCount);
+                this._openMediaImages();
             }));
         },
 
@@ -193,6 +223,75 @@ define([
             domStyle.set(this.mediaContainer, "display", "none");
             domClass.remove(this.noMediaInfoContainer, "esriCTHidden");
             domAttr.set(this.noMediaInfoContainer, "innerHTML", this.appConfig.i18n.mediaTab.noFeatureAvailabe);
+        },
+
+        /**
+        * This function is used to resize charts
+        * @param{number} parameters to resize charts
+        * @memberOf widgets/details-panel/media
+        */
+        _resizeMediaChart: function (currentIndex, slideCount) {
+            var svgElement = query(".chart > svg"), i;
+
+            if (svgElement && svgElement.length) {
+                for (i = 0; i < svgElement.length; i++) {
+                    svgElement[i].setAttribute('height', '160');
+                    svgElement[i].setAttribute('width', '200');
+                    svgElement[i].setAttribute('preserveAspectRatio', 'xMidYMid meet');
+                }
+            }
+            if (this._firstLoadedSvg) {
+                this._firstLoadedSvg = false;
+                setTimeout(lang.hitch(this, function () {
+                    this._infoWidget._goToNextMedia();
+                    this._infoWidget._goToPrevMedia();
+                }), 1000);
+            }
+        },
+
+        /**
+        * This function is used to show caption for media
+        * @param{number} parameters to show caption for media
+        * @memberOf widgets/details-panel/media
+        */
+        _showMediaCaption: function (currentIndex, slideCount) {
+            if (this._chartInfo && (currentIndex === slideCount || (currentIndex === slideCount - 1 && this._chartIndex === 0))) {
+                var selectedMedia = this._chartInfo[this._chartIndex];
+                if (selectedMedia && selectedMedia.caption && lang.trim(selectedMedia.caption) !== "") {
+                    domAttr.set("esriCTChartContainer", "title", selectedMedia.caption);
+                } else {
+                    domAttr.remove("esriCTChartContainer", "title");
+                }
+            } else {
+                domAttr.remove("esriCTChartContainer", "title");
+            }
+        },
+
+        /**
+        * This function is used to enable/disable navigation arrow
+        * @param{number} parameters to enable/disable navigation arrow
+        * @memberOf widgets/details-panel/media
+        */
+        _enableDisableArrow: function (currentIndex, slideCount) {
+            var mediaLeftArrow = $('.carousel-control.mediaLeft').first(),
+                mediaRightArrow = $('.carousel-control.mediaRight').first();
+            if (mediaLeftArrow) {
+                mediaLeftArrow.removeClass('disableLeftArrow');
+            }
+            if (mediaRightArrow) {
+                mediaRightArrow.removeClass('disableRightArrow');
+            }
+            if (slideCount === 1 && this._chartInfo.length < 2) {
+                mediaLeftArrow.addClass('disableLeftArrow');
+                mediaRightArrow.addClass('disableRightArrow');
+            } else {
+                if (mediaLeftArrow && parseInt(currentIndex, 10) < 1 && this._chartIndex === 0) {
+                    mediaLeftArrow.addClass('disableLeftArrow');
+                }
+                if (mediaRightArrow && parseInt(currentIndex, 10) === slideCount && this._chartIndex === this._chartInfo.length - 1) {
+                    mediaRightArrow.addClass('disableRightArrow');
+                }
+            }
         },
 
         /**

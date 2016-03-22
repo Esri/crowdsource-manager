@@ -23,9 +23,11 @@ define([
     "dijit/_WidgetsInTemplateMixin",
     "dojo/_base/lang",
     "dojo/dom",
+    "dojo/dom-attr",
     "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/on",
+    "dojo/mouse",
     "dijit/layout/ContentPane",
     "widgets/details-panel/popup-form",
     "esri/tasks/query",
@@ -38,9 +40,11 @@ define([
     _WidgetsInTemplateMixin,
     lang,
     dom,
+    domAttr,
     domClass,
     domConstruct,
     on,
+    mouse,
     ContentPane,
     PopupForm,
     Query
@@ -74,6 +78,7 @@ define([
                 this._hidePanel(this.popupFormContainer);
                 this._showPanel(this.popupInfoParentContainer);
                 this._displayPopupContent(this.multipleFeatures[0]);
+                this.popupEditModeEnabled(false);
             } else {
                 //create edit popup form if multiple feature selected
                 this._createPopupForm();
@@ -94,11 +99,13 @@ define([
                 queryFeature.where = currentDateTime + "=" + currentDateTime;
                 queryFeature.returnGeometry = true;
                 this.selectedOperationalLayer.queryFeatures(queryFeature, lang.hitch(this, function (result) {
-                    var popupContentPane = new ContentPane({}, this.popupContainer);
-                    popupContentPane.startup();
-                    popupContentPane.set("content", result.features[0].getContent());
-                    this._checkAttachments();
-                    this._createEditFormButton();
+                    if (this.multipleFeatures[0]) {
+                        var popupContentPane = new ContentPane({}, this.popupContainer);
+                        popupContentPane.startup();
+                        popupContentPane.set("content", result.features[0].getContent());
+                        this._checkAttachments();
+                        this._createEditFormButton();
+                    }
                 }));
             }
         },
@@ -108,7 +115,7 @@ define([
         * @memberOf widgets/details-panel/popup
         */
         _createEditFormButton: function () {
-            var editFeatureButton = domConstruct.create("div", { "class": "esriCTEditFeatureButton" }, this.popupContainer);
+            var editFeatureButton = domConstruct.create("div", { "class": "esriCTEditFeatureButton", "title": this.appConfig.i18n.detailsPanel.editContentText }, this.popupContainer);
             //attach 'click event on edit button to display form
             on(editFeatureButton, "click", lang.hitch(this, function () {
                 this._createPopupForm();
@@ -125,6 +132,7 @@ define([
                 this.popupFormInstance.destroy();
             }
             domConstruct.empty(this.popupFormContainer);
+            this.popupEditModeEnabled(true);
             //Create new instance of PopupForm
             this.popupFormInstance = new PopupForm({
                 config: this.appConfig,
@@ -163,6 +171,7 @@ define([
             }
             //Scroll to top position when clicked cancel need ID to use scrollTop
             dom.byId("tabContent").scrollTop = 0;
+            this.popupEditModeEnabled(false);
         },
 
         /**
@@ -208,11 +217,13 @@ define([
         _checkAttachments: function () {
             if (this.selectedOperationalLayer.hasAttachments && this.popupInfo.showAttachments) {
                 var attachmentsDiv = $(".attachmentsSection", this.popupContainer)[0];
-                domConstruct.empty(attachmentsDiv);
-                domClass.remove(attachmentsDiv, "hidden");
-                this._loadAttachmentTimer = setTimeout(lang.hitch(this, function () {
-                    this._showAttachments(this.multipleFeatures[0], attachmentsDiv);
-                }), 500);
+                if (attachmentsDiv) {
+                    domConstruct.empty(attachmentsDiv);
+                    domClass.remove(attachmentsDiv, "hidden");
+                    this._loadAttachmentTimer = setTimeout(lang.hitch(this, function () {
+                        this._showAttachments(this.multipleFeatures[0], attachmentsDiv);
+                    }), 500);
+                }
             }
         },
 
@@ -223,40 +234,122 @@ define([
         * @memberOf widgets/details-panel/popup
         **/
         _showAttachments: function (graphic, attachmentContainer) {
-            var objectID, fieldContent, imageDiv, imagePath, i, isAttachmentAvailable = false;
-            objectID = graphic.attributes[this.selectedOperationalLayer.objectIdField];
-            domConstruct.empty(attachmentContainer);
-            this.selectedOperationalLayer.queryAttachmentInfos(objectID, lang.hitch(this, function (infos) {
-                //check if attachments found
-                if (infos && infos.length > 0) {
-                    //Create attachment header text
-                    domConstruct.create("div", {
-                        "innerHTML": this.appConfig.i18n.geoform.attachmentHeaderText,
-                        "class": "esriCTAttachmentHeader"
-                    }, attachmentContainer);
-                    fieldContent = domConstruct.create("div", {
-                        "class": "esriCTThumbnailContainer"
-                    }, attachmentContainer);
-                    // display all attached images in thumbnails
-                    for (i = 0; i < infos.length; i++) {
-                        if (infos[i].contentType.indexOf("image") === -1) {
-                            isAttachmentAvailable = true;
-                            //set default image path if attachment has no image URL
-                            imagePath = dojoConfig.baseURL + "/images/default-attachment.png";
-                            imageDiv = domConstruct.create("img", {
-                                "alt": infos[i].url,
-                                "class": "esriCTAttachmentImg",
-                                "src": imagePath
-                            }, fieldContent);
-                            on(imageDiv, "click", lang.hitch(this, this._displayImageAttachments));
+            var objectID, fieldContent, imageDiv, imagePath, i, isAttachmentAvailable = false, imageThumbnailContainer, attahmentWrapper, imageThubnailContent, imageContainer, fileTypeContainer;
+            if (graphic) {
+                objectID = graphic.attributes[this.selectedOperationalLayer.objectIdField];
+                domConstruct.empty(attachmentContainer);
+                this.selectedOperationalLayer.queryAttachmentInfos(objectID, lang.hitch(this, function (infos) {
+                    //check if attachments found
+                    if (infos && infos.length > 0) {
+                        //Create attachment header text
+                        domConstruct.create("div", {
+                            "innerHTML": this.appConfig.i18n.geoform.attachmentHeaderText,
+                            "class": "esriCTAttachmentHeader"
+                        }, attachmentContainer);
+
+                        fieldContent = domConstruct.create("div", {
+                            "class": "esriCTThumbnailContainer"
+                        }, attachmentContainer);
+
+                        // display all attached images in thumbnails
+                        for (i = 0; i < infos.length; i++) {
+                            if (infos[i].contentType.indexOf("image") === -1) {
+                                attahmentWrapper = domConstruct.create("div", {}, fieldContent);
+
+                                imageThumbnailContainer = domConstruct.create("div", {
+                                    "class": "esriCTNonImageContainer",
+                                    "alt": infos[i].url
+                                }, attahmentWrapper);
+
+                                imageThubnailContent = domConstruct.create("div", {
+                                    "class": "esriCTNonImageContent"
+                                }, imageThumbnailContainer);
+
+                                //Mouse hover event to show document title
+                                $(imageThumbnailContainer).mouseover(function (evt) {
+                                    domClass.add(evt.currentTarget.children[0], "esriCTHidden");
+                                    domClass.remove(evt.currentTarget.children[1], "esriCTHidden");
+                                });
+
+                                //Mouse out event to show image thumbnail
+                                $(imageThumbnailContainer).mouseout(function (evt) {
+                                    domClass.remove(evt.currentTarget.children[0], "esriCTHidden");
+                                    domClass.add(evt.currentTarget.children[1], "esriCTHidden");
+                                });
+
+                                imageContainer = domConstruct.create("div", {}, imageThubnailContent);
+
+                                fileTypeContainer = domConstruct.create("div", {
+                                    "class": "esriCTNonFileTypeContent"
+                                }, imageThubnailContent);
+
+                                isAttachmentAvailable = true;
+                                //set default image path if attachment has no image URL
+                                imagePath = dojoConfig.baseURL + this.appConfig.noAttachmentIcon;
+                                imageDiv = domConstruct.create("img", {
+                                    "alt": infos[i].url,
+                                    "class": "esriCTAttachmentImg",
+                                    "src": imagePath
+                                }, imageContainer);
+                                this._fetchDocumentContentType(infos[i], fileTypeContainer);
+                                this._fetchDocumentName(infos[i], imageThumbnailContainer);
+                                on(imageThumbnailContainer, "click", lang.hitch(this, this._displayImageAttachments));
+                            }
+                        }
+                        if (!isAttachmentAvailable) {
+                            domClass.add(attachmentContainer, "hidden");
                         }
                     }
-                    if (!isAttachmentAvailable) {
-                        domClass.add(attachmentContainer, "hidden");
-                    }
-                }
-            }));
+                }));
+            }
         },
+
+        /**
+        * Function to fetch document content type
+        * @param{object} attachment object
+        * @memberOf widgets/details-panel/popup
+        **/
+        _fetchDocumentContentType: function (attachmentData, fileTypeContainer) {
+            var attachmentType = attachmentData.contentType.split("/")[1], typeText;
+            switch (attachmentType) {
+            case "pdf":
+                typeText = ".PDF";
+                break;
+            case "plain":
+                typeText = ".TXT";
+                break;
+            case "vnd.ms-powerpoint":
+                typeText = ".PPT";
+                break;
+            case "vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                typeText = ".XLSX";
+                break;
+            case "vnd.openxmlformats-officedocument.wordprocessingml.document":
+                typeText = ".DOCX";
+                break;
+            case "octet-stream":
+                typeText = ".ZIP";
+                break;
+            default:
+                typeText = ".DOCX";
+            }
+            domAttr.set(fileTypeContainer, "innerHTML", typeText);
+        },
+
+        /**
+        * Function to fetch document name
+        * @param{object} attachment object
+        * @param{object} dom node
+        * @memberOf widgets/details-panel/popup
+        **/
+        _fetchDocumentName: function (attachmentData, container) {
+            var attachmentName;
+            attachmentName = domConstruct.create("div", {
+                "class": "esriCTNonImageName esriCTHidden",
+                "innerHTML": attachmentData.name
+            }, container);
+        },
+
 
         /**
         * This function is used to show attachments in new window when user clicks on the attachment thumbnail
@@ -264,7 +357,15 @@ define([
         * @memberOf widgets/details-panel/popup
         **/
         _displayImageAttachments: function (evt) {
-            window.open(evt.target.alt);
+            window.open(domAttr.get(evt.currentTarget, "alt"));
+        },
+
+        /**
+        * Event listner for edit mode
+        * @memberOf widgets/details-panel/popup
+        **/
+        popupEditModeEnabled: function (isEditMode) {
+            return isEditMode;
         }
     });
 });

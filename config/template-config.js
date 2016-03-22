@@ -1,20 +1,20 @@
 /*global define */
 /*jslint sloppy:true */
 /*
-| Copyright 2014 Esri
-|
-| Licensed under the Apache License, Version 2.0 (the "License");
-| you may not use this file except in compliance with the License.
-| You may obtain a copy of the License at
-|
-|    http://www.apache.org/licenses/LICENSE-2.0
-|
-| Unless required by applicable law or agreed to in writing, software
-| distributed under the License is distributed on an "AS IS" BASIS,
-| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-| See the License for the specific language governing permissions and
-| limitations under the License.
-*/
+ | Copyright 2014 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+ */
 define({
     // When true, the template will query arcgis.com for the webmap item.
     "queryForWebmap": false,
@@ -25,7 +25,7 @@ define({
     // Use a local hosted webmap instead of a webmap on ArcGIS or portal.
     "useLocalWebmap": false,
     // support sending credentials with AJAX requests to specific domains. This will allow editing of feature services secured with web-tier authentication
-    "webTierSecurity": false,
+    "webTierSecurity": true,
     // Webmap file to use for the local webmap
     "localWebmapFile": "config/demo-map",
     // When true the template will query arcgis.com for default settings for helper services, units etc. If you

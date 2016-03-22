@@ -1,15 +1,20 @@
 ﻿<div class="esriCTFullHeightWidth">
     <div data-dojo-attach-point="esriCTDetailsPanelTabContainer" class="esriCTDetailsPanelTabContainer">
         <ul class="nav nav-tabs nav-justified" data-dojo-attach-point="tabList" style="display: none;">
-            <li id="popupTab" class="active"><a data-toggle="pill" href="#popupTabPanel">${i18n.detailsPanel.popupTabText}
+            <li id="popupTab" class="active"><a class="esriCTTabAnchor" data-toggle="pill" href="#popupTabPanel">
+                ${i18n.detailsPanel.popupTabText} ${i18n.detailsPanel.popupTabText}</a></li>
+            <li id="mediaTab" style="display: none;"><a class="esriCTTabAnchor" data-toggle="pill"
+                href="#mediaTabPanel">${i18n.detailsPanel.mediaTabText}</a></li>
+            <li id="commentsTab" style="display: none;"><a class="esriCTTabAnchor2" data-toggle="pill"
+                href="#commentsTabPanel">
+                <div class="esriCTCommentsBadgeContainer">
+                    ${i18n.detailsPanel.commentsTabText}</div>
+                <div class="badge" id="commentsTotalCount">
+                </div>
             </a></li>
-            <li id="mediaTab" style="display: none;"><a data-toggle="pill" href="#mediaTabPanel">
-                ${i18n.detailsPanel.mediaTabText}</a></li>
-            <li id="commentsTab" style="display: none;"><a data-toggle="pill" href="#commentsTabPanel">
-                ${i18n.detailsPanel.commentsTabText}</a></li>
         </ul>
         <div class="tab-content" id="tabContent">
-            <div id="popupTabPanel" class="tab-pane fade active in">
+            <div id="popupTabPanel" class="tab-pane fade active in esriCTPopupWrapperContainer">
                 <div id="popupWrapperContainer">
                 </div>
             </div>

@@ -55,6 +55,11 @@
     {
         top: 59px;
     }
+
+    .esriSimpleSliderDecrementButton:hover, .esriSimpleSliderIncrementButton:hover
+    {
+        background-color: #fff;
+    }
 }
 
 /* Common devices & browsers ends */

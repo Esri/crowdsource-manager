@@ -1,9 +1,9 @@
 $(function(){
     //$("table").stickyTableHeaders({container: "#container"});
-    //$("table").stickyTableHeaders();
 });
 /*! Copyright (c) 2011 by Jonas Mosbech - https://github.com/jmosbech/StickyTableHeaders
-    MIT license info: https://github.com/jmosbech/StickyTableHeaders/blob/master/license.txt */
+    MIT license info: https://github.com/jmosbech/StickyTableHeaders/blob/master/license.txt 
+    sample used: http://jsfiddle.net/LqZ2T/42/ */
 
 ;(function ($, window, undefined) {
     'use strict';
@@ -94,7 +94,12 @@ $(function(){
             var containerOffset = base.getContainerOffset();
             var elementOffset = base.$el.offset();
             var scrollLeft = base.$container.scrollLeft() + base.$window.scrollLeft();
-            var newLeft = containerOffset.left - scrollLeft;
+            var newLeft;
+            if ($("body").css("direction").toLowerCase() == "rtl"){
+                newLeft = containerOffset.left - scrollLeft + 18;
+            } else{
+                newLeft = containerOffset.left - scrollLeft;
+            }
             var newTop;                    
             if(windowScrollTop > containerOffset.top) {
                 newTop = 0;

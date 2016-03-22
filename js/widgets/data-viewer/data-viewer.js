@@ -1,20 +1,20 @@
 ﻿/*global define,dojo,alert,moment,$,setTimeout */
 /*jslint sloppy:true */
 /*
-| Copyright 2014 Esri
-|
-| Licensed under the Apache License, Version 2.0 (the "License");
-| you may not use this file except in compliance with the License.
-| You may obtain a copy of the License at
-|
-|    http://www.apache.org/licenses/LICENSE-2.0
-|
-| Unless required by applicable law or agreed to in writing, software
-| distributed under the License is distributed on an "AS IS" BASIS,
-| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-| See the License for the specific language governing permissions and
-| limitations under the License.
-*/
+ | Copyright 2014 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+ */
 define([
     "dojo/_base/declare",
     "dojo/dom-construct",
@@ -87,6 +87,8 @@ define([
         _featureObjectID: null, // store objectid of feature selected
         _isRowFound: false, // keeps track whether row is available in grid when user selects feature from map
         _manualRefreshDataObj: {}, // keep the track of last sorting and the column number on which sorting performed
+        _filterRefreshDataObj: {}, // keep the track of last horizontal position to regain data-viewer position after filter applied
+        isEditMode: false,
 
         /**
         * This function is called when widget is constructed
@@ -163,10 +165,10 @@ define([
                 if (this.popupInfo) {
                     this._selectRowGraphicsLayer.setInfoTemplate(new PopupTemplate(this.popupInfo));
                 }
-                this.attachEventToGraphicsLayer(this._selectRowGraphicsLayer);
                 // Create and add a graphic layer on the map
                 this.map.addLayer(this._selectRowGraphicsLayer);
             }
+            this.attachEventToGraphicsLayer(this._selectRowGraphicsLayer);
         },
 
         /**
@@ -278,6 +280,13 @@ define([
                     this._scrollToActivatedFeature(0, true);
                 }
             }
+            // filter applied is applied on the layer and data-viewer refreshed
+            if (this.isFilterRefreshClicked) {
+                // if last horizontal position is set before filter is applied
+                if (this._filterRefreshDataObj && this._filterRefreshDataObj.lastHorizontalScrollPosition) {
+                    this._scrollToActivatedFeature(0, false);
+                }
+            }
             this._highlightUpdatedFeature();
         },
 
@@ -290,6 +299,7 @@ define([
                 this._selectFeatureOnMapClick({ graphic: this.updatedFeature });
             } else {
                 this.isManualRefreshedClicked = false;
+                this.isFilterRefreshClicked = false;
             }
         },
 
@@ -481,7 +491,7 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _createDataViewerHeaderPanel: function () {
-            var columnHeader, thead, tr, i, theadClass, thTitleContainer, column, caretIcon, filterIcon;
+            var columnHeader, thead, tr, i, theadClass, thTitleContainer, column, filterIcon, caretAndFilterIconContainer, sortingIconDiv, ascendingIconDiv, descendingIconDiv;
             domConstruct.empty(this.dataViewerContainer);
             this._table = domConstruct.create("table", { "class": "table table-striped table-bordered", "cellspacing": "0", "cellpadding": "0" }, this.dataViewerContainer);
             thead = domConstruct.create("thead", {}, this._table);
@@ -498,16 +508,19 @@ define([
                         columnHeader = domConstruct.create("th", { "class": "esriCTHiddenColumn " + theadClass, "style": "min-width:300px;" });
                         domAttr.set(columnHeader, "colid", i);
                     } else {
-                        columnHeader = domConstruct.create("th", { "class": "esriCTTableHeaderDiv " + theadClass });
+                        columnHeader = domConstruct.create("th", { "class": "esriCTTableHeaderDiv " + theadClass, "style": "min-width:300px;" });
                         domAttr.set(columnHeader, "colid", i);
                     }
                     thTitleContainer = domConstruct.create("div", { "class": "esriCTThTitleContainer" }, columnHeader);
                     column = domConstruct.create("div", { "class": "esriCTTableHeader " + theadClass, "innerHTML": this._displayColumn[i].label }, thTitleContainer);
-                    caretIcon = domConstruct.create("div", { "class": "esriCTBlackCaretIcon esriCTSortAsc " + theadClass, "innerHTML": "&#9660;" }, thTitleContainer);
-                    filterIcon = domConstruct.create("div", { "class": "esriCTFilterIcon  esriCTSortDesc esriCTHiddenColumn " + theadClass }, thTitleContainer);
+                    caretAndFilterIconContainer = domConstruct.create("div", { "class": "esriCTCaretFilterIconDiv" }, thTitleContainer);
+                    sortingIconDiv = domConstruct.create("div", { "class": "esriCTBlackCaretIcon esriCTCaretIconParent " + theadClass }, caretAndFilterIconContainer);
+                    ascendingIconDiv = domConstruct.create("div", { "class": "esriCTSortAscDisable esriCTBlackCaretIcon Ascending" + i }, sortingIconDiv);
+                    descendingIconDiv = domConstruct.create("div", { "class": "esriCTSortDescDisable esriCTBlackCaretIcon Descending" + i }, sortingIconDiv);
+                    filterIcon = domConstruct.create("div", { "class": "esriCTFilterIcon  esriCTSortDesc esriCTHiddenColumn " + theadClass }, caretAndFilterIconContainer);
                     tr.appendChild(columnHeader);
                     // To set filter or Caret icon on column header
-                    this._toggleFilterCaretIcon(caretIcon, filterIcon, this._displayColumn[i].fieldName);
+                    this._toggleFilterCaretIcon(filterIcon, this._displayColumn[i].fieldName);
                     // Attach header click event
                     this._attachHeaderClickEvent(columnHeader, this._displayColumn[i].fieldName);
                 }
@@ -519,18 +532,22 @@ define([
         * To show or hide filter container div for corresponding clicked header title
         * @memberOf widgets/data-viewer/data-viewer
         */
-        _toggleFilterCaretIcon: function (caretIcon, filterIcon, columnClassName) {
+        _toggleFilterCaretIcon: function (filterIcon, columnClassName) {
             if (this.itemInfo && this.itemInfo.itemData && this.itemInfo.itemData.operationalLayers) {
                 array.forEach(this.itemInfo.itemData.operationalLayers, lang.hitch(this, function (layer) {
                     if (this.selectedOperationalLayer.id === layer.id && layer.definitionEditor) {
                         array.forEach(layer.definitionEditor.inputs, lang.hitch(this, function (input, index) {
-                            if ((this.appConfig && this.appConfig.enableFilter) || (this.appConfig._filterObject && this.appConfig._filterObject.inputs[index] && this.appConfig._filterObject.inputs[index].parameters[0].enableFilter)) {
-                                if (input.parameters[0].fieldName === columnClassName) {
-                                    if (caretIcon && !domClass.contains(caretIcon, "esriCTHiddenColumn")) {
-                                        domClass.add(caretIcon, "esriCTHiddenColumn");
+                            if (input.parameters[0].fieldName === columnClassName) {
+                                if (filterIcon && domClass.contains(filterIcon, "esriCTHiddenColumn")) {
+                                    domClass.remove(filterIcon, "esriCTHiddenColumn");
+                                }
+                                if ((this.appConfig && this.appConfig.enableFilter) || (this.appConfig._filterObject && this.appConfig._filterObject.inputs[index] && this.appConfig._filterObject.inputs[index].parameters[0].enableFilter)) {
+                                    if (filterIcon && domClass.contains(filterIcon, "esriCTDisableFilterIcon")) {
+                                        domClass.replace(filterIcon, "esriCTFilterIcon", "esriCTDisableFilterIcon");
                                     }
-                                    if (filterIcon && domClass.contains(filterIcon, "esriCTHiddenColumn")) {
-                                        domClass.remove(filterIcon, "esriCTHiddenColumn");
+                                } else {
+                                    if (filterIcon && domClass.contains(filterIcon, "esriCTFilterIcon")) {
+                                        domClass.replace(filterIcon, "esriCTDisableFilterIcon", "esriCTFilterIcon");
                                     }
                                 }
                             }
@@ -550,7 +567,7 @@ define([
             // binding click event for filter container on table header
             this.own(on(header, "click", lang.hitch(this, function (event) {
                 this.hideWebMapList();
-                var headerCoordinates, xCoordinate, title;
+                var headerCoordinates, xCoordinate, title, offsetLeft;
                 array.some(event.currentTarget.attributes, lang.hitch(this, function (currentAttribute) {
                     if (currentAttribute.name === "colid") {
                         currentChildNode = $("[filterParentContainerColumnID=" + currentAttribute.value + "]")[0];
@@ -564,15 +581,33 @@ define([
                     $(".esriCTFilterParentContainer").css("display", "none");
                     title = this._createClassName(headerTitle);
                     if (domClass.contains(header, title) && domStyle.get(currentChildNode, "display") !== "block") {
-                        headerCoordinates = domGeom.position(event.currentTarget, false);
-                        if (this.appConfig.i18n.direction === "ltr") {
-                            xCoordinate = ((headerCoordinates.x + headerCoordinates.w) - 270);
+                        //set scroll left if filter container is not visible
+                        headerCoordinates = domGeom.position(header, false);
+                        if (headerCoordinates.x > 0) {
+                            offsetLeft = this.dataViewerContainer.offsetWidth - headerCoordinates.x;
+                            if (offsetLeft < header.offsetWidth) {
+                                if (this.dataViewerContainer.scrollLeft > 0) {
+                                    offsetLeft = this.dataViewerContainer.scrollLeft + (header.offsetWidth - offsetLeft);
+                                } else {
+                                    offsetLeft = header.offsetWidth - offsetLeft;
+                                }
+                                this.dataViewerContainer.scrollLeft = offsetLeft;
+                            }
                         } else {
-                            xCoordinate = headerCoordinates.x + 20;
+                            this.dataViewerContainer.scrollLeft = this.dataViewerContainer.scrollLeft + headerCoordinates.x - 20;
                         }
-                        domStyle.set(currentChildNode, "left", parseInt(xCoordinate, 10) + "px");
-                        domStyle.set(currentChildNode, "display", "block");
+                        setTimeout(lang.hitch(this, function () {
+                            headerCoordinates = domGeom.position(header, false);
+                            if (this.appConfig.i18n.direction === "ltr") {
+                                xCoordinate = ((headerCoordinates.x + headerCoordinates.w) - 270);
+                            } else {
+                                xCoordinate = headerCoordinates.x + 20;
+                            }
+                            domStyle.set(currentChildNode, "left", parseInt(xCoordinate, 10) + "px");
+                            domStyle.set(currentChildNode, "display", "block");
+                        }), 50);
                     }
+                    this._filterWidgetObj._handleFilterComponentVisibilty(currentChildNode, this._selectRowGraphicsLayer.graphics.length, this.isEditMode);
                 }
             })));
         },
@@ -617,6 +652,123 @@ define([
         },
 
         /**
+        * This function will enable descending sort icon for current column id
+        * Param{int} contains column id
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        _setAscIconEnable: function (columnNumber) {
+            var columns, acsIconDivOriginal, descIconDivOriginal, acsIconDiv, descIconDiv, i;
+            columns = query(".tableFloatingHeaderOriginal th", this._table);
+            for (i = 0; i < columns.length; i++) {
+                if (i !== columnNumber) {
+                    acsIconDivOriginal = query(".esriCTBlackCaretIcon.Ascending" + i)[0];
+                    descIconDivOriginal = query(".esriCTBlackCaretIcon.Descending" + i)[0];
+                    acsIconDiv = query(".esriCTBlackCaretIcon.Ascending" + i)[1];
+                    descIconDiv = query(".esriCTBlackCaretIcon.Descending" + i)[1];
+                    this._resetSortingIcon(acsIconDivOriginal, descIconDivOriginal);
+                    this._resetSortingIcon(acsIconDiv, descIconDiv);
+                } else {
+                    acsIconDivOriginal = query(".esriCTBlackCaretIcon.Ascending" + columnNumber)[0];
+                    descIconDivOriginal = query(".esriCTBlackCaretIcon.Descending" + columnNumber)[0];
+                    acsIconDiv = query(".esriCTBlackCaretIcon.Ascending" + columnNumber)[1];
+                    descIconDiv = query(".esriCTBlackCaretIcon.Descending" + columnNumber)[1];
+                    this._setAscSortingIcon(acsIconDivOriginal, descIconDivOriginal);
+                    this._setAscSortingIcon(acsIconDiv, descIconDiv);
+                }
+            }
+        },
+
+        /**
+        * This function will enable descending sort icon for current column id
+        * Param{int} contains column id
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        _setDescIconEnable: function (columnNumber) {
+            var columns, acsIconDivOriginal, descIconDivOriginal, acsIconDiv, descIconDiv, i;
+            columns = query(".tableFloatingHeaderOriginal th", this._table);
+            for (i = 0; i < columns.length; i++) {
+                if (i !== columnNumber) {
+                    acsIconDivOriginal = query(".esriCTBlackCaretIcon.Ascending" + i)[0];
+                    descIconDivOriginal = query(".esriCTBlackCaretIcon.Descending" + i)[0];
+                    acsIconDiv = query(".esriCTBlackCaretIcon.Ascending" + i)[1];
+                    descIconDiv = query(".esriCTBlackCaretIcon.Descending" + i)[1];
+                    this._resetSortingIcon(acsIconDivOriginal, descIconDivOriginal);
+                    this._resetSortingIcon(acsIconDiv, descIconDiv);
+                } else {
+                    acsIconDivOriginal = query(".esriCTBlackCaretIcon.Ascending" + columnNumber)[0];
+                    descIconDivOriginal = query(".esriCTBlackCaretIcon.Descending" + columnNumber)[0];
+                    acsIconDiv = query(".esriCTBlackCaretIcon.Ascending" + columnNumber)[1];
+                    descIconDiv = query(".esriCTBlackCaretIcon.Descending" + columnNumber)[1];
+                    this._setDescSortingIcon(acsIconDivOriginal, descIconDivOriginal);
+                    this._setDescSortingIcon(acsIconDiv, descIconDiv);
+                }
+            }
+        },
+
+        /**
+        * This function will reset sort icons
+        * Param{node} contains asc icon node
+        * Param{node} contains desc icon node
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        _resetSortingIcon: function (acsIconDiv, descIconDiv) {
+            if (acsIconDiv && domClass.contains(acsIconDiv, "esriCTSortAsc")) {
+                domClass.replace(acsIconDiv, "esriCTSortAscDisable", "esriCTSortAsc");
+            }
+            if (descIconDiv && domClass.contains(descIconDiv, "esriCTSortDesc")) {
+                domClass.replace(descIconDiv, "esriCTSortDescDisable", "esriCTSortDesc");
+            }
+            if (acsIconDiv && domClass.contains(acsIconDiv, "esriCTVisibilityHidden")) {
+                domClass.remove(acsIconDiv, "esriCTVisibilityHidden");
+            }
+            if (descIconDiv && domClass.contains(descIconDiv, "esriCTVisibilityHidden")) {
+                domClass.remove(descIconDiv, "esriCTVisibilityHidden");
+            }
+        },
+
+        /**
+        * This function will enable ascending sort icon for current column id
+        * Param{node} contains asc icon node
+        * Param{node} contains desc icon node
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        _setAscSortingIcon: function (acsIconDiv, descIconDiv) {
+            if (acsIconDiv && domClass.contains(acsIconDiv, "esriCTSortAscDisable")) {
+                domClass.replace(acsIconDiv, "esriCTSortAsc", "esriCTSortAscDisable");
+            }
+            if (acsIconDiv && domClass.contains(acsIconDiv, "esriCTVisibilityHidden")) {
+                domClass.remove(acsIconDiv, "esriCTVisibilityHidden");
+            }
+            if (descIconDiv && domClass.contains(descIconDiv, "esriCTSortDesc")) {
+                domClass.replace(descIconDiv, "esriCTSortDescDisable", "esriCTSortDesc");
+            }
+            if (descIconDiv && !domClass.contains(descIconDiv, "esriCTVisibilityHidden")) {
+                domClass.add(descIconDiv, "esriCTVisibilityHidden");
+            }
+        },
+
+        /**
+        * This function will enable descending sort icon for current column id
+        * Param{node} contains asc icon node
+        * Param{node} contains desc icon node
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        _setDescSortingIcon: function (acsIconDiv, descIconDiv) {
+            if (domClass.contains(acsIconDiv, "esriCTSortAsc")) {
+                domClass.replace(acsIconDiv, "esriCTSortAscDisable", "esriCTSortAsc");
+            }
+            if (acsIconDiv && !domClass.contains(acsIconDiv, "esriCTVisibilityHidden")) {
+                domClass.add(acsIconDiv, "esriCTVisibilityHidden");
+            }
+            if (domClass.contains(descIconDiv, "esriCTSortDescDisable")) {
+                domClass.replace(descIconDiv, "esriCTSortDesc", "esriCTSortDescDisable");
+            }
+            if (descIconDiv && domClass.contains(descIconDiv, "esriCTVisibilityHidden")) {
+                domClass.remove(descIconDiv, "esriCTVisibilityHidden");
+            }
+        },
+
+        /**
         * This function is used to create filter widget
         * @memberOf widgets/data-viewer/data-viewer
         */
@@ -637,6 +789,9 @@ define([
             this._filterWidgetObj = new Filter(filterParameters, domConstruct.create("div", {}, filterParentContainer));
             // creating UI Filters, only if the field contains 'ask for value' filters checked for the layer
             this._filterWidgetObj.startup();
+            this._filterWidgetObj.filterRefresh = lang.hitch(this, function () {
+                this.storeDataForFilterRefresh();
+            });
         },
 
         /**
@@ -674,12 +829,15 @@ define([
             // otherwise sort in descending order
             if (sortingOrder === "ASC") {
                 this._manualRefreshDataObj.sortingOrder = "ASC";
+                this._setAscIconEnable(columnNumber);
                 $('table').trigger('sorton', [[[columnNumber, 0]]]);
             } else {
                 this._manualRefreshDataObj.sortingOrder = "DESC";
+                this._setDescIconEnable(columnNumber);
                 $('table').trigger('sorton', [[[columnNumber, 1]]]);
             }
             this._manualRefreshDataObj.columnNumber = columnNumber;
+            this._scrollToActivatedFeature(0, false);
             this._hideFilterContainer();
         },
 
@@ -945,7 +1103,7 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _scrollToActivatedFeature: function (rowNumber, manualRefreshScroll) {
-            var scrollTopValue;
+            var scrollTopValue, scrollLeftValue;
             $('.esriCTDataViewerContainer').animate({
                 scrollTop: 0
             }, 0);
@@ -959,8 +1117,16 @@ define([
                     scrollTopValue = $('.esriCTDataViewerContainer tr:eq(' + rowNumber + ')').offset().top;
                     scrollTopValue = scrollTopValue - 150;
                 }
+                // if last horizontal scroll position is set before filter applied then set scroll
+                // position same as it was earlier else set the scroll to left 0
+                if (this._filterRefreshDataObj && this._filterRefreshDataObj.lastHorizontalScrollPosition && this.isFilterRefreshClicked) {
+                    scrollLeftValue = this._filterRefreshDataObj.lastHorizontalScrollPosition;
+                    this.isFilterRefreshClicked = false;
+                }
+
                 $('.esriCTDataViewerContainer').animate({
-                    scrollTop: $('.esriCTDataViewerContainer').scrollTop() + scrollTopValue
+                    scrollTop: $('.esriCTDataViewerContainer').scrollTop() + scrollTopValue,
+                    scrollLeft: scrollLeftValue
                 }, 400);
             }
             this.appUtils.hideLoadingIndicator();
@@ -1159,11 +1325,31 @@ define([
         },
 
         /**
+        * This function is used to store data needed to retain scroll position
+        * when user apply filter
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        storeDataForFilterRefresh: function () {
+            var filterRefreshDataObj;
+            filterRefreshDataObj = {};
+            filterRefreshDataObj.lastHorizontalScrollPosition = (this._filterRefreshDataObj && this._filterRefreshDataObj.lastHorizontalScrollPosition) ? this._filterRefreshDataObj.lastHorizontalScrollPosition : 0;
+            this.updateFilterRefreshData(filterRefreshDataObj);
+        },
+
+        /**
         * This function is used to update manual refresh data
         * @memberOf widgets/data-viewer/data-viewer
         */
         updateManualRefreshData: function (manualRefreshDataObj) {
             return manualRefreshDataObj;
+        },
+
+        /**
+        * This function is used to update filter refresh data
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        updateFilterRefreshData: function (filterRefreshDataObj) {
+            return filterRefreshDataObj;
         },
 
         /**
@@ -1174,7 +1360,9 @@ define([
             var lastPos = 0;
             // binding on scroll event on data viewer parent container
             on(this.dataViewerContainer, "scroll", lang.hitch(this, function (event) {
+                this.hideWebMapList();
                 this._manualRefreshDataObj.lastVerticalScrollPosition = event.currentTarget.scrollTop;
+                this._filterRefreshDataObj.lastHorizontalScrollPosition = event.currentTarget.scrollLeft;
                 this._hideFilterContainer();
                 var currPos = $(this.dataViewerContainer).scrollLeft();
                 if (lastPos < currPos) {
