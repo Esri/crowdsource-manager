@@ -1,5 +1,5 @@
 /*global define,location */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
+/*jslint sloppy:true */
 /*
  | Copyright 2014 Esri
  |
@@ -16,26 +16,29 @@
  | limitations under the License.
  */
 define({
-    //Default configuration settings for the application. This is where you'll define things like a bing maps key,
-    //default group, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
+    // Default configuration settings for the application. This is where you'll define things like a bing maps key,
+    // default group, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
     "appid": "",
     "oauthappid": null,
-    //Group templates must support a group url parameter. This will contain the id of the group.
+    // Group templates must support a group url parameter. This will contain the id of the group.
     "group": "4c4ea6122c1a4313bab674bc4d9cf83b",
-    //Enter the url to the proxy if needed by the application. See the 'Using the proxy page' help topic for details
-    //http://developers.arcgis.com/en/javascript/jshelp/ags_proxy.html
+    // Enter the url to the proxy if needed by the application. See the 'Using the proxy page' help topic for details
+    // http://developers.arcgis.com/en/javascript/jshelp/ags_proxy.html
     "proxyurl": "proxy.ashx",
-    //Example of a template specific property. If your template had several color schemes
-    //you could define the default here and setup configuration settings to allow users to choose a different
-    //color theme.
-    "theme": "#d15706",
+    // Example of a template specific property. If your template had several color schemes
+    // you could define the default here and setup configuration settings to allow users to choose a different
+    // color theme.
+    "theme": "#f26e1f",
     "bingKey": "", //Enter the url to your organizations bing maps key if you want to use bing basemaps
-    //Defaults to arcgis.com. Set this value to your portal or organization host name.
+    // Defaults to arcgis.com. Set this value to your portal or organization host name.
     "sharinghost": location.protocol + "//" + "arcgis.com",
     "units": null,
-    //If your applcation needs to edit feature layer fields set this value to true. When false the map will
-    //be dreated with layers that are not set to editable which allows the FeatureLayer to load features optimally.
+    // If your applcation needs to edit feature layer fields set this value to true. When false the map will
+    // be dreated with layers that are not set to editable which allows the FeatureLayer to load features optimally.
     "editable": false,
+    "markerSymbol": "./images/esri-blue-pin-circle-26.png",
+    "markerSymbolWidth": 26,
+    "markerSymbolHeight": 26,
     "helperServices": {
         "geometry": {
             "url": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer"
@@ -88,6 +91,16 @@ define({
     "commentField": "COMMENTS",
     // to display comment table popup info
     "usePopupConfigurationForComment": false,
-    // to set the color of feature that is activated by selecting particular row
-    "activeRow": "#C8C8C8"
+    // to set the color of feature that is highlighted by selecting a particular row
+    "highlightRow": "#C8C8C8",
+    // to show non editable layers on selected web map
+    "showNonEditableLayers": false,
+    // configurable message to indicate that user needs to select record to view the details panel
+    "selectFeatureMessage": "Select a feature to get started",
+    // To enable or disable filters, applied on the selected layer
+    "enableFilter": true,
+    // To set title for help dialog
+    "helpDialogTitle": "Help Page",
+    // To set content for help dialog
+    "helpDialogContent": "<p>Crowdsource Manager, a companion group template to Crowdsource Reporter, allows users within an organization to review problems or observations submitted through the Reporter application.</p>"
 });
