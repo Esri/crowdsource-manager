@@ -21,6 +21,7 @@ define([
     "dijit/_TemplatedMixin",
     "dojo/_base/lang",
     "dojo/_base/array",
+    "dojo/_base/kernel",
     "dojo/dom-construct",
     "dojo/dom-class",
     "dojo/query",
@@ -29,6 +30,8 @@ define([
     "dojo/on",
     'dojo/dom-attr',
     "esri/graphic",
+    "dojo/dom-geometry",
+    "dojo/dom-style",
     "dojo/text!./templates/comment-form.html"
 ], function (
     declare,
@@ -36,6 +39,7 @@ define([
     _TemplatedMixin,
     lang,
     array,
+    kernel,
     domConstruct,
     domClass,
     query,
@@ -44,6 +48,8 @@ define([
     on,
     domAttr,
     Graphic,
+    domGeom,
+    domStyle,
     commentForm
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
@@ -599,8 +605,12 @@ define([
                 referenceNode = dom.byId(this.commentTable.typeIdField).parentNode;
                 // code to populate type dependent fields
                 array.forEach(this._sortedFields, lang.hitch(this, function (currentInput, index) {
-                    var field = null,
-                        fieldAttribute;
+                    var field = null, hasDomainValue, hasDefaultValue, fieldAttribute;
+                    hasDomainValue = selectedType.domains[currentInput.name];
+                    hasDefaultValue = selectedType.templates[0].prototype.attributes[currentInput.name];
+                    if ((hasDomainValue && hasDomainValue.type !== "inherited") || (hasDefaultValue && !currentInput.typeField)) {
+                        currentInput.isTypeDependent = true;
+                    }
                     // condition to filter out fields independent of subtypes
                     if (!currentInput.isTypeDependent) {
                         return true;
@@ -1003,7 +1013,7 @@ define([
         * Format input values
         * @param{object} currentField, current targeted field
         * @param{int} typeCastedInputValue , input integer value of field
-        * @memberOf widgets/geo-form/geo-form
+        * @memberOf widgets/details-panel/comment-form
         */
         _setFormatToValue: function (currentField, typeCastedInputValue, node) {
             var toFixedValue;
@@ -1096,7 +1106,11 @@ define([
                 $(this.parentElement).data("DateTimePicker").hide();
             });
             // Attach datetime picker to the container
-            $(parentNode).datetimepicker({}).on('dp.show', function (evt) {
+            $(parentNode).datetimepicker({ locale: kernel.locale }).on('dp.show', function (evt) {
+                var datePickerDialogBox, datePickerPosition;
+                datePickerPosition = domGeom.position(evt.currentTarget, true);
+                datePickerDialogBox = query(".bootstrap-datetimepicker-widget.dropdown-menu")[0];
+                domStyle.set(datePickerDialogBox, "position", "fixed");
                 if (isRangeField) {
                     value = new Date(query("input", this)[0].value);
                     minVlaue = new Date(currentField.domain.minValue);

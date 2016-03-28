@@ -1,20 +1,20 @@
 ﻿/*global define,dojo,alert,moment,$,setTimeout */
 /*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
 define([
     "dojo/_base/declare",
     "dojo/dom-construct",
@@ -283,7 +283,7 @@ define([
             // filter applied is applied on the layer and data-viewer refreshed
             if (this.isFilterRefreshClicked) {
                 // if last horizontal position is set before filter is applied
-                if (this._filterRefreshDataObj && this._filterRefreshDataObj.lastHorizontalScrollPosition) {
+                if (this._filterRefreshDataObj && this._filterRefreshDataObj.lastHorizontalScrollPosition !== "") {
                     this._scrollToActivatedFeature(0, false);
                 }
             }
@@ -579,6 +579,7 @@ define([
                     this._filterWidgetObj._showAppliedFilterValue(headerTitle);
                 } else {
                     $(".esriCTFilterParentContainer").css("display", "none");
+                    this._filterWidgetObj._showAppliedFilterValue(headerTitle);
                     title = this._createClassName(headerTitle);
                     if (domClass.contains(header, title) && domStyle.get(currentChildNode, "display") !== "block") {
                         //set scroll left if filter container is not visible
@@ -591,7 +592,7 @@ define([
                                 } else {
                                     offsetLeft = header.offsetWidth - offsetLeft;
                                 }
-                                this.dataViewerContainer.scrollLeft = offsetLeft;
+                                this.dataViewerContainer.scrollLeft = offsetLeft + 20;
                             }
                         } else {
                             this.dataViewerContainer.scrollLeft = this.dataViewerContainer.scrollLeft + headerCoordinates.x - 20;
@@ -1032,44 +1033,46 @@ define([
         _selectRowOnFeatureClick: function (objectId, selectRow, ctrlFlag) { //ignore jslint
             var i, selectedRowObjID, rowNumber, isRowSelected = false;
             this._isRowFound = false;
-            for (i = 0; i < this._table.rows.length; i++) {
-                selectedRowObjID = parseInt(domAttr.get(this._table.rows[i], "OBJID"), 10);
-                if (objectId === selectedRowObjID) {
-                    this._isRowFound = true;
-                    rowNumber = i;
-                    if (domClass.contains(this._table.rows[i], "esriCTRowHighlighted")) {
-                        if (ctrlFlag) {
-                            this._removeHighLightedFeatureOnRowClick(objectId);
-                            domClass.remove(this._table.rows[i], "esriCTRowHighlighted");
-                            isRowSelected = false;
+            if (this._table && this._table.rows && this._table.rows.length > 1) {
+                for (i = 0; i < this._table.rows.length; i++) {
+                    selectedRowObjID = parseInt(domAttr.get(this._table.rows[i], "OBJID"), 10);
+                    if (objectId === selectedRowObjID) {
+                        this._isRowFound = true;
+                        rowNumber = i;
+                        if (domClass.contains(this._table.rows[i], "esriCTRowHighlighted")) {
+                            if (ctrlFlag) {
+                                this._removeHighLightedFeatureOnRowClick(objectId);
+                                domClass.remove(this._table.rows[i], "esriCTRowHighlighted");
+                                isRowSelected = false;
+                            } else {
+                                if (query(".esriCTRowHighlighted", this._table).length > 1) {
+                                    this._clearSelection();
+                                    this._deselectTableRows();
+                                    domClass.add(this._table.rows[i], "esriCTRowHighlighted");
+                                    isRowSelected = true;
+                                } else {
+                                    this._clearSelection();
+                                    this._deselectTableRows();
+                                    domClass.remove(this._table.rows[i], "esriCTRowHighlighted");
+                                    isRowSelected = false;
+                                }
+                            }
                         } else {
-                            if (query(".esriCTRowHighlighted", this._table).length > 1) {
-                                this._clearSelection();
-                                this._deselectTableRows();
+                            if (ctrlFlag) {
                                 domClass.add(this._table.rows[i], "esriCTRowHighlighted");
                                 isRowSelected = true;
                             } else {
                                 this._clearSelection();
                                 this._deselectTableRows();
-                                domClass.remove(this._table.rows[i], "esriCTRowHighlighted");
-                                isRowSelected = false;
+                                domClass.add(this._table.rows[i], "esriCTRowHighlighted");
+                                isRowSelected = true;
                             }
                         }
-                    } else {
-                        if (ctrlFlag) {
-                            domClass.add(this._table.rows[i], "esriCTRowHighlighted");
-                            isRowSelected = true;
-                        } else {
-                            this._clearSelection();
-                            this._deselectTableRows();
-                            domClass.add(this._table.rows[i], "esriCTRowHighlighted");
-                            isRowSelected = true;
-                        }
+                        break;
                     }
-                    break;
                 }
+                this.appUtils.hideLoadingIndicator();
             }
-            this.appUtils.hideLoadingIndicator();
             if (this._isRowFound && selectRow) {
                 this._scrollToActivatedFeature(rowNumber);
             } else {
@@ -1119,7 +1122,7 @@ define([
                 }
                 // if last horizontal scroll position is set before filter applied then set scroll
                 // position same as it was earlier else set the scroll to left 0
-                if (this._filterRefreshDataObj && this._filterRefreshDataObj.lastHorizontalScrollPosition && this.isFilterRefreshClicked) {
+                if (this._filterRefreshDataObj && this._filterRefreshDataObj.lastHorizontalScrollPosition !== "" && this.isFilterRefreshClicked) {
                     scrollLeftValue = this._filterRefreshDataObj.lastHorizontalScrollPosition;
                     this.isFilterRefreshClicked = false;
                 }
@@ -1332,7 +1335,7 @@ define([
         storeDataForFilterRefresh: function () {
             var filterRefreshDataObj;
             filterRefreshDataObj = {};
-            filterRefreshDataObj.lastHorizontalScrollPosition = (this._filterRefreshDataObj && this._filterRefreshDataObj.lastHorizontalScrollPosition) ? this._filterRefreshDataObj.lastHorizontalScrollPosition : 0;
+            filterRefreshDataObj.lastHorizontalScrollPosition = (this._filterRefreshDataObj && this._filterRefreshDataObj.lastHorizontalScrollPosition !== "") ? this._filterRefreshDataObj.lastHorizontalScrollPosition : 0;
             this.updateFilterRefreshData(filterRefreshDataObj);
         },
 

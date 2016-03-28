@@ -1,5 +1,5 @@
-﻿/*global $*/
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4*/
+﻿/*global $,window */
+/*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
 |
@@ -47,7 +47,7 @@ $(window).load(function () {
             }
         },
 
-        resize: function (event, ui) {
+        resize: function (event, ui) {//ignore jslint
             var that = $(this).data("ui-resizable"),
                 o = that.options,
                 os = that.originalSize,
@@ -68,7 +68,7 @@ $(window).load(function () {
                                 "width", "height", "top", "left"
                             ];
 
-                        $.each(css, function (i, prop) {
+                        $.each(css, function (i, prop) {//ignore jslint
                             var sum = (start[prop] || 0) - (delta[prop] ||
                                 0);
                             if (sum && sum >= 0) {

@@ -101,7 +101,7 @@ define([
                         if ((infos && infos.length > 0) || (this._chartInfo && this._chartInfo.length > 0)) {
                             this._createDynamicCarousel(infos);
                         } else {
-                            this._showNoMedaiFound();
+                            this._showNoMediaFound();
                         }
                     }), lang.hitch(this, function () {
                         /*hide Loading indicator */
@@ -136,7 +136,10 @@ define([
                 $('#carousel-widget').carousel({
                     interval: false,    // to stop auto display animation
                     wrap: false         // to stop circular rotation in carousel
-                });
+                }).on('slid.bs.carousel', lang.hitch(this, function () {
+                    var currentIndex = $('#carousel-widget .carousel-inner .item.active').index();
+                    this._enableDisableArrow(currentIndex, slideCount);
+                }));
                 this._enableDisableArrow(0, slideCount);
                 resizeEvent = on(dom.byId("mediaTab"), "click", lang.hitch(this, function () {
                     resizeEvent.remove();
@@ -144,20 +147,32 @@ define([
                     this._resizeMediaChart(0, slideCount);
                 }));
             } else {
-                this._showNoMedaiFound();
+                this._showNoMediaFound();
             }
         },
 
+        /**
+        * This function is used to open media images
+        * @memberOf widgets/details-panel/media
+        */
         _openMediaImages: function () {
             var mediaImages = $('#carousel-widget .esriViewPopup .gallery .frame img'), i;
             for (i = 0; i < this._eventCollection.length; i++) {
-                this._eventCollection[i].remove && this._eventCollection[i].remove();
+                if (this._eventCollection[i].remove) {
+                    this._eventCollection[i].remove();
+                }
             }
             for (i = 0; i < mediaImages.length; i++) {
-                this._eventCollection.push(on(mediaImages[i], "click", function () {
-                    window.open(this.src);
-                }));
+                this._eventCollection.push(on(mediaImages[i], "click", this._showImgInNewTab));
             }
+        },
+
+        /**
+        * This function is used to show media images in diffrent tab when user clicks on it
+        * @memberOf widgets/details-panel/media
+        */
+        _showImgInNewTab: function () {
+            window.open(this.src);
         },
 
         /**
@@ -166,7 +181,7 @@ define([
         * @memberOf widgets/details-panel/media
         */
         _addChartsToCarousel: function (slideCount) {
-            var chartContaner, popupContentPane, chartCount = slideCount;
+            var chartContaner, popupContentPane, totalSlideCount = slideCount;
             if (this._chartInfo && this._chartInfo.length > 0) {
                 $('<div class="item"><div id="esriCTChartContainer"></div></div>').appendTo('.carousel-inner');
 
@@ -174,11 +189,11 @@ define([
                 popupContentPane = new ContentPane({}, chartContaner);
                 popupContentPane.startup();
                 popupContentPane.set("content", this._infoContent);
-                this._attachNextPrevEvents(slideCount);
-                this._showMediaCaption(0, slideCount);
-                chartCount = slideCount + 1;
+                totalSlideCount = slideCount + 1;
+                this._attachNextPrevEvents(totalSlideCount);
+                this._showMediaCaption(0, totalSlideCount);
             }
-            return chartCount;
+            return totalSlideCount;
         },
 
         /**
@@ -190,39 +205,38 @@ define([
             on(this.slidePrev, "click", lang.hitch(this, function (evt) {
                 var currentIndex = $('#carousel-widget .carousel-inner .item.active').index();
                 this._resizeMediaChart(currentIndex, slideCount);
-                if (parseInt(currentIndex, 10) === slideCount && this._chartIndex !== 0) {
+                if (parseInt(currentIndex, 10) === slideCount - 1 && this._chartIndex !== 0) {
                     this._chartIndex--;
                     evt.stopPropagation();
+                    this._enableDisableArrow(currentIndex, slideCount);
                     this._infoWidget._goToPrevMedia();
                 }
                 this._showMediaCaption(currentIndex, slideCount);
-                this._enableDisableArrow(currentIndex - 1, slideCount);
                 this._openMediaImages();
             }));
 
             on(this.slideNext, "click", lang.hitch(this, function (evt) {
                 var currentIndex = $('#carousel-widget .carousel-inner .item.active').index();
                 this._resizeMediaChart(currentIndex, slideCount);
-                if (parseInt(currentIndex, 10) === slideCount && this._chartIndex !== this._chartInfo.length - 1) {
+                if (parseInt(currentIndex, 10) === slideCount - 1 && this._chartIndex !== this._chartInfo.length - 1) {
                     this._chartIndex++;
                     evt.stopPropagation();
+                    this._enableDisableArrow(currentIndex, slideCount);
                     this._infoWidget._goToNextMedia();
                 }
                 this._showMediaCaption(currentIndex, slideCount);
-                this._enableDisableArrow(currentIndex, slideCount);
                 this._openMediaImages();
             }));
         },
 
         /**
-        * This function is used to show no medai Found info
+        * This function is used to show no media Found info
         * @memberOf widgets/details-panel/media
         */
-        _showNoMedaiFound: function () {
+        _showNoMediaFound: function () {
             this.hideMediaTab();
             domStyle.set(this.mediaContainer, "display", "none");
             domClass.remove(this.noMediaInfoContainer, "esriCTHidden");
-            domAttr.set(this.noMediaInfoContainer, "innerHTML", this.appConfig.i18n.mediaTab.noFeatureAvailabe);
         },
 
         /**
@@ -230,9 +244,8 @@ define([
         * @param{number} parameters to resize charts
         * @memberOf widgets/details-panel/media
         */
-        _resizeMediaChart: function (currentIndex, slideCount) {
+        _resizeMediaChart: function () {
             var svgElement = query(".chart > svg"), i;
-
             if (svgElement && svgElement.length) {
                 for (i = 0; i < svgElement.length; i++) {
                     svgElement[i].setAttribute('height', '160');
@@ -273,7 +286,8 @@ define([
         * @memberOf widgets/details-panel/media
         */
         _enableDisableArrow: function (currentIndex, slideCount) {
-            var mediaLeftArrow = $('.carousel-control.mediaLeft').first(),
+            var lastSlideIndex = slideCount - 1,
+                mediaLeftArrow = $('.carousel-control.mediaLeft').first(),
                 mediaRightArrow = $('.carousel-control.mediaRight').first();
             if (mediaLeftArrow) {
                 mediaLeftArrow.removeClass('disableLeftArrow');
@@ -281,21 +295,21 @@ define([
             if (mediaRightArrow) {
                 mediaRightArrow.removeClass('disableRightArrow');
             }
-            if (slideCount === 1 && this._chartInfo.length < 2) {
+            if (lastSlideIndex === 0 && this._chartInfo.length < 2) {
                 mediaLeftArrow.addClass('disableLeftArrow');
                 mediaRightArrow.addClass('disableRightArrow');
             } else {
-                if (mediaLeftArrow && parseInt(currentIndex, 10) < 1 && this._chartIndex === 0) {
+                if (mediaLeftArrow && parseInt(currentIndex, 10) === 0 && this._chartIndex === 0) {
                     mediaLeftArrow.addClass('disableLeftArrow');
                 }
-                if (mediaRightArrow && parseInt(currentIndex, 10) === slideCount && this._chartIndex === this._chartInfo.length - 1) {
+                if (mediaRightArrow && parseInt(currentIndex, 10) === lastSlideIndex && (this._chartIndex === this._chartInfo.length - 1 || this._chartInfo.length === 0)) {
                     mediaRightArrow.addClass('disableRightArrow');
                 }
             }
         },
 
         /**
-        * This function is used to hide medai tab
+        * This function is used to hide media tab
         * @memberOf widgets/details-panel/media
         */
         hideMediaTab: function () {
@@ -303,7 +317,7 @@ define([
         },
 
         /**
-        * This function is used to show medai tab
+        * This function is used to show media tab
         * @memberOf widgets/details-panel/media
         */
         showMediaTab: function () {

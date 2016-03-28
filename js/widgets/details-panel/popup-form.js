@@ -21,6 +21,7 @@ define([
     "dijit/_TemplatedMixin",
     "dojo/_base/lang",
     "dojo/_base/array",
+    "dojo/_base/kernel",
     "dojo/dom-construct",
     "dojo/dom-class",
     "dojo/query",
@@ -29,6 +30,8 @@ define([
     "dojo/on",
     'dojo/dom-attr',
     "esri/graphic",
+    "dojo/dom-geometry",
+    "dojo/dom-style",
     "dojo/text!./templates/popup-form.html"
 ], function (
     declare,
@@ -36,6 +39,7 @@ define([
     _TemplatedMixin,
     lang,
     array,
+    kernel,
     domConstruct,
     domClass,
     query,
@@ -44,6 +48,8 @@ define([
     on,
     domAttr,
     Graphic,
+    domGeom,
+    domStyle,
     popupForm
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
@@ -312,21 +318,24 @@ define([
         * @memberOf widgets/details-panel/popup-form
         */
         _checkForFields: function () {
-            var erroneousFields = [];
+            var erroneousFields = [], currentInput;
             // for all the fields in popup form
             array.forEach(query(".popupFormQuestionare"), lang.hitch(this, function (currentField) {
+                currentInput = query(".form-control", currentField)[0];
                 // to check for errors in form before submitting.
-                if ((query(".form-control", currentField)[0])) {
+                if (currentInput) {
                     // condition to check if the entered values are erroneous.
                     if (domClass.contains(currentField, "has-error") && query("select", currentField).length === 0) {
                         erroneousFields.push(currentField);
                     }
                     // condition to check if mandatory fields are kept empty.
-                    if ((query(".form-control", currentField)[0].value === "" && domClass.contains(currentField, "mandatory"))) {
-                        this._validateUserInput(this.config.i18n.geoform.requiredFields, currentField, query(".form-control", currentField)[0].value, true);
-                        erroneousFields.push(currentField);
+                    if (currentInput.value === "" && domClass.contains(currentField, "mandatory")) {
+                        if (this._featureAttributes[currentInput.id] !== currentInput.value) {
+                            this._validateUserInput(this.config.i18n.geoform.requiredFields, currentField, currentInput.value, true);
+                            erroneousFields.push(currentField);
+                        }
                     } else if (domClass.contains(currentField, "mandatory")) {
-                        this._validateUserInput(false, currentField, query(".form-control", currentField)[0].value, true);
+                        this._validateUserInput(false, currentField, currentInput.value, true);
                     }
                 }
             }));
@@ -641,8 +650,12 @@ define([
                 referenceNode = dom.byId(this.selectedLayer.typeIdField).parentNode;
                 // code to populate type dependent fields
                 array.forEach(this._sortedFields, lang.hitch(this, function (currentInput, index) {
-                    var field = null,
-                        fieldAttribute;
+                    var field = null, hasDomainValue, hasDefaultValue, fieldAttribute;
+                    hasDomainValue = selectedType.domains[currentInput.name];
+                    hasDefaultValue = selectedType.templates[0].prototype.attributes[currentInput.name];
+                    if ((hasDomainValue && hasDomainValue.type !== "inherited") || (hasDefaultValue && !currentInput.typeField)) {
+                        currentInput.isTypeDependent = true;
+                    }
                     // condition to filter out fields independent of subtypes
                     if (!currentInput.isTypeDependent) {
                         return true;
@@ -1045,7 +1058,7 @@ define([
         * Format input values
         * @param{object} currentField, current targeted field
         * @param{int} typeCastedInputValue , input integer value of field
-        * @memberOf widgets/geo-form/geo-form
+        * @memberOf widgets/details-panel/popup-form
         */
         _setFormatToValue: function (currentField, typeCastedInputValue, node) {
             var toFixedValue;
@@ -1138,7 +1151,11 @@ define([
                 $(this.parentElement).data("DateTimePicker").hide();
             });
             // Attach datetime picker to the container
-            $(parentNode).datetimepicker({}).on('dp.show', function (evt) {
+            $(parentNode).datetimepicker({ locale: kernel.locale }).on('dp.show', function (evt) {
+                var datePickerDialogBox, datePickerPosition;
+                datePickerPosition = domGeom.position(evt.currentTarget, true);
+                datePickerDialogBox = query(".bootstrap-datetimepicker-widget.dropdown-menu")[0];
+                domStyle.set(datePickerDialogBox, "position", "fixed");
                 if (isRangeField) {
                     value = new Date(query("input", this)[0].value);
                     minVlaue = new Date(currentField.domain.minValue);

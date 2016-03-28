@@ -1,5 +1,5 @@
 ﻿/*global define,dojo,$,setTimeout,window,dojoConfig */
-/*jslint sloppy:true,unparam:true,indent:4 */
+/*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
 |
@@ -27,7 +27,6 @@ define([
     "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/on",
-    "dojo/mouse",
     "dijit/layout/ContentPane",
     "widgets/details-panel/popup-form",
     "esri/tasks/query",
@@ -44,7 +43,6 @@ define([
     domClass,
     domConstruct,
     on,
-    mouse,
     ContentPane,
     PopupForm,
     Query
@@ -234,7 +232,7 @@ define([
         * @memberOf widgets/details-panel/popup
         **/
         _showAttachments: function (graphic, attachmentContainer) {
-            var objectID, fieldContent, imageDiv, imagePath, i, isAttachmentAvailable = false, imageThumbnailContainer, attahmentWrapper, imageThubnailContent, imageContainer, fileTypeContainer;
+            var objectID, fieldContent, imageDiv, imagePath, i, isAttachmentAvailable = false, imageThumbnailContainer, attahmentWrapper, imageThumbnailContent, imageContainer, fileTypeContainer;
             if (graphic) {
                 objectID = graphic.attributes[this.selectedOperationalLayer.objectIdField];
                 domConstruct.empty(attachmentContainer);
@@ -261,27 +259,15 @@ define([
                                     "alt": infos[i].url
                                 }, attahmentWrapper);
 
-                                imageThubnailContent = domConstruct.create("div", {
+                                imageThumbnailContent = domConstruct.create("div", {
                                     "class": "esriCTNonImageContent"
                                 }, imageThumbnailContainer);
 
-                                //Mouse hover event to show document title
-                                $(imageThumbnailContainer).mouseover(function (evt) {
-                                    domClass.add(evt.currentTarget.children[0], "esriCTHidden");
-                                    domClass.remove(evt.currentTarget.children[1], "esriCTHidden");
-                                });
-
-                                //Mouse out event to show image thumbnail
-                                $(imageThumbnailContainer).mouseout(function (evt) {
-                                    domClass.remove(evt.currentTarget.children[0], "esriCTHidden");
-                                    domClass.add(evt.currentTarget.children[1], "esriCTHidden");
-                                });
-
-                                imageContainer = domConstruct.create("div", {}, imageThubnailContent);
+                                imageContainer = domConstruct.create("div", {}, imageThumbnailContent);
 
                                 fileTypeContainer = domConstruct.create("div", {
                                     "class": "esriCTNonFileTypeContent"
-                                }, imageThubnailContent);
+                                }, imageThumbnailContent);
 
                                 isAttachmentAvailable = true;
                                 //set default image path if attachment has no image URL
@@ -343,13 +329,16 @@ define([
         * @memberOf widgets/details-panel/popup
         **/
         _fetchDocumentName: function (attachmentData, container) {
-            var attachmentName;
-            attachmentName = domConstruct.create("div", {
-                "class": "esriCTNonImageName esriCTHidden",
-                "innerHTML": attachmentData.name
+            var attachmentNameWrapper, attachmentName;
+            attachmentNameWrapper = domConstruct.create("div", {
+                "class": "esriCTNonImageName"
             }, container);
-        },
 
+            attachmentName = domConstruct.create("div", {
+                "class": "esriCTNonImageNameMidle",
+                "innerHTML": attachmentData.name
+            }, attachmentNameWrapper);
+        },
 
         /**
         * This function is used to show attachments in new window when user clicks on the attachment thumbnail

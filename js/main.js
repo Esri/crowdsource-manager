@@ -172,6 +172,8 @@ define([
         */
         _loadApplication: function () {
             if (this.appConfig.groupItems.results.length > 0) {
+                domClass.remove("UpperAndLowerWrapperContainer", "esriCTHidden");
+                domClass.add("signInErrorMessageContainer", "esriCTHidden");
                 // executes when window is resized
                 on(window, "resize", lang.hitch(this, this._onWindowResize));
                 // set Application Theme
@@ -249,6 +251,8 @@ define([
             if (this._applicationHeader) {
                 this._applicationHeader._setWidthOfApplicationNameContainer();
             }
+            this._setNoDataDataViewerMessagePosition();
+            $(".esriCTFilterParentContainer").css("display", "none");
             this._resizeMap();
         },
 
@@ -280,7 +284,9 @@ define([
 
             this._applicationHeader.hideWebMapList = lang.hitch(this, function () {
                 if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
-                    this._webMapListWidget.hideWebMapList();
+                    if (this._webMapListWidget) {
+                        this._webMapListWidget.hideWebMapList();
+                    }
                 }
             });
 
@@ -417,6 +423,7 @@ define([
                 setTimeout(lang.hitch(this, function () {
                     ApplicationUtils.showLoadingIndicator();
                     ApplicationUtils.hideOverlayContainer();
+                    this._resetUpperAndLowerContainer();
                     // Reset last updated feature array
                     this.updatedFeature = null;
                     // Reset filter state object for a new layer
@@ -439,6 +446,8 @@ define([
                     this._timeInfo = details.operationalLayerDetails.layerObject.timeInfo;
                     this._isManualRefreshedClicked = false;
                     this._isFilterRefreshClicked = false;
+                    //destroy time slider instance
+                    this._destroyTimeSliderWidget();
                     this._addOperationalLayerInSnapShotMode();
                     //Reset application header and search widget flags
                     if (this._applicationHeader) {
@@ -469,6 +478,15 @@ define([
             this._webMapListWidget.displayInitalLoad = lang.hitch(this, function () {
                 this._disableHeaderIcons();
             });
+        },
+
+        /**
+        * This function is used to reset the height of upper and lower container
+        * @memberOf widgets/main/main
+        */
+        _resetUpperAndLowerContainer: function () {
+            $("#upperContainer").height('55%');
+            $("#lowerContainer").height('45%');
         },
 
         /**
@@ -586,9 +604,10 @@ define([
         * @memberOf widgets/main/main
         */
         _addOperationalLayerInSnapShotMode: function () {
-            var opLayerInfo, staticDefinitionExpression;
+            var opLayerInfo, staticDefinitionExpression, cloneRenderer;
             //get selected operation layer details
             opLayerInfo = this._layerSelectionDetails.operationalLayerDetails;
+            cloneRenderer = lang.clone(this.map.getLayer(opLayerInfo.id).renderer);
             //remove selected layer from map
             this.map.removeLayer(this.map.getLayer(opLayerInfo.id));
             //create feature layer in 'snapshot' mode
@@ -606,10 +625,7 @@ define([
                 staticDefinitionExpression = this._extractStaticExpression(opLayerInfo);
                 this._refinedOperationalLayer.setDefinitionExpression(staticDefinitionExpression);
             }
-            //set layer renderer configured in webmap
-            if (opLayerInfo.layerDefinition && opLayerInfo.layerDefinition.drawingInfo && opLayerInfo.layerDefinition.drawingInfo.renderer) {
-                this._refinedOperationalLayer.setRenderer(opLayerInfo.layerDefinition.drawingInfo.renderer);
-            }
+            this._refinedOperationalLayer.setRenderer(cloneRenderer);
             //set popupInfo template configured in webmap
             if (opLayerInfo.popupInfo) {
                 this._refinedOperationalLayer.setInfoTemplate(new PopupTemplate(opLayerInfo.popupInfo));
@@ -795,6 +811,7 @@ define([
                 }));
 
                 this._dataViewerFeatureLayerUpdateEndHandle = on(this._refinedOperationalLayer, "update-end", lang.hitch(this, function () {
+                    this._refinedOperationalLayer.clearSelection();
                     this._toggleNoFeatureFoundDiv(true);
                     //Enable time slider if it was disable
                     if (this._timeSliderWidget) {
@@ -862,6 +879,7 @@ define([
         _destroyTimeSliderWidget: function () {
             if (this._timeSliderWidget) {
                 this._timeSliderWidget.destroy();
+                this._timeSliderWidget = null;
             }
         },
 
@@ -1033,6 +1051,20 @@ define([
             var noDataWrapperContainer;
             domConstruct.empty(dom.byId("overlayContainer"));
             noDataWrapperContainer = domConstruct.create("div", { "class": "esriCTNoDataDataViewerPanelContainer", "innerHTML": this.appConfig.i18n.dataviewer.selectLayerToBegin }, dom.byId("overlayContainer"));
+            this._setNoDataDataViewerMessagePosition();
+        },
+
+        /**
+        * This function is align the no data message when Data viewer panel is empty from the top
+        * @memberOf widgets/main/main
+        */
+        _setNoDataDataViewerMessagePosition: function () {
+            var noDataViewerContainer, upperContainerHeight;
+            upperContainerHeight = parseFloat(domStyle.get("upperContainer", "height") / 2);
+            noDataViewerContainer = query(".esriCTNoDataDataViewerPanelContainer")[0];
+            if (noDataViewerContainer) {
+                domStyle.set(noDataViewerContainer, "marginTop", upperContainerHeight + "px");
+            }
         },
 
         /**
@@ -1040,17 +1072,18 @@ define([
         * @memberOf widgets/main/main
         */
         _displayErrorMessageScreen: function (error) {
-            var errorMessage, upperAndLowerWrapperContainerHeight;
-            domConstruct.empty("UpperAndLowerWrapperContainer");
+            var errorMessage, signInErrorMessageContainerHeight;
+            domClass.add("UpperAndLowerWrapperContainer", "esriCTHidden");
+            domClass.remove("signInErrorMessageContainer", "esriCTHidden");
             errorMessage = this.appConfig.i18n.map.error;
             if (error && error.message) {
                 errorMessage = error.message;
             }
-            upperAndLowerWrapperContainerHeight = $("#UpperAndLowerWrapperContainer").outerHeight(true);
-            upperAndLowerWrapperContainerHeight = parseFloat(upperAndLowerWrapperContainerHeight);
-            domStyle.set("UpperAndLowerWrapperContainer", "line-height", upperAndLowerWrapperContainerHeight + "px");
-            domClass.add("UpperAndLowerWrapperContainer", "esriCTTextAlignCenter");
-            domAttr.set("UpperAndLowerWrapperContainer", "innerHTML", errorMessage);
+            signInErrorMessageContainerHeight = $("#signInErrorMessageContainer").outerHeight(true);
+            signInErrorMessageContainerHeight = parseFloat(signInErrorMessageContainerHeight);
+            domStyle.set("signInErrorMessageContainer", "line-height", signInErrorMessageContainerHeight + "px");
+            domClass.add("signInErrorMessageContainer", "esriCTTextAlignCenter");
+            domAttr.set("signInErrorMessageContainer", "innerHTML", errorMessage);
             ApplicationUtils.hideLoadingIndicator();
         },
 

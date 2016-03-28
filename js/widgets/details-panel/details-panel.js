@@ -159,6 +159,10 @@ define([
             });
         },
 
+        /**
+        * This function is used to declare that edit mode is enabled in popup tab
+        * @memberOf widgets/details-panel/details-panel
+        */
         popupEditModeEnabled: function (isEditMode) {
             return isEditMode;
         },
@@ -235,6 +239,10 @@ define([
             }
         },
 
+        /**
+        * This function is used to attach event listener to comments widget
+        * @memberOf widgets/details-panel/details-panel
+        */
         _attachCommentsEventListener: function () {
             this._commentsWidgetObj.hideCommentsTab = lang.hitch(this, function () {
                 this._hideDetailsPanelTab("comments");
@@ -248,7 +256,7 @@ define([
 
         /**
         * This function is used to destroy popup widget.
-        * @memberOf widgets/main/main
+        * @memberOf widgets/details-panel/details-panel
         */
         destroyPopupWidget: function () {
             if (this._popupWidgetObj) {
@@ -258,7 +266,7 @@ define([
 
         /**
         * This function is used to destroy media widget.
-        * @memberOf widgets/main/main
+        * @memberOf widgets/details-panel/details-panel
         */
         destroyMediaWidget: function () {
             if (this._mediaWidgetObj) {
@@ -268,14 +276,13 @@ define([
 
         /**
         * This function is used to destroy comments widget.
-        * @memberOf widgets/main/main
+        * @memberOf widgets/details-panel/details-panel
         */
         destroyCommentsWidget: function () {
             if (this._commentsWidgetObj) {
                 this._commentsWidgetObj.destroy();
             }
         },
-
 
         /**
         * This function is used to hide navigation tabs based on availability of data
@@ -295,7 +302,6 @@ define([
         * @memberOf widgets/details-panel/details-panel
         */
         _showDetailsPanelTab: function (tabName) {
-            //TODO : check for appropriate display property since the tab goes to next line after setting "block" //ignore jslint
             var tab = dom.byId(tabName + "Tab");
             if (tab) {
                 dom.byId(tabName + "Tab").style.display = "";
@@ -326,6 +332,5 @@ define([
             }
             this.tabList.style.display = "";
         }
-
     });
 });
