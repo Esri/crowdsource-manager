@@ -22,7 +22,10 @@
         "selectFeatureMessage": "Select a feature to get started",
         "enableFilter": true,
         "helpDialogTitle": "Help Page",
-        "helpDialogContent": "<p>Crowdsource Manager, a companion group template to Crowdsource Reporter, allows users within an organization to review problems or observations submitted through the Reporter application.</p>"
+        "helpDialogContent": "<p>Crowdsource Manager, a companion group template to Crowdsource Reporter, allows users within an organization to review problems or observations submitted through the Reporter application.</p>",
+        "popupTabText": "Popup",
+        "mediaTabText": "Media",
+        "commentsTabText": "Comments"
     },
     "configurationSettings": [{
         "category": "<b>App Settings</b>",
@@ -150,6 +153,21 @@
             "label": "Dialog content",
             "stringFieldOption": "richtext",
             "tooltip": "Text and graphics that will display in the help window."
+        }, {
+            "type": "string",
+            "fieldName": "popupTabText",
+            "label": "Text to be displayed on popup tab",
+            "tooltip": "Text to be displayed on popup tab in details panel"
+        }, {
+            "type": "string",
+            "fieldName": "mediaTabText",
+            "label": "Text to be displayed on media tab",
+            "tooltip": "Text to be displayed on media tab in details panel"
+        }, {
+            "type": "string",
+            "fieldName": "commentsTabText",
+            "label": "Text to be displayed on comments tab",
+            "tooltip": "Text to be displayed on comments tab in details panel"
         }]
     }]
 }

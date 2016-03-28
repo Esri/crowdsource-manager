@@ -1,7 +1,7 @@
 ﻿/*global define,dojo,alert */
 /*jslint sloppy:true */
-/** @license
-| Copyright 2013 Esri
+/*
+| Copyright 2014 Esri
 |
 | Licensed under the Apache License, Version 2.0 (the "License");
 | you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 | See the License for the specific language governing permissions and
 | limitations under the License.
 */
-//============================================================================================================================//
 define([
     "dojo/_base/declare",
     "dojo/_base/lang",
@@ -37,7 +36,7 @@ define([
         /**
         * This function is called when widget is constructed
         * @param{object} parameters of the widget
-        * @name widgets/map-viewer/map-viewer
+        * @memberOf widgets/map-viewer/map-viewer
         */
         constructor: function (options) {
             lang.mixin(this, options);

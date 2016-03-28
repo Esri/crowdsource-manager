@@ -1,7 +1,7 @@
-﻿/*global dojoConfig:true */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
+﻿/*global dojoConfig:true,location */
+/*jslint sloppy:true */
 /*
-| Copyright 2013 Esri
+| Copyright 2014 Esri
 |
 | Licensed under the Apache License, Version 2.0 (the "License");
 | you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 | See the License for the specific language governing permissions and
 | limitations under the License.
 */
-//============================================================================================================================//
 var package_path = location.href.slice(0, location.href.lastIndexOf('/'));
 var dojoConfig = {
     parseOnLoad: true,

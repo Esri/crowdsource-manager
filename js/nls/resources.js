@@ -1,20 +1,20 @@
 /*global define */
 /*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
 define({
     root: ({
         map: {
@@ -83,11 +83,11 @@ define({
             filterLabel: "Filter", // Appears as a label for Filter container
             valueRadioButtonLabel: "Value", // Appears as a label for 'Value' radio button in filter container
             uniqueRadioButtonLabel: "Unique", // Appears as a label for 'Unique' radio button in filter container
-            selectLayerToBegin: "Please select a layer to begin with" // for showing default message on application load
+            selectLayerToBegin: "Please select a map." // for showing default message on application load
         },
         timeSlider: {
             timeSliderLabel: "Time range", // Appears beside time slider widget
-            timeSliderInEditModeAlert: "Cannot change time slider in edit mode"
+            timeSliderInEditModeAlert: "Cannot change time slider in edit mode" // Displayed when user tries to change time-slider in edit mode
         },
         comment: {
             commentsFormSubmitButton: "Save", // Displayed on submit button to display comments
@@ -103,31 +103,25 @@ define({
             noGroup: "No group configured" // Appears when no group is configured
         },
         search: {
-            searchIconTooltip: "Search this layer",
-            noResultFoundText: "No results found",
-            searchInEditModeAlert: "Cannot perform search operation in edit mode"
+            searchIconTooltip: "Search this layer", // Displayed on hover of search icon
+            noResultFoundText: "No results found", // Displayed when no results are found after search
+            searchInEditModeAlert: "Cannot perform search operation in edit mode" // Displayed when no results are found after search
         },
         manualRefresh: {
-            manualRefreshIconTooltip: "Refresh",
+            manualRefreshIconTooltip: "Refresh", // Displayed on hover of manual refresh icon
             confirmManualRefeshText: "All selections and unsaved changes will be discarded" // Appears when user wants to do manual refresh
         },
         help: {
-            helpIconTooltip: "Help"
-        },
-        mediaTab: {
-            noFeatureAvailabe: "No Media Content available"
+            helpIconTooltip: "Help" // Displayed on hover of manual refresh icon
         },
         filter: {
-            noFeatureFoundText: "No feature found for this value.",
-            distinctQueryFalied: "No distinct values found for the field.",
-            andText: "and",
-            filterInEditModeAlert: "Cannot apply filter in edit mode."
+            noFeatureFoundText: "No feature found for this value.", // Displayed when no feature is found after applying filter
+            distinctQueryFalied: "No distinct values found for the field.", // Displayed when query fails while fetching distinct values in filter unique value section
+            andText: "and", // Displayed in filter UI when "is between" case is applied to its field
+            filterInEditModeAlert: "Cannot apply filter in edit mode." // Displayed when user tries to applies filter in edit mode
         },
         detailsPanel: {
-            popupTabText: "Popup", // Display on popup tab text
-            mediaTabText: "Media", // Display on media tab text
-            commentsTabText: "Comments", // Display on comments tab text
-            editContentText: "Edit Content"
+            editContentText: "Edit Content" // Displayed on hover of edit toggle button
         },
         signOutPage: {
             signOutMessage: "You've been successfully signed out", // Appears when user is successfully signed-out from application

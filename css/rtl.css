@@ -30,6 +30,26 @@
     text-align: right;
 }
 
+.dj_rtl .esriCTSearchBox
+{
+    float: right;
+}
+
+.dj_rtl .esriCTClearBtn
+{
+    float: right;
+}
+
+.dj_rtl .esriCTClearDiv
+{
+    border-left: 1px solid #DFDFDF;
+    border-right: none;
+}
+
+.dj_rtl .esriCTSearchButton
+{
+    margin-right: 5px;
+}
 /** Application header container ends **/
 
 /** Details panel container starts **/
@@ -78,6 +98,7 @@
 {
     float: right;
 }
+
 /* Comments panel ends*/
 
 /* Popup panel starts*/
@@ -103,6 +124,12 @@
     top: 20px;
     left: auto;
     right: 20px;
+}
+
+.dj_rtl .esriCTDetailsPanelWrapperContainer .esriViewPopup .header
+{
+    margin-right: 0px;
+    margin-left: 24px;
 }
 /** Map panel container ends **/
 
@@ -162,7 +189,9 @@
 .dj_rtl .esriCTInputTextBox
 {
     float: right;
-    padding-right: 4px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 .dj_rtl .esriCTRadioButtonDiv
@@ -185,7 +214,7 @@
 .dj_rtl .esriCTSelectOption
 {
     float: right;
-    padding: 3px 1px 4px 0;
+    padding: 0px 1px 0px 0px;
 }
 
 .dj_rtl .esriCTFilterParentContainer .input-group.date
@@ -204,28 +233,34 @@
     border-left: 0;
 }
 
-.dj_rtl .esriCTBlackCaretIcon, .dj_rtl .esriCTDisableFilterIcon
+.dj_rtl .esriCTBlackCaretIcon
 {
     float: left;
     padding-right: 5px;
     margin-left: 0;
 }
 
-.dj_rtl .esriCTFilterIcon
+.dj_rtl .esriCTFilterIcon, .dj_rtl .esriCTDisableFilterIcon
 {
     float: left;
     margin: 4px 0 0 5px;
 }
 
+.dj_rtl .esriCTFilterContainer
+{
+    float: none;
+}
+
 /** Filter panel container ends **/
 
 /** Time Slider container start **/
+
 .dj_rtl .esriCTTimeSliderContainer
 {
     float: right;
 }
 
-.dj_rtl .divTableWithFloatingHeader
+.dj_rtl .esriCTDataViewerContainer .divTableWithFloatingHeader
 {
     width: 100%;
 }
@@ -281,7 +316,7 @@
 .dj_rtl .esriCTSignOutOption
 {
     right: auto;
-    left: 75px;
+    left: 0px;
     text-align: right;
 }
 
@@ -289,6 +324,11 @@
 {
     right: auto;
     left: 0px;
+}
+
+.dj_rtl .esriCTSeperator
+{
+    float: left;
 }
 
 /* Sign-in container ends */

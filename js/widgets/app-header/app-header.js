@@ -1,20 +1,20 @@
 ﻿/*global define,dojoConfig,$,confirm,document */
 /*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
 //============================================================================================================================//
 define([
     "dojo/_base/declare",
@@ -86,6 +86,9 @@ define([
                 this._displaySignedInUserDetails();
                 this._setSignOutOptionText();
                 this._setWidthOfApplicationNameContainer();
+                if (this.displaySignInText) {
+                    this._displaySignInText();
+                }
                 this._setApplicationName();
                 this._setApplicationShortcutIcon();
                 this._initializeSearchWidget();
@@ -93,9 +96,6 @@ define([
                 this._initializeSignInWidget();
                 this._initializeHelpWidget();
                 this._setToolTip();
-                if (this.displaySignInText) {
-                    this._displaySignInText();
-                }
             }));
         },
 
@@ -104,7 +104,6 @@ define([
         * @memberOf widgets/app-header/app-header
         */
         _displaySignInText: function () {
-            domClass.add(this.helpButton, "esriCTHidden");
             domClass.add(this.refreshButton, "esriCTHidden");
             domClass.add(this.searchButton, "esriCTHidden");
             this.applicationHeaderName.innerHTML = this.appConfig.i18n.applicationHeader.pleaseSignInText;
@@ -172,20 +171,20 @@ define([
         * @memberOf widgets/app-header/app-header
         */
         _setMaxWidthOfApplicationIcon: function () {
-            var searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth, signInTextWidth, signInCaretIcon;
+            var searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth, signInSeperatorWidth, signedInUserDetailsContainerWidth;
             applicationHeaderContainerWidth = $(this.applicationHeaderContainer).outerWidth(true);
             applicationHeaderContainerWidth = parseFloat(applicationHeaderContainerWidth);
             searchIconWidth = $(this.searchButton).outerWidth(true);
             searchIconWidth = parseFloat(searchIconWidth);
             manualRefreshIconWidth = $(this.refreshButton).outerWidth(true);
             manualRefreshIconWidth = parseFloat(manualRefreshIconWidth);
-            signInTextWidth = $(this.signedInUserDetails).outerWidth(true);
-            signInTextWidth = parseFloat(signInTextWidth);
-            signInCaretIcon = $(this.signedInUserDetailsCaretIcon).outerWidth(true);
-            signInCaretIcon = parseFloat(signInCaretIcon);
+            signedInUserDetailsContainerWidth = $(this.signedInUserDetailsContainer).outerWidth(true);
+            signedInUserDetailsContainerWidth = parseFloat(signedInUserDetailsContainerWidth);
             helpIconWidth = $(this.helpButton).outerWidth(true);
             helpIconWidth = parseFloat(helpIconWidth);
-            headerIconsWidth = searchIconWidth + manualRefreshIconWidth + helpIconWidth + signInTextWidth + signInCaretIcon;
+            signInSeperatorWidth = $(this.signInSeperator).outerWidth(true);
+            signInSeperatorWidth = parseFloat(signInSeperatorWidth);
+            headerIconsWidth = searchIconWidth + manualRefreshIconWidth + helpIconWidth + signInSeperatorWidth;
             domStyle.set(this.applicationHeaderIconContainer, "max-width", (applicationHeaderContainerWidth - headerIconsWidth) + "px");
         },
 
@@ -226,7 +225,7 @@ define([
         * @memberOf widgets/app-header/app-header
         */
         _setWidthOfApplicationNameContainer: function () {
-            var applicationIconWidth, searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth, applicationNameContainerWidth, signInTextWidth, signInCaretIcon;
+            var applicationIconWidth, searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth, applicationNameContainerWidth, signInSeperatorWidth, signedInUserDetailsContainerWidth;
             applicationHeaderContainerWidth = $(this.applicationHeaderContainer).outerWidth(true);
             applicationHeaderContainerWidth = parseFloat(applicationHeaderContainerWidth);
             applicationIconWidth = $(this.applicationHeaderIconContainer).outerWidth(true);
@@ -237,13 +236,13 @@ define([
             manualRefreshIconWidth = parseFloat(manualRefreshIconWidth);
             helpIconWidth = $(this.helpButton).outerWidth(true);
             helpIconWidth = parseFloat(helpIconWidth);
-            signInTextWidth = $(this.signedInUserDetails).outerWidth(true);
-            signInTextWidth = parseFloat(signInTextWidth);
-            signInCaretIcon = $(this.signedInUserDetailsCaretIcon).outerWidth(true);
-            signInCaretIcon = parseFloat(signInCaretIcon);
-            headerIconsWidth = applicationIconWidth + searchIconWidth + manualRefreshIconWidth + helpIconWidth + signInTextWidth + signInCaretIcon;
+            signedInUserDetailsContainerWidth = $(this.signedInUserDetailsContainer).outerWidth(true);
+            signedInUserDetailsContainerWidth = parseFloat(signedInUserDetailsContainerWidth);
+            signInSeperatorWidth = $(this.signInSeperator).outerWidth(true);
+            signInSeperatorWidth = parseFloat(signInSeperatorWidth);
+            headerIconsWidth = applicationIconWidth + searchIconWidth + manualRefreshIconWidth + helpIconWidth + signedInUserDetailsContainerWidth + signInSeperatorWidth;
             applicationNameContainerWidth = applicationHeaderContainerWidth - headerIconsWidth;
-            applicationNameContainerWidth = applicationNameContainerWidth - 15;
+            applicationNameContainerWidth = applicationNameContainerWidth - 30;
             domStyle.set(this.applicationNameContainer, "width", applicationNameContainerWidth + "px");
         },
 
@@ -260,6 +259,11 @@ define([
                 applicationName = this.appConfig.applicationName;
             } else if (this.appConfig.groupInfo.results.length > 0 && this.appConfig.groupInfo.results[0].title) {
                 applicationName = this.appConfig.groupInfo.results[0].title;
+            } else {
+                applicationName = this.appConfig.i18n.applicationHeader.pleaseSignInText;
+            }
+            if (!this.appConfig.logInDetails) {
+                applicationName = this.appConfig.i18n.applicationHeader.pleaseSignInText;
             }
             // to set title of document
             document.title = applicationName;
@@ -430,7 +434,9 @@ define([
             });
             // On click of sign in text, open identity manager
             on(this.signedInUserDetails, "click", lang.hitch(this, function () {
-                this._signInWidgetObj.startup();
+                if ((domStyle.get(this.signedInUserDetailsCaretIcon, "display") === "none")) {
+                    this._signInWidgetObj.startup();
+                }
             }));
             on(this.signedInUserDetailsCaretIcon, "click", lang.hitch(this, function () {
                 if ((domStyle.get(this.helpButton, "display") === "none") && (domStyle.get(this.refreshButton, "display") === "none") && (domStyle.get(this.searchButton, "display") === "none")) {

@@ -24,6 +24,7 @@ define([
     "dojo/query",
     "dojo/dom-attr",
     "dojo/dom-class",
+    "dojo/dom-style",
     "dojo/text!./templates/time-slider.html",
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
@@ -40,6 +41,7 @@ define([
     query,
     domAttr,
     domClass,
+    domStyle,
     template,
     _WidgetBase,
     _TemplatedMixin,
@@ -81,20 +83,34 @@ define([
             var timeExtent = this._createTimeExtent(timeInfoData),
                 timeSlider = new TimeSlider({
                     "thumbCount": timeInfoData.thumbCount
-                }, this.timeSliderContainer);
+                }, domConstruct.create("div", {}, this.timeSliderContainer));
             timeSlider.setThumbIndexes([0, 1]);
             //Check the configuration of time slider in webmap, if timeStopInterval is available use it otherwise
             //create time slider ticks/interval by numberOfStops property
             if (timeInfoData.timeStopInterval) {
                 timeSlider.createTimeStopsByTimeInterval(timeExtent, timeInfoData.timeStopInterval.interval, timeInfoData.timeStopInterval.units);
             } else {
-                timeSlider.createTimeStopsByCount(timeExtent, timeInfoData.numberOfStops);
+                timeSlider.createTimeStopsByCount(timeExtent, timeInfoData.numberOfStops + 1);
             }
             timeSlider.on("time-extent-change", lang.hitch(this, this._showSliderInfo));
             domAttr.set(this.timeSliderTextContainer, "innerHTML", this.appConfig.i18n.timeSlider.timeSliderLabel);
             timeSlider.startup();
             this.map.setTimeSlider(timeSlider);
+            this._checkTimeSliderStops(timeSlider);
             this._hideWebmapList();
+        },
+
+        /**
+        * check count of stops created in time slider and hide the stops/ticks if count is more thane 30
+        * @memberOf widgets/time-slider/time-slider
+        */
+        _checkTimeSliderStops: function (timeSlider) {
+            if (timeSlider.timeStops && timeSlider.timeStops.length > 30) {
+                var ruler = query(".dijitRuleContainer", this.timeSliderContainer)[0];
+                if (ruler) {
+                    domStyle.set(ruler, "display", "none");
+                }
+            }
         },
 
         /**

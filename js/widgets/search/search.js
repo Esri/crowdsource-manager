@@ -24,6 +24,7 @@ define([
     "dojo/_base/lang",
     "dojo/dom-class",
     "dojo/on",
+    "dojo/has",
     "esri/tasks/QueryTask",
     "esri/tasks/query",
     "esri/tasks/GeometryService",
@@ -37,6 +38,7 @@ define([
     lang,
     domClass,
     on,
+    has,
     QueryTask,
     Query,
     GeometryService
@@ -48,6 +50,7 @@ define([
         _existingDefinitionExpression: null, // to store existing definition expression applied on layer
         _layerUpdateHandle: null, // to store the handle of update end event of the selected layer
         _searchedFromSearchWidget: false, //to store flag if map should be zoomed to searched records
+        _lastDefinitionExprAppliedBySearch: null, // to store last definition expression applied by search
 
         /**
         * This function is called when widget is constructed
@@ -64,6 +67,17 @@ define([
         */
         startup: function () {
             this._toggleOptions();
+            on(this.searchBox, "blur", lang.hitch(this, function () {
+                if (has("ie") === 9) {
+                    this._displayPlaceHolderText();
+                }
+            }));
+
+            on(this.searchBox, "focus", lang.hitch(this, function () {
+                if (has("ie") === 9) {
+                    this._removePlaceHolderText();
+                }
+            }));
         },
 
         /**
@@ -103,7 +117,7 @@ define([
             }
             $(".esriCTNoResults").addClass("esriCTHidden");
             // If the value/search string exists then search it
-            if ((lang.trim(this.searchBox.value) !== "")) {
+            if ((lang.trim(this.searchBox.value) !== "") && (!domClass.contains(this.searchBox, "esriCTPlaceholder"))) {
                 this.appUtils.showLoadingIndicator();
                 this.searchBox.value = lang.trim(this.searchBox.value);
                 this._searchedFieldValue = this.searchBox.value;
@@ -115,12 +129,11 @@ define([
                 //then just set the existing def exprn so that the layer will get updated records
                 if (!this._searchedFromSearchWidget) {
                     this.selectedOperationalLayer.refresh();
+                } else {
+                    this.appUtils.hideLoadingIndicator();
                 }
-                this.appUtils.hideLoadingIndicator();
             }
         },
-
-        _lastDefinitionExprAppliedBySearch: null,
 
         /**
         * This function is used to search the value of field entered by user
@@ -252,6 +265,7 @@ define([
         clearSearchText: function () {
             on(this.clearTextContent, "click", lang.hitch(this, function () {
                 if (this._newDefinitionExpression !== this._existingDefinitionExpression) {
+                    this._getExistingDefinitionExpression();
                     this.appUtils.showLoadingIndicator();
                     this._newDefinitionExpression = this._existingDefinitionExpression;
                     this.searchBox.value = "";
@@ -283,6 +297,10 @@ define([
                     if (this.selectedOperationalLayerID === this.itemInfo.itemData.applicationProperties.viewing.search.layers[i].id) {
                         if ($(".esriCTSearchBox").length > 0 && this.itemInfo.itemData.applicationProperties.viewing.search.hintText) {
                             this.searchBox.placeholder = this.itemInfo.itemData.applicationProperties.viewing.search.hintText;
+                        }
+                        if (has("ie") === 9) {
+                            this.searchBox.value = this.itemInfo.itemData.applicationProperties.viewing.search.hintText;
+                            domClass.add(this.searchBox, "esriCTPlaceholder");
                         }
                         enableSearch = true;
                         break;
@@ -346,7 +364,7 @@ define([
 
         /**
         * This function is used to create a new data set after definition expression is set
-        * @memberOf widgets/data-viewer/data-viewer
+        * @memberOf widgets/search/search
         */
         _zoomToSearchedRecords: function () {
             var selectedFeatureArr, geometryService, selectedFeaturesGeometryArr, i;
@@ -378,10 +396,34 @@ define([
 
         /**
         * This function is used to return last searched string
-        * @memberOf widgets/data-viewer/data-viewer
+        * @memberOf widgets/search/search
         */
         onSearchApplied: function () {
             return this._lastDefinitionExprAppliedBySearch;
+        },
+
+        /**
+        * This function is used to display place holder text in search bar
+        * @memberOf widgets/search/search
+        */
+        _displayPlaceHolderText: function () {
+            if (has("ie") === 9) {
+                if (lang.trim(this.searchBox.value) === "") {
+                    this.searchBox.value = this.itemInfo.itemData.applicationProperties.viewing.search.hintText;
+                    domClass.add(this.searchBox, "esriCTPlaceholder");
+                }
+            }
+        },
+
+        /**
+        * This function is used to remove place holder text in search bar
+        * @memberOf widgets/search/search
+        */
+        _removePlaceHolderText: function () {
+            if (domClass.contains(this.searchBox, "esriCTPlaceholder")) {
+                this.searchBox.value = "";
+                domClass.remove(this.searchBox, "esriCTPlaceholder");
+            }
         }
     });
 });

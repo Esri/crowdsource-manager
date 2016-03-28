@@ -1,20 +1,20 @@
 /*global define,location */
 /*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
 define({
     // Default configuration settings for the application. This is where you'll define things like a bing maps key,
     // default group, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
@@ -96,11 +96,17 @@ define({
     // to show non editable layers on selected web map
     "showNonEditableLayers": false,
     // configurable message to indicate that user needs to select record to view the details panel
-    "selectFeatureMessage": "Select a feature to get started",
-    // To enable or disable filters, applied on the selected layer
+    "selectFeatureMessage": "Select a feature to get started.",
+    // to enable or disable filters, applied on the selected layer
     "enableFilter": true,
-    // To set title for help dialog
+    // to set title for help dialog
     "helpDialogTitle": "Help Page",
-    // To set content for help dialog
-    "helpDialogContent": "<p>Crowdsource Manager, a companion group template to Crowdsource Reporter, allows users within an organization to review problems or observations submitted through the Reporter application.</p>"
+    // to set content for help dialog
+    "helpDialogContent": "<p>Crowdsource Manager, a companion group template to Crowdsource Reporter, allows users within an organization to review problems or observations submitted through the Reporter application.</p>",
+    // to set the text of popup tab
+    "popupTabText": "Popup",
+    // to set the text of comment tab
+    "mediaTabText": "Media",
+    // to set the text of media tab
+    "commentsTabText": "Comments"
 });

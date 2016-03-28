@@ -1,5 +1,5 @@
 ﻿/*global define,dojo,alert,moment,$,console */
-/*jslint sloppy:true,unparam:true,indent:4 */
+/*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
 |
@@ -62,7 +62,7 @@ define([
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         _commentPopupTable: null, // stores object of comments popup table
-        _relatedRecords: [], // stores object of related record fatures
+        _relatedRecords: [], // stores object of related record features
         _commentformInstance: null,
 
         /**
@@ -176,7 +176,7 @@ define([
         * This function is used to create common popup comment contents
         * @memberOf widgets/details-panel/comments
         */
-        _createPopUpContent: function (currentFeature, commentsParentDiv, currentID) {
+        _createPopUpContent: function (currentFeature, commentsParentDiv) {
             var queryFeature, currentDateTime = new Date().getTime();
             queryFeature = new Query();
             queryFeature.objectIds = [parseInt(currentFeature.attributes[this.selectedOperationalLayer.objectIdField], 10)];
@@ -189,7 +189,7 @@ define([
                 commentContentPane = new ContentPane({}, commentContentPaneContainer);
                 commentContentPane.startup();
                 commentContentPane.set('content', result.features[0].getContent());
-                this._createCommentButton(commentContentPaneContainer, currentID, currentFeature.attributes[this.selectedOperationalLayer.objectIdField], currentFeature);
+                this._createCommentButton(commentContentPaneContainer, currentFeature);
             }));
         },
 
@@ -197,7 +197,7 @@ define([
         * This function is used to create comments button
         * @memberOf widgets/details-panel/comments
         */
-        _createCommentButton: function (parentDiv, relationID, objectID, graphic) {
+        _createCommentButton: function (parentDiv, graphic) {
             var commentBtnnDiv = domConstruct.create("div", { "class": "esriCTCommentButton", "title": this.appConfig.i18n.detailsPanel.editContentText }, parentDiv);
             on(commentBtnnDiv, "click", lang.hitch(this, function () {
                 this._createCommentForm(graphic);
@@ -223,6 +223,7 @@ define([
 
         /**
         * Instantiate comment-form widget
+        * @param {object} item contains selected feature object
         * @memberOf widgets/details-panel/comments
         */
         _createCommentForm: function (item) {
@@ -256,7 +257,7 @@ define([
                 dom.byId("tabContent").scrollTop = 0;
 
             });
-            this._commentformInstance.onCommentFormSubmitted = lang.hitch(this, function (item) {
+            this._commentformInstance.onCommentFormSubmitted = lang.hitch(this, function () {
                 //close the comment form after submitting new comment
                 this._showPanel(dom.byId("commentformContainer"));
                 this.isCommentFormOpen = false;
@@ -279,6 +280,7 @@ define([
 
         /**
         * shows and hides the div content
+        * @memberOf widgets/details-panel/comments
         */
         _showPanel: function (domNode) {
             if (domClass.contains(domNode, "esriCTHidden")) {
@@ -290,6 +292,7 @@ define([
 
         /**
         * Empties the list of comments.
+        * @memberOf widgets/details-panel/comments
         */
         _clearComments: function () {
             domConstruct.empty(this.commentsList);
@@ -298,6 +301,7 @@ define([
 
         /**
         * This function is used to fetch comments from table
+        * @param {object} graphic contains related feature object
         * @memberOf widgets/details-panel/comments
         */
         _fetchComments: function (graphic, parentDiv) {
@@ -332,9 +336,9 @@ define([
                         this._relatedRecords[currentID].features.sort(sortComments);
                         for (i = 0; i < this._relatedRecords[currentID].features.length; i++) {
                             if (!this.appConfig.usePopupConfigurationForComment) {
-                                this._createPopUpForSingleField(this._relatedRecords[currentID].features[i], currentID);
+                                this._createPopUpForSingleField(this._relatedRecords[currentID].features[i]);
                             }
-                            this._createPopUpContent(this._relatedRecords[currentID].features[i], commentsParentDiv, currentID);
+                            this._createPopUpContent(this._relatedRecords[currentID].features[i], commentsParentDiv);
                         }
                         this.showCommentsTab();
                         domAttr.set(dom.byId("commentsTotalCount"), "innerHTML", this._relatedRecords[currentID].features.length);
@@ -349,9 +353,10 @@ define([
 
         /**
         * This function is used to create popup template for single field
+        * @param {object} currentFeature contains selected feature object
         * @memberOf widgets/details-panel/comments
         */
-        _createPopUpForSingleField: function (currentFeature, currentID) {
+        _createPopUpForSingleField: function (currentFeature) {
             var popupInfo = {}, k, singlefieldComment;
             popupInfo.fieldInfos = [];
             popupInfo.mediaInfos = [];
@@ -382,65 +387,9 @@ define([
         },
 
         /**
-        * Retrieves the comments associated with an item.
-        * @param {objectID} item Item whose comments are sought
-        * @return {publish} "updatedCommentsList" with results of query
-        */
-        _queryComments: function (item) {
-            var updateQuery = new RelationshipQuery();
-            updateQuery.objectIds = [this.multipleFeatures[0].attributes[this.selectedOperationalLayer.objectIdField]];
-            updateQuery.returnGeometry = true;
-            updateQuery.outFields = ["*"];
-            updateQuery.relationshipId = this.selectedOperationalLayer.relationships[0].id;
-            //Show loading indicator
-            this.appUtils.showLoadingIndicator();
-            this.selectedOperationalLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
-                var pThis = this, fset, features, i;
-                // Function for descending-OID-order sort
-                function sortByOID(a, b) {
-                    if (a.attributes[pThis._commentTable.objectIdField] > b.attributes[pThis._commentTable.objectIdField]) {
-                        return -1;  // order a before b
-                    }
-                    if (a.attributes[pThis._commentTable.objectIdField] < b.attributes[pThis._commentTable.objectIdField]) {
-                        return 1;  // order b before a
-                    }
-                    return 0;  // a & b have same date, so relative order doesn't matter
-                }
-
-                fset = results[this.multipleFeatures[0].attributes[this.selectedOperationalLayer.objectIdField]];
-                features = fset ? fset.features : [];
-
-                if (features.length > 0) {
-                    // Sort by descending OID order
-                    features.sort(sortByOID);
-
-                    // Add the comment table popup
-                    for (i = 0; i < features.length; ++i) {
-                        features[i].setInfoTemplate(new PopupTemplate(this._commentPopupTable.popupInfo));
-                    }
-                }
-                this._clearComments();
-                if (features.length > 0) {
-                    // Sort by descending OID order
-                    features.sort(sortByOID);
-                    this._setComments(results[this.multipleFeatures[0].attributes[this.selectedOperationalLayer.objectIdField]].features);
-                    domClass.add(this.noCommentsDiv, "esriCTHidden");
-                } else {
-                    domClass.remove(this.noCommentsDiv, "esriCTHidden");
-                    domAttr.set(this.noCommentsDiv, "innerHTML", this.appConfig.i18n.comment.noCommentsAvailableText);
-                }
-                //Hide loading indicator
-                this.appUtils.hideLoadingIndicator();
-            }), lang.hitch(this, function (err) {
-                console.log(err.message || "queryRelatedFeatures");
-                //Hide loading indicator
-                this.appUtils.hideLoadingIndicator();
-            }));
-        },
-
-        /**
         * sets the comments associated with an item.
-        * @param {commentsArr} item Item whose comments are sought
+        * @param {array} commentsArr contains related features array
+        * @memberOf widgets/details-panel/comments
         */
         _setComments: function (commentsArr) {
             domConstruct.empty(this.commentsContainer);
@@ -448,14 +397,14 @@ define([
         },
 
         /**
-        * Creates a ContentPane to hold the contents of a comment.
-        * @param {object} comment Comment to display; its contents come from calling
-        * getContent() on it
+        * display popup info for related features
+        * @param {object} item is selected related feature
+        * @memberOf widgets/details-panel/comments
         */
-        _buildCommentDiv: function (comment) {
+        _buildCommentDiv: function (item) {
             var commentDiv;
             commentDiv = domConstruct.create('div', { 'class': 'comment' }, this.commentsContainer);
-            new ContentPane({ 'class': 'content small-text', 'content': comment.getContent() }, commentDiv).startup();
+            new ContentPane({ 'class': 'content small-text', 'content': item.getContent() }, commentDiv).startup();
         }
     });
 });

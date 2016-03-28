@@ -125,7 +125,6 @@ define([
         _displayErrorMessageScreen: function (error) {
             var errorMessage, node;
             domClass.add("mainWrapperContainer", "esriCTHidden");
-            errorMessage = this._boilerPlateTemplateObject.config.i18n.map.error;
             // show error message when group is undefined
             if (error && error.message) {
                 if (error.message.toLowerCase() === "group undefined.") {

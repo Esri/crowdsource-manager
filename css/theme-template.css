@@ -64,7 +64,7 @@
 .esriCTDetailsPanelWrapperContainer .nav-tabs>li>a:hover
 {
     border-top-color: ${SelectedThemeColor};
-    background-color: ${LighterShadeThemeColor} !important;
+    background-color: ${LighterShadeThemeColor};
 }
 
 .esriCTPostPopupButton:hover, .esriCTPostPopupButton, .esriCTPostCommentButton, .esriCTPostCommentButton:hover

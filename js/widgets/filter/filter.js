@@ -30,6 +30,7 @@ define([
     "dojo/dom-style",
     "dojo/dom",
     "dojo/query",
+    "dojo/dom-geometry",
     "dojo/domReady!"
 ], function (
     declare,
@@ -45,7 +46,8 @@ define([
     Deferred,
     domStyle,
     dom,
-    query
+    query,
+    domGeom
 ) {
     return declare([_WidgetBase], {
         _filterContainer: null, // contains parent filter container
@@ -124,16 +126,16 @@ define([
                 // checking if it is already created (i.e. when index > 0)
                 if (!this._filterContainer) {
                     this._filterContainer = domConstruct.create("div", { "class": "esriCTFilterContainer" }, this.filterParentContainer);
-                    filterDisableContaner = domConstruct.create("div", { "class": "esriCTDisableFilterContainer esriCTHidden" }, this.filterParentContainer);
-                    on(filterDisableContaner, "click", lang.hitch(this, function () {
-                        alert(this.appConfig.i18n.filter.filterInEditModeAlert);
-                    }));
                     filterLabel = domConstruct.create("div", { "innerHTML": this.appConfig.i18n.dataviewer.filterLabel, "class": "esriCTFilterLabel" }, this._filterContainer);
                     borderContainer = domConstruct.create("div", { "class": "esriCTBorderDiv" }, this._filterContainer);
                     this.filterAttributesContainer = domConstruct.create("div", { "class": "esriCTFilterAttributesContainer" }, this._filterContainer);
                     screenHeight = screen.height;
                     maxHeight = screenHeight - 380;
                     domStyle.set(this.filterAttributesContainer, "max-height", maxHeight + "px");
+                    filterDisableContaner = domConstruct.create("div", { "class": "esriCTDisableFilterContainer esriCTHidden" }, this.filterAttributesContainer);
+                    on(filterDisableContaner, "click", lang.hitch(this, function () {
+                        this.appUtils.showMessage(this.appConfig.i18n.filter.filterInEditModeAlert);
+                    }));
                 }
                 // Calling a function to append filter optipns in the container
                 this._createFilterOptionBox(definitionEditorInput, index, displayColumn);
@@ -294,7 +296,14 @@ define([
                 "class": "esriCTActiveCloseSpan " + displayColumn
             }, obj.formGroupDiv);
             // Attach close icon click event for datePicker
-            this._attachCloseDatePickerSpanClickEvent(closeDatePickerSpan, obj.index, obj.displayColumn);
+            queryDateObject = {
+                "input": dom.byId(obj.displayColumn + obj.index),
+                "node": $(parentNode),
+                "index": obj.index,
+                "displayColumn": obj.displayColumn,
+                "closeDatePickerSpan": closeDatePickerSpan
+            };
+            this._attachCloseDatePickerSpanClickEvent(queryDateObject);
             defaultValue = obj.definitionEditorInput.parameters[0].utcValue;
             //check date field value if exists else set the default or current date value
             if (this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue) {
@@ -303,8 +312,9 @@ define([
                 fieldValue = defaultValue ? new Date(defaultValue) : new Date();
             }
             $(parentNode).datetimepicker().data("DateTimePicker").date(fieldValue);
-            if (this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue === null) {
-                this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue = null;
+            if (this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue === "") {
+                $(parentNode).datetimepicker().data("DateTimePicker").date(new Date());
+                this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue = "";
                 this._resetDatePicker(closeDatePickerSpan, obj.index, obj.displayColumn);
             } else {
                 this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = $(parentNode).data().date;
@@ -313,7 +323,7 @@ define([
             // Attach datetime picker to the container
             $(parentNode).datetimepicker().on('dp.change', lang.hitch(this, function (val) {
                 // on change
-                if (new Date(this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue).toString() !== val.date.toString()) {
+                if (new Date(this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue).toString() !== new Date(val.date).toString()) {
                     this.appUtils.showLoadingIndicator();
                     this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = $(parentNode).data().date;
                     $(parentNode).data("DateTimePicker").hide();
@@ -333,6 +343,18 @@ define([
                         };
                         this._getFeatureCountForDatePicker(queryDateObject);
                     }
+                }
+            })).on('dp.show', lang.hitch(this, function (evt) {
+                var datePickerDialogBox, datePickerPosition, timePickerDialogBox;
+                datePickerPosition = domGeom.position(evt.currentTarget, true);
+                datePickerDialogBox = query(".bootstrap-datetimepicker-widget.dropdown-menu")[0];
+                timePickerDialogBox = query(".picker-switch.accordion-toggle", evt.currentTarget)[0];
+                if (timePickerDialogBox) {
+                    domStyle.set(timePickerDialogBox, "display", "none");
+                }
+                if (datePickerDialogBox) {
+                    domStyle.set(datePickerDialogBox, "position", "fixed");
+                    domStyle.set(datePickerDialogBox, "left", ((datePickerPosition.x - 20) + "px"));
                 }
             }));
             // if filter is not enabled then reset date picker
@@ -386,14 +408,17 @@ define([
             if (this.appConfig._filterObject.inputs[radioParam.index].parameters[0].showTextBox) {
                 domAttr.set(valueRadio, "checked", true);
                 this._showTextBox(radioButtonParam);
+                this.appConfig._filterObject.inputs[radioParam.index].parameters[0].valueFrom = "textBox";
             } else if (this.appConfig._filterObject.inputs[radioParam.index].parameters[0].showDropDown) {
                 domAttr.set(uniqueRadio, "checked", true);
                 // boolean value 'false' tells that radio button is not clicked
                 // setting radio button checked by default
                 this._showDropDown(radioButtonParam);
+                this.appConfig._filterObject.inputs[radioParam.index].parameters[0].valueFrom = "dropDown";
             } else {
                 domAttr.set(valueRadio, "checked", true);
                 this._showTextBox(radioButtonParam);
+                this.appConfig._filterObject.inputs[radioParam.index].parameters[0].valueFrom = "textBox";
             }
 
             // Attach radio button's change event
@@ -444,7 +469,7 @@ define([
             this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].showTextBox = true;
             this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].showDropDown = false;
             this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].currentValue = this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].textBoxValue;
-            this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].prevTextBoxValue = this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].textBoxValue;
+            this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].prevValue = this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].textBoxValue;
         },
 
         /**
@@ -463,9 +488,6 @@ define([
             }
             this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].showTextBox = false;
             this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].showDropDown = true;
-            // if a radio button is called first time, then query distinct values of current field
-            this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].currentValue = this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].dropDownValue;
-            this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].prevDropDownValue = this.appConfig._filterObject.inputs[radioParamObj.index].parameters[0].dropDownValue;
             this._queryLayerForDistinctValues(radioParamObj);
         },
 
@@ -543,17 +565,17 @@ define([
         * @memberOf widgets/filter/filter
         */
         _populateDropDownContainer: function (obj) {
-            var option = [], firstOption, selectedOption = false, closeDropDownSpan, coadedDomainValue, dropDownValue, prevDropDownValue;
+            var option = [], firstOption, selectedOption = false, closeDropDownSpan, coadedDomainValue, dropDownValue, prevValue;
             domConstruct.empty(obj.node);
             closeDropDownSpan = obj.closeDropDownSpan;
-            if (this.appConfig._filterObject && this.appConfig._filterObject.inputs[obj.index] && (this.appConfig._filterObject.inputs[obj.index].parameters[0].dropDownValue || this.appConfig._filterObject.inputs[obj.index].parameters[0].dropDownValue === null)) {
+            if (this.appConfig._filterObject && this.appConfig._filterObject.inputs[obj.index] && (this.appConfig._filterObject.inputs[obj.index].parameters[0].dropDownValue || this.appConfig._filterObject.inputs[obj.index].parameters[0].dropDownValue === "" || this.appConfig._filterObject.inputs[obj.index].parameters[0].dropDownValue === null)) {
                 dropDownValue = this.appConfig._filterObject.inputs[obj.index].parameters[0].dropDownValue;
             }
-            if (this.appConfig._filterObject && this.appConfig._filterObject.inputs[obj.index] && (this.appConfig._filterObject.inputs[obj.index].parameters[0].prevDropDownValue || this.appConfig._filterObject.inputs[obj.index].parameters[0].prevDropDownValue === null)) {
-                prevDropDownValue = this.appConfig._filterObject.inputs[obj.index].parameters[0].prevDropDownValue;
+            if (this.appConfig._filterObject && this.appConfig._filterObject.inputs[obj.index] && (this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue || this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue === "" || this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue === null)) {
+                prevValue = this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue;
             }
             // start pushing option to dropdown
-            firstOption = domConstruct.create("option", { "innerHTML": "Select", "value": null }, obj.node);
+            firstOption = domConstruct.create("option", { "innerHTML": "Select", "value": "" }, obj.node);
             array.forEach(obj.features, lang.hitch(this, function (feature, i) {
                 if (feature.attributes[obj.displayColumn] === 0 || (feature.attributes[obj.displayColumn] && (feature.attributes[obj.displayColumn] !== "" || feature.attributes[obj.displayColumn] !== null))) {
                     if (this._isCodedValueColumn) {
@@ -568,25 +590,26 @@ define([
                         "value": feature.attributes[obj.displayColumn]
                     }, obj.node);
                     // Setting default selection value for the dropdown
-                    if (prevDropDownValue && prevDropDownValue === feature.attributes[obj.displayColumn].toString()) {
-                        this.appConfig._filterObject.inputs[obj.index].parameters[0].dropDownValue = prevDropDownValue;
-                        this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = prevDropDownValue;
+                    if (prevValue && prevValue === feature.attributes[obj.displayColumn].toString()) {
+                        this.appConfig._filterObject.inputs[obj.index].parameters[0].dropDownValue = prevValue;
+                        this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = prevValue;
                         domAttr.set(option[i], "selected", true);
                         selectedOption = true;
-                    } else if (dropDownValue && dropDownValue === feature.attributes[obj.displayColumn].toString()) {
-                        this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = dropDownValue;
-                        this.appConfig._filterObject.inputs[obj.index].parameters[0].prevDropDownValue = dropDownValue;
-                        domAttr.set(option[i], "selected", true);
-                        selectedOption = true;
-                    } else if ((dropDownValue === "" || dropDownValue === null) && !selectedOption) {
-                        this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = dropDownValue;
-                        this.appConfig._filterObject.inputs[obj.index].parameters[0].prevDropDownValue = dropDownValue;
+                    } else if ((prevValue === "" || prevValue === null) && !selectedOption) {
+                        this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = prevValue;
+                        this.appConfig._filterObject.inputs[obj.index].parameters[0].dropDownValue = prevValue;
                         this._resetDropDown(firstOption, obj.index, closeDropDownSpan);
                         selectedOption = true;
-                    } else if (this.appConfig._filterObject.inputs[obj.index].parameters[0].defaultValue.toString() === feature.attributes[obj.displayColumn].toString() && !selectedOption) {
+                    } else if (this.appConfig._filterObject.inputs[obj.index].parameters[0].textBoxValue && this.appConfig._filterObject.inputs[obj.index].parameters[0].textBoxValue.toString() === feature.attributes[obj.displayColumn].toString() && !selectedOption) {
                         this.appConfig._filterObject.inputs[obj.index].parameters[0].dropDownValue = feature.attributes[obj.displayColumn];
                         this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = feature.attributes[obj.displayColumn];
-                        this.appConfig._filterObject.inputs[obj.index].parameters[0].prevDropDownValue = feature.attributes[obj.displayColumn];
+                        this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue = feature.attributes[obj.displayColumn];
+                        domAttr.set(option[i], "selected", true);
+                        selectedOption = true;
+                    } else if (this.appConfig._filterObject.inputs[obj.index].parameters[0].defaultValue && this.appConfig._filterObject.inputs[obj.index].parameters[0].defaultValue.toString() === feature.attributes[obj.displayColumn].toString() && !selectedOption) {
+                        this.appConfig._filterObject.inputs[obj.index].parameters[0].dropDownValue = feature.attributes[obj.displayColumn];
+                        this.appConfig._filterObject.inputs[obj.index].parameters[0].currentValue = feature.attributes[obj.displayColumn];
+                        this.appConfig._filterObject.inputs[obj.index].parameters[0].prevValue = feature.attributes[obj.displayColumn];
                         domAttr.set(option[i], "selected", true);
                         selectedOption = true;
                     }
@@ -595,12 +618,17 @@ define([
             // Attach dropdown change event
             this._attachDropDownChangeEvent(obj.node, obj.index, closeDropDownSpan, obj.displayColumn);
             // Attach dropdown's close icon
-            this._attachCloseDropDownSpanClickEvent(firstOption, obj.index, closeDropDownSpan, obj.displayColumn);
+            this._attachCloseDropDownSpanClickEvent(obj.node, obj.index, closeDropDownSpan, obj.displayColumn);
             // check configured filter enable option for dropdown
             this._checkConfigFilterOptionForDropDown(firstOption, obj.index, closeDropDownSpan);
             // if default value is not found in options list then set 1st option by default
             if (!selectedOption) {
                 this._resetDropDown(firstOption, obj.index, closeDropDownSpan);
+            }
+            if (obj.node.value !== "") {
+                domClass.replace(closeDropDownSpan, "esriCTActiveCloseSpan", "esriCTDisabledCloseSpan");
+            } else {
+                domClass.replace(closeDropDownSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
             }
         },
 
@@ -613,21 +641,19 @@ define([
         * @memberOf widgets/filter/filter
         */
         _setDefaultTextBoxValue: function (definitionEditorInput, inputTextBox, index, closeTextBoxSpan) {
-            if (definitionEditorInput.parameters[0].prevTextBoxValue === "" || definitionEditorInput.parameters[0].prevTextBoxValue) {
-                domAttr.set(inputTextBox, "value", definitionEditorInput.parameters[0].prevTextBoxValue);
-                this.appConfig._filterObject.inputs[index].parameters[0].currentValue = definitionEditorInput.parameters[0].prevTextBoxValue;
-                this.appConfig._filterObject.inputs[index].parameters[0].textBoxValue = definitionEditorInput.parameters[0].prevTextBoxValue;
+            if (definitionEditorInput.parameters[0].prevValue === "" || definitionEditorInput.parameters[0].prevValue) {
+                domAttr.set(inputTextBox, "value", definitionEditorInput.parameters[0].prevValue);
+                this.appConfig._filterObject.inputs[index].parameters[0].currentValue = definitionEditorInput.parameters[0].prevValue;
+                this.appConfig._filterObject.inputs[index].parameters[0].textBoxValue = definitionEditorInput.parameters[0].prevValue;
             } else if (definitionEditorInput.parameters[0].textBoxValue === "" || definitionEditorInput.parameters[0].textBoxValue) {
                 domAttr.set(inputTextBox, "value", definitionEditorInput.parameters[0].textBoxValue);
                 this.appConfig._filterObject.inputs[index].parameters[0].currentValue = definitionEditorInput.parameters[0].textBoxValue;
-                this.appConfig._filterObject.inputs[index].parameters[0].prevTextBoxValue = definitionEditorInput.parameters[0].textBoxValue;
             } else if (definitionEditorInput.parameters[0].textBoxValue === null) {
                 domAttr.set(inputTextBox, "value", "");
             } else {
                 domAttr.set(inputTextBox, "value", definitionEditorInput.parameters[0].defaultValue);
                 this.appConfig._filterObject.inputs[index].parameters[0].textBoxValue = definitionEditorInput.parameters[0].defaultValue;
                 this.appConfig._filterObject.inputs[index].parameters[0].currentValue = definitionEditorInput.parameters[0].defaultValue;
-                this.appConfig._filterObject.inputs[index].parameters[0].prevTextBoxValue = definitionEditorInput.parameters[0].defaultValue;
             }
             if (inputTextBox.value !== "") {
                 domClass.replace(closeTextBoxSpan, "esriCTActiveCloseSpan", "esriCTDisabledCloseSpan");
@@ -684,8 +710,8 @@ define([
                     this._onEditFilterOptionChangeIcon(index, displayColumn);
                     // check active filter nodes
                     this._checkFieldActiveNodes(displayColumn);
-                    this.appConfig._filterObject.inputs[index].parameters[0].valueFrom = "textBox";
-                    this._setParameterizedExpression();
+                    this._setCurrentExpression();
+                    this._getFeatureCount(inputTextBox, index, closeTextBoxSpan, displayColumn, "textBox");
                 }
             }));
         },
@@ -711,8 +737,8 @@ define([
                         domClass.replace(closeDropDownSpan, "esriCTActiveCloseSpan", "esriCTDisabledCloseSpan");
                     } else {
                         domClass.replace(closeDropDownSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
-                        this.appConfig._filterObject.inputs[index].parameters[0].dropDownValue = null;
-                        this.appConfig._filterObject.inputs[index].parameters[0].currentValue = null;
+                        this.appConfig._filterObject.inputs[index].parameters[0].dropDownValue = "";
+                        this.appConfig._filterObject.inputs[index].parameters[0].currentValue = "";
                     }
                     // check header icon on the basis of changes in the filter
                     this._onEditFilterOptionChangeIcon(index, displayColumn);
@@ -727,23 +753,25 @@ define([
 
         /**
         * Function to attach 'click' event of dropdown close icon
-        * @param{string} contains first option of dropdown list
+        * @param{string} contains options of dropdown list
         * @param{int} contains the index/parameter id of the input layer detail
         * @param{node} contains close icon node
         * @memberOf widgets/filter/filter
         */
-        _attachCloseDropDownSpanClickEvent: function (firstOption, index, closeDropDownSpan, displayColumn) {
+        _attachCloseDropDownSpanClickEvent: function (node, index, closeDropDownSpan, displayColumn) {
+            var getCount = false;
             // Attach "click" event to close icon for textBox
             on(closeDropDownSpan, "click", lang.hitch(this, function () {
-                if (domClass.contains(closeDropDownSpan, "esriCTActiveCloseSpan")) {
+                if (!getCount && domClass.contains(closeDropDownSpan, "esriCTActiveCloseSpan")) {
                     this.appUtils.showLoadingIndicator();
-                    this._resetDropDown(firstOption, index, closeDropDownSpan);
+                    this._resetDropDown(node[0], index, closeDropDownSpan);
                     // check header icon on the basis of changes in the filter
                     this._onEditFilterOptionChangeIcon(index, displayColumn);
                     // check active filter nodes
                     this._checkFieldActiveNodes(displayColumn);
-                    this.appConfig._filterObject.inputs[index].parameters[0].valueFrom = "dropDown";
-                    this._setParameterizedExpression();
+                    this._setCurrentExpression();
+                    this._getFeatureCount(node, index, closeDropDownSpan, displayColumn, "dropDown");
+                    getCount = true;
                 }
             }));
         },
@@ -784,9 +812,8 @@ define([
         _setEmptyTextBox: function (inputTextBox, closeTextBoxSpan, index) {
             domAttr.set(inputTextBox, "value", "");
             domClass.replace(closeTextBoxSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
-            this.appConfig._filterObject.inputs[index].parameters[0].textBoxValue = null;
+            this.appConfig._filterObject.inputs[index].parameters[0].textBoxValue = "";
             this.appConfig._filterObject.inputs[index].parameters[0].currentValue = "";
-            this.appConfig._filterObject.inputs[index].parameters[0].prevTextBoxValue = "";
         },
 
         /**
@@ -799,28 +826,26 @@ define([
         _resetDropDown: function (firstOption, index, closeDropDownSpan) {
             domAttr.set(firstOption, "selected", true);
             domClass.replace(closeDropDownSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
-            this.appConfig._filterObject.inputs[index].parameters[0].dropDownValue = null;
-            this.appConfig._filterObject.inputs[index].parameters[0].currentValue = null;
-            this.appConfig._filterObject.inputs[index].parameters[0].prevDropDownValue = null;
+            this.appConfig._filterObject.inputs[index].parameters[0].dropDownValue = "";
+            this.appConfig._filterObject.inputs[index].parameters[0].currentValue = "";
         },
 
         /**
         * Function to attach 'click' event of date picker close icon
-        * @param{icon} contains close icon node
-        * @param{int} contains the index/parameter id of the input layer detail
-        * @param{string} contains field name
+        * @param{obj} contains date parameters
         * @memberOf widgets/filter/filter
         */
-        _attachCloseDatePickerSpanClickEvent: function (icon, index, displayColumn) {
-            on(icon, "click", lang.hitch(this, function () {
-                if (domClass.contains(icon, "esriCTActiveCloseSpan")) {
+        _attachCloseDatePickerSpanClickEvent: function (queryDateObject) {
+            on(queryDateObject.closeDatePickerSpan, "click", lang.hitch(this, function () {
+                if (domClass.contains(queryDateObject.closeDatePickerSpan, "esriCTActiveCloseSpan")) {
                     this.appUtils.showLoadingIndicator();
-                    this._resetDatePicker(icon, index, displayColumn);
+                    this._resetDatePicker(queryDateObject.closeDatePickerSpan, queryDateObject.index, queryDateObject.displayColumn);
                     // check header icon on the basis of changes in the filter
-                    this._onEditFilterOptionChangeIcon(index, displayColumn);
+                    this._onEditFilterOptionChangeIcon(queryDateObject.index, queryDateObject.displayColumn);
                     // check active filter nodes
-                    this._checkFieldActiveNodes(displayColumn);
-                    this._setParameterizedExpression();
+                    this._checkFieldActiveNodes(queryDateObject.displayColumn);
+                    this._setCurrentExpression();
+                    this._getFeatureCountForDatePicker(queryDateObject);
                 }
             }));
         },
@@ -834,7 +859,7 @@ define([
         */
         _resetDatePicker: function (icon, index, displayColumn) {
             domAttr.set(dom.byId(displayColumn + index), "value", "");
-            this.appConfig._filterObject.inputs[index].parameters[0].currentValue = null;
+            this.appConfig._filterObject.inputs[index].parameters[0].currentValue = "";
             domClass.replace(icon, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
         },
 
@@ -887,12 +912,8 @@ define([
                     delete input.parameters[0].showTextBox;
                 }
 
-                if (input.parameters[0].prevTextBoxValue !== undefined) {
-                    delete input.parameters[0].prevTextBoxValue;
-                }
-
-                if (input.parameters[0].prevDropDownValue !== undefined) {
-                    delete input.parameters[0].prevDropDownValue;
+                if (input.parameters[0].prevValue !== undefined) {
+                    delete input.parameters[0].prevValue;
                 }
 
                 if (input.parameters[0].currentValue !== undefined) {
@@ -1012,13 +1033,13 @@ define([
         * @memberOf widgets/filter/filter
         */
         _hasCodedDomain: function (displayColumn) {
-            var isCodedDoamin = false;
+            var isCodedDomain = false;
             array.forEach(this.selectedOperationalLayer.fields, lang.hitch(this, function (field) {
-                if (field.name === displayColumn && field.domain && field.domain.codedValues && field.domain.codedValues.length > 0 && !isCodedDoamin) {
-                    isCodedDoamin = true;
+                if (field.name === displayColumn && field.domain && field.domain.codedValues && field.domain.codedValues.length > 0 && !isCodedDomain) {
+                    isCodedDomain = true;
                 }
             }));
-            return isCodedDoamin;
+            return isCodedDomain;
         },
 
         /**
@@ -1054,9 +1075,9 @@ define([
                 // then show alert message to user,
                 if (results > 0) {
                     if (valueFrom === "textBox") {
-                        this.appConfig._filterObject.inputs[index].parameters[0].prevTextBoxValue = node.value;
+                        this.appConfig._filterObject.inputs[index].parameters[0].prevValue = node.value;
                     } else {
-                        this.appConfig._filterObject.inputs[index].parameters[0].prevDropDownValue = node.value;
+                        this.appConfig._filterObject.inputs[index].parameters[0].prevValue = node.value;
                     }
                     this.appConfig._filterObject.inputs[index].parameters[0].valueFrom = valueFrom;
                     this._applyParameterizedExpression();
@@ -1067,7 +1088,7 @@ define([
                     } else {
                         this._resetToPrevDropDownValue(index, closeSpan, displayColumn, node);
                     }
-                    alert(this.appConfig.i18n.filter.noFeatureFoundText);
+                    this.appUtils.showMessage(this.appConfig.i18n.filter.noFeatureFoundText);
                     this.appUtils.hideLoadingIndicator();
                     alertPoped = true;
                 }
@@ -1079,7 +1100,7 @@ define([
                     this._resetToPrevDropDownValue(index, closeSpan, displayColumn, node);
                 }
                 if (!alertPoped) {
-                    alert(this.appConfig.i18n.filter.noFeatureFoundText);
+                    this.appUtils.showMessage(this.appConfig.i18n.filter.noFeatureFoundText);
                     this.appUtils.hideLoadingIndicator();
                 }
             }));
@@ -1253,16 +1274,18 @@ define([
             array.forEach(this.appConfig._filterObject.inputs, lang.hitch(this, function (input, i) {
                 if (input.parameters[0].fieldName === columnName && input.parameters[0].type !== "esriFieldTypeDate" && input.parameters.length === 1) {
                     if (input.parameters[0].valueFrom === "dropDown") {
-                        domAttr.set(this._openFilterParam[i].uniqueRadio, "checked", true);
-                        // boolean value 'true' tells that radio button is checked
-                        this._showDropDown(this._openFilterParam[i]);
+                        if (this._openFilterParam[i]) {
+                            domAttr.set(this._openFilterParam[i].uniqueRadio, "checked", true);
+                            // boolean value 'true' tells that radio button is checked
+                            this._showDropDown(this._openFilterParam[i]);
+                        }
                     } else if (input.parameters[0].valueFrom === "textBox") {
                         domAttr.set(this._openFilterParam[i].valueRadio, "checked", true);
                         this._showTextBox(this._openFilterParam[i]);
                         // check active filter nodes
                         this._checkFieldActiveNodes(columnName);
                     }
-                    if (input.parameters[0].valueFrom === "dropDown" || input.parameters[0].valueFrom === "textBox") {
+                    if ((input.parameters[0].valueFrom === "dropDown" || input.parameters[0].valueFrom === "textBox") && this._openFilterParam[i]) {
                         // check header icon on the basis of changes in the filter
                         this._onEditFilterOptionChangeIcon(this._openFilterParam[i].index, columnName);
                     }
@@ -1279,11 +1302,11 @@ define([
         * @memberOf widgets/filter/filter
         */
         _resetTextBoxPrevValue: function (index, closeTextBoxSpan, displayColumn, inputTextBox) {
-            if (this.appConfig._filterObject.inputs[index].parameters[0].prevTextBoxValue === null || this.appConfig._filterObject.inputs[index].parameters[0].prevTextBoxValue === "" || (this.appConfig._filterObject && this.appConfig._filterObject.inputs[index] && this.appConfig._filterObject.inputs[index].parameters[0].prevTextBoxValue)) {
-                domAttr.set(inputTextBox, "value", this.appConfig._filterObject.inputs[index].parameters[0].prevTextBoxValue);
-                this.appConfig._filterObject.inputs[index].parameters[0].textBoxValue = this.appConfig._filterObject.inputs[index].parameters[0].prevTextBoxValue;
-                this.appConfig._filterObject.inputs[index].parameters[0].currentValue = this.appConfig._filterObject.inputs[index].parameters[0].prevTextBoxValue;
-                if (this.appConfig._filterObject.inputs[index].parameters[0].prevTextBoxValue !== "") {
+            if (this.appConfig._filterObject.inputs[index].parameters[0].prevValue === null || this.appConfig._filterObject.inputs[index].parameters[0].prevValue === "" || (this.appConfig._filterObject && this.appConfig._filterObject.inputs[index] && this.appConfig._filterObject.inputs[index].parameters[0].prevValue)) {
+                domAttr.set(inputTextBox, "value", this.appConfig._filterObject.inputs[index].parameters[0].prevValue);
+                this.appConfig._filterObject.inputs[index].parameters[0].textBoxValue = this.appConfig._filterObject.inputs[index].parameters[0].prevValue;
+                this.appConfig._filterObject.inputs[index].parameters[0].currentValue = this.appConfig._filterObject.inputs[index].parameters[0].prevValue;
+                if (this.appConfig._filterObject.inputs[index].parameters[0].prevValue !== "") {
                     domClass.replace(closeTextBoxSpan, "esriCTActiveCloseSpan", "esriCTDisabledCloseSpan");
                 } else {
                     domClass.replace(closeTextBoxSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
@@ -1303,8 +1326,8 @@ define([
         */
         _resetToPrevDropDownValue: function (index, closeSpan, displayColumn, node) {
             var layerObj;
-            if (this.appConfig._filterObject.inputs[index].parameters[0].prevDropDownValue === null || this.appConfig._filterObject.inputs[index].parameters[0].prevDropDownValue === "" || (this.appConfig._filterObject && this.appConfig._filterObject.inputs[index] && this.appConfig._filterObject.inputs[index].parameters[0].prevDropDownValue)) {
-                this.appConfig._filterObject.inputs[index].parameters[0].dropDownValue = this.appConfig._filterObject.inputs[index].parameters[0].prevDropDownValue;
+            if (this.appConfig._filterObject.inputs[index].parameters[0].prevValue === null || this.appConfig._filterObject.inputs[index].parameters[0].prevValue === "" || (this.appConfig._filterObject && this.appConfig._filterObject.inputs[index] && this.appConfig._filterObject.inputs[index].parameters[0].prevValue)) {
+                this.appConfig._filterObject.inputs[index].parameters[0].dropDownValue = this.appConfig._filterObject.inputs[index].parameters[0].prevValue;
                 if (this._openFilterParam[index]) {
                     this._showDropDown(this._openFilterParam[index]);
                 } else {
@@ -1335,13 +1358,17 @@ define([
                 // if the count of features is 0,
                 // then show alert message to user,
                 if (results > 0) {
-                    this.appConfig._filterObject.inputs[queryDateObject.index].parameters[0].currentValue = queryDateObject.node.data().date;
-                    this.appConfig._filterObject.inputs[queryDateObject.index].parameters[0].prevValue = queryDateObject.node.data().date;
-                    queryDateObject.node.datetimepicker().data("DateTimePicker").date(new Date(queryDateObject.node.data().date));
+                    if (this.appConfig._filterObject && this.appConfig._filterObject.inputs && this.appConfig._filterObject.inputs[queryDateObject.index].parameters[0].currentValue && this.appConfig._filterObject.inputs[queryDateObject.index].parameters[0].currentValue !== "") {
+                        this.appConfig._filterObject.inputs[queryDateObject.index].parameters[0].prevValue = queryDateObject.node.data().date;
+                        queryDateObject.node.datetimepicker().data("DateTimePicker").date(new Date(queryDateObject.node.data().date));
+                    } else {
+                        this.appConfig._filterObject.inputs[queryDateObject.index].parameters[0].prevValue = this.appConfig._filterObject.inputs[queryDateObject.index].parameters[0].currentValue;
+                        //this._resetDatePicker(queryDateObject.closeDatePickerSpan, queryDateObject.index, queryDateObject.displayColumn);
+                    }
                     this._applyParameterizedExpression();
                 } else {
                     this._resetDatePickerToPrevValue(queryDateObject);
-                    alert(this.appConfig.i18n.filter.noFeatureFoundText);
+                    this.appUtils.showMessage(this.appConfig.i18n.filter.noFeatureFoundText);
                     this.appUtils.hideLoadingIndicator();
                     alertPoped = true;
                 }
@@ -1349,7 +1376,7 @@ define([
                 deferred.resolve();
                 this._resetDatePickerToPrevValue(queryDateObject);
                 if (!alertPoped) {
-                    alert(this.appConfig.i18n.filter.noFeatureFoundText);
+                    this.appUtils.showMessage(this.appConfig.i18n.filter.noFeatureFoundText);
                     this.appUtils.hideLoadingIndicator();
                 }
             }));
@@ -1404,7 +1431,7 @@ define([
             // reset the filter if filter is not enabled from config
             if (!this.appConfig.enableFilter && !this.appConfig._filterObject.inputs[index].parameters[0].enableFilter) {
                 // set textbox values to empty
-                this._resetTextBoxes(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+                this._resetTextBoxes(firstInputBox, secondInputBox, index);
             }
         },
 
@@ -1450,16 +1477,11 @@ define([
         * @param{icon} contains close icon to reset textboxes to empty values
         * @memberOf widgets/filter/filter
         */
-        _resetTextBoxes: function (firstInputBox, secondInputBox, index, closeTextBoxSpan) {
+        _resetTextBoxes: function (firstInputBox, secondInputBox, index) {
             domAttr.set(firstInputBox, "value", "");
             domAttr.set(secondInputBox, "value", "");
             this.appConfig._filterObject.inputs[index].parameters[0].currentValue = "";
             this.appConfig._filterObject.inputs[index].parameters[1].currentValue = "";
-            this.appConfig._filterObject.inputs[index].parameters[0].prevValue = "";
-            this.appConfig._filterObject.inputs[index].parameters[1].prevValue = "";
-            if (domClass.contains(closeTextBoxSpan, "esriCTActiveCloseSpan")) {
-                domClass.replace(closeTextBoxSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
-            }
         },
 
         /**
@@ -1477,7 +1499,7 @@ define([
                     this.appUtils.showLoadingIndicator();
                     if (firstInputBox.value === "" && secondInputBox.value === "") {
                         // set textbox values to empty
-                        this._resetTextBoxes(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+                        this._resetTextBoxes(firstInputBox, secondInputBox, index);
                     }
                     // check header icon on the basis of changes in the filter
                     this._onEditFilterOptionChangeIcon(index, displayColumn);
@@ -1489,7 +1511,7 @@ define([
                     this.appUtils.showLoadingIndicator();
                     if (firstInputBox.value === "" && secondInputBox.value === "") {
                         // set textbox values to empty
-                        this._resetTextBoxes(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+                        this._resetTextBoxes(firstInputBox, secondInputBox, index);
                     }
                     // check header icon on the basis of changes in the filter
                     this._onEditFilterOptionChangeIcon(index, displayColumn);
@@ -1511,10 +1533,11 @@ define([
             on(closeTextBoxSpan, "click", lang.hitch(this, function () {
                 this.appUtils.showLoadingIndicator();
                 // set textbox values to empty
-                this._resetTextBoxes(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+                this._resetTextBoxes(firstInputBox, secondInputBox, index);
                 // check header icon on the basis of changes in the filter
                 this._onEditFilterOptionChangeIcon(index, displayColumn);
-                this._setParameterizedExpression();
+                this._setCurrentExpression();
+                this._getFeatureCountForRange(firstInputBox, secondInputBox, index, closeTextBoxSpan);
             }));
         },
 
@@ -1572,13 +1595,13 @@ define([
                     // if the count of features is 0,
                     // then show alert message to user,
                     this._setPrevValues(firstInputBox, secondInputBox, index, closeTextBoxSpan);
-                    alert(this.appConfig.i18n.filter.noFeatureFoundText);
+                    this.appUtils.showMessage(this.appConfig.i18n.filter.noFeatureFoundText);
                     this.appUtils.hideLoadingIndicator();
                 }
             }), lang.hitch(this, function () {
                 deferred.resolve();
                 this._setPrevValues(firstInputBox, secondInputBox, index, closeTextBoxSpan);
-                alert(this.appConfig.i18n.filter.noFeatureFoundText);
+                this.appUtils.showMessage(this.appConfig.i18n.filter.noFeatureFoundText);
                 this.appUtils.hideLoadingIndicator();
             }));
         },
@@ -1596,9 +1619,12 @@ define([
             domAttr.set(secondInputBox, "value", this.appConfig._filterObject.inputs[index].parameters[1].prevValue);
             this.appConfig._filterObject.inputs[index].parameters[0].currentValue = this.appConfig._filterObject.inputs[index].parameters[0].prevValue;
             this.appConfig._filterObject.inputs[index].parameters[1].currentValue = this.appConfig._filterObject.inputs[index].parameters[1].prevValue;
-            if (firstInputBox.value === "" && secondInputBox.value === "") {
+            if (this.appConfig._filterObject.inputs[index].parameters[0].prevValue === "" && this.appConfig._filterObject.inputs[index].parameters[1].prevValue === "") {
                 // set textbox values to empty
-                this._resetTextBoxes(firstInputBox, secondInputBox, index, closeTextBoxSpan);
+                this._resetTextBoxes(firstInputBox, secondInputBox, index);
+                domClass.replace(closeTextBoxSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
+            } else {
+                domClass.replace(closeTextBoxSpan, "esriCTActiveCloseSpan", "esriCTDisabledCloseSpan");
             }
         },
 

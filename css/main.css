@@ -10,97 +10,133 @@ html, body
     font-family: "Avenir Next W01" , "Avenir Next" , Avenir, "Open Sans" , "Helvetica Neue" , Helvetica, Arial, sans-serif;
 }
 
+/*
+| Copyright 2016 CyberTech Systems and Software Ltd.
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
+
 /* Open Sans Webfont Kit
  * -------------------------- */
 /* Light 300
  * -------------------------- */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('font/light/opensans-light-webfont.eot');
-  src: url('font/light/opensans-light-webfont.eot?#iefix') format('embedded-opentype'), url('font/light/opensans-light-webfont.woff') format('woff'), url('font/light/opensans-light-webfont.ttf') format('truetype'), url('font/light/opensans-light-webfont.svg#OpenSansLight') format('svg');
-  font-weight: 300;
-  font-style: normal; }
+@font-face
+{
+    font-family: 'Open Sans';
+    src: url('font/light/opensans-light-webfont.eot');
+    src: url('font/light/opensans-light-webfont.eot?#iefix') format('embedded-opentype'), url('font/light/opensans-light-webfont.woff') format('woff'), url('font/light/opensans-light-webfont.ttf') format('truetype'), url('font/light/opensans-light-webfont.svg#OpenSansLight') format('svg');
+    font-weight: 300;
+    font-style: normal;
+}
 
 /* Light 300 Italic
  * -------------------------- */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('font/light-italic/opensans-light-italic-webfont.eot');
-  src: url('font/light-italic/opensans-light-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/light-italic/opensans-light-italic-webfont.woff') format('woff'), url('font/light-italic/opensans-light-italic-webfont.ttf') format('truetype'), url('font/light-italic/opensans-light-italic-webfont.svg#OpenSansLightItalic') format('svg');
-  font-weight: 300;
-  font-style: italic; }
+@font-face
+{
+    font-family: 'Open Sans';
+    src: url('font/light-italic/opensans-light-italic-webfont.eot');
+    src: url('font/light-italic/opensans-light-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/light-italic/opensans-light-italic-webfont.woff') format('woff'), url('font/light-italic/opensans-light-italic-webfont.ttf') format('truetype'), url('font/light-italic/opensans-light-italic-webfont.svg#OpenSansLightItalic') format('svg');
+    font-weight: 300;
+    font-style: italic;
+}
 
 /* Regular 400
  * -------------------------- */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('font/regular/opensans-regular-webfont.eot');
-  src: url('font/regular/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'), url('font/regular/opensans-regular-webfont.woff') format('woff'), url('font/regular/opensans-regular-webfont.ttf') format('truetype'), url('font/regular/opensans-regular-webfont.svg#OpenSansRegular') format('svg');
-  font-weight: normal;
-  font-style: normal; }
+@font-face
+{
+    font-family: 'Open Sans';
+    src: url('font/regular/opensans-regular-webfont.eot');
+    src: url('font/regular/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'), url('font/regular/opensans-regular-webfont.woff') format('woff'), url('font/regular/opensans-regular-webfont.ttf') format('truetype'), url('font/regular/opensans-regular-webfont.svg#OpenSansRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 
 /* Regular 400 Italic
  * -------------------------- */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('font/italic/opensans-italic-webfont.eot');
-  src: url('font/italic/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/italic/opensans-italic-webfont.woff') format('woff'), url('font/italic/opensans-italic-webfont.ttf') format('truetype'), url('font/italic/opensans-italic-webfont.svg#OpenSansItalic') format('svg');
-  font-weight: normal;
-  font-style: italic; }
+@font-face
+{
+    font-family: 'Open Sans';
+    src: url('font/italic/opensans-italic-webfont.eot');
+    src: url('font/italic/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/italic/opensans-italic-webfont.woff') format('woff'), url('font/italic/opensans-italic-webfont.ttf') format('truetype'), url('font/italic/opensans-italic-webfont.svg#OpenSansItalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+}
 
 /* Semibold 600
  * -------------------------- */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('font/semibold/opensans-semibold-webfont.eot');
-  src: url('font/semibold/opensans-semibold-webfont.eot?#iefix') format('embedded-opentype'), url('font/semibold/opensans-semibold-webfont.woff') format('woff'), url('font/semibold/opensans-semibold-webfont.ttf') format('truetype'), url('font/semibold/opensans-semibold-webfont.svg#OpenSansSemibold') format('svg');
-  font-weight: 600;
-  font-style: normal; }
+@font-face
+{
+    font-family: 'Open Sans';
+    src: url('font/semibold/opensans-semibold-webfont.eot');
+    src: url('font/semibold/opensans-semibold-webfont.eot?#iefix') format('embedded-opentype'), url('font/semibold/opensans-semibold-webfont.woff') format('woff'), url('font/semibold/opensans-semibold-webfont.ttf') format('truetype'), url('font/semibold/opensans-semibold-webfont.svg#OpenSansSemibold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+}
 
 /* Semi-Bold 600 Italic
  * -------------------------- */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('font/semibold-italic/opensans-semibold-italic-webfont.eot');
-  src: url('font/semibold-italic/opensans-semibold-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/semibold-italic/opensans-semibold-italic-webfont.woff') format('woff'), url('font/semibold-italic/opensans-semibold-italic-webfont.ttf') format('truetype'), url('font/semibold-italic/opensans-semibold-italic-webfont.svg#OpenSansSemiboldItalic') format('svg');
-  font-weight: 600;
-  font-style: italic; }
+@font-face
+{
+    font-family: 'Open Sans';
+    src: url('font/semibold-italic/opensans-semibold-italic-webfont.eot');
+    src: url('font/semibold-italic/opensans-semibold-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/semibold-italic/opensans-semibold-italic-webfont.woff') format('woff'), url('font/semibold-italic/opensans-semibold-italic-webfont.ttf') format('truetype'), url('font/semibold-italic/opensans-semibold-italic-webfont.svg#OpenSansSemiboldItalic') format('svg');
+    font-weight: 600;
+    font-style: italic;
+}
 
 /* Bold 700
  * -------------------------- */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('font/bold/opensans-bold-webfont.eot');
-  src: url('font/bold/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'), url('font/bold/opensans-bold-webfont.woff') format('woff'), url('font/bold/opensans-bold-webfont.ttf') format('truetype'), url('font/bold/opensans-bold-webfont.svg#OpenSansBold') format('svg');
-  font-weight: bold;
-  font-style: normal; }
+@font-face
+{
+    font-family: 'Open Sans';
+    src: url('font/bold/opensans-bold-webfont.eot');
+    src: url('font/bold/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'), url('font/bold/opensans-bold-webfont.woff') format('woff'), url('font/bold/opensans-bold-webfont.ttf') format('truetype'), url('font/bold/opensans-bold-webfont.svg#OpenSansBold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
 
 /* Bold 700 Italic
  * -------------------------- */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('font/bold-italic/opensans-bold-italic-webfont.eot');
-  src: url('font/bold-italic/opensans-bold-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/bold-italic/opensans-bold-italic-webfont.woff') format('woff'), url('font/bold-italic/opensans-bold-italic-webfont.ttf') format('truetype'), url('font/bold-italic/opensans-bold-italic-webfont.svg#OpenSansItalic') format('svg');
-  font-weight: bold;
-  font-style: italic; }
+@font-face
+{
+    font-family: 'Open Sans';
+    src: url('font/bold-italic/opensans-bold-italic-webfont.eot');
+    src: url('font/bold-italic/opensans-bold-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/bold-italic/opensans-bold-italic-webfont.woff') format('woff'), url('font/bold-italic/opensans-bold-italic-webfont.ttf') format('truetype'), url('font/bold-italic/opensans-bold-italic-webfont.svg#OpenSansItalic') format('svg');
+    font-weight: bold;
+    font-style: italic;
+}
 
 /* Extrabold 800
  * -------------------------- */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('font/extrabold/opensans-extrabold-webfont.eot');
-  src: url('font/extrabold/opensans-extrabold-webfont.eot?#iefix') format('embedded-opentype'), url('font/extrabold/opensans-extrabold-webfont.woff') format('woff'), url('font/extrabold/opensans-extrabold-webfont.ttf') format('truetype'), url('font/extrabold/opensans-extrabold-webfont.svg#OpenSansExtrabold') format('svg');
-  font-weight: 800;
-  font-style: normal; }
+@font-face
+{
+    font-family: 'Open Sans';
+    src: url('font/extrabold/opensans-extrabold-webfont.eot');
+    src: url('font/extrabold/opensans-extrabold-webfont.eot?#iefix') format('embedded-opentype'), url('font/extrabold/opensans-extrabold-webfont.woff') format('woff'), url('font/extrabold/opensans-extrabold-webfont.ttf') format('truetype'), url('font/extrabold/opensans-extrabold-webfont.svg#OpenSansExtrabold') format('svg');
+    font-weight: 800;
+    font-style: normal;
+}
 
 /* Extra-Bold 800 Italic
  * -------------------------- */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('font/extrabold-italic/opensans-extrabold-italic-webfont.eot');
-  src: url('font/extrabold-italic/opensans-extrabold-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/extrabold-italic/opensans-extrabold-italic-webfont.woff') format('woff'), url('font/extrabold-italic/opensans-extrabold-italic-webfont.ttf') format('truetype'), url('font/extrabold-italic/opensans-extrabold-italic-webfont.svg#OpenSansExtraboldItalic') format('svg');
-  font-weight: 800;
-  font-style: italic; }
+@font-face
+{
+    font-family: 'Open Sans';
+    src: url('font/extrabold-italic/opensans-extrabold-italic-webfont.eot');
+    src: url('font/extrabold-italic/opensans-extrabold-italic-webfont.eot?#iefix') format('embedded-opentype'), url('font/extrabold-italic/opensans-extrabold-italic-webfont.woff') format('woff'), url('font/extrabold-italic/opensans-extrabold-italic-webfont.ttf') format('truetype'), url('font/extrabold-italic/opensans-extrabold-italic-webfont.svg#OpenSansExtraboldItalic') format('svg');
+    font-weight: 800;
+    font-style: italic;
+}
 
 .esriRTL label
 {
@@ -115,7 +151,7 @@ html, body
     display: none;
     height: 100%;
     width: 100%;
-    z-index: 1001;
+    z-index: 901;
     position: absolute;
     top: 0;
     left: 0;
@@ -147,7 +183,7 @@ html, body
     padding-top: 60px;
     width: 100%;
     position: absolute;
-    z-index: 1001;
+    z-index: 901;
     top: 40%;
     left: 0;
     text-align: center;
@@ -179,6 +215,13 @@ html, body
 }
 
 .esriCTUpperAndLowerWrapperContainer
+{
+    width: 100%;
+    height: calc(100% - 50px);
+    float: left;
+}
+
+.esriCTSignInErrorMessageContainer
 {
     width: 100%;
     height: calc(100% - 50px);
@@ -220,6 +263,7 @@ html, body
 }
 
 /** This CSS to is use to disable the default selection behavior of table **/
+
 table
 {
     -moz-user-select: none;
@@ -320,6 +364,7 @@ table
     float: right;
     display: table;
     height: 100%;
+    padding: 0px 15px;
 }
 
 .esriCTSignInUserNameDetails
@@ -349,17 +394,26 @@ table
     background-color: #FFF;
     cursor: pointer;
     width: auto;
-    right: 75px;
+    right: 0px;
     top: 50px;
     padding: 5px;
     border-top: 0 !important;
-    z-index: 999;
+    z-index: 899;
     min-width: 100px;
 }
 
 .esriCTSignOutOptionErrorMode
 {
     right: 0px;
+}
+
+.esriCTSeperator
+{
+    float: right;
+    border-right: 1px solid #Cccccc;
+    width: 1px;
+    height: calc(100% - 18px);
+    margin: 9px 0px;
 }
 
 /** Application header container ends **/
@@ -393,7 +447,11 @@ table
 {
     text-align: center;
     color: #FFF;
-    margin-top: 35px;
+    width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: auto;
 }
 
 .esriCTDataViewerWrapperContainer
@@ -546,7 +604,11 @@ table
     font-weight: bold;
 }
 
-
+.dj_rtl .esriCTDataViewerContainer .divTableWithFloatingHeader
+{
+    width: 100%;
+    display: table;
+}
 
 .tableFloatingHeader th
 {
@@ -561,7 +623,7 @@ table
 {
     background: #fff;
     position: absolute;
-    z-index: 998;
+    z-index: 898;
     height: 50px;
     width: 100%;
     opacity: 0.5;
@@ -645,7 +707,7 @@ table
 
 .esriTimeSlider
 {
-    z-index: 997;
+    z-index: 897;
 }
 
 .lblTimeRange
@@ -724,6 +786,7 @@ table
 }
 
 /* tab left right gap as per mokup*/
+
 .nav-tabs > li
 {
     top: 1px;
@@ -744,7 +807,7 @@ table
     background: url('../images/pencil-24.png') no-repeat center;
     position: absolute;
     right: 10px;
-    top: 10px;
+    top: 4px;
 }
 
 .nav-justified, .nav-tabs.nav-justified
@@ -752,6 +815,7 @@ table
     padding: 0 15px;
     border-bottom: 1px solid #a9a9a9;
 }
+
 /** Details panel container ends **/
 
 /** Map panel container starts **/
@@ -868,7 +932,7 @@ table
     width: 30%;
     position: absolute;
     display: block;
-    z-index: 999;
+    z-index: 899;
     border-right: 1px solid #cccccc;
 }
 
@@ -1150,7 +1214,7 @@ table
     width: 100%;
     position: absolute;
     background-color: #4c4c4c;
-    z-index: 998;
+    z-index: 898;
     opacity: 0.6;
 }
 
@@ -1164,8 +1228,9 @@ table
     background-color: #fff;
     width: calc(100% - 5px);
     float: left;
-    height: calc(100% - 70px);
+    height: 100%;
     opacity: 0.5;
+    z-index: 899;
 }
 
 .esriCTFilterParentContainer
@@ -1184,7 +1249,8 @@ table
     max-height: 75%;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    z-index: 1000;
+    z-index: 900;
+    word-wrap: break-word;
 }
 
 .esriCTTableHeaderContainer
@@ -1231,11 +1297,6 @@ table
     margin-top: 8px;
 }
 
-.esriCTFilterAttributesContainer
-{
-    clear: both;
-}
-
 .esriCTBaseFilterOptionDiv
 {
     width: 100%;
@@ -1253,7 +1314,7 @@ table
     outline: none;
     border: 1px solid #A9A9A9;
     padding-left: 5px;
-    padding-top: 2px;
+    padding-top: 0px;
     height: 25px;
 }
 
@@ -1276,7 +1337,7 @@ table
     width: 85%;
     float: left;
     outline: none;
-    padding: 3px 0 4px 1px;
+    padding: 0px 0px 1px 1px;
     box-shadow: none;
     height: 25px;
 }
@@ -1374,26 +1435,27 @@ input.esriCTRadioButton
 {
     clear: left;
     width: 100%;
-    margin: 5px 0;
+    padding: 10px 0;
 }
 
 .esriCTFilterParentContainer .input-group.date
 {
     width: 80%;
     float: left;
+    margin: 0 0 10px 0;
 }
 
 .esriCTFilterParentContainer input.form-control.hasDatetimepicker
 {
     padding-bottom: 0;
     padding-top: 0;
-    height: 30px;
+    height: 25px;
 }
 
 .esriCTFilterParentContainer span.input-group-addon
 {
     padding-bottom: 0;
-    padding-top: 0;
+    padding-top: 2px;
 }
 
 .esriCTAndTextDiv
@@ -1425,7 +1487,7 @@ input.esriCTRadioButton
     background-repeat: no-repeat;
     width: 100%;
     height: 9px;
-    z-index: 996;
+    z-index: 896;
 }
 
 /** Resize handle ends **/
@@ -1508,6 +1570,7 @@ input.esriCTRadioButton
     max-width: 25%;
     width: auto;
     float: left;
+    border: 1px solid #ffffff;
 }
 /** Comments tab container ends **/
 
@@ -1616,29 +1679,54 @@ input.esriCTRadioButton
 {
     text-align: center;
     height: 75px;
+    line-height: 75px;
+    width: 100%;
+    position: absolute;
     overflow: hidden;
-    margin: 5px;
+    display: none;
     word-break: break-all;
     cursor: pointer;
+}
+
+.esriCTNonImageNameMidle
+{
+    display: inline-block;
+    vertical-align: middle; /* vertical alignment of the inline element */
+    line-height: normal;
+    color: #fff;
 }
 
 .esriCTNonImageContainer
 {
     float: left;
     margin: 5px;
+    position: relative;
     background-color: #c4bd97;
     height: 82px;
     width: 83px;
 }
 
+.esriCTNonImageContainer:hover .esriCTNonImageName
+{
+    display: block;
+}
+
+.esriCTNonImageContainer:hover .esriCTNonImageContent
+{
+    display: none;
+}
+
 .esriCTNonFileTypeContent
 {
     text-align: center;
+    color: #ffffff;
+    line-height: 23px;
 }
 
 /* attachment styles end**/
 
 /* popup form styles start*/
+
 .esriCTPopupWrapperContainer
 {
     font-size: 15px;
@@ -1687,6 +1775,13 @@ input.esriCTRadioButton
 /** Popup tab container ends **/
 
 /** Media tab container starts **/
+
+.dijitTooltipContainer.dijitTooltipContents
+{
+    font-size: small !important;
+    width: 120%;
+}
+
 .esriCTmediaWrapperContainer
 {
     height: 100%;
@@ -1761,7 +1856,7 @@ input.esriCTRadioButton
     left: 0px;
     top: calc(50% - 22px);
     background-position: center center;
-    background-image: url(../images/crasual-Left-Arrow.png);
+    background-image: url(../images/carousel-left-arrow.png);
     background-repeat: no-repeat;
     background-size: cover;
     height: 44px;
@@ -1776,7 +1871,7 @@ input.esriCTRadioButton
     right: 0;
     top: calc(50% - 22px);
     background-position: center center;
-    background-image: url(../images/crasual-Right-Arrow.png);
+    background-image: url(../images/carousel-right-arrow.png);
     background-repeat: no-repeat;
     background-size: cover;
     height: 44px;
@@ -1870,7 +1965,7 @@ input.esriCTRadioButton
     position: absolute;
     top: 48px;
     right: 2px;
-    z-index: 994;
+    z-index: 894;
 }
 
 /* Search container ends */
