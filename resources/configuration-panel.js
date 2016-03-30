@@ -35,12 +35,12 @@
 	        "type": "group"
 	    }, {
 	        "label": "Application title",
-	        "tooltip": "Titles should be shorter than approximately 27 chars to fit on mobile divices",
+	        "tooltip": "Title displays in application header",
 	        "type": "string",
 	        "fieldName": "applicationName"
 	    }, {
 	        "label": "URL of application logo",
-	        "tooltip": "Logo displays in top left corner of application. Icon should be 48px tall.",
+	        "tooltip": "Logo displays in top left corner of application. Image should be 48px tall.",
 	        "type": "string",
 	        "fieldName": "applicationIcon"
 	    }, {
@@ -53,7 +53,7 @@
 	    "category": "<b>Content Settings</b>",
 	    "fields": [{
 	        "type": "paragraph",
-	        "value": "By default, Crowdsource Manager app will show only one editable layer at a time. Optionally, choose to display your non-editable map layers with each editable layer to provide additional context for the reports."
+	        "value": "By default, Crowdsource Manager apps will show only one editable layer at a time. Optionally, choose to display your non-editable map layers with each editable layer to provide additional context for the reports."
 	    }, {
 	        "label": "Show supporting layers",
 	        "tooltip": "Enable to show non-editable layers",
@@ -162,7 +162,7 @@
 	    }, {
 	        "type": "string",
 	        "fieldName": "commentField",
-	        "label": "Provide the name of a field in the related table(s) to display content from a single field for each related record, regardless of the popup settings.",
+	        "label": "Alternatively, provide the name of a field in the related table(s) to display content from a single field for each related record, regardless of the popup settings.",
 	        "tooltip": "Only content from related tables that have this field will be accessible through the application. This value is ignored if you choose to build the form from the comment table popup (previous option)."
 	    }]
 	}, {
