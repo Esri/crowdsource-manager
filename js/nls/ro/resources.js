@@ -1,88 +1,131 @@
-﻿/*global define */
+/*global define */
+/*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
-define(
-     ({
-        map: {
-            error: "Imposibil de creat harta" // Shown when error occurs while creation of map
-        },
-        main: {
-            noGroup: "Niciun grup configurat" // Appears when no group is configured
-        },
-        webMapList: {
-            owner: "Proprietar", // Appears in web-map list description panel when it is set to true
-            created: "Data creării", // Appears in web-map list description panel when it is set to true
-            modified: "Dată modificată", // Appears in web-map list description panel when it is set to true
-            description: "Descriere", // Appears in web-map list description panel when it is set to true
-            snippet: "Rezumat", // Appears in web-map list description panel when it is set to true
-            licenseInfo: "Reguli de accesare şi utilizare", // Appears in web-map list description panel when it is set to true
-            accessInformation: "Credite", // Appears in web-map list description panel when it is set to true
-            tags: "Etichete", // Appears in web-map list description panel when it is set to true
-            numViews: "Număr de vizualizări", // Appears in web-map list description panel when it is set to true
-            avgRating: "Calificativ", // Appears in web-map list description panel when it is set to true
-            noWebMapInGroup: "Grupul configurat nu este valid sau niciun element nu a fost încă partajat cu grupul", // Appears when invalid group in configured or no web-map is available in that group
-            infoBtnToolTip: "Informaţii hartă" // Display tool-tip on command button to display description of web-map
-        },
-        applicationHeader: {
-            signOutOption: "Deconectare", // Command button to sign-out from the application
-            pleaseSignInText: "Autentificaţi-vă", // Appears when user needs to sign-in into the application
-            showSelectedOption: "Afişare obiecte selectate", // Command button to show selected records in data-viewer
-            showAllOption: "Afişare toate+", // Command button to show all the records in data-viewer
-            clearSelectionOption: "Golire selecţie", // Command button to clear selected records in data-viewer
-            zoomToSelectedOption: "Transfocare la selecţie", // Command button to zoom map to selected records
-            gridViewOption: "Vizualizare listă", // Command button to display list view
-            mapViewOption: "Vizualizare hartă", // Command button to display map view
-            gridMapViewOption: "Vizualizare împărţită", // Command button to display split view
-            settingsBtnToolTip: "Opţiuni selecţie", // Display tool-tip on command button to open a list of settings options
-            viewModeBtnToolTip: "Opţiuni de afişare", // Display tool-tip on command button to open a list of view options
-            searchModeBtnToolTip: "Căutare în acest strat tematic", // Display tool-tip on command button to open a dialog box for finding a feature
-            manualRefreshBtnToolTip: "Reîmprospătare", // Display tool-tip on command button to manually refresh the selected operational layer
-            confirmManualRefeshText: "Toate selecţiile şi modificările nesalvate vor fi eliminate", // Appears when user wants to do manual refresh
-            signInOption: "Autentificare" // Appears when user has not signed in
-        },
-        dataviewer: {
-            noIssuesReported: "Nu există niciun raport disponibil", // Appears when no issues are available in current extent
-            photoAttachmentHeader: "Fișiere atașate", // Appears when attachments are available for display in details tab
-            invalidSmallNumber: "Introduceţi un număr întreg ", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -32768 and 32767)
-            invalidNumber: "Introduceţi un număr întreg", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -2147483648 and 2147483647)
-            invalidFloat: "Introduceţi un număr", // Shown when invalid floating value is entered while editing in data-viewer (floating point value between -3.4E38 and 1.2E38)
-            invalidDouble: "Introduceţi un număr", // Shown when invalid double value is entered while editing in data-viewer (double value between -2.2E308 and 1.8E308)
-            invalidString: "Introduceţi o valoare", // Shown when user enters invalid string value
-            invalidDate: "Introduceţi o dată validă", // Shown when user enters invalid date value
-            invalidNumericRange: "Introduceţi o valoare între ${minValue} şi ${maxValue}", // Shown when user enters value which is out of range
-            moreInfolink: "Legare", // Shown when value in field contains only URL.
-            commentsText: "Comentarii", // Appears when comments are available for display in details tab
-            noCommentsAvailable: "Niciun comentariu disponibil", // Appears when no comments are available
-            noFeatureGeometry: "Obiectul spaţial nu poate fi afişat" // Appears when user selects/activates a feature and geometry is available for that
-        },
-        config: {
-            configNotDefined: "Nicio configuraţie definită" // Shown when there is an issue with config file
-        },
-        searchPanel: {
-            noResultsFound: "Nu a fost găsit niciun rezultat" // Appears when user search for features and no feature is found
-        },
-        mapViewer: {
-            detailsBtnToolTip: "Vizualizaţi mai multe detalii pentru obiectul spaţial activ", // Display tool-tip on command button to view details of selected feature
-            locationBtnToolTip: "Vizualizare hartă", // Display tool-tip on command button to view map panel
-            zoomInToolTip: "Mărire", // Display tool-tip on command button to zoom in map
-            zoomOutToolTip: "Micşorare" // Display tool-tip on command button to zoom out map
-        },
-        signOutPage: {
-            signOutMessage: "V-aţi deconectat cu succes", // Appears when user is successfully signed-out from application
-            reSignInMessage: "Faceţi clic aici pentru a vă autentifica" // Appears when user is signed-out from application and wants to sign-in again
-        }
-    })
-);
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
+define({
+  "map": {
+    "error": "Imposibil de creat harta"
+  },
+  "webMapList": {
+    "owner": "Proprietar",
+    "created": "Data creării",
+    "modified": "Dată modificată",
+    "description": "Descriere",
+    "snippet": "Rezumat",
+    "licenseInfo": "Reguli de accesare şi utilizare",
+    "accessInformation": "Credite",
+    "tags": "Etichete",
+    "numViews": "Număr de vizualizări",
+    "avgRating": "Calificativ",
+    "noWebMapInGroup": "Grupul configurat nu este valid sau niciun element nu a fost încă partajat cu grupul",
+    "infoBtnToolTip": "Informaţii hartă",
+    "openWebmapList": "Ă_Open panel____ș",
+    "closeWebmapList": "Ă_Close panel____ș"
+  },
+  "geoform": {
+    "enterInformation": "Ă_Details___ș",
+    "selectAttachments": "Ă_Attachments____ș",
+    "selectFileText": "Ă_Browse___ș",
+    "enterLocation": "Ă_Location___ș",
+    "reportItButton": "Ă_Submit___ș",
+    "cancelButton": "Ă_Cancel___ș",
+    "requiredField": "Ă_(required)____ș",
+    "selectDefaultText": "Ă_Select&hellip;_____ș",
+    "invalidInputValue": "Ă_Please enter valid value_________ș.",
+    "noFieldsConfiguredMessage": "Ă_Layer fields are not configured to capture data_______________ș",
+    "invalidSmallNumber": "Ă_Please enter an integer________ș",
+    "invalidNumber": "Introduceţi un număr întreg",
+    "invalidFloat": "Introduceţi un număr",
+    "invalidDouble": "Introduceţi un număr",
+    "requiredFields": "Ă_Please provide values for all required fields_______________ș",
+    "selectLocation": "Ă_Please select the location for your report______________ș",
+    "numericRangeHintMessage": "Ă_${openStrong}Hint:${closeStrong} Minimum value ${minValue} and maximum value ${maxValue}___________________________ș",
+    "dateRangeHintMessage": "Ă_${openStrong}Hint:${closeStrong} Minimum date ${minValue} and Maximum date ${maxValue}___________________________ș",
+    "errorsInApplyEdits": "Ă_Report could not be submitted__________ș",
+    "attachmentSelectedMsg": "Ă_attachment(s) selected________ș",
+    "attachmentUploadStatus": "Ă_${failed} of ${total} attachment(s) failed to upload_________________ș",
+    "geoLocationError": "Ă_Current location not available__________ș",
+    "geoLocationOutOfExtent": "Ă_Current location is out of basemap extent_____________ș",
+    "submitButtonTooltip": "Ă_Save__ș",
+    "cancelButtonTooltip": "Ă_Cancel___ș",
+    "geoformBackButtonTooltip": "Ă_Return to the report list_________ș",
+    "updateFeaturesConfirmationMsg": "Ă_${count} features will be updated___________ș",
+    "attachmentHeaderText": "Ă_Attachments____ș"
+  },
+  "mapViewer": {
+    "zoomInToolTip": "Ă_Zoom in___ș",
+    "zoomOutToolTip": "Micşorare"
+  },
+  "applicationHeader": {
+    "signInOption": "Autentificare",
+    "signOutOption": "Deconectare",
+    "pleaseSignInText": "Autentificaţi-vă"
+  },
+  "dataviewer": {
+    "noIssuesReported": "Nu există niciun raport disponibil",
+    "noFeatureGeometry": "Obiectul spaţial nu poate fi afişat",
+    "ascendingFlagTitle": "Ă_Sort in ascending order________ș",
+    "descendingFlagTitle": "Ă_Sort in descending order________ș",
+    "filterLabel": "Ă_Filter___ș",
+    "valueRadioButtonLabel": "Ă_Value___ș",
+    "uniqueRadioButtonLabel": "Ă_Unique___ș",
+    "selectLayerToBegin": "Ă_Select a category to get started___________ș",
+    "layerFeatureCount": "Ă_${featureCount} records________ș"
+  },
+  "timeSlider": {
+    "timeSliderLabel": "Ă_Time range____ș",
+    "timeSliderInEditModeAlert": "Ă_Time slider unavailable while editing____________ș"
+  },
+  "comment": {
+    "commentsFormSubmitButton": "Ă_Save__ș",
+    "commentsFormCancelButton": "Ă_Cancel___ș",
+    "errorInSubmittingComment": "Ă_Edits could not be saved_________ș.",
+    "emptyCommentMessage": "Ă_Value required_____ș",
+    "placeHolderText": "",
+    "noCommentsAvailableText": "Ă_No records available_______ș",
+    "remainingTextCount": "Ă_${0} character(s) remain________ș",
+    "showNoText": "Ă_No__ș"
+  },
+  "main": {
+    "noGroup": "Niciun grup configurat"
+  },
+  "search": {
+    "searchIconTooltip": "Ă_Search this layer______ș",
+    "noResultFoundText": "Ă_No results found______ș",
+    "searchInEditModeAlert": "Ă_Search unavailable while editing___________ș"
+  },
+  "manualRefresh": {
+    "manualRefreshIconTooltip": "Ă_Refresh___ș",
+    "confirmManualRefeshText": "Toate selecţiile şi modificările nesalvate vor fi eliminate"
+  },
+  "help": {
+    "helpIconTooltip": "Ă_Help__ș"
+  },
+  "filter": {
+    "noFeatureFoundText": "Ă_No feature found for this value___________ș.",
+    "distinctQueryFalied": "Ă_No distinct values found for the field_____________ș.",
+    "andText": "Ă_and__ș",
+    "filterInEditModeAlert": "Ă_Filters unavailable while editing___________ș",
+    "dropdownSelectOption": "Ă_Select___ș"
+  },
+  "detailsPanel": {
+    "editContentText": "Ă_Edit record____ș"
+  },
+  "signOutPage": {
+    "signOutMessage": "V-aţi deconectat cu succes",
+    "reSignInMessage": "Faceţi clic aici pentru a vă autentifica"
+  }
+});

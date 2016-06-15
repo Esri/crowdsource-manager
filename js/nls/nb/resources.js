@@ -1,88 +1,131 @@
-﻿/*global define */
+/*global define */
+/*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
-define(
-     ({
-        map: {
-            error: "Kan ikke opprette kart" // Shown when error occurs while creation of map
-        },
-        main: {
-            noGroup: "Ingen gruppe er konfigurert" // Appears when no group is configured
-        },
-        webMapList: {
-            owner: "Eier", // Appears in web-map list description panel when it is set to true
-            created: "Opprettingsdato", // Appears in web-map list description panel when it is set to true
-            modified: "Oppdatert dato", // Appears in web-map list description panel when it is set to true
-            description: "Beskrivelse", // Appears in web-map list description panel when it is set to true
-            snippet: "Sammendrag", // Appears in web-map list description panel when it is set to true
-            licenseInfo: "Begrensning av tilgang og bruk", // Appears in web-map list description panel when it is set to true
-            accessInformation: "Credits", // Appears in web-map list description panel when it is set to true
-            tags: "Merker", // Appears in web-map list description panel when it is set to true
-            numViews: "Antall visninger", // Appears in web-map list description panel when it is set to true
-            avgRating: "Vurdering", // Appears in web-map list description panel when it is set to true
-            noWebMapInGroup: "Konfigurert gruppe er ugyldig, eller ingen elementer er blitt delt med denne gruppen ennå", // Appears when invalid group in configured or no web-map is available in that group
-            infoBtnToolTip: "Kartinformasjon" // Display tool-tip on command button to display description of web-map
-        },
-        applicationHeader: {
-            signOutOption: "Logg ut", // Command button to sign-out from the application
-            pleaseSignInText: "Du må logge på", // Appears when user needs to sign-in into the application
-            showSelectedOption: "Vis valgte", // Command button to show selected records in data-viewer
-            showAllOption: "Vis alle", // Command button to show all the records in data-viewer
-            clearSelectionOption: "Fjern utvalg", // Command button to clear selected records in data-viewer
-            zoomToSelectedOption: "Zoom til valgt", // Command button to zoom map to selected records
-            gridViewOption: "Listevisning", // Command button to display list view
-            mapViewOption: "Kartvisning", // Command button to display map view
-            gridMapViewOption: "Delt visning", // Command button to display split view
-            settingsBtnToolTip: "Alternativer for utvalg", // Display tool-tip on command button to open a list of settings options
-            viewModeBtnToolTip: "Visningsalternativer", // Display tool-tip on command button to open a list of view options
-            searchModeBtnToolTip: "Søk i dette laget", // Display tool-tip on command button to open a dialog box for finding a feature
-            manualRefreshBtnToolTip: "Oppdater", // Display tool-tip on command button to manually refresh the selected operational layer
-            confirmManualRefeshText: "Alle utvalg og endringer som ikke er lagret, forkastes", // Appears when user wants to do manual refresh
-            signInOption: "Logg på" // Appears when user has not signed in
-        },
-        dataviewer: {
-            noIssuesReported: "Ingen tilgjengelige rapporter", // Appears when no issues are available in current extent
-            photoAttachmentHeader: "Vedlegg", // Appears when attachments are available for display in details tab
-            invalidSmallNumber: "Angi et heltall ", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -32768 and 32767)
-            invalidNumber: "Angi et heltall", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -2147483648 and 2147483647)
-            invalidFloat: "Angi et tall", // Shown when invalid floating value is entered while editing in data-viewer (floating point value between -3.4E38 and 1.2E38)
-            invalidDouble: "Angi et tall", // Shown when invalid double value is entered while editing in data-viewer (double value between -2.2E308 and 1.8E308)
-            invalidString: "Angi en verdi", // Shown when user enters invalid string value
-            invalidDate: "Angi en gyldig dato", // Shown when user enters invalid date value
-            invalidNumericRange: "Angi en verdi mellom ${minValue} og ${maxValue}", // Shown when user enters value which is out of range
-            moreInfolink: "Kobling", // Shown when value in field contains only URL.
-            commentsText: "Kommentarer", // Appears when comments are available for display in details tab
-            noCommentsAvailable: "Ingen tilgjengelige kommentarer", // Appears when no comments are available
-            noFeatureGeometry: "Kan ikke vise geoobjekt" // Appears when user selects/activates a feature and geometry is available for that
-        },
-        config: {
-            configNotDefined: "Ingen konfigurasjon er definert" // Shown when there is an issue with config file
-        },
-        searchPanel: {
-            noResultsFound: "Fant ingen resultater" // Appears when user search for features and no feature is found
-        },
-        mapViewer: {
-            detailsBtnToolTip: "Vis flere detaljer om det aktive geoobjektet", // Display tool-tip on command button to view details of selected feature
-            locationBtnToolTip: "Vis kart", // Display tool-tip on command button to view map panel
-            zoomInToolTip: "Zoom inn", // Display tool-tip on command button to zoom in map
-            zoomOutToolTip: "Zoom ut" // Display tool-tip on command button to zoom out map
-        },
-        signOutPage: {
-            signOutMessage: "Du er logget av", // Appears when user is successfully signed-out from application
-            reSignInMessage: "Klikk her for å logge på" // Appears when user is signed-out from application and wants to sign-in again
-        }
-    })
-);
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
+define({
+  "map": {
+    "error": "Kan ikke opprette kart"
+  },
+  "webMapList": {
+    "owner": "Eier",
+    "created": "Opprettingsdato",
+    "modified": "Oppdatert dato",
+    "description": "Beskrivelse",
+    "snippet": "Sammendrag",
+    "licenseInfo": "Begrensning av tilgang og bruk",
+    "accessInformation": "Credits",
+    "tags": "Merker",
+    "numViews": "Antall visninger",
+    "avgRating": "Vurdering",
+    "noWebMapInGroup": "Konfigurert gruppe er ugyldig, eller ingen elementer er blitt delt med denne gruppen ennå",
+    "infoBtnToolTip": "Kartinformasjon",
+    "openWebmapList": "å_Open panel____ø",
+    "closeWebmapList": "å_Close panel____ø"
+  },
+  "geoform": {
+    "enterInformation": "å_Details___ø",
+    "selectAttachments": "å_Attachments____ø",
+    "selectFileText": "å_Browse___ø",
+    "enterLocation": "å_Location___ø",
+    "reportItButton": "å_Submit___ø",
+    "cancelButton": "å_Cancel___ø",
+    "requiredField": "å_(required)____ø",
+    "selectDefaultText": "å_Select&hellip;_____ø",
+    "invalidInputValue": "å_Please enter valid value_________ø.",
+    "noFieldsConfiguredMessage": "å_Layer fields are not configured to capture data_______________ø",
+    "invalidSmallNumber": "å_Please enter an integer________ø",
+    "invalidNumber": "Angi et heltall",
+    "invalidFloat": "Angi et tall",
+    "invalidDouble": "Angi et tall",
+    "requiredFields": "å_Please provide values for all required fields_______________ø",
+    "selectLocation": "å_Please select the location for your report______________ø",
+    "numericRangeHintMessage": "å_${openStrong}Hint:${closeStrong} Minimum value ${minValue} and maximum value ${maxValue}___________________________ø",
+    "dateRangeHintMessage": "å_${openStrong}Hint:${closeStrong} Minimum date ${minValue} and Maximum date ${maxValue}___________________________ø",
+    "errorsInApplyEdits": "å_Report could not be submitted__________ø",
+    "attachmentSelectedMsg": "å_attachment(s) selected________ø",
+    "attachmentUploadStatus": "å_${failed} of ${total} attachment(s) failed to upload_________________ø",
+    "geoLocationError": "å_Current location not available__________ø",
+    "geoLocationOutOfExtent": "å_Current location is out of basemap extent_____________ø",
+    "submitButtonTooltip": "å_Save__ø",
+    "cancelButtonTooltip": "å_Cancel___ø",
+    "geoformBackButtonTooltip": "å_Return to the report list_________ø",
+    "updateFeaturesConfirmationMsg": "å_${count} features will be updated___________ø",
+    "attachmentHeaderText": "å_Attachments____ø"
+  },
+  "mapViewer": {
+    "zoomInToolTip": "å_Zoom in___ø",
+    "zoomOutToolTip": "Zoom ut"
+  },
+  "applicationHeader": {
+    "signInOption": "Logg på",
+    "signOutOption": "Logg ut",
+    "pleaseSignInText": "Du må logge på"
+  },
+  "dataviewer": {
+    "noIssuesReported": "Ingen tilgjengelige rapporter",
+    "noFeatureGeometry": "Kan ikke vise geoobjekt",
+    "ascendingFlagTitle": "å_Sort in ascending order________ø",
+    "descendingFlagTitle": "å_Sort in descending order________ø",
+    "filterLabel": "å_Filter___ø",
+    "valueRadioButtonLabel": "å_Value___ø",
+    "uniqueRadioButtonLabel": "å_Unique___ø",
+    "selectLayerToBegin": "å_Select a category to get started___________ø",
+    "layerFeatureCount": "å_${featureCount} records________ø"
+  },
+  "timeSlider": {
+    "timeSliderLabel": "å_Time range____ø",
+    "timeSliderInEditModeAlert": "å_Time slider unavailable while editing____________ø"
+  },
+  "comment": {
+    "commentsFormSubmitButton": "å_Save__ø",
+    "commentsFormCancelButton": "å_Cancel___ø",
+    "errorInSubmittingComment": "å_Edits could not be saved_________ø.",
+    "emptyCommentMessage": "å_Value required_____ø",
+    "placeHolderText": "",
+    "noCommentsAvailableText": "å_No records available_______ø",
+    "remainingTextCount": "å_${0} character(s) remain________ø",
+    "showNoText": "å_No__ø"
+  },
+  "main": {
+    "noGroup": "Ingen gruppe er konfigurert"
+  },
+  "search": {
+    "searchIconTooltip": "å_Search this layer______ø",
+    "noResultFoundText": "å_No results found______ø",
+    "searchInEditModeAlert": "å_Search unavailable while editing___________ø"
+  },
+  "manualRefresh": {
+    "manualRefreshIconTooltip": "å_Refresh___ø",
+    "confirmManualRefeshText": "Alle utvalg og endringer som ikke er lagret, forkastes"
+  },
+  "help": {
+    "helpIconTooltip": "å_Help__ø"
+  },
+  "filter": {
+    "noFeatureFoundText": "å_No feature found for this value___________ø.",
+    "distinctQueryFalied": "å_No distinct values found for the field_____________ø.",
+    "andText": "å_and__ø",
+    "filterInEditModeAlert": "å_Filters unavailable while editing___________ø",
+    "dropdownSelectOption": "å_Select___ø"
+  },
+  "detailsPanel": {
+    "editContentText": "å_Edit record____ø"
+  },
+  "signOutPage": {
+    "signOutMessage": "Du er logget av",
+    "reSignInMessage": "Klikk her for å logge på"
+  }
+});

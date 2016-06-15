@@ -1,88 +1,131 @@
-﻿/*global define */
+/*global define */
+/*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
-define(
-     ({
-        map: {
-            error: "Nie można utworzyć" // Shown when error occurs while creation of map
-        },
-        main: {
-            noGroup: "Nie skonfigurowano żadnej grupy" // Appears when no group is configured
-        },
-        webMapList: {
-            owner: "Właściciel", // Appears in web-map list description panel when it is set to true
-            created: "Data utworzenia", // Appears in web-map list description panel when it is set to true
-            modified: "Ostatnia modyfikacja", // Appears in web-map list description panel when it is set to true
-            description: "Opis", // Appears in web-map list description panel when it is set to true
-            snippet: "Summary", // Appears in web-map list description panel when it is set to true
-            licenseInfo: "Ograniczenia dostępu i użytkowania", // Appears in web-map list description panel when it is set to true
-            accessInformation: "Udostępniający zasoby", // Appears in web-map list description panel when it is set to true
-            tags: "Tags", // Appears in web-map list description panel when it is set to true
-            numViews: "Liczba wyświetleń", // Appears in web-map list description panel when it is set to true
-            avgRating: "Ocena", // Appears in web-map list description panel when it is set to true
-            noWebMapInGroup: "Skonfigurowana grupa jest nieprawidłowa lub tej grupie nie udostępniono jeszcze żadnych elementów", // Appears when invalid group in configured or no web-map is available in that group
-            infoBtnToolTip: "Informacje o mapie" // Display tool-tip on command button to display description of web-map
-        },
-        applicationHeader: {
-            signOutOption: "Wyloguj się", // Command button to sign-out from the application
-            pleaseSignInText: "Zaloguj się", // Appears when user needs to sign-in into the application
-            showSelectedOption: "Pokaż wybrane", // Command button to show selected records in data-viewer
-            showAllOption: "Show All", // Command button to show all the records in data-viewer
-            clearSelectionOption: "Clear Selection", // Command button to clear selected records in data-viewer
-            zoomToSelectedOption: "Powiększ do selekcji", // Command button to zoom map to selected records
-            gridViewOption: "Widok listy", // Command button to display list view
-            mapViewOption: "Widok mapy", // Command button to display map view
-            gridMapViewOption: "Widok podzielony", // Command button to display split view
-            settingsBtnToolTip: "Opcje selekcji", // Display tool-tip on command button to open a list of settings options
-            viewModeBtnToolTip: "Opcje wyświetlania", // Display tool-tip on command button to open a list of view options
-            searchModeBtnToolTip: "Przeszukaj tę warstwę", // Display tool-tip on command button to open a dialog box for finding a feature
-            manualRefreshBtnToolTip: "Odśwież", // Display tool-tip on command button to manually refresh the selected operational layer
-            confirmManualRefeshText: "Wszystkie selekcje i niezapisane zmiany zostaną odrzucone", // Appears when user wants to do manual refresh
-            signInOption: "Zaloguj się" // Appears when user has not signed in
-        },
-        dataviewer: {
-            noIssuesReported: "Brak dostępnych raportów", // Appears when no issues are available in current extent
-            photoAttachmentHeader: "Załączniki", // Appears when attachments are available for display in details tab
-            invalidSmallNumber: "Wprowadź liczbę całkowitą ", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -32768 and 32767)
-            invalidNumber: "Wprowadź liczbę całkowitą", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -2147483648 and 2147483647)
-            invalidFloat: "Wprowadź liczbę", // Shown when invalid floating value is entered while editing in data-viewer (floating point value between -3.4E38 and 1.2E38)
-            invalidDouble: "Wprowadź liczbę", // Shown when invalid double value is entered while editing in data-viewer (double value between -2.2E308 and 1.8E308)
-            invalidString: "Wprowadź wartość", // Shown when user enters invalid string value
-            invalidDate: "Wprowadź prawidłową datę", // Shown when user enters invalid date value
-            invalidNumericRange: "Wprowadź wartość między ${minValue} a ${maxValue}", // Shown when user enters value which is out of range
-            moreInfolink: "Połącz", // Shown when value in field contains only URL.
-            commentsText: "Comments", // Appears when comments are available for display in details tab
-            noCommentsAvailable: "Brak dostępnych komentarzy", // Appears when no comments are available
-            noFeatureGeometry: "Nie można wyświetlić obiektu" // Appears when user selects/activates a feature and geometry is available for that
-        },
-        config: {
-            configNotDefined: "Brak zdefiniowanych konfiguracji" // Shown when there is an issue with config file
-        },
-        searchPanel: {
-            noResultsFound: "Nie znaleziono wyników" // Appears when user search for features and no feature is found
-        },
-        mapViewer: {
-            detailsBtnToolTip: "Wyświetl więcej szczegółów aktywnego obiektu", // Display tool-tip on command button to view details of selected feature
-            locationBtnToolTip: "Wyświetl mapę", // Display tool-tip on command button to view map panel
-            zoomInToolTip: "Powiększ", // Display tool-tip on command button to zoom in map
-            zoomOutToolTip: "Pomniejsz" // Display tool-tip on command button to zoom out map
-        },
-        signOutPage: {
-            signOutMessage: "Wylogowanie pomyślne", // Appears when user is successfully signed-out from application
-            reSignInMessage: "Kliknij tutaj, aby się zalogować" // Appears when user is signed-out from application and wants to sign-in again
-        }
-    })
-);
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
+define({
+  "map": {
+    "error": "Nie można utworzyć"
+  },
+  "webMapList": {
+    "owner": "Właściciel",
+    "created": "Data utworzenia",
+    "modified": "Ostatnia modyfikacja",
+    "description": "Opis",
+    "snippet": "Summary",
+    "licenseInfo": "Ograniczenia dostępu i użytkowania",
+    "accessInformation": "Udostępniający zasoby",
+    "tags": "Tags",
+    "numViews": "Liczba wyświetleń",
+    "avgRating": "Ocena",
+    "noWebMapInGroup": "Skonfigurowana grupa jest nieprawidłowa lub tej grupie nie udostępniono jeszcze żadnych elementów",
+    "infoBtnToolTip": "Informacje o mapie",
+    "openWebmapList": "ł_Open panel____ą",
+    "closeWebmapList": "ł_Close panel____ą"
+  },
+  "geoform": {
+    "enterInformation": "ł_Details___ą",
+    "selectAttachments": "ł_Attachments____ą",
+    "selectFileText": "ł_Browse___ą",
+    "enterLocation": "ł_Location___ą",
+    "reportItButton": "ł_Submit___ą",
+    "cancelButton": "ł_Cancel___ą",
+    "requiredField": "ł_(required)____ą",
+    "selectDefaultText": "ł_Select&hellip;_____ą",
+    "invalidInputValue": "ł_Please enter valid value_________ą.",
+    "noFieldsConfiguredMessage": "ł_Layer fields are not configured to capture data_______________ą",
+    "invalidSmallNumber": "ł_Please enter an integer________ą",
+    "invalidNumber": "Wprowadź liczbę całkowitą",
+    "invalidFloat": "Wprowadź liczbę",
+    "invalidDouble": "Wprowadź liczbę",
+    "requiredFields": "ł_Please provide values for all required fields_______________ą",
+    "selectLocation": "ł_Please select the location for your report______________ą",
+    "numericRangeHintMessage": "ł_${openStrong}Hint:${closeStrong} Minimum value ${minValue} and maximum value ${maxValue}___________________________ą",
+    "dateRangeHintMessage": "ł_${openStrong}Hint:${closeStrong} Minimum date ${minValue} and Maximum date ${maxValue}___________________________ą",
+    "errorsInApplyEdits": "ł_Report could not be submitted__________ą",
+    "attachmentSelectedMsg": "ł_attachment(s) selected________ą",
+    "attachmentUploadStatus": "ł_${failed} of ${total} attachment(s) failed to upload_________________ą",
+    "geoLocationError": "ł_Current location not available__________ą",
+    "geoLocationOutOfExtent": "ł_Current location is out of basemap extent_____________ą",
+    "submitButtonTooltip": "ł_Save__ą",
+    "cancelButtonTooltip": "ł_Cancel___ą",
+    "geoformBackButtonTooltip": "ł_Return to the report list_________ą",
+    "updateFeaturesConfirmationMsg": "ł_${count} features will be updated___________ą",
+    "attachmentHeaderText": "ł_Attachments____ą"
+  },
+  "mapViewer": {
+    "zoomInToolTip": "ł_Zoom in___ą",
+    "zoomOutToolTip": "Pomniejsz"
+  },
+  "applicationHeader": {
+    "signInOption": "Zaloguj się",
+    "signOutOption": "Wyloguj się",
+    "pleaseSignInText": "Zaloguj się"
+  },
+  "dataviewer": {
+    "noIssuesReported": "Brak dostępnych raportów",
+    "noFeatureGeometry": "Nie można wyświetlić obiektu",
+    "ascendingFlagTitle": "ł_Sort in ascending order________ą",
+    "descendingFlagTitle": "ł_Sort in descending order________ą",
+    "filterLabel": "ł_Filter___ą",
+    "valueRadioButtonLabel": "ł_Value___ą",
+    "uniqueRadioButtonLabel": "ł_Unique___ą",
+    "selectLayerToBegin": "ł_Select a category to get started___________ą",
+    "layerFeatureCount": "ł_${featureCount} records________ą"
+  },
+  "timeSlider": {
+    "timeSliderLabel": "ł_Time range____ą",
+    "timeSliderInEditModeAlert": "ł_Time slider unavailable while editing____________ą"
+  },
+  "comment": {
+    "commentsFormSubmitButton": "ł_Save__ą",
+    "commentsFormCancelButton": "ł_Cancel___ą",
+    "errorInSubmittingComment": "ł_Edits could not be saved_________ą.",
+    "emptyCommentMessage": "ł_Value required_____ą",
+    "placeHolderText": "",
+    "noCommentsAvailableText": "ł_No records available_______ą",
+    "remainingTextCount": "ł_${0} character(s) remain________ą",
+    "showNoText": "ł_No__ą"
+  },
+  "main": {
+    "noGroup": "Nie skonfigurowano żadnej grupy"
+  },
+  "search": {
+    "searchIconTooltip": "ł_Search this layer______ą",
+    "noResultFoundText": "ł_No results found______ą",
+    "searchInEditModeAlert": "ł_Search unavailable while editing___________ą"
+  },
+  "manualRefresh": {
+    "manualRefreshIconTooltip": "ł_Refresh___ą",
+    "confirmManualRefeshText": "Wszystkie selekcje i niezapisane zmiany zostaną odrzucone"
+  },
+  "help": {
+    "helpIconTooltip": "ł_Help__ą"
+  },
+  "filter": {
+    "noFeatureFoundText": "ł_No feature found for this value___________ą.",
+    "distinctQueryFalied": "ł_No distinct values found for the field_____________ą.",
+    "andText": "ł_and__ą",
+    "filterInEditModeAlert": "ł_Filters unavailable while editing___________ą",
+    "dropdownSelectOption": "ł_Select___ą"
+  },
+  "detailsPanel": {
+    "editContentText": "ł_Edit record____ą"
+  },
+  "signOutPage": {
+    "signOutMessage": "Wylogowanie pomyślne",
+    "reSignInMessage": "Kliknij tutaj, aby się zalogować"
+  }
+});

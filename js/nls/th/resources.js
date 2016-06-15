@@ -1,88 +1,131 @@
-﻿/*global define */
+/*global define */
+/*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
-define(
-     ({
-        map: {
-            error: "ไม่สามารถสร้างแผนที่ได้" // Shown when error occurs while creation of map
-        },
-        main: {
-            noGroup: "ยังไม่กำหนดกลุ่ม" // Appears when no group is configured
-        },
-        webMapList: {
-            owner: "เจ้าของ", // Appears in web-map list description panel when it is set to true
-            created: "วันที่สร้าง", // Appears in web-map list description panel when it is set to true
-            modified: "วันที่แก้ไข", // Appears in web-map list description panel when it is set to true
-            description: "คำบรรยาย", // Appears in web-map list description panel when it is set to true
-            snippet: "สรุป", // Appears in web-map list description panel when it is set to true
-            licenseInfo: "การเข้าถึงและข้อจำกัด", // Appears in web-map list description panel when it is set to true
-            accessInformation: "เครดิต", // Appears in web-map list description panel when it is set to true
-            tags: "แท็กส์", // Appears in web-map list description panel when it is set to true
-            numViews: "จำนวนวิว", // Appears in web-map list description panel when it is set to true
-            avgRating: "อันดับ", // Appears in web-map list description panel when it is set to true
-            noWebMapInGroup: "กำหนดกลุ่มไม่ถูกต้องหรือยังไม่มีไอเท็มแชร์อยู่ในกลุ่ม", // Appears when invalid group in configured or no web-map is available in that group
-            infoBtnToolTip: "ข้อมูลรายละเอียดแผนที่" // Display tool-tip on command button to display description of web-map
-        },
-        applicationHeader: {
-            signOutOption: "ลงชื่อออก", // Command button to sign-out from the application
-            pleaseSignInText: "กรุณาลงชื่อเข้าใช้", // Appears when user needs to sign-in into the application
-            showSelectedOption: "แสดงที่เลือก", // Command button to show selected records in data-viewer
-            showAllOption: "แสดงทั้งหมด", // Command button to show all the records in data-viewer
-            clearSelectionOption: "ยกเลิกบริเวณที่เลือก", // Command button to clear selected records in data-viewer
-            zoomToSelectedOption: "ขยายไปบริเวณที่เลือกไว้", // Command button to zoom map to selected records
-            gridViewOption: "รายการมุมมอง", // Command button to display list view
-            mapViewOption: "มุมมองแผนที่", // Command button to display map view
-            gridMapViewOption: "แบ่งมุมมอง", // Command button to display split view
-            settingsBtnToolTip: "ตัวเลือกที่ใช้ในการเลือก", // Display tool-tip on command button to open a list of settings options
-            viewModeBtnToolTip: "ตัวเลือกที่ใช้ในการแสดงผล", // Display tool-tip on command button to open a list of view options
-            searchModeBtnToolTip: "ค้นหาชั้นข้อมูล", // Display tool-tip on command button to open a dialog box for finding a feature
-            manualRefreshBtnToolTip: "รีเฟรช", // Display tool-tip on command button to manually refresh the selected operational layer
-            confirmManualRefeshText: "การเลือกทั้งหมดและสิ่งที่ไม่ได้บันทึกการเปลี่ยนแปลงจะถูกละทิ้ง", // Appears when user wants to do manual refresh
-            signInOption: "ลงชื่อเข้าใช้" // Appears when user has not signed in
-        },
-        dataviewer: {
-            noIssuesReported: "ไม่มีรายงานให้", // Appears when no issues are available in current extent
-            photoAttachmentHeader: "เอกสารแนบ", // Appears when attachments are available for display in details tab
-            invalidSmallNumber: "โปรดกรอกเลขจำนวนเต็ม ", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -32768 and 32767)
-            invalidNumber: "โปรดกรอกเลขจำนวนเต็ม", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -2147483648 and 2147483647)
-            invalidFloat: "โปรดกรอกตัวเลข", // Shown when invalid floating value is entered while editing in data-viewer (floating point value between -3.4E38 and 1.2E38)
-            invalidDouble: "โปรดกรอกตัวเลข", // Shown when invalid double value is entered while editing in data-viewer (double value between -2.2E308 and 1.8E308)
-            invalidString: "โปรดกรอกค่า", // Shown when user enters invalid string value
-            invalidDate: "โปรดกรอกวันที่", // Shown when user enters invalid date value
-            invalidNumericRange: "โปรดกรอกค่าระหว่าง ${minValue} และ ${maxValue}", // Shown when user enters value which is out of range
-            moreInfolink: "ลิงค์", // Shown when value in field contains only URL.
-            commentsText: "ความคิดเห็น", // Appears when comments are available for display in details tab
-            noCommentsAvailable: "ไม่มีความคิดเห็น", // Appears when no comments are available
-            noFeatureGeometry: "ไม่สามารถแสดงฟีเจอร์ได้" // Appears when user selects/activates a feature and geometry is available for that
-        },
-        config: {
-            configNotDefined: "ไม่มีการกำหนดค่า" // Shown when there is an issue with config file
-        },
-        searchPanel: {
-            noResultsFound: "ไม่พบผลลัพธ์" // Appears when user search for features and no feature is found
-        },
-        mapViewer: {
-            detailsBtnToolTip: "แสดงรายละเอียดของข้อมูลที่ทำงานอยู่มากกว่านี้", // Display tool-tip on command button to view details of selected feature
-            locationBtnToolTip: "ดูแผนที่", // Display tool-tip on command button to view map panel
-            zoomInToolTip: "ขยายภาพ", // Display tool-tip on command button to zoom in map
-            zoomOutToolTip: "ย่อภาพ" // Display tool-tip on command button to zoom out map
-        },
-        signOutPage: {
-            signOutMessage: "คุณได้ลงชื่อออกเรียบร้อยแล้ว", // Appears when user is successfully signed-out from application
-            reSignInMessage: "กดที่นี่ เพื่อลงชื่อเข้าใช้" // Appears when user is signed-out from application and wants to sign-in again
-        }
-    })
-);
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
+define({
+  "map": {
+    "error": "ไม่สามารถสร้างแผนที่ได้"
+  },
+  "webMapList": {
+    "owner": "เจ้าของ",
+    "created": "วันที่สร้าง",
+    "modified": "วันที่แก้ไข",
+    "description": "คำบรรยาย",
+    "snippet": "สรุป",
+    "licenseInfo": "การเข้าถึงและข้อจำกัด",
+    "accessInformation": "เครดิต",
+    "tags": "แท็กส์",
+    "numViews": "จำนวนวิว",
+    "avgRating": "อันดับ",
+    "noWebMapInGroup": "กำหนดกลุ่มไม่ถูกต้องหรือยังไม่มีไอเท็มแชร์อยู่ในกลุ่ม",
+    "infoBtnToolTip": "ข้อมูลรายละเอียดแผนที่",
+    "openWebmapList": "ก้_Open panel____ษฺ",
+    "closeWebmapList": "ก้_Close panel____ษฺ"
+  },
+  "geoform": {
+    "enterInformation": "ก้_Details___ษฺ",
+    "selectAttachments": "ก้_Attachments____ษฺ",
+    "selectFileText": "ก้_Browse___ษฺ",
+    "enterLocation": "ก้_Location___ษฺ",
+    "reportItButton": "ก้_Submit___ษฺ",
+    "cancelButton": "ก้_Cancel___ษฺ",
+    "requiredField": "ก้_(required)____ษฺ",
+    "selectDefaultText": "ก้_Select&hellip;_____ษฺ",
+    "invalidInputValue": "ก้_Please enter valid value_________ษฺ.",
+    "noFieldsConfiguredMessage": "ก้_Layer fields are not configured to capture data_______________ษฺ",
+    "invalidSmallNumber": "ก้_Please enter an integer________ษฺ",
+    "invalidNumber": "โปรดกรอกเลขจำนวนเต็ม",
+    "invalidFloat": "โปรดกรอกตัวเลข",
+    "invalidDouble": "โปรดกรอกตัวเลข",
+    "requiredFields": "ก้_Please provide values for all required fields_______________ษฺ",
+    "selectLocation": "ก้_Please select the location for your report______________ษฺ",
+    "numericRangeHintMessage": "ก้_${openStrong}Hint:${closeStrong} Minimum value ${minValue} and maximum value ${maxValue}___________________________ษฺ",
+    "dateRangeHintMessage": "ก้_${openStrong}Hint:${closeStrong} Minimum date ${minValue} and Maximum date ${maxValue}___________________________ษฺ",
+    "errorsInApplyEdits": "ก้_Report could not be submitted__________ษฺ",
+    "attachmentSelectedMsg": "ก้_attachment(s) selected________ษฺ",
+    "attachmentUploadStatus": "ก้_${failed} of ${total} attachment(s) failed to upload_________________ษฺ",
+    "geoLocationError": "ก้_Current location not available__________ษฺ",
+    "geoLocationOutOfExtent": "ก้_Current location is out of basemap extent_____________ษฺ",
+    "submitButtonTooltip": "ก้_Save__ษฺ",
+    "cancelButtonTooltip": "ก้_Cancel___ษฺ",
+    "geoformBackButtonTooltip": "ก้_Return to the report list_________ษฺ",
+    "updateFeaturesConfirmationMsg": "ก้_${count} features will be updated___________ษฺ",
+    "attachmentHeaderText": "ก้_Attachments____ษฺ"
+  },
+  "mapViewer": {
+    "zoomInToolTip": "ก้_Zoom in___ษฺ",
+    "zoomOutToolTip": "ย่อภาพ"
+  },
+  "applicationHeader": {
+    "signInOption": "ลงชื่อเข้าใช้",
+    "signOutOption": "ลงชื่อออก",
+    "pleaseSignInText": "กรุณาลงชื่อเข้าใช้"
+  },
+  "dataviewer": {
+    "noIssuesReported": "ไม่มีรายงานให้",
+    "noFeatureGeometry": "ไม่สามารถแสดงฟีเจอร์ได้",
+    "ascendingFlagTitle": "ก้_Sort in ascending order________ษฺ",
+    "descendingFlagTitle": "ก้_Sort in descending order________ษฺ",
+    "filterLabel": "ก้_Filter___ษฺ",
+    "valueRadioButtonLabel": "ก้_Value___ษฺ",
+    "uniqueRadioButtonLabel": "ก้_Unique___ษฺ",
+    "selectLayerToBegin": "ก้_Select a category to get started___________ษฺ",
+    "layerFeatureCount": "ก้_${featureCount} records________ษฺ"
+  },
+  "timeSlider": {
+    "timeSliderLabel": "ก้_Time range____ษฺ",
+    "timeSliderInEditModeAlert": "ก้_Time slider unavailable while editing____________ษฺ"
+  },
+  "comment": {
+    "commentsFormSubmitButton": "ก้_Save__ษฺ",
+    "commentsFormCancelButton": "ก้_Cancel___ษฺ",
+    "errorInSubmittingComment": "ก้_Edits could not be saved_________ษฺ.",
+    "emptyCommentMessage": "ก้_Value required_____ษฺ",
+    "placeHolderText": "",
+    "noCommentsAvailableText": "ก้_No records available_______ษฺ",
+    "remainingTextCount": "ก้_${0} character(s) remain________ษฺ",
+    "showNoText": "ก้_No__ษฺ"
+  },
+  "main": {
+    "noGroup": "ยังไม่กำหนดกลุ่ม"
+  },
+  "search": {
+    "searchIconTooltip": "ก้_Search this layer______ษฺ",
+    "noResultFoundText": "ก้_No results found______ษฺ",
+    "searchInEditModeAlert": "ก้_Search unavailable while editing___________ษฺ"
+  },
+  "manualRefresh": {
+    "manualRefreshIconTooltip": "ก้_Refresh___ษฺ",
+    "confirmManualRefeshText": "การเลือกทั้งหมดและสิ่งที่ไม่ได้บันทึกการเปลี่ยนแปลงจะถูกละทิ้ง"
+  },
+  "help": {
+    "helpIconTooltip": "ก้_Help__ษฺ"
+  },
+  "filter": {
+    "noFeatureFoundText": "ก้_No feature found for this value___________ษฺ.",
+    "distinctQueryFalied": "ก้_No distinct values found for the field_____________ษฺ.",
+    "andText": "ก้_and__ษฺ",
+    "filterInEditModeAlert": "ก้_Filters unavailable while editing___________ษฺ",
+    "dropdownSelectOption": "ก้_Select___ษฺ"
+  },
+  "detailsPanel": {
+    "editContentText": "ก้_Edit record____ษฺ"
+  },
+  "signOutPage": {
+    "signOutMessage": "คุณได้ลงชื่อออกเรียบร้อยแล้ว",
+    "reSignInMessage": "กดที่นี่ เพื่อลงชื่อเข้าใช้"
+  }
+});

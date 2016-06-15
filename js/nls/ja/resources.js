@@ -1,88 +1,131 @@
-﻿/*global define */
+/*global define */
+/*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
-define(
-     ({
-        map: {
-            error: "マップを作成できません" // Shown when error occurs while creation of map
-        },
-        main: {
-            noGroup: "グループが構成されていません" // Appears when no group is configured
-        },
-        webMapList: {
-            owner: "所有者", // Appears in web-map list description panel when it is set to true
-            created: "作成日", // Appears in web-map list description panel when it is set to true
-            modified: "更新日", // Appears in web-map list description panel when it is set to true
-            description: "説明", // Appears in web-map list description panel when it is set to true
-            snippet: "サマリー", // Appears in web-map list description panel when it is set to true
-            licenseInfo: "アクセスと使用の制限", // Appears in web-map list description panel when it is set to true
-            accessInformation: "著作権", // Appears in web-map list description panel when it is set to true
-            tags: "タグ", // Appears in web-map list description panel when it is set to true
-            numViews: "ビュー数", // Appears in web-map list description panel when it is set to true
-            avgRating: "評価", // Appears in web-map list description panel when it is set to true
-            noWebMapInGroup: "構成済みのグループが無効であるか、アイテムがこのグループと共有されていません", // Appears when invalid group in configured or no web-map is available in that group
-            infoBtnToolTip: "マップ情報" // Display tool-tip on command button to display description of web-map
-        },
-        applicationHeader: {
-            signOutOption: "サイン アウト", // Command button to sign-out from the application
-            pleaseSignInText: "サイン インしてください", // Appears when user needs to sign-in into the application
-            showSelectedOption: "選択レイヤーの表示", // Command button to show selected records in data-viewer
-            showAllOption: "すべて表示", // Command button to show all the records in data-viewer
-            clearSelectionOption: "選択の解除", // Command button to clear selected records in data-viewer
-            zoomToSelectedOption: "選択セットにズーム", // Command button to zoom map to selected records
-            gridViewOption: "リスト ビュー", // Command button to display list view
-            mapViewOption: "マップ ビュー", // Command button to display map view
-            gridMapViewOption: "ビューの分割", // Command button to display split view
-            settingsBtnToolTip: "選択オプション", // Display tool-tip on command button to open a list of settings options
-            viewModeBtnToolTip: "表示オプション", // Display tool-tip on command button to open a list of view options
-            searchModeBtnToolTip: "このレイヤーを検索", // Display tool-tip on command button to open a dialog box for finding a feature
-            manualRefreshBtnToolTip: "更新", // Display tool-tip on command button to manually refresh the selected operational layer
-            confirmManualRefeshText: "すべての選択セットおよび保存されていない変更は破棄されます", // Appears when user wants to do manual refresh
-            signInOption: "サイン イン" // Appears when user has not signed in
-        },
-        dataviewer: {
-            noIssuesReported: "レポートがありません", // Appears when no issues are available in current extent
-            photoAttachmentHeader: "添付ファイル", // Appears when attachments are available for display in details tab
-            invalidSmallNumber: "整数を入力してください ", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -32768 and 32767)
-            invalidNumber: "整数を入力してください", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -2147483648 and 2147483647)
-            invalidFloat: "数字を入力してください", // Shown when invalid floating value is entered while editing in data-viewer (floating point value between -3.4E38 and 1.2E38)
-            invalidDouble: "数字を入力してください", // Shown when invalid double value is entered while editing in data-viewer (double value between -2.2E308 and 1.8E308)
-            invalidString: "値を入力してください。", // Shown when user enters invalid string value
-            invalidDate: "有効な日付を入力してください", // Shown when user enters invalid date value
-            invalidNumericRange: "${minValue} ～ ${maxValue} の値を入力してください", // Shown when user enters value which is out of range
-            moreInfolink: "リンク", // Shown when value in field contains only URL.
-            commentsText: "コメント", // Appears when comments are available for display in details tab
-            noCommentsAvailable: "コメントがありません", // Appears when no comments are available
-            noFeatureGeometry: "フィーチャを表示できません" // Appears when user selects/activates a feature and geometry is available for that
-        },
-        config: {
-            configNotDefined: "構成が定義されていません" // Shown when there is an issue with config file
-        },
-        searchPanel: {
-            noResultsFound: "結果が見つかりません" // Appears when user search for features and no feature is found
-        },
-        mapViewer: {
-            detailsBtnToolTip: "アクティブなフィーチャの詳細を表示", // Display tool-tip on command button to view details of selected feature
-            locationBtnToolTip: "マップの表示", // Display tool-tip on command button to view map panel
-            zoomInToolTip: "拡大", // Display tool-tip on command button to zoom in map
-            zoomOutToolTip: "縮小" // Display tool-tip on command button to zoom out map
-        },
-        signOutPage: {
-            signOutMessage: "正常にサイン アウトしました", // Appears when user is successfully signed-out from application
-            reSignInMessage: "ここをクリックしてサイン インします" // Appears when user is signed-out from application and wants to sign-in again
-        }
-    })
-);
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
+define({
+  "map": {
+    "error": "マップを作成できません"
+  },
+  "webMapList": {
+    "owner": "所有者",
+    "created": "作成日",
+    "modified": "更新日",
+    "description": "説明",
+    "snippet": "サマリー",
+    "licenseInfo": "アクセスと使用の制限",
+    "accessInformation": "著作権",
+    "tags": "タグ",
+    "numViews": "ビュー数",
+    "avgRating": "評価",
+    "noWebMapInGroup": "構成済みのグループが無効であるか、アイテムがこのグループと共有されていません",
+    "infoBtnToolTip": "マップ情報",
+    "openWebmapList": "須_Open panel____鷗",
+    "closeWebmapList": "須_Close panel____鷗"
+  },
+  "geoform": {
+    "enterInformation": "須_Details___鷗",
+    "selectAttachments": "須_Attachments____鷗",
+    "selectFileText": "須_Browse___鷗",
+    "enterLocation": "須_Location___鷗",
+    "reportItButton": "須_Submit___鷗",
+    "cancelButton": "須_Cancel___鷗",
+    "requiredField": "須_(required)____鷗",
+    "selectDefaultText": "須_Select&hellip;_____鷗",
+    "invalidInputValue": "須_Please enter valid value_________鷗.",
+    "noFieldsConfiguredMessage": "須_Layer fields are not configured to capture data_______________鷗",
+    "invalidSmallNumber": "須_Please enter an integer________鷗",
+    "invalidNumber": "整数を入力してください",
+    "invalidFloat": "数字を入力してください",
+    "invalidDouble": "数字を入力してください",
+    "requiredFields": "須_Please provide values for all required fields_______________鷗",
+    "selectLocation": "須_Please select the location for your report______________鷗",
+    "numericRangeHintMessage": "須_${openStrong}Hint:${closeStrong} Minimum value ${minValue} and maximum value ${maxValue}___________________________鷗",
+    "dateRangeHintMessage": "須_${openStrong}Hint:${closeStrong} Minimum date ${minValue} and Maximum date ${maxValue}___________________________鷗",
+    "errorsInApplyEdits": "須_Report could not be submitted__________鷗",
+    "attachmentSelectedMsg": "須_attachment(s) selected________鷗",
+    "attachmentUploadStatus": "須_${failed} of ${total} attachment(s) failed to upload_________________鷗",
+    "geoLocationError": "須_Current location not available__________鷗",
+    "geoLocationOutOfExtent": "須_Current location is out of basemap extent_____________鷗",
+    "submitButtonTooltip": "須_Save__鷗",
+    "cancelButtonTooltip": "須_Cancel___鷗",
+    "geoformBackButtonTooltip": "須_Return to the report list_________鷗",
+    "updateFeaturesConfirmationMsg": "須_${count} features will be updated___________鷗",
+    "attachmentHeaderText": "須_Attachments____鷗"
+  },
+  "mapViewer": {
+    "zoomInToolTip": "須_Zoom in___鷗",
+    "zoomOutToolTip": "縮小"
+  },
+  "applicationHeader": {
+    "signInOption": "サイン イン",
+    "signOutOption": "サイン アウト",
+    "pleaseSignInText": "サイン インしてください"
+  },
+  "dataviewer": {
+    "noIssuesReported": "レポートがありません",
+    "noFeatureGeometry": "フィーチャを表示できません",
+    "ascendingFlagTitle": "須_Sort in ascending order________鷗",
+    "descendingFlagTitle": "須_Sort in descending order________鷗",
+    "filterLabel": "須_Filter___鷗",
+    "valueRadioButtonLabel": "須_Value___鷗",
+    "uniqueRadioButtonLabel": "須_Unique___鷗",
+    "selectLayerToBegin": "須_Select a category to get started___________鷗",
+    "layerFeatureCount": "須_${featureCount} records________鷗"
+  },
+  "timeSlider": {
+    "timeSliderLabel": "須_Time range____鷗",
+    "timeSliderInEditModeAlert": "須_Time slider unavailable while editing____________鷗"
+  },
+  "comment": {
+    "commentsFormSubmitButton": "須_Save__鷗",
+    "commentsFormCancelButton": "須_Cancel___鷗",
+    "errorInSubmittingComment": "須_Edits could not be saved_________鷗.",
+    "emptyCommentMessage": "須_Value required_____鷗",
+    "placeHolderText": "",
+    "noCommentsAvailableText": "須_No records available_______鷗",
+    "remainingTextCount": "須_${0} character(s) remain________鷗",
+    "showNoText": "須_No__鷗"
+  },
+  "main": {
+    "noGroup": "グループが構成されていません"
+  },
+  "search": {
+    "searchIconTooltip": "須_Search this layer______鷗",
+    "noResultFoundText": "須_No results found______鷗",
+    "searchInEditModeAlert": "須_Search unavailable while editing___________鷗"
+  },
+  "manualRefresh": {
+    "manualRefreshIconTooltip": "須_Refresh___鷗",
+    "confirmManualRefeshText": "すべての選択セットおよび保存されていない変更は破棄されます"
+  },
+  "help": {
+    "helpIconTooltip": "須_Help__鷗"
+  },
+  "filter": {
+    "noFeatureFoundText": "須_No feature found for this value___________鷗.",
+    "distinctQueryFalied": "須_No distinct values found for the field_____________鷗.",
+    "andText": "須_and__鷗",
+    "filterInEditModeAlert": "須_Filters unavailable while editing___________鷗",
+    "dropdownSelectOption": "須_Select___鷗"
+  },
+  "detailsPanel": {
+    "editContentText": "須_Edit record____鷗"
+  },
+  "signOutPage": {
+    "signOutMessage": "正常にサイン アウトしました",
+    "reSignInMessage": "ここをクリックしてサイン インします"
+  }
+});

@@ -1,88 +1,131 @@
-﻿/*global define */
+/*global define */
+/*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
-define(
-     ({
-        map: {
-            error: "Nelze vytvořit mapu" // Shown when error occurs while creation of map
-        },
-        main: {
-            noGroup: "Není nakonfigurována žádná skupina" // Appears when no group is configured
-        },
-        webMapList: {
-            owner: "Vlastník", // Appears in web-map list description panel when it is set to true
-            created: "Datum vytvoření", // Appears in web-map list description panel when it is set to true
-            modified: "Datum změny", // Appears in web-map list description panel when it is set to true
-            description: "Popis", // Appears in web-map list description panel when it is set to true
-            snippet: "Souhrn", // Appears in web-map list description panel when it is set to true
-            licenseInfo: "Přístup a omezení použití", // Appears in web-map list description panel when it is set to true
-            accessInformation: "Poděkování", // Appears in web-map list description panel when it is set to true
-            tags: "Klíčová slova", // Appears in web-map list description panel when it is set to true
-            numViews: "Počet zobrazení", // Appears in web-map list description panel when it is set to true
-            avgRating: "Hodnocení", // Appears in web-map list description panel when it is set to true
-            noWebMapInGroup: "Nakonfigurovaná skupina je neplatné, případně s touto skupinou ještě nebyly sdíleny žádné položky.", // Appears when invalid group in configured or no web-map is available in that group
-            infoBtnToolTip: "Informace o mapě" // Display tool-tip on command button to display description of web-map
-        },
-        applicationHeader: {
-            signOutOption: "Odhlásit", // Command button to sign-out from the application
-            pleaseSignInText: "Prosím přihlaste se", // Appears when user needs to sign-in into the application
-            showSelectedOption: "Zobrazovat vybrané", // Command button to show selected records in data-viewer
-            showAllOption: "Zobrazit vše", // Command button to show all the records in data-viewer
-            clearSelectionOption: "Zrušit výběr", // Command button to clear selected records in data-viewer
-            zoomToSelectedOption: "Přiblížit na vybrané", // Command button to zoom map to selected records
-            gridViewOption: "Zobrazení seznamu", // Command button to display list view
-            mapViewOption: "Zobrazení mapy", // Command button to display map view
-            gridMapViewOption: "Rozdělené zobrazení", // Command button to display split view
-            settingsBtnToolTip: "Možnosti výběru", // Display tool-tip on command button to open a list of settings options
-            viewModeBtnToolTip: "Možnosti zobrazení", // Display tool-tip on command button to open a list of view options
-            searchModeBtnToolTip: "Prohledat vrstvu", // Display tool-tip on command button to open a dialog box for finding a feature
-            manualRefreshBtnToolTip: "Obnovit", // Display tool-tip on command button to manually refresh the selected operational layer
-            confirmManualRefeshText: "Všechny výběry a neuložené změny budou zrušeny.", // Appears when user wants to do manual refresh
-            signInOption: "Přihlásit" // Appears when user has not signed in
-        },
-        dataviewer: {
-            noIssuesReported: "Nejsou k dispozici žádné zprávy.", // Appears when no issues are available in current extent
-            photoAttachmentHeader: "Přílohy", // Appears when attachments are available for display in details tab
-            invalidSmallNumber: "Zadejte celé číslo. ", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -32768 and 32767)
-            invalidNumber: "Zadejte celé číslo.", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -2147483648 and 2147483647)
-            invalidFloat: "Zadejte číslo.", // Shown when invalid floating value is entered while editing in data-viewer (floating point value between -3.4E38 and 1.2E38)
-            invalidDouble: "Zadejte číslo.", // Shown when invalid double value is entered while editing in data-viewer (double value between -2.2E308 and 1.8E308)
-            invalidString: "Zadejte hodnotu.", // Shown when user enters invalid string value
-            invalidDate: "Zadejte platné datum.", // Shown when user enters invalid date value
-            invalidNumericRange: "Zadejte hodnotu mezi ${minValue} a ${maxValue}.", // Shown when user enters value which is out of range
-            moreInfolink: "Odkaz", // Shown when value in field contains only URL.
-            commentsText: "Komentáře", // Appears when comments are available for display in details tab
-            noCommentsAvailable: "Nejsou k dispozici žádné komentáře.", // Appears when no comments are available
-            noFeatureGeometry: "Prvek nelze zobrazit." // Appears when user selects/activates a feature and geometry is available for that
-        },
-        config: {
-            configNotDefined: "Není definována žádná konfigurace." // Shown when there is an issue with config file
-        },
-        searchPanel: {
-            noResultsFound: "Nebyly nalezeny žádné výsledky." // Appears when user search for features and no feature is found
-        },
-        mapViewer: {
-            detailsBtnToolTip: "Zobrazit další podrobnosti aktivního prvku", // Display tool-tip on command button to view details of selected feature
-            locationBtnToolTip: "Zobrazit mapu", // Display tool-tip on command button to view map panel
-            zoomInToolTip: "Přiblížit", // Display tool-tip on command button to zoom in map
-            zoomOutToolTip: "Oddálit" // Display tool-tip on command button to zoom out map
-        },
-        signOutPage: {
-            signOutMessage: "Byli jste úspěšně odhlášeni.", // Appears when user is successfully signed-out from application
-            reSignInMessage: "Klikněte sem pro přihlášení." // Appears when user is signed-out from application and wants to sign-in again
-        }
-    })
-);
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
+define({
+  "map": {
+    "error": "Nelze vytvořit mapu"
+  },
+  "webMapList": {
+    "owner": "Vlastník",
+    "created": "Datum vytvoření",
+    "modified": "Datum změny",
+    "description": "Popis",
+    "snippet": "Souhrn",
+    "licenseInfo": "Přístup a omezení použití",
+    "accessInformation": "Poděkování",
+    "tags": "Klíčová slova",
+    "numViews": "Počet zobrazení",
+    "avgRating": "Hodnocení",
+    "noWebMapInGroup": "Nakonfigurovaná skupina je neplatné, případně s touto skupinou ještě nebyly sdíleny žádné položky.",
+    "infoBtnToolTip": "Informace o mapě",
+    "openWebmapList": "Ř_Open panel____ů",
+    "closeWebmapList": "Ř_Close panel____ů"
+  },
+  "geoform": {
+    "enterInformation": "Ř_Details___ů",
+    "selectAttachments": "Ř_Attachments____ů",
+    "selectFileText": "Ř_Browse___ů",
+    "enterLocation": "Ř_Location___ů",
+    "reportItButton": "Ř_Submit___ů",
+    "cancelButton": "Ř_Cancel___ů",
+    "requiredField": "Ř_(required)____ů",
+    "selectDefaultText": "Ř_Select&hellip;_____ů",
+    "invalidInputValue": "Ř_Please enter valid value_________ů.",
+    "noFieldsConfiguredMessage": "Ř_Layer fields are not configured to capture data_______________ů",
+    "invalidSmallNumber": "Ř_Please enter an integer________ů",
+    "invalidNumber": "Zadejte celé číslo.",
+    "invalidFloat": "Zadejte číslo.",
+    "invalidDouble": "Zadejte číslo.",
+    "requiredFields": "Ř_Please provide values for all required fields_______________ů",
+    "selectLocation": "Ř_Please select the location for your report______________ů",
+    "numericRangeHintMessage": "Ř_${openStrong}Hint:${closeStrong} Minimum value ${minValue} and maximum value ${maxValue}___________________________ů",
+    "dateRangeHintMessage": "Ř_${openStrong}Hint:${closeStrong} Minimum date ${minValue} and Maximum date ${maxValue}___________________________ů",
+    "errorsInApplyEdits": "Ř_Report could not be submitted__________ů",
+    "attachmentSelectedMsg": "Ř_attachment(s) selected________ů",
+    "attachmentUploadStatus": "Ř_${failed} of ${total} attachment(s) failed to upload_________________ů",
+    "geoLocationError": "Ř_Current location not available__________ů",
+    "geoLocationOutOfExtent": "Ř_Current location is out of basemap extent_____________ů",
+    "submitButtonTooltip": "Ř_Save__ů",
+    "cancelButtonTooltip": "Ř_Cancel___ů",
+    "geoformBackButtonTooltip": "Ř_Return to the report list_________ů",
+    "updateFeaturesConfirmationMsg": "Ř_${count} features will be updated___________ů",
+    "attachmentHeaderText": "Ř_Attachments____ů"
+  },
+  "mapViewer": {
+    "zoomInToolTip": "Ř_Zoom in___ů",
+    "zoomOutToolTip": "Oddálit"
+  },
+  "applicationHeader": {
+    "signInOption": "Přihlásit",
+    "signOutOption": "Odhlásit",
+    "pleaseSignInText": "Prosím přihlaste se"
+  },
+  "dataviewer": {
+    "noIssuesReported": "Nejsou k dispozici žádné zprávy.",
+    "noFeatureGeometry": "Prvek nelze zobrazit.",
+    "ascendingFlagTitle": "Ř_Sort in ascending order________ů",
+    "descendingFlagTitle": "Ř_Sort in descending order________ů",
+    "filterLabel": "Ř_Filter___ů",
+    "valueRadioButtonLabel": "Ř_Value___ů",
+    "uniqueRadioButtonLabel": "Ř_Unique___ů",
+    "selectLayerToBegin": "Ř_Select a category to get started___________ů",
+    "layerFeatureCount": "Ř_${featureCount} records________ů"
+  },
+  "timeSlider": {
+    "timeSliderLabel": "Ř_Time range____ů",
+    "timeSliderInEditModeAlert": "Ř_Time slider unavailable while editing____________ů"
+  },
+  "comment": {
+    "commentsFormSubmitButton": "Ř_Save__ů",
+    "commentsFormCancelButton": "Ř_Cancel___ů",
+    "errorInSubmittingComment": "Ř_Edits could not be saved_________ů.",
+    "emptyCommentMessage": "Ř_Value required_____ů",
+    "placeHolderText": "",
+    "noCommentsAvailableText": "Ř_No records available_______ů",
+    "remainingTextCount": "Ř_${0} character(s) remain________ů",
+    "showNoText": "Ř_No__ů"
+  },
+  "main": {
+    "noGroup": "Není nakonfigurována žádná skupina"
+  },
+  "search": {
+    "searchIconTooltip": "Ř_Search this layer______ů",
+    "noResultFoundText": "Ř_No results found______ů",
+    "searchInEditModeAlert": "Ř_Search unavailable while editing___________ů"
+  },
+  "manualRefresh": {
+    "manualRefreshIconTooltip": "Ř_Refresh___ů",
+    "confirmManualRefeshText": "Všechny výběry a neuložené změny budou zrušeny."
+  },
+  "help": {
+    "helpIconTooltip": "Ř_Help__ů"
+  },
+  "filter": {
+    "noFeatureFoundText": "Ř_No feature found for this value___________ů.",
+    "distinctQueryFalied": "Ř_No distinct values found for the field_____________ů.",
+    "andText": "Ř_and__ů",
+    "filterInEditModeAlert": "Ř_Filters unavailable while editing___________ů",
+    "dropdownSelectOption": "Ř_Select___ů"
+  },
+  "detailsPanel": {
+    "editContentText": "Ř_Edit record____ů"
+  },
+  "signOutPage": {
+    "signOutMessage": "Byli jste úspěšně odhlášeni.",
+    "reSignInMessage": "Klikněte sem pro přihlášení."
+  }
+});

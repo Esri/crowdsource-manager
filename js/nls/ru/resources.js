@@ -1,88 +1,131 @@
-﻿/*global define */
+/*global define */
+/*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
-define(
-     ({
-        map: {
-            error: "Не удалось создать карту" // Shown when error occurs while creation of map
-        },
-        main: {
-            noGroup: "Не задана группа" // Appears when no group is configured
-        },
-        webMapList: {
-            owner: "Владелец", // Appears in web-map list description panel when it is set to true
-            created: "Время создания", // Appears in web-map list description panel when it is set to true
-            modified: "Дата изменения", // Appears in web-map list description panel when it is set to true
-            description: "Описание", // Appears in web-map list description panel when it is set to true
-            snippet: "Итоговая информация", // Appears in web-map list description panel when it is set to true
-            licenseInfo: "Ограничения доступа и использования", // Appears in web-map list description panel when it is set to true
-            accessInformation: "Сведения об авторах", // Appears in web-map list description panel when it is set to true
-            tags: "Теги", // Appears in web-map list description panel when it is set to true
-            numViews: "Количество просмотров", // Appears in web-map list description panel when it is set to true
-            avgRating: "Рейтинг", // Appears in web-map list description panel when it is set to true
-            noWebMapInGroup: "Настроенная группа недействительна, или в указанной группе нет доступных элементов.", // Appears when invalid group in configured or no web-map is available in that group
-            infoBtnToolTip: "Информация карты" // Display tool-tip on command button to display description of web-map
-        },
-        applicationHeader: {
-            signOutOption: "Выход", // Command button to sign-out from the application
-            pleaseSignInText: "Выполните вход", // Appears when user needs to sign-in into the application
-            showSelectedOption: "Показать выбранные", // Command button to show selected records in data-viewer
-            showAllOption: "Показать все", // Command button to show all the records in data-viewer
-            clearSelectionOption: "Очистить выбранные объекты", // Command button to clear selected records in data-viewer
-            zoomToSelectedOption: "Приблизить к выбранным", // Command button to zoom map to selected records
-            gridViewOption: "Вид списка", // Command button to display list view
-            mapViewOption: "Вид карты", // Command button to display map view
-            gridMapViewOption: "Разделить", // Command button to display split view
-            settingsBtnToolTip: "Опции выборки", // Display tool-tip on command button to open a list of settings options
-            viewModeBtnToolTip: "Опции отображения", // Display tool-tip on command button to open a list of view options
-            searchModeBtnToolTip: "Поиск в этом слое", // Display tool-tip on command button to open a dialog box for finding a feature
-            manualRefreshBtnToolTip: "Обновить", // Display tool-tip on command button to manually refresh the selected operational layer
-            confirmManualRefeshText: "Все выборки и несохраненные изменения будут удалены", // Appears when user wants to do manual refresh
-            signInOption: "Вход" // Appears when user has not signed in
-        },
-        dataviewer: {
-            noIssuesReported: "Нет доступных отчетов", // Appears when no issues are available in current extent
-            photoAttachmentHeader: "Вложения", // Appears when attachments are available for display in details tab
-            invalidSmallNumber: "Введите целое число ", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -32768 and 32767)
-            invalidNumber: "Введите целое число", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -2147483648 and 2147483647)
-            invalidFloat: "Введите число", // Shown when invalid floating value is entered while editing in data-viewer (floating point value between -3.4E38 and 1.2E38)
-            invalidDouble: "Введите число", // Shown when invalid double value is entered while editing in data-viewer (double value between -2.2E308 and 1.8E308)
-            invalidString: "Введите числовое значение", // Shown when user enters invalid string value
-            invalidDate: "Введите допустимое значение", // Shown when user enters invalid date value
-            invalidNumericRange: "Введите число между ${minValue} и ${maxValue}.", // Shown when user enters value which is out of range
-            moreInfolink: "Ссылка", // Shown when value in field contains only URL.
-            commentsText: "Комментарии", // Appears when comments are available for display in details tab
-            noCommentsAvailable: "Нет доступных комментариев", // Appears when no comments are available
-            noFeatureGeometry: "Объекты невозможно отобразить" // Appears when user selects/activates a feature and geometry is available for that
-        },
-        config: {
-            configNotDefined: "Конфигурация не определена" // Shown when there is an issue with config file
-        },
-        searchPanel: {
-            noResultsFound: "Результаты не найдены" // Appears when user search for features and no feature is found
-        },
-        mapViewer: {
-            detailsBtnToolTip: "Просмотр подробной информации об активной функции", // Display tool-tip on command button to view details of selected feature
-            locationBtnToolTip: "Просмотр карты", // Display tool-tip on command button to view map panel
-            zoomInToolTip: "Увеличить", // Display tool-tip on command button to zoom in map
-            zoomOutToolTip: "Уменьшить" // Display tool-tip on command button to zoom out map
-        },
-        signOutPage: {
-            signOutMessage: "Выход успешно выполнен", // Appears when user is successfully signed-out from application
-            reSignInMessage: "Щелкните здесь, чтобы выполнить вход" // Appears when user is signed-out from application and wants to sign-in again
-        }
-    })
-);
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
+define({
+  "map": {
+    "error": "Не удалось создать карту"
+  },
+  "webMapList": {
+    "owner": "Владелец",
+    "created": "Время создания",
+    "modified": "Дата изменения",
+    "description": "Описание",
+    "snippet": "Итоговая информация",
+    "licenseInfo": "Ограничения доступа и использования",
+    "accessInformation": "Сведения об авторах",
+    "tags": "Теги",
+    "numViews": "Количество просмотров",
+    "avgRating": "Рейтинг",
+    "noWebMapInGroup": "Настроенная группа недействительна, или в указанной группе нет доступных элементов.",
+    "infoBtnToolTip": "Информация карты",
+    "openWebmapList": "Ж_Open panel____Я",
+    "closeWebmapList": "Ж_Close panel____Я"
+  },
+  "geoform": {
+    "enterInformation": "Ж_Details___Я",
+    "selectAttachments": "Ж_Attachments____Я",
+    "selectFileText": "Ж_Browse___Я",
+    "enterLocation": "Ж_Location___Я",
+    "reportItButton": "Ж_Submit___Я",
+    "cancelButton": "Ж_Cancel___Я",
+    "requiredField": "Ж_(required)____Я",
+    "selectDefaultText": "Ж_Select&hellip;_____Я",
+    "invalidInputValue": "Ж_Please enter valid value_________Я.",
+    "noFieldsConfiguredMessage": "Ж_Layer fields are not configured to capture data_______________Я",
+    "invalidSmallNumber": "Ж_Please enter an integer________Я",
+    "invalidNumber": "Введите целое число",
+    "invalidFloat": "Введите число",
+    "invalidDouble": "Введите число",
+    "requiredFields": "Ж_Please provide values for all required fields_______________Я",
+    "selectLocation": "Ж_Please select the location for your report______________Я",
+    "numericRangeHintMessage": "Ж_${openStrong}Hint:${closeStrong} Minimum value ${minValue} and maximum value ${maxValue}___________________________Я",
+    "dateRangeHintMessage": "Ж_${openStrong}Hint:${closeStrong} Minimum date ${minValue} and Maximum date ${maxValue}___________________________Я",
+    "errorsInApplyEdits": "Ж_Report could not be submitted__________Я",
+    "attachmentSelectedMsg": "Ж_attachment(s) selected________Я",
+    "attachmentUploadStatus": "Ж_${failed} of ${total} attachment(s) failed to upload_________________Я",
+    "geoLocationError": "Ж_Current location not available__________Я",
+    "geoLocationOutOfExtent": "Ж_Current location is out of basemap extent_____________Я",
+    "submitButtonTooltip": "Ж_Save__Я",
+    "cancelButtonTooltip": "Ж_Cancel___Я",
+    "geoformBackButtonTooltip": "Ж_Return to the report list_________Я",
+    "updateFeaturesConfirmationMsg": "Ж_${count} features will be updated___________Я",
+    "attachmentHeaderText": "Ж_Attachments____Я"
+  },
+  "mapViewer": {
+    "zoomInToolTip": "Ж_Zoom in___Я",
+    "zoomOutToolTip": "Уменьшить"
+  },
+  "applicationHeader": {
+    "signInOption": "Вход",
+    "signOutOption": "Выход",
+    "pleaseSignInText": "Выполните вход"
+  },
+  "dataviewer": {
+    "noIssuesReported": "Нет доступных отчетов",
+    "noFeatureGeometry": "Объекты невозможно отобразить",
+    "ascendingFlagTitle": "Ж_Sort in ascending order________Я",
+    "descendingFlagTitle": "Ж_Sort in descending order________Я",
+    "filterLabel": "Ж_Filter___Я",
+    "valueRadioButtonLabel": "Ж_Value___Я",
+    "uniqueRadioButtonLabel": "Ж_Unique___Я",
+    "selectLayerToBegin": "Ж_Select a category to get started___________Я",
+    "layerFeatureCount": "Ж_${featureCount} records________Я"
+  },
+  "timeSlider": {
+    "timeSliderLabel": "Ж_Time range____Я",
+    "timeSliderInEditModeAlert": "Ж_Time slider unavailable while editing____________Я"
+  },
+  "comment": {
+    "commentsFormSubmitButton": "Ж_Save__Я",
+    "commentsFormCancelButton": "Ж_Cancel___Я",
+    "errorInSubmittingComment": "Ж_Edits could not be saved_________Я.",
+    "emptyCommentMessage": "Ж_Value required_____Я",
+    "placeHolderText": "",
+    "noCommentsAvailableText": "Ж_No records available_______Я",
+    "remainingTextCount": "Ж_${0} character(s) remain________Я",
+    "showNoText": "Ж_No__Я"
+  },
+  "main": {
+    "noGroup": "Не задана группа"
+  },
+  "search": {
+    "searchIconTooltip": "Ж_Search this layer______Я",
+    "noResultFoundText": "Ж_No results found______Я",
+    "searchInEditModeAlert": "Ж_Search unavailable while editing___________Я"
+  },
+  "manualRefresh": {
+    "manualRefreshIconTooltip": "Ж_Refresh___Я",
+    "confirmManualRefeshText": "Все выборки и несохраненные изменения будут удалены"
+  },
+  "help": {
+    "helpIconTooltip": "Ж_Help__Я"
+  },
+  "filter": {
+    "noFeatureFoundText": "Ж_No feature found for this value___________Я.",
+    "distinctQueryFalied": "Ж_No distinct values found for the field_____________Я.",
+    "andText": "Ж_and__Я",
+    "filterInEditModeAlert": "Ж_Filters unavailable while editing___________Я",
+    "dropdownSelectOption": "Ж_Select___Я"
+  },
+  "detailsPanel": {
+    "editContentText": "Ж_Edit record____Я"
+  },
+  "signOutPage": {
+    "signOutMessage": "Выход успешно выполнен",
+    "reSignInMessage": "Щелкните здесь, чтобы выполнить вход"
+  }
+});

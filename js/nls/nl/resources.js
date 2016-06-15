@@ -1,88 +1,131 @@
-﻿/*global define */
+/*global define */
+/*jslint sloppy:true */
 /*
- | Copyright 2014 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
-define(
-     ({
-        map: {
-            error: "Kaart kan niet gemaakt worden" // Shown when error occurs while creation of map
-        },
-        main: {
-            noGroup: "Geen groep geconfigureerd" // Appears when no group is configured
-        },
-        webMapList: {
-            owner: "Eigenaar", // Appears in web-map list description panel when it is set to true
-            created: "Aanmaakdatum", // Appears in web-map list description panel when it is set to true
-            modified: "Datum wijziging", // Appears in web-map list description panel when it is set to true
-            description: "Beschrijving", // Appears in web-map list description panel when it is set to true
-            snippet: "Samenvatting", // Appears in web-map list description panel when it is set to true
-            licenseInfo: "Gebruiks- en toegangsbeperkingen", // Appears in web-map list description panel when it is set to true
-            accessInformation: "Credits", // Appears in web-map list description panel when it is set to true
-            tags: "Labels", // Appears in web-map list description panel when it is set to true
-            numViews: "Aantal weergaven", // Appears in web-map list description panel when it is set to true
-            avgRating: "Beoordeling", // Appears in web-map list description panel when it is set to true
-            noWebMapInGroup: "Geconfigureerde groep is ongeldig of er worden nog geen items gedeeld met deze groep", // Appears when invalid group in configured or no web-map is available in that group
-            infoBtnToolTip: "Kaartinformatie" // Display tool-tip on command button to display description of web-map
-        },
-        applicationHeader: {
-            signOutOption: "Afmelden", // Command button to sign-out from the application
-            pleaseSignInText: "Meld u aan", // Appears when user needs to sign-in into the application
-            showSelectedOption: "Geef geselecteerde weer", // Command button to show selected records in data-viewer
-            showAllOption: "Show All", // Command button to show all the records in data-viewer
-            clearSelectionOption: "Selectie wissen", // Command button to clear selected records in data-viewer
-            zoomToSelectedOption: "Zoomen naar geselecteerd", // Command button to zoom map to selected records
-            gridViewOption: "Lijstweergave", // Command button to display list view
-            mapViewOption: "Kaartweergave", // Command button to display map view
-            gridMapViewOption: "Gesplitste weergave", // Command button to display split view
-            settingsBtnToolTip: "Opties selecteren", // Display tool-tip on command button to open a list of settings options
-            viewModeBtnToolTip: "Weergaveopties", // Display tool-tip on command button to open a list of view options
-            searchModeBtnToolTip: "Deze laag zoeken", // Display tool-tip on command button to open a dialog box for finding a feature
-            manualRefreshBtnToolTip: "Vernieuwen", // Display tool-tip on command button to manually refresh the selected operational layer
-            confirmManualRefeshText: "Alle selecties en onopgeslagen wijzigingen worden genegeerd", // Appears when user wants to do manual refresh
-            signInOption: "Aanmelden" // Appears when user has not signed in
-        },
-        dataviewer: {
-            noIssuesReported: "Geen rapporten beschikbaar", // Appears when no issues are available in current extent
-            photoAttachmentHeader: "Bijlagen", // Appears when attachments are available for display in details tab
-            invalidSmallNumber: "Een integer invoeren ", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -32768 and 32767)
-            invalidNumber: "Een integer invoeren", // Shown when invalid integer value is entered while editing in data-viewer (valid integer value between -2147483648 and 2147483647)
-            invalidFloat: "Een nummer invoeren", // Shown when invalid floating value is entered while editing in data-viewer (floating point value between -3.4E38 and 1.2E38)
-            invalidDouble: "Een nummer invoeren", // Shown when invalid double value is entered while editing in data-viewer (double value between -2.2E308 and 1.8E308)
-            invalidString: "Voer een waarde in", // Shown when user enters invalid string value
-            invalidDate: "Voer een geldige datum in", // Shown when user enters invalid date value
-            invalidNumericRange: "Voer een waarde in tussen ${minValue} en ${maxValue}", // Shown when user enters value which is out of range
-            moreInfolink: "Koppeling", // Shown when value in field contains only URL.
-            commentsText: "Opmerkingen", // Appears when comments are available for display in details tab
-            noCommentsAvailable: "Geen reacties beschikbaar", // Appears when no comments are available
-            noFeatureGeometry: "Object kan niet worden weergegeven" // Appears when user selects/activates a feature and geometry is available for that
-        },
-        config: {
-            configNotDefined: "Geen configuratie gedefinieerd" // Shown when there is an issue with config file
-        },
-        searchPanel: {
-            noResultsFound: "Geen resultaten gevonden" // Appears when user search for features and no feature is found
-        },
-        mapViewer: {
-            detailsBtnToolTip: "Bekijk meer details voor het actieve object", // Display tool-tip on command button to view details of selected feature
-            locationBtnToolTip: "Kaart weergeven", // Display tool-tip on command button to view map panel
-            zoomInToolTip: "Inzoomen", // Display tool-tip on command button to zoom in map
-            zoomOutToolTip: "Uitzoomen" // Display tool-tip on command button to zoom out map
-        },
-        signOutPage: {
-            signOutMessage: "U bent afgemeld.", // Appears when user is successfully signed-out from application
-            reSignInMessage: "Klik hier om u aan te melden." // Appears when user is signed-out from application and wants to sign-in again
-        }
-    })
-);
+| Copyright 2014 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
+define({
+  "map": {
+    "error": "Kaart kan niet gemaakt worden"
+  },
+  "webMapList": {
+    "owner": "Eigenaar",
+    "created": "Aanmaakdatum",
+    "modified": "Datum wijziging",
+    "description": "Beschrijving",
+    "snippet": "Samenvatting",
+    "licenseInfo": "Gebruiks- en toegangsbeperkingen",
+    "accessInformation": "Credits",
+    "tags": "Labels",
+    "numViews": "Aantal weergaven",
+    "avgRating": "Beoordeling",
+    "noWebMapInGroup": "Geconfigureerde groep is ongeldig of er worden nog geen items gedeeld met deze groep",
+    "infoBtnToolTip": "Kaartinformatie",
+    "openWebmapList": "Ĳ_Open panel____ä",
+    "closeWebmapList": "Ĳ_Close panel____ä"
+  },
+  "geoform": {
+    "enterInformation": "Ĳ_Details___ä",
+    "selectAttachments": "Ĳ_Attachments____ä",
+    "selectFileText": "Ĳ_Browse___ä",
+    "enterLocation": "Ĳ_Location___ä",
+    "reportItButton": "Ĳ_Submit___ä",
+    "cancelButton": "Ĳ_Cancel___ä",
+    "requiredField": "Ĳ_(required)____ä",
+    "selectDefaultText": "Ĳ_Select&hellip;_____ä",
+    "invalidInputValue": "Ĳ_Please enter valid value_________ä.",
+    "noFieldsConfiguredMessage": "Ĳ_Layer fields are not configured to capture data_______________ä",
+    "invalidSmallNumber": "Ĳ_Please enter an integer________ä",
+    "invalidNumber": "Een integer invoeren",
+    "invalidFloat": "Een nummer invoeren",
+    "invalidDouble": "Een nummer invoeren",
+    "requiredFields": "Ĳ_Please provide values for all required fields_______________ä",
+    "selectLocation": "Ĳ_Please select the location for your report______________ä",
+    "numericRangeHintMessage": "Ĳ_${openStrong}Hint:${closeStrong} Minimum value ${minValue} and maximum value ${maxValue}___________________________ä",
+    "dateRangeHintMessage": "Ĳ_${openStrong}Hint:${closeStrong} Minimum date ${minValue} and Maximum date ${maxValue}___________________________ä",
+    "errorsInApplyEdits": "Ĳ_Report could not be submitted__________ä",
+    "attachmentSelectedMsg": "Ĳ_attachment(s) selected________ä",
+    "attachmentUploadStatus": "Ĳ_${failed} of ${total} attachment(s) failed to upload_________________ä",
+    "geoLocationError": "Ĳ_Current location not available__________ä",
+    "geoLocationOutOfExtent": "Ĳ_Current location is out of basemap extent_____________ä",
+    "submitButtonTooltip": "Ĳ_Save__ä",
+    "cancelButtonTooltip": "Ĳ_Cancel___ä",
+    "geoformBackButtonTooltip": "Ĳ_Return to the report list_________ä",
+    "updateFeaturesConfirmationMsg": "Ĳ_${count} features will be updated___________ä",
+    "attachmentHeaderText": "Ĳ_Attachments____ä"
+  },
+  "mapViewer": {
+    "zoomInToolTip": "Ĳ_Zoom in___ä",
+    "zoomOutToolTip": "Uitzoomen"
+  },
+  "applicationHeader": {
+    "signInOption": "Aanmelden",
+    "signOutOption": "Afmelden",
+    "pleaseSignInText": "Meld u aan"
+  },
+  "dataviewer": {
+    "noIssuesReported": "Geen rapporten beschikbaar",
+    "noFeatureGeometry": "Object kan niet worden weergegeven",
+    "ascendingFlagTitle": "Ĳ_Sort in ascending order________ä",
+    "descendingFlagTitle": "Ĳ_Sort in descending order________ä",
+    "filterLabel": "Ĳ_Filter___ä",
+    "valueRadioButtonLabel": "Ĳ_Value___ä",
+    "uniqueRadioButtonLabel": "Ĳ_Unique___ä",
+    "selectLayerToBegin": "Ĳ_Select a category to get started___________ä",
+    "layerFeatureCount": "Ĳ_${featureCount} records________ä"
+  },
+  "timeSlider": {
+    "timeSliderLabel": "Ĳ_Time range____ä",
+    "timeSliderInEditModeAlert": "Ĳ_Time slider unavailable while editing____________ä"
+  },
+  "comment": {
+    "commentsFormSubmitButton": "Ĳ_Save__ä",
+    "commentsFormCancelButton": "Ĳ_Cancel___ä",
+    "errorInSubmittingComment": "Ĳ_Edits could not be saved_________ä.",
+    "emptyCommentMessage": "Ĳ_Value required_____ä",
+    "placeHolderText": "",
+    "noCommentsAvailableText": "Ĳ_No records available_______ä",
+    "remainingTextCount": "Ĳ_${0} character(s) remain________ä",
+    "showNoText": "Ĳ_No__ä"
+  },
+  "main": {
+    "noGroup": "Geen groep geconfigureerd"
+  },
+  "search": {
+    "searchIconTooltip": "Ĳ_Search this layer______ä",
+    "noResultFoundText": "Ĳ_No results found______ä",
+    "searchInEditModeAlert": "Ĳ_Search unavailable while editing___________ä"
+  },
+  "manualRefresh": {
+    "manualRefreshIconTooltip": "Ĳ_Refresh___ä",
+    "confirmManualRefeshText": "Alle selecties en onopgeslagen wijzigingen worden genegeerd"
+  },
+  "help": {
+    "helpIconTooltip": "Ĳ_Help__ä"
+  },
+  "filter": {
+    "noFeatureFoundText": "Ĳ_No feature found for this value___________ä.",
+    "distinctQueryFalied": "Ĳ_No distinct values found for the field_____________ä.",
+    "andText": "Ĳ_and__ä",
+    "filterInEditModeAlert": "Ĳ_Filters unavailable while editing___________ä",
+    "dropdownSelectOption": "Ĳ_Select___ä"
+  },
+  "detailsPanel": {
+    "editContentText": "Ĳ_Edit record____ä"
+  },
+  "signOutPage": {
+    "signOutMessage": "U bent afgemeld.",
+    "reSignInMessage": "Klik hier om u aan te melden."
+  }
+});
