@@ -500,7 +500,7 @@ define([
         },
 
         /**
-        * Function to
+        * Function to check attributes distinct values
         * @param{object} contains nodes, _filterObject to change and maintain state
         * @memberOf widgets/filter/filter
         */
@@ -541,12 +541,64 @@ define([
         _populateWithTypeIdValues: function (radioParamObj) {
             var attributes, features;
             features = [];
-            array.forEach(this.selectedOperationalLayer.types, lang.hitch(this, function (type) {
-                attributes = {};
-                attributes[radioParamObj.displayColumn] = type.id;
-                features.push({ "attributes": attributes });
-            }));
-            this._populateDropDown(features, radioParamObj);
+            if (this.selectedOperationalLayer.types && this.selectedOperationalLayer.typeIdField === radioParamObj.displayColumn) {
+                array.forEach(this.selectedOperationalLayer.types, lang.hitch(this, function (type) {
+                    attributes = {};
+                    attributes[radioParamObj.displayColumn] = type.id;
+                    features.push({ "attributes": attributes });
+                }));
+                this._populateDropDown(features, radioParamObj);
+            } else if (this.selectedOperationalLayer.types && this.selectedOperationalLayer.types.length > 0) {
+                array.forEach(this.selectedOperationalLayer.types, lang.hitch(this, function (type) {
+                    if (type.domains && type.domains[radioParamObj.displayColumn] && type.domains[radioParamObj.displayColumn].codedValues && type.domains[radioParamObj.displayColumn].codedValues.length > 0) {
+                        array.forEach(type.domains[radioParamObj.displayColumn].codedValues, lang.hitch(this, function (codedValue) {
+                            features.push(codedValue.code);
+                        }));
+                    }
+                }));
+                features = this._getUniqueCodes(features, radioParamObj.displayColumn);
+                this._populateDropDown(features, radioParamObj);
+            }
+        },
+
+        /**
+        * Function to get unique coded values
+        * @param{array} contains coded domain values
+        * @param{string} contains column/field name
+        * @memberOf widgets/filter/filter
+        */
+        _getUniqueCodes: function (features, displayColumn) {
+            var arr, newFeatures, i, attributes;
+            arr = [];
+            newFeatures = [];
+            for (i = 0; i < features.length; i++) {
+                if (!(this._containsValue(arr, features[i]))) {
+                    arr.push(features[i]);
+                    attributes = {};
+                    attributes[displayColumn] = arr[i];
+                    newFeatures.push({ "attributes": attributes });
+
+                }
+            }
+            return newFeatures;
+        },
+
+        /**
+        * Function to check unique values in an array
+        * @param{array} contains coded domain values
+        * @param{string/number/boolean} contains an coded domain value
+        * @memberOf widgets/filter/filter
+        */
+        _containsValue: function (array, value) {
+            var condition, i;
+            condition = false;
+            for (i = 0; i < array.length; i++) {
+                if (array[i] === value) {
+                    condition = true;
+                    return condition;
+                }
+            }
+            return condition;
         },
 
         /**
@@ -649,7 +701,7 @@ define([
                     if (this._isCodedValueColumn) {
                         codedDomainValue = this._getCodedDomainValue(feature.attributes[obj.displayColumn], obj.displayColumn);
                     } else if (this._isTypeIdfield) {
-                        codedDomainValue = this._getTypeIdField(feature.attributes[obj.displayColumn]);
+                        codedDomainValue = this._getTypeIdField(feature.attributes[obj.displayColumn], obj.displayColumn);
                     } else {
                         codedDomainValue = feature.attributes[obj.displayColumn];
                     }
@@ -1037,7 +1089,7 @@ define([
             }
         },
 
-        /** this function will show caret icon on the field header
+        /** This function will show caret icon on the field header
         * @param{caretIconDiv} contains a node with caret icon
         * @param{filterIconDiv} contains a node with filter icon
         * @memberOf widgets/filter/filter
@@ -1084,14 +1136,28 @@ define([
         * @param{string} contains field name
         * @memberOf widgets/filter/filter
         */
-        _getTypeIdField: function (value) {
-            var isNotFound = true;
-            array.forEach(this.selectedOperationalLayer.types, lang.hitch(this, function (type) {
-                if (type.id === value && isNotFound) {
-                    value = type.name;
-                    isNotFound = false;
-                }
-            }));
+        _getTypeIdField: function (code, displayColumn) {
+            var isNotFound = true, value;
+            if (this.selectedOperationalLayer.types && this.selectedOperationalLayer.typeIdField === displayColumn) {
+                array.forEach(this.selectedOperationalLayer.types, lang.hitch(this, function (type) {
+                    if (type.id === code && isNotFound) {
+                        value = type.name;
+                        isNotFound = false;
+                    }
+                }));
+            } else if (this.selectedOperationalLayer.types && this.selectedOperationalLayer.types.length > 0) {
+                value = [];
+                array.forEach(this.selectedOperationalLayer.types, lang.hitch(this, function (type) {
+                    if (type.domains && type.domains[displayColumn] && type.domains[displayColumn].codedValues && type.domains[displayColumn].codedValues.length > 0) {
+                        array.forEach(type.domains[displayColumn].codedValues, lang.hitch(this, function (codedValue) {
+                            if (codedValue.code === code) {
+                                value.push(codedValue.name);
+                            }
+                        }));
+                    }
+                }));
+                value = value.join(", ");
+            }
             return value;
         },
 
@@ -1119,6 +1185,13 @@ define([
             var isTypeIdfield = false;
             if (this.selectedOperationalLayer.typeIdField === displayColumn) {
                 isTypeIdfield = true;
+            } else if (this.selectedOperationalLayer.types && this.selectedOperationalLayer.types.length > 0) {
+                array.some(this.selectedOperationalLayer.types, lang.hitch(this, function (type) {
+                    if (type.domains && type.domains[displayColumn] && type.domains[displayColumn].codedValues && type.domains[displayColumn].codedValues.length > 0) {
+                        isTypeIdfield = true;
+                        return isTypeIdfield;
+                    }
+                }));
             }
             return isTypeIdfield;
         },

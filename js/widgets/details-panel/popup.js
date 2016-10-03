@@ -272,7 +272,7 @@ define([
                             if (infos[i].contentType.indexOf("image") !== -1 && infos[i].contentType.match(/(\/tiff)/)) {
                                 infos[i].contentType = "application/tiff";
                             }
-                            if (infos[i].contentType.indexOf("image") === -1) {
+                            if ((infos[i].contentType.indexOf("image") === -1) && (infos[i].contentType.indexOf("mp4") === -1)) {
                                 attachmentWrapper = domConstruct.create("div", {}, fieldContent);
 
                                 imageThumbnailContainer = domConstruct.create("div", {
@@ -317,31 +317,13 @@ define([
         * @memberOf widgets/details-panel/popup
         **/
         _fetchDocumentContentType: function (attachmentData, fileTypeContainer) {
-            var attachmentType = attachmentData.contentType.split("/")[1], typeText;
-            switch (attachmentType) {
-            case "pdf":
-                typeText = ".PDF";
-                break;
-            case "plain":
-                typeText = ".TXT";
-                break;
-            case "vnd.ms-powerpoint":
-                typeText = ".PPT";
-                break;
-            case "vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                typeText = ".XLSX";
-                break;
-            case "vnd.openxmlformats-officedocument.wordprocessingml.document":
-                typeText = ".DOCX";
-                break;
-            case "octet-stream":
-                typeText = ".ZIP";
-                break;
-            case "tiff":
-                typeText = ".TIFF";
-                break;
-            default:
-                typeText = ".DOCX";
+            var typeText, fileExtensionRegEx, fileExtension;
+            fileExtensionRegEx = /(?:\.([^.]+))?$/; //ignore jslint
+            fileExtension = fileExtensionRegEx.exec(attachmentData.name);
+            if (fileExtension && fileExtension[1]) {
+                typeText = "." + fileExtension[1].toUpperCase();
+            } else {
+                typeText = this.appConfig.i18n.geoform.unknownPopupAttachment;
             }
             domAttr.set(fileTypeContainer, "innerHTML", typeText);
         },

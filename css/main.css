@@ -457,11 +457,9 @@ table {
 .esriCTNoDataDataViewerPanelContainer {
     text-align: center;
     color: #FFF;
-    width: 90%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin: auto;
 }
 
 .esriCTDataViewerWrapperContainer {
@@ -891,6 +889,7 @@ table {
     display: block;
     z-index: 899;
     border-right: 1px solid #cccccc;
+    box-shadow: 4px 1px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .esriCTWebMapListBannerContainer {
@@ -1620,6 +1619,9 @@ input.esriCTRadioButton {
     padding: 0px 10px 0px 10px;
 }
 
+.esriCTCommentsFormHintText {
+    font-style: italic;
+}
 
 /** Comments form end **/
 
@@ -1715,7 +1717,7 @@ input.esriCTRadioButton {
 /** Attachment section styles for popup and comments ends **/
 
 
-/** popup form styles start*/
+/** Popup form styles starts */
 
 .esriCTPopupWrapperContainer {
     font-size: 15px;
@@ -1758,6 +1760,10 @@ input.esriCTRadioButton {
     margin-left: 5px;
     font-weight: normal;
     font-size: 100%;
+}
+
+.esriCTPopupFormHintText {
+    font-style: italic;
 }
 
 

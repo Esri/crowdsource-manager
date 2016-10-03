@@ -376,49 +376,13 @@ define([
         * @memberOf widgets/details-panel/comments
         **/
         _fetchDocumentContentType: function (attachmentData, fileTypeContainer) {
-            var attachmentType = attachmentData.contentType.split("/")[1], typeText;
-            switch (attachmentType) {
-            case "pdf":
-                typeText = ".PDF";
-                break;
-            case "plain":
-                typeText = ".TXT";
-                break;
-            case "vnd.ms-powerpoint":
-                typeText = ".PPT";
-                break;
-            case "vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                typeText = ".XLSX";
-                break;
-            case "vnd.openxmlformats-officedocument.wordprocessingml.document":
-                typeText = ".DOCX";
-                break;
-            case "octet-stream":
-                typeText = ".ZIP";
-                break;
-            case "tiff":
-                typeText = ".TIFF";
-                break;
-            case "tif":
-                typeText = ".TIF";
-                break;
-            case "bmp":
-                typeText = ".BMP";
-                break;
-            case "jpeg":
-                typeText = ".JPEG";
-                break;
-            case "jpg":
-                typeText = ".JPG";
-                break;
-            case "gif":
-                typeText = ".GIF";
-                break;
-            case "png":
-                typeText = ".PNG";
-                break;
-            default:
-                typeText = ".DOCX";
+            var typeText, fileExtensionRegEx, fileExtension;
+            fileExtensionRegEx = /(?:\.([^.]+))?$/; //ignore jslint
+            fileExtension = fileExtensionRegEx.exec(attachmentData.name);
+            if (fileExtension && fileExtension[1]) {
+                typeText = "." + fileExtension[1].toUpperCase();
+            } else {
+                typeText = this.appConfig.i18n.comment.unknownCommentAttachment;
             }
             domAttr.set(fileTypeContainer, "innerHTML", typeText);
         },
@@ -459,6 +423,9 @@ define([
                 domClass.add(this.addCommentsBtnWrapperContainer, "esriCTHidden");
                 this._createCommentForm(graphic, false);
                 domStyle.set(this.commentsContainer, "display", "none");
+                $('#tabContent').animate({
+                    scrollTop: 0
+                });
             }));
         },
 
