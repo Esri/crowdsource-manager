@@ -1296,9 +1296,19 @@ define([
         * @memberOf widgets/main/main
         */
         _handleEmptyDataViewerPanel: function () {
-            var noDataWrapperContainer;
+            var noDataWrapperContainer, webMapListContainer, webMapListContainerWidth;
+            webMapListContainer = dom.byId('webMapListContainer');
+            webMapListContainerWidth = $(webMapListContainer).outerWidth(true);
             domConstruct.empty(dom.byId("overlayContainer"));
-            noDataWrapperContainer = domConstruct.create("div", { "class": "esriCTNoDataDataViewerPanelContainer", "innerHTML": this.appConfig.i18n.dataviewer.selectLayerToBegin }, dom.byId("overlayContainer"));
+            noDataWrapperContainer = domConstruct.create("div", {
+                "class": "esriCTNoDataDataViewerPanelContainer",
+                "innerHTML": this.appConfig.i18n.dataviewer.selectLayerToBegin
+            }, dom.byId("overlayContainer"));
+            if (this.appConfig.i18n.direction === "rtl") {
+                domStyle.set(noDataWrapperContainer, "padding-right", webMapListContainerWidth + "px");
+            } else {
+                domStyle.set(noDataWrapperContainer, "padding-left", webMapListContainerWidth + "px");
+            }
             this._setNoDataDataViewerMessagePosition();
         },
 
