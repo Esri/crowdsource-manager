@@ -116,6 +116,9 @@ define([
                             if (this._commentsTable && this._commentsTable.url) {
                                 if (currentTable.url === this._commentsTable.url && currentTable.popupInfo) {
                                     this._commentPopupTable = currentTable;
+                                    if (currentTable.layerDefinition && currentTable.layerDefinition.definitionExpression) {
+                                        this._commentsTable.setDefinitionExpression(currentTable.layerDefinition.definitionExpression);
+                                    }
                                 }
                             }
                         }));
@@ -155,12 +158,17 @@ define([
         * @memberOf widgets/details-panel/comments
         */
         _fetchComments: function (graphic, parentDiv) {
-            var relatedQuery, currentID;
+            var relatedQuery, currentID, commentsTableDefinitionExpression;
             currentID = graphic.attributes[this.selectedOperationalLayer.objectIdField];
             relatedQuery = new RelationshipQuery();
             relatedQuery.outFields = ["*"];
             relatedQuery.relationshipId = this.selectedOperationalLayer.relationships[0].id;
             relatedQuery.objectIds = [currentID];
+            commentsTableDefinitionExpression = this._commentsTable.getDefinitionExpression();
+            //If table has definition expression set in web map then apply it
+            if (commentsTableDefinitionExpression && commentsTableDefinitionExpression !== null && commentsTableDefinitionExpression !== "") {
+                relatedQuery.definitionExpression = commentsTableDefinitionExpression;
+            }
             // Query for related features and showing comments
             this.selectedOperationalLayer.queryRelatedFeatures(relatedQuery, lang.hitch(this, function (relatedFeatures) {
                 var commentsParentDiv, pThis, commentsContainerDiv, i, deferredListArr;
