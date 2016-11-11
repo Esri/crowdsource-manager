@@ -610,10 +610,10 @@ define([
         },
 
         /**
-         * Show selected file on comment form and create new fileControl so that multiple files can be selected.
-         * @param{object} evt - Event object which will be generated on file input change event.
-         * @memberOf widgets/details-panel/comment-form
-         */
+        * Show selected file on comment form and create new fileControl so that multiple files can be selected.
+        * @param{object} evt - Event object which will be generated on file input change event.
+        * @memberOf widgets/details-panel/comment-form
+        */
         _onFileSelected: function (evt) {
             var newFormControl, fileInput, fileName, fileChange, alertHtml, target = evt.currentTarget || evt.srcElement;
             if (target && target.value) {
@@ -869,7 +869,7 @@ define([
                     var field = null, hasDomainValue, hasDefaultValue, fieldAttribute;
                     hasDomainValue = selectedType.domains[currentInput.name];
                     hasDefaultValue = selectedType.templates[0].prototype.attributes[currentInput.name];
-                    if ((hasDomainValue && hasDomainValue.type !== "inherited") || (hasDefaultValue && !currentInput.typeField)) {
+                    if ((hasDomainValue && hasDomainValue.type !== "inherited") || (hasDefaultValue && !currentInput.typeField) || (hasDefaultValue === 0 && !currentInput.typeField)) {
                         currentInput.isTypeDependent = true;
                     }
                     // condition to filter out fields independent of subtypes

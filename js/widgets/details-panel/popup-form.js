@@ -653,7 +653,7 @@ define([
                     var field = null, hasDomainValue, hasDefaultValue, fieldAttribute;
                     hasDomainValue = selectedType.domains[currentInput.name];
                     hasDefaultValue = selectedType.templates[0].prototype.attributes[currentInput.name];
-                    if ((hasDomainValue && hasDomainValue.type !== "inherited") || (hasDefaultValue && !currentInput.typeField)) {
+                    if ((hasDomainValue && hasDomainValue.type !== "inherited") || (hasDefaultValue && !currentInput.typeField) || (hasDefaultValue === 0 && !currentInput.typeField)) {
                         currentInput.isTypeDependent = true;
                     }
                     // condition to filter out fields independent of subtypes
