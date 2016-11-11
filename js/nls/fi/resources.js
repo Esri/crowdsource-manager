@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Peruuta",
     "geoformBackButtonTooltip": "Palaa raporttiluetteloon",
     "updateFeaturesConfirmationMsg": "${count} kohdetta päivitetään",
-    "attachmentHeaderText": "Liitteet"
+    "attachmentHeaderText": "Liitteet",
+    "unknownPopupAttachment": "Å_FILE__ö"
   },
   "mapViewer": {
     "zoomInToolTip": "Lähennä",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Selaa",
     "attachmentSelectedMsg": "liite(ttä) on valittu",
     "attachmentHeaderText": "Liitteet",
-    "addRecordText": "Lisää tietue"
+    "addRecordText": "Lisää tietue",
+    "unknownCommentAttachment": "Å_FILE__ö"
   },
   "main": {
     "noGroup": "Yhtään ryhmää ei ole määritetty"

@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "キャンセル",
     "geoformBackButtonTooltip": "レポート リストに戻る",
     "updateFeaturesConfirmationMsg": "${count} フィーチャが更新されます",
-    "attachmentHeaderText": "添付ファイル"
+    "attachmentHeaderText": "添付ファイル",
+    "unknownPopupAttachment": "須_FILE__鷗"
   },
   "mapViewer": {
     "zoomInToolTip": "拡大",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "参照",
     "attachmentSelectedMsg": "添付ファイルが選択されています",
     "attachmentHeaderText": "添付ファイル",
-    "addRecordText": "レコードの追加"
+    "addRecordText": "レコードの追加",
+    "unknownCommentAttachment": "須_FILE__鷗"
   },
   "main": {
     "noGroup": "グループが構成されていません"

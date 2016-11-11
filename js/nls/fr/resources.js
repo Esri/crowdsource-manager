@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Annuler",
     "geoformBackButtonTooltip": "Revenir à la liste des rapports",
     "updateFeaturesConfirmationMsg": "${count} entités vont être mises à jour",
-    "attachmentHeaderText": "Pièces jointes"
+    "attachmentHeaderText": "Pièces jointes",
+    "unknownPopupAttachment": "æ_FILE__Â"
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom avant",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Parcourir",
     "attachmentSelectedMsg": "pièce(s) jointe(s) sélectionnée(s)",
     "attachmentHeaderText": "Pièces jointes",
-    "addRecordText": "Ajouter un enregistrement"
+    "addRecordText": "Ajouter un enregistrement",
+    "unknownCommentAttachment": "æ_FILE__Â"
   },
   "main": {
     "noGroup": "Aucun groupe configuré"

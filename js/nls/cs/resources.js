@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Storno",
     "geoformBackButtonTooltip": "Vrátit se do seznamu zpráv",
     "updateFeaturesConfirmationMsg": "Bude aktualizováno ${count} prvků",
-    "attachmentHeaderText": "Přílohy"
+    "attachmentHeaderText": "Přílohy",
+    "unknownPopupAttachment": "Ř_FILE__ů"
   },
   "mapViewer": {
     "zoomInToolTip": "Přiblížit",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Procházet",
     "attachmentSelectedMsg": "příloh vybráno",
     "attachmentHeaderText": "Přílohy",
-    "addRecordText": "Přidat záznam"
+    "addRecordText": "Přidat záznam",
+    "unknownCommentAttachment": "Ř_FILE__ů"
   },
   "main": {
     "noGroup": "Není nakonfigurována žádná skupina"

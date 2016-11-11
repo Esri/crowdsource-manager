@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Otkaži",
     "geoformBackButtonTooltip": "Vrati se na listu izveštaja",
     "updateFeaturesConfirmationMsg": "${count} geoobjekata će biti ažurirano",
-    "attachmentHeaderText": "Prilozi"
+    "attachmentHeaderText": "Prilozi",
+    "unknownPopupAttachment": "Č_FILE__ž"
   },
   "mapViewer": {
     "zoomInToolTip": "Uvećanje",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Pregledaj",
     "attachmentSelectedMsg": "izabrani prilog/prilozi",
     "attachmentHeaderText": "Prilozi",
-    "addRecordText": "Dodaj zapis"
+    "addRecordText": "Dodaj zapis",
+    "unknownCommentAttachment": "Č_FILE__ž"
   },
   "main": {
     "noGroup": "Nijedna grupa nije konfigurisana"

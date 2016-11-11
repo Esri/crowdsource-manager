@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Atšaukti",
     "geoformBackButtonTooltip": "Grįžti į ataskaitų sąrašą",
     "updateFeaturesConfirmationMsg": "Bus atnaujinta elementų: ${count}",
-    "attachmentHeaderText": "Priedai"
+    "attachmentHeaderText": "Priedai",
+    "unknownPopupAttachment": "Į_FILE__š"
   },
   "mapViewer": {
     "zoomInToolTip": "Artinti",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Parinkti",
     "attachmentSelectedMsg": "pasirinktas (-i) priedas (-ai)",
     "attachmentHeaderText": "Priedai",
-    "addRecordText": "Pridėti įrašą"
+    "addRecordText": "Pridėti įrašą",
+    "unknownCommentAttachment": "Į_FILE__š"
   },
   "main": {
     "noGroup": "Sukonfigūruotų grupių nėra"

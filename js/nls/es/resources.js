@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Cancelar",
     "geoformBackButtonTooltip": "Volver a la lista de informes",
     "updateFeaturesConfirmationMsg": "${count} entidades se actualizarán",
-    "attachmentHeaderText": "Adjuntos"
+    "attachmentHeaderText": "Adjuntos",
+    "unknownPopupAttachment": "á_FILE__Ó"
   },
   "mapViewer": {
     "zoomInToolTip": "Acercar",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Examinar",
     "attachmentSelectedMsg": "adjuntos seleccionados",
     "attachmentHeaderText": "Adjuntos",
-    "addRecordText": "Agregar registro"
+    "addRecordText": "Agregar registro",
+    "unknownCommentAttachment": "á_FILE__Ó"
   },
   "main": {
     "noGroup": "No hay ningún grupo configurado"

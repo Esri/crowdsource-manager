@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "ยกเลิก",
     "geoformBackButtonTooltip": "กลับสู่ลิสต์ของรายงาน",
     "updateFeaturesConfirmationMsg": "${count} ฟีเจอร์จะถูกอัพเดท",
-    "attachmentHeaderText": "แนบ"
+    "attachmentHeaderText": "แนบ",
+    "unknownPopupAttachment": "ก้_FILE__ษฺ"
   },
   "mapViewer": {
     "zoomInToolTip": "ขยายภาพ",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "ค้นหา",
     "attachmentSelectedMsg": "เลือกไฟล์แนบ",
     "attachmentHeaderText": "แนบ",
-    "addRecordText": "เพิ่มเรคคอร์ด"
+    "addRecordText": "เพิ่มเรคคอร์ด",
+    "unknownCommentAttachment": "ก้_FILE__ษฺ"
   },
   "main": {
     "noGroup": "ยังไม่กำหนดกลุ่ม"

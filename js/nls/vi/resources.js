@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Hủy",
     "geoformBackButtonTooltip": "Quay lại danh sách báo cáo",
     "updateFeaturesConfirmationMsg": "${count} đối tượng sẽ được cập nhật",
-    "attachmentHeaderText": "Tệp đính kèm"
+    "attachmentHeaderText": "Tệp đính kèm",
+    "unknownPopupAttachment": "Đ_FILE__ớ"
   },
   "mapViewer": {
     "zoomInToolTip": "Thu nhỏ",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Duyệt",
     "attachmentSelectedMsg": "(các) tệp đính kèm được chọn",
     "attachmentHeaderText": "Tệp đính kèm",
-    "addRecordText": "Thêm Bản ghi"
+    "addRecordText": "Thêm Bản ghi",
+    "unknownCommentAttachment": "Đ_FILE__ớ"
   },
   "main": {
     "noGroup": "Không có nhóm nào được cấu hình"

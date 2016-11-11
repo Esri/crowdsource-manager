@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Tühista",
     "geoformBackButtonTooltip": "Tagasi aruandelehele",
     "updateFeaturesConfirmationMsg": "${count} objekti värskendatakse",
-    "attachmentHeaderText": "Manused"
+    "attachmentHeaderText": "Manused",
+    "unknownPopupAttachment": "Š_FILE__ä"
   },
   "mapViewer": {
     "zoomInToolTip": "Suurenda",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Sirvi",
     "attachmentSelectedMsg": "valitud manus(ed)",
     "attachmentHeaderText": "Manused",
-    "addRecordText": "Lisa kirje"
+    "addRecordText": "Lisa kirje",
+    "unknownCommentAttachment": "Š_FILE__ä"
   },
   "main": {
     "noGroup": "Ühtki gruppi ei ole konfigureeritud"

@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Отмена",
     "geoformBackButtonTooltip": "Вернуться к списку отчетов",
     "updateFeaturesConfirmationMsg": "${count} объектов будет обновлено",
-    "attachmentHeaderText": "Вложения"
+    "attachmentHeaderText": "Вложения",
+    "unknownPopupAttachment": "Ж_FILE__Я"
   },
   "mapViewer": {
     "zoomInToolTip": "Увеличить",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Просмотр",
     "attachmentSelectedMsg": "выбранные вложения",
     "attachmentHeaderText": "Вложения",
-    "addRecordText": "Добавить запись"
+    "addRecordText": "Добавить запись",
+    "unknownCommentAttachment": "Ж_FILE__Я"
   },
   "main": {
     "noGroup": "Не задана группа"

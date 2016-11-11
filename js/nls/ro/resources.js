@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Anulare",
     "geoformBackButtonTooltip": "Reveniţi la lista de rapoarte",
     "updateFeaturesConfirmationMsg": "${count} obiecte spaţiale vor fi actualizate",
-    "attachmentHeaderText": "Ataşări"
+    "attachmentHeaderText": "Ataşări",
+    "unknownPopupAttachment": "Ă_FILE__ș"
   },
   "mapViewer": {
     "zoomInToolTip": "Mărire",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Parcurgere",
     "attachmentSelectedMsg": "ataşări selectate",
     "attachmentHeaderText": "Ataşări",
-    "addRecordText": "Adăugare înregistrare"
+    "addRecordText": "Adăugare înregistrare",
+    "unknownCommentAttachment": "Ă_FILE__ș"
   },
   "main": {
     "noGroup": "Niciun grup configurat"

@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "취소",
     "geoformBackButtonTooltip": "보고서 목록으로 돌아가기",
     "updateFeaturesConfirmationMsg": "${count} 피처가 업데이트됨",
-    "attachmentHeaderText": "첨부 파일"
+    "attachmentHeaderText": "첨부 파일",
+    "unknownPopupAttachment": "한_FILE__빠"
   },
   "mapViewer": {
     "zoomInToolTip": "확대",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "찾아보기",
     "attachmentSelectedMsg": "첨부 파일이 선택됨",
     "attachmentHeaderText": "첨부 파일",
-    "addRecordText": "레코드 추가"
+    "addRecordText": "레코드 추가",
+    "unknownCommentAttachment": "한_FILE__빠"
   },
   "main": {
     "noGroup": "구성된 그룹 없음"

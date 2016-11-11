@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Atcelt",
     "geoformBackButtonTooltip": "Atgriezties pārskatu sarakstā",
     "updateFeaturesConfirmationMsg": "${count} elementi tiks atjaunināti",
-    "attachmentHeaderText": "Piesaistes"
+    "attachmentHeaderText": "Piesaistes",
+    "unknownPopupAttachment": "ķ_FILE__ū"
   },
   "mapViewer": {
     "zoomInToolTip": "Pietuvināt",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Pārlūkot",
     "attachmentSelectedMsg": "atlasītais(-ie) pielikums(-i)",
     "attachmentHeaderText": "Piesaistes",
-    "addRecordText": "Pievienot ierakstu"
+    "addRecordText": "Pievienot ierakstu",
+    "unknownCommentAttachment": "ķ_FILE__ū"
   },
   "main": {
     "noGroup": "Nav konfigurētas grupas"

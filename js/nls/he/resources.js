@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "ביטול",
     "geoformBackButtonTooltip": "חזור לרשימת הדוחות",
     "updateFeaturesConfirmationMsg": "${count} תכונות יעודכנו",
-    "attachmentHeaderText": "קבצים מקושרים"
+    "attachmentHeaderText": "קבצים מקושרים",
+    "unknownPopupAttachment": "כן_FILE__ש"
   },
   "mapViewer": {
     "zoomInToolTip": "התמקד פנימה",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "נתב",
     "attachmentSelectedMsg": "קבצים מצורפים נבחרו",
     "attachmentHeaderText": "קבצים מקושרים",
-    "addRecordText": "הוסף רשומה"
+    "addRecordText": "הוסף רשומה",
+    "unknownCommentAttachment": "כן_FILE__ש"
   },
   "main": {
     "noGroup": "לא הוגדרה קבוצה"

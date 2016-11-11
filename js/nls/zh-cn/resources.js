@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "取消",
     "geoformBackButtonTooltip": "返回至报告列表",
     "updateFeaturesConfirmationMsg": "将更新 ${count} 个要素",
-    "attachmentHeaderText": "附件"
+    "attachmentHeaderText": "附件",
+    "unknownPopupAttachment": "试_FILE__验"
   },
   "mapViewer": {
     "zoomInToolTip": "放大",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "浏览",
     "attachmentSelectedMsg": "附件已选定",
     "attachmentHeaderText": "附件",
-    "addRecordText": "添加记录"
+    "addRecordText": "添加记录",
+    "unknownCommentAttachment": "试_FILE__验"
   },
   "main": {
     "noGroup": "未配置任何群组"

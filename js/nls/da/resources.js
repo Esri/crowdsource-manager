@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Annullér",
     "geoformBackButtonTooltip": "Vend tilbage til rapportlisten",
     "updateFeaturesConfirmationMsg": "${count} objekter vil blive opdateret",
-    "attachmentHeaderText": "Vedhæftninger"
+    "attachmentHeaderText": "Vedhæftninger",
+    "unknownPopupAttachment": "ø_FILE__å"
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom ind",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Gennemse",
     "attachmentSelectedMsg": "vedhæftning(er) valgt",
     "attachmentHeaderText": "Vedhæftninger",
-    "addRecordText": "Tilføj post"
+    "addRecordText": "Tilføj post",
+    "unknownCommentAttachment": "ø_FILE__å"
   },
   "main": {
     "noGroup": "Ingen gruppe konfigureret"

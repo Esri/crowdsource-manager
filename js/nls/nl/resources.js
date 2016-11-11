@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Annuleren",
     "geoformBackButtonTooltip": "Terug naar de meldlijst",
     "updateFeaturesConfirmationMsg": "${count} objecten worden bijgewerkt",
-    "attachmentHeaderText": "Bijlagen"
+    "attachmentHeaderText": "Bijlagen",
+    "unknownPopupAttachment": "Ĳ_FILE__ä"
   },
   "mapViewer": {
     "zoomInToolTip": "Inzoomen",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Bladeren",
     "attachmentSelectedMsg": "bijlage(n) geselecteerd",
     "attachmentHeaderText": "Bijlagen",
-    "addRecordText": "Item toevoegen"
+    "addRecordText": "Item toevoegen",
+    "unknownCommentAttachment": "Ĳ_FILE__ä"
   },
   "main": {
     "noGroup": "Geen groep geconfigureerd"

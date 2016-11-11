@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Ακύρωση",
     "geoformBackButtonTooltip": "Επιστροφή στη λίστα αναφορών",
     "updateFeaturesConfirmationMsg": "${count} στοιχεία θα ενημερωθούν",
-    "attachmentHeaderText": "Συνημμένα"
+    "attachmentHeaderText": "Συνημμένα",
+    "unknownPopupAttachment": "Đ_FILE__ớ"
   },
   "mapViewer": {
     "zoomInToolTip": "Εστίαση σε μεγαλύτερη κλίμακα",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Αναζήτηση",
     "attachmentSelectedMsg": "συνημμένα επιλέχθηκαν",
     "attachmentHeaderText": "Συνημμένα",
-    "addRecordText": "Προσθήκη εγγραφής"
+    "addRecordText": "Προσθήκη εγγραφής",
+    "unknownCommentAttachment": "Đ_FILE__ớ"
   },
   "main": {
     "noGroup": "Δεν έχει παραμετροποιηθεί κάποια ομάδα"

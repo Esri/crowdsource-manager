@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Cancelar",
     "geoformBackButtonTooltip": "Retornar para lista de relatório",
     "updateFeaturesConfirmationMsg": "${count} feições serão atualizadas",
-    "attachmentHeaderText": "Anexos"
+    "attachmentHeaderText": "Anexos",
+    "unknownPopupAttachment": "ã_FILE__Ç"
   },
   "mapViewer": {
     "zoomInToolTip": "Mais Zoom",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Procurar",
     "attachmentSelectedMsg": "anexos selecionados",
     "attachmentHeaderText": "Anexos",
-    "addRecordText": "Adicionar Registros"
+    "addRecordText": "Adicionar Registros",
+    "unknownCommentAttachment": "ã_FILE__Ç"
   },
   "main": {
     "noGroup": "Nenhum grupo configurado"

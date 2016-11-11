@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "إلغاء الأمر",
     "geoformBackButtonTooltip": "الرجوع إلى قائمة التقرير",
     "updateFeaturesConfirmationMsg": "سيتم تحديث المعالم ${count}",
-    "attachmentHeaderText": "مرفقات"
+    "attachmentHeaderText": "مرفقات",
+    "unknownPopupAttachment": "بيت_FILE__لاحقة"
   },
   "mapViewer": {
     "zoomInToolTip": "التكبير",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "مربع حوار",
     "attachmentSelectedMsg": "المرفقات المحددة",
     "attachmentHeaderText": "مرفقات",
-    "addRecordText": "إضافة تسجيل"
+    "addRecordText": "إضافة تسجيل",
+    "unknownCommentAttachment": "بيت_FILE__لاحقة"
   },
   "main": {
     "noGroup": "لم يتم تكوين المجموعة"

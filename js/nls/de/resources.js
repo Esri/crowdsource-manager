@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Abbrechen",
     "geoformBackButtonTooltip": "Zur Berichtsliste zurückkehren",
     "updateFeaturesConfirmationMsg": "${count} Features werden aktualisiert",
-    "attachmentHeaderText": "Anlagen"
+    "attachmentHeaderText": "Anlagen",
+    "unknownPopupAttachment": "ä_FILE__Ü"
   },
   "mapViewer": {
     "zoomInToolTip": "Vergrößern",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Durchsuchen",
     "attachmentSelectedMsg": "Anlage(n) ausgewählt",
     "attachmentHeaderText": "Anlagen",
-    "addRecordText": "Datensatz hinzufügen"
+    "addRecordText": "Datensatz hinzufügen",
+    "unknownCommentAttachment": "ä_FILE__Ü"
   },
   "main": {
     "noGroup": "Keine Gruppe konfiguriert"

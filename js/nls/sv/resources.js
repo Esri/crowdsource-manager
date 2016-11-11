@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Avbryt",
     "geoformBackButtonTooltip": "Återgå till rapportlistan",
     "updateFeaturesConfirmationMsg": "${count} geoobjekt uppdateras",
-    "attachmentHeaderText": "Bilagor"
+    "attachmentHeaderText": "Bilagor",
+    "unknownPopupAttachment": "Å_FILE__ö"
   },
   "mapViewer": {
     "zoomInToolTip": "Zooma in",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Bläddra",
     "attachmentSelectedMsg": "bilagor markerade",
     "attachmentHeaderText": "Bilagor",
-    "addRecordText": "Lägg till post"
+    "addRecordText": "Lägg till post",
+    "unknownCommentAttachment": "Å_FILE__ö"
   },
   "main": {
     "noGroup": "Ingen grupp konfigurerad"
