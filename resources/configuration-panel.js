@@ -32,6 +32,9 @@
 	"configurationSettings": [{
 	    "category": "<b>App Settings</b>",
 	    "fields": [{
+	        "type": "paragraph",
+	        "value": "For more information on configuring this app, check out the <a href=\"http://links.esri.com/localgovernment/help/crowdsource-manager\" target=\"_blank\">Crowdsource Manager documentation<\/a>."
+	    }, {
 	        "label": "Select a group",
 	        "tooltip": "Choose a group that contains one or more maps containing layers of data to manage through your application.",
 	        "type": "group"
@@ -60,7 +63,30 @@
 	        "tooltip": "Choose the color for highlighting selected rows in the table",
 	        "type": "color",
 	        "fieldName": "highlightRow"
-	    }]
+	    }, {
+	        "type": "subcategory",
+	        "label": "Help Settings"
+	    }, {
+	        "type": "paragraph",
+	        "value": "Provide instructions for using the app, contact information, etc. in a panel that is accessible from the application header"
+	    }, {
+	        "type": "conditional",
+	        "fieldName": "showHelpIcon",
+	        "label": "Enable the help window",
+	        "tooltip": "When disabled, the help window will not be accessible",
+			"condition": false,
+			"items":[{
+				"type": "string",
+				"fieldName": "helpDialogTitle",
+				"label": "Help window title",
+				"tooltip": "Text displayed at the top of the help window"
+				}, {
+				"type": "string",
+				"fieldName": "helpDialogContent",
+				"label": "Dialog content",
+				"stringFieldOption": "richtext",
+				"tooltip": "Text and graphics that will display in the help window."
+	    }]}]
 	}, {
 	    "category": "<b>Map Settings</b>",
 	    "fields": [{
@@ -138,6 +164,20 @@
 	        "tooltip": "Enable to show webmap average rating",
 	        "type": "boolean",
 	        "fieldName": "webMapInfoAvgRating"
+	    }, {
+	        "type": "subcategory",
+	        "label": "Filter Settings"
+	    }, {
+	        "type": "paragraph",
+	        "value": "Attribute filters that use the option to 'Ask For Values' and the time slider will be exposed in Crowdsource Manager when they have been configured on layers in the map."
+	    }, {
+	        "type": "paragraph",
+	        "value": "By default, the application will honor the initial values of these filters. If you use several of these filters, that may mean that no features are visible when your application loads. Optionally, uncheck the following parameter to choose to ignore the default filter and time slider values when the app loads. Users of the application will be able to choose the filter values they would like to apply. Crowdsource Manager apps will always honor static filters on your map layers."
+	    }, {
+	        "label": "Apply default filters automatically",
+	        "tooltip": "Enable to load the application with the default values of all dynamic filters applied.",
+	        "type": "boolean",
+	        "fieldName": "enableFilter"
 	    }]
 	}, {
 	    "category": "<b>Report Settings</b>",
@@ -166,65 +206,25 @@
 	        "type": "string",
 	        "fieldName": "commentsTabText"
 	    }, {
-	        "type": "paragraph",
-	        "value": "Indicate how related records are displayed and edited: either by using a single field, or by using the <a href=\"http://links.esri.com/ArcGISOnline/Configurepop-ups\" target=\"_blank\">popup<\/a> defined for the table layer in the map."
-	    }, {
-	        "type": "string",
-	        "fieldName": "commentField",
-	        "label": "Provide the name of a single field to display, regardless of the popup settings. This value is ignored if you choose to build the form from the comment table popup (below).",
-	        "tooltip": "Only content from related tables that have this field will be accessible through the application."
-	    }, {
-	        "label": "Header for section of the comments form where photos and other supporting files can be added to the comments. This section is only available when attachments are enabled on the layer.",
-	        "tooltip": "Header for the section of the comments form where supporting files can be attached to the comments.",
+	        "label": "Header for section of the comments form where photos and other supporting files can be added to the comments. ",
+	        "tooltip": "Header for the section of the comments form where supporting files can be attached to the comments. This section is only available when attachments are enabled on the related records layer.",
 	        "type": "string",
 	        "fieldName": "commentFormAttachmentSectionLabel"
 	    }, {
-	        "type": "boolean",
+	        "type": "paragraph",
+	        "value": "Indicate how related records are displayed and edited: either by using a single field, or by using the <a href=\"http://links.esri.com/ArcGISOnline/Configurepop-ups\" target=\"_blank\">popup<\/a> defined for the table layer in the map."
+	    }, {
+	        "type": "conditional",
 	        "fieldName": "usePopupConfigurationForComment",
 	        "label": "Display related records using the popup configuration.",
-	        "tooltip": "Enable to display related records and the editing form based on the table layer's popup configuration instead of a single field. Fields that are marked editable in the popup will be editable in the application."
-	    }, {
-	        "type": "paragraph",
-	        "value": "For more information on how popup configuration and data structure can enhance these tabs, check out the <a href=\"http://links.esri.com/localgovernment/help/crowdsource-manager\" target=\"_blank\">Crowdsource Manager documentation<\/a>."
-	    }]
-	}, {
-	    "category": "<b>Filter Settings</b>",
-	    "fields": [{
-	        "type": "paragraph",
-	        "value": "Attribute filters that that use the option to 'Ask For Values' and the time slider will be exposed in Crowdsource Manager when they have been configured on layers in the map."
-	    }, {
-	        "type": "paragraph",
-	        "value": "By default, the application will honor the initial values of these filters. Optionally, choose to ignore the default filter and time slider values when the app loads and let your users apply the filters as necessary. Crowdsource Manager apps will always honor static filters on your map layers."
-	    }, {
-	        "label": "Apply default filters automatically",
-	        "tooltip": "Enable to load the application with the default values of all dynamic filters applied.",
-	        "type": "boolean",
-	        "fieldName": "enableFilter"
-	    }, {
-	        "type": "paragraph",
-	        "value": "For more information on configuring time and attribute filters for use in this app, check out the <a href=\"http://links.esri.com/localgovernment/help/crowdsource-manager\" target=\"_blank\">Crowdsource Manager documentation<\/a>."
-	    }]
-	}, {
-	    "category": "<b>Help Settings</b>",
-	    "fields": [{
-	        "type": "paragraph",
-	        "value": "Provide instructions for using the app, contact information, etc. in a panel that is accessible from the application header"
-	    }, {
-	        "type": "boolean",
-	        "fieldName": "showHelpIcon",
-	        "label": "Enable the help window",
-	        "tooltip": "When disabled, the help window will not be accessible"
-	    }, {
-	        "type": "string",
-	        "fieldName": "helpDialogTitle",
-	        "label": "Help window title",
-	        "tooltip": "Text displayed at the top of the help window"
-	    }, {
-	        "type": "string",
-	        "fieldName": "helpDialogContent",
-	        "label": "Dialog content",
-	        "stringFieldOption": "richtext",
-	        "tooltip": "Text and graphics that will display in the help window."
+	        "tooltip": "Enable to display related records and the editing form based on the table layer's popup configuration instead of a single field. Fields that are marked editable in the popup will be editable in the application.",
+			"condition": true,
+			"items":[{
+				"type": "string",
+				"fieldName": "commentField",
+				"label": "Provide the name of a single field to display, regardless of the popup settings. This value is ignored if you choose to build the form usign the popup configuration.",
+				"tooltip": "Only content from related tables that have this field will be accessible through the application."
+				}]
 	    }]
 	}]
 }
