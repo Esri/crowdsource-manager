@@ -1,10 +1,10 @@
 {
     "values": {
-        "group": "",
+        "group": "4c4ea6122c1a4313bab674bc4d9cf83b",
 		"theme": "#f26e1f",
 		"applicationName": "",
 		"applicationIcon": "",
-		"applicationFavicon": "",
+		"applicationFavicon": "/images/favicon.ico",
 		"zoomLevel": 12,
 		"commentField": "COMMENTS",
 		"usePopupConfigurationForComment": false,
