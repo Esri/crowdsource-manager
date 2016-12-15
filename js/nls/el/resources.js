@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Ακύρωση",
     "geoformBackButtonTooltip": "Επιστροφή στη λίστα αναφορών",
     "updateFeaturesConfirmationMsg": "${count} στοιχεία θα ενημερωθούν",
-    "attachmentHeaderText": "Συνημμένα"
+    "attachmentHeaderText": "Συνημμένα",
+    "unknownPopupAttachment": "Đ_FILE__ớ"
   },
   "mapViewer": {
     "zoomInToolTip": "Εστίαση σε μεγαλύτερη κλίμακα",
@@ -83,7 +84,7 @@ define({
     "valueRadioButtonLabel": "Τιμή",
     "uniqueRadioButtonLabel": "Μοναδικό",
     "selectLayerToBegin": "Επιλέξτε μια κατηγορία για να ξεκινήσετε",
-    "layerFeatureCount": "Đ_${selectedFeatureCount} selected / ${featureCount} records__________________ớ"
+    "layerFeatureCount": "${selectedFeatureCount} επιλεγμένα / ${featureCount} εγγραφές"
   },
   "timeSlider": {
     "timeSliderLabel": "Εύρος χρόνου",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Αναζήτηση",
     "attachmentSelectedMsg": "συνημμένα επιλέχθηκαν",
     "attachmentHeaderText": "Συνημμένα",
-    "addRecordText": "Đ_Add Record____ớ"
+    "addRecordText": "Προσθήκη εγγραφής",
+    "unknownCommentAttachment": "Đ_FILE__ớ"
   },
   "main": {
     "noGroup": "Δεν έχει παραμετροποιηθεί κάποια ομάδα"
@@ -114,18 +116,18 @@ define({
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Ανανέωση",
-    "confirmManualRefreshText": "Đ_All selections and unsaved changes will be discarded_________________ớ"
+    "confirmManualRefreshText": "Όλες οι επιλογές και οι μη αποθηκευμένες αλλαγές θα απορριφθούν"
   },
   "help": {
     "helpIconTooltip": "Βοήθεια"
   },
   "filter": {
     "noFeatureFoundText": "Δεν βρέθηκαν στοιχεία για αυτήν την τιμή.",
-    "distinctQueryFailed": "Đ_No distinct values found for the field_____________ớ.",
+    "distinctQueryFailed": "Δεν βρέθηκαν διακριτές τιμές για το πεδίο.",
     "andText": "και",
-    "filterInEditModeAlert": "Đ_Filters unavailable while editing___________ớ.",
+    "filterInEditModeAlert": "Τα φίλτρα δεν είναι διαθέσιμα κατά την επεξεργασία.",
     "dropdownSelectOption": "Επιλογή",
-    "filterInShowSelectedEditModeAlert": "Đ_Filters unavailable in 'Show Selected' mode______________ớ."
+    "filterInShowSelectedEditModeAlert": "Τα φίλτρα δεν είναι διαθέσιμα στη λειτουργία \"Εμφάνιση επιλεγμένων\"."
   },
   "detailsPanel": {
     "editContentText": "Επεξεργασία εγγραφής"
@@ -135,8 +137,8 @@ define({
     "reSignInMessage": "Κάντε κλικ εδώ για να συνδεθείτε"
   },
   "selectionOptions": {
-    "selectionOptionsIconTooltip": "Đ_Selection Options______ớ",
-    "showAllOptionText": "Đ_Show All___ớ",
-    "showSelectedOptionText": "Đ_Show Selected_____ớ"
+    "selectionOptionsIconTooltip": "Δυνατότητες επιλογής",
+    "showAllOptionText": "Εμφάνιση όλων",
+    "showSelectedOptionText": "Εμφάνιση επιλεγμένων"
   }
 });

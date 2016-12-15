@@ -448,6 +448,8 @@ define([
                     }
                 }
             }
+            // Set hint text for range domain Value
+            this._createRangeText(currentField, formContent, fieldname);
             // If field has coded domain value and typeField set to true then create form elements for domain fields
             // else create form elements for non domain fields
             if (currentField.domain || currentField.typeField) {
@@ -455,8 +457,6 @@ define([
             } else {
                 this._createInputFormElements(currentField, formContent, fieldname);
             }
-            // Set hint text for range domain Value
-            this._createRangeText(currentField, formContent, fieldname);
         },
 
         /**
@@ -476,7 +476,7 @@ define([
             // if info pop has tooltip then create info popup hint text
             if (currentField.tooltip) {
                 domConstruct.create("p", {
-                    className: "help-block",
+                    className: "help-block esriCTPopupFormHintText",
                     innerHTML: currentField.tooltip
                 }, formContent);
             }
@@ -653,7 +653,7 @@ define([
                     var field = null, hasDomainValue, hasDefaultValue, fieldAttribute;
                     hasDomainValue = selectedType.domains[currentInput.name];
                     hasDefaultValue = selectedType.templates[0].prototype.attributes[currentInput.name];
-                    if ((hasDomainValue && hasDomainValue.type !== "inherited") || (hasDefaultValue && !currentInput.typeField)) {
+                    if ((hasDomainValue && hasDomainValue.type !== "inherited") || (hasDefaultValue && !currentInput.typeField) || (hasDefaultValue === 0 && !currentInput.typeField)) {
                         currentInput.isTypeDependent = true;
                     }
                     // condition to filter out fields independent of subtypes
@@ -945,6 +945,8 @@ define([
                 if (defaultValue || defaultValue === 0) {
                     domClass.add(formContent, "has-success");
                     this._validateField({ 'target': this.inputContent }, currentField, true);
+                } else {
+                    this.inputContent.value = "";
                 }
             } else {
                 //check date field value if exists

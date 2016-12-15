@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Abbrechen",
     "geoformBackButtonTooltip": "Zur Berichtsliste zurückkehren",
     "updateFeaturesConfirmationMsg": "${count} Features werden aktualisiert",
-    "attachmentHeaderText": "Anlagen"
+    "attachmentHeaderText": "Anlagen",
+    "unknownPopupAttachment": "ä_FILE__Ü"
   },
   "mapViewer": {
     "zoomInToolTip": "Vergrößern",
@@ -83,7 +84,7 @@ define({
     "valueRadioButtonLabel": "Wert",
     "uniqueRadioButtonLabel": "Eindeutig",
     "selectLayerToBegin": "Zum Einstieg eine Kategorie auswählen",
-    "layerFeatureCount": "ä_${selectedFeatureCount} selected / ${featureCount} records__________________Ü"
+    "layerFeatureCount": "${selectedFeatureCount} ausgewählt / ${featureCount} Datensätze"
   },
   "timeSlider": {
     "timeSliderLabel": "Zeitbereich",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Durchsuchen",
     "attachmentSelectedMsg": "Anlage(n) ausgewählt",
     "attachmentHeaderText": "Anlagen",
-    "addRecordText": "ä_Add Record____Ü"
+    "addRecordText": "Datensatz hinzufügen",
+    "unknownCommentAttachment": "ä_FILE__Ü"
   },
   "main": {
     "noGroup": "Keine Gruppe konfiguriert"
@@ -114,18 +116,18 @@ define({
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Aktualisieren",
-    "confirmManualRefreshText": "ä_All selections and unsaved changes will be discarded_________________Ü"
+    "confirmManualRefreshText": "Gesamte Auswahl und nicht gespeicherte Änderungen werden verworfen"
   },
   "help": {
     "helpIconTooltip": "Hilfe"
   },
   "filter": {
     "noFeatureFoundText": "Für diesen Wert wurde kein Feature gefunden.",
-    "distinctQueryFailed": "ä_No distinct values found for the field_____________Ü.",
+    "distinctQueryFailed": "Für dieses Feld wurden keine eindeutigen Werte gefunden.",
     "andText": "und",
-    "filterInEditModeAlert": "ä_Filters unavailable while editing___________Ü.",
+    "filterInEditModeAlert": "Filter sind während der Bearbeitung nicht verfügbar.",
     "dropdownSelectOption": "Auswählen",
-    "filterInShowSelectedEditModeAlert": "ä_Filters unavailable in 'Show Selected' mode______________Ü."
+    "filterInShowSelectedEditModeAlert": "Filter sind im Modus 'Anzeigen: Ausgewählte' nicht verfügbar."
   },
   "detailsPanel": {
     "editContentText": "Datensatz bearbeiten"
@@ -135,8 +137,8 @@ define({
     "reSignInMessage": "Klicken Sie hier, um sich anzumelden"
   },
   "selectionOptions": {
-    "selectionOptionsIconTooltip": "ä_Selection Options______Ü",
-    "showAllOptionText": "ä_Show All___Ü",
-    "showSelectedOptionText": "ä_Show Selected_____Ü"
+    "selectionOptionsIconTooltip": "Auswahloptionen",
+    "showAllOptionText": "Alle anzeigen",
+    "showSelectedOptionText": "Ausgewählte anzeigen"
   }
 });

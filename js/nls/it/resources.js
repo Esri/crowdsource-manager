@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Annulla",
     "geoformBackButtonTooltip": "Torna all'elenco dei report",
     "updateFeaturesConfirmationMsg": "${count} feature verranno aggiornate",
-    "attachmentHeaderText": "Allegati"
+    "attachmentHeaderText": "Allegati",
+    "unknownPopupAttachment": "é_FILE__È"
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom avanti",
@@ -83,7 +84,7 @@ define({
     "valueRadioButtonLabel": "Valore",
     "uniqueRadioButtonLabel": "Unico",
     "selectLayerToBegin": "Selezionare una categoria per iniziare",
-    "layerFeatureCount": "é_${selectedFeatureCount} selected / ${featureCount} records__________________È"
+    "layerFeatureCount": "${selectedFeatureCount} selezionato/ ${featureCount} record"
   },
   "timeSlider": {
     "timeSliderLabel": "Intervallo temporale",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Esplora",
     "attachmentSelectedMsg": "allegato/i selezionato/i",
     "attachmentHeaderText": "Allegati",
-    "addRecordText": "é_Add Record____È"
+    "addRecordText": "Aggiungi record",
+    "unknownCommentAttachment": "é_FILE__È"
   },
   "main": {
     "noGroup": "Nessun gruppo configurato"
@@ -114,18 +116,18 @@ define({
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Aggiorna",
-    "confirmManualRefreshText": "é_All selections and unsaved changes will be discarded_________________È"
+    "confirmManualRefreshText": "Tutte le selezioni e le modifiche non salvate verranno ignorate"
   },
   "help": {
     "helpIconTooltip": "Guida"
   },
   "filter": {
     "noFeatureFoundText": "Nessuna feature trovata per questo valore.",
-    "distinctQueryFailed": "é_No distinct values found for the field_____________È.",
+    "distinctQueryFailed": "Nessun valore distinto trovato per il campo.",
     "andText": "e",
-    "filterInEditModeAlert": "é_Filters unavailable while editing___________È.",
+    "filterInEditModeAlert": "Filtri non disponibili durante la modifica.",
     "dropdownSelectOption": "Seleziona",
-    "filterInShowSelectedEditModeAlert": "é_Filters unavailable in 'Show Selected' mode______________È."
+    "filterInShowSelectedEditModeAlert": "Filtri non disponibili nella modalità 'Mostra selezionate'."
   },
   "detailsPanel": {
     "editContentText": "Modifica record"
@@ -135,8 +137,8 @@ define({
     "reSignInMessage": "Fare clic qui per effettuare l'accesso"
   },
   "selectionOptions": {
-    "selectionOptionsIconTooltip": "é_Selection Options______È",
-    "showAllOptionText": "é_Show All___È",
-    "showSelectedOptionText": "é_Show Selected_____È"
+    "selectionOptionsIconTooltip": "Opzioni di selezione",
+    "showAllOptionText": "Mostra tutto",
+    "showSelectedOptionText": "Mostra selezionate"
   }
 });

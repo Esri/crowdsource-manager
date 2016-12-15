@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Atšaukti",
     "geoformBackButtonTooltip": "Grįžti į ataskaitų sąrašą",
     "updateFeaturesConfirmationMsg": "Bus atnaujinta elementų: ${count}",
-    "attachmentHeaderText": "Priedai"
+    "attachmentHeaderText": "Priedai",
+    "unknownPopupAttachment": "Į_FILE__š"
   },
   "mapViewer": {
     "zoomInToolTip": "Artinti",
@@ -83,7 +84,7 @@ define({
     "valueRadioButtonLabel": "Reikšmė",
     "uniqueRadioButtonLabel": "Unikalios",
     "selectLayerToBegin": "Jei norite pradėti, pasirinkite kategoriją",
-    "layerFeatureCount": "Į_${selectedFeatureCount} selected / ${featureCount} records__________________š"
+    "layerFeatureCount": "Pažymėtų įrašų: ${selectedFeatureCount} / Iš viso įrašų: ${featureCount}"
   },
   "timeSlider": {
     "timeSliderLabel": "Laiko intervalas",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Parinkti",
     "attachmentSelectedMsg": "pasirinktas (-i) priedas (-ai)",
     "attachmentHeaderText": "Priedai",
-    "addRecordText": "Į_Add Record____š"
+    "addRecordText": "Pridėti įrašą",
+    "unknownCommentAttachment": "Į_FILE__š"
   },
   "main": {
     "noGroup": "Sukonfigūruotų grupių nėra"
@@ -114,18 +116,18 @@ define({
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Atnaujinti",
-    "confirmManualRefreshText": "Į_All selections and unsaved changes will be discarded_________________š"
+    "confirmManualRefreshText": "Visi pasirinkimai ir neišsaugoti pakeitimai bus atmesti"
   },
   "help": {
     "helpIconTooltip": "Pagalba"
   },
   "filter": {
     "noFeatureFoundText": "Šiai reikšmei elementų nerasta.",
-    "distinctQueryFailed": "Į_No distinct values found for the field_____________š.",
+    "distinctQueryFailed": "Šiam laukui atskirų reikšmių nerasta.",
     "andText": "ir",
-    "filterInEditModeAlert": "Į_Filters unavailable while editing___________š.",
+    "filterInEditModeAlert": "Redaguojant filtrai nepasiekiami.",
     "dropdownSelectOption": "Pasirinkite",
-    "filterInShowSelectedEditModeAlert": "Į_Filters unavailable in 'Show Selected' mode______________š."
+    "filterInShowSelectedEditModeAlert": "Naudojant režimą „Rodyti pažymėtus“, filtrai nepasiekiami."
   },
   "detailsPanel": {
     "editContentText": "Redaguoti įrašą"
@@ -135,8 +137,8 @@ define({
     "reSignInMessage": "Paspauskite prisijungti"
   },
   "selectionOptions": {
-    "selectionOptionsIconTooltip": "Į_Selection Options______š",
-    "showAllOptionText": "Į_Show All___š",
-    "showSelectedOptionText": "Į_Show Selected_____š"
+    "selectionOptionsIconTooltip": "Pasirinkimo parinktys",
+    "showAllOptionText": "Rodyti visus",
+    "showSelectedOptionText": "Rodyti pažymėtus"
   }
 });

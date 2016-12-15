@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Annuler",
     "geoformBackButtonTooltip": "Revenir à la liste des rapports",
     "updateFeaturesConfirmationMsg": "${count} entités vont être mises à jour",
-    "attachmentHeaderText": "Pièces jointes"
+    "attachmentHeaderText": "Pièces jointes",
+    "unknownPopupAttachment": "æ_FILE__Â"
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom avant",
@@ -83,7 +84,7 @@ define({
     "valueRadioButtonLabel": "Valeur",
     "uniqueRadioButtonLabel": "Unique",
     "selectLayerToBegin": "Sélectionnez une catégorie pour commencer",
-    "layerFeatureCount": "æ_${selectedFeatureCount} selected / ${featureCount} records__________________Â"
+    "layerFeatureCount": "${selectedFeatureCount} sélectionnées / ${featureCount} enregistrements"
   },
   "timeSlider": {
     "timeSliderLabel": "Période",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Parcourir",
     "attachmentSelectedMsg": "pièce(s) jointe(s) sélectionnée(s)",
     "attachmentHeaderText": "Pièces jointes",
-    "addRecordText": "æ_Add Record____Â"
+    "addRecordText": "Ajouter un enregistrement",
+    "unknownCommentAttachment": "æ_FILE__Â"
   },
   "main": {
     "noGroup": "Aucun groupe configuré"
@@ -114,18 +116,18 @@ define({
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Actualiser",
-    "confirmManualRefreshText": "æ_All selections and unsaved changes will be discarded_________________Â"
+    "confirmManualRefreshText": "Toutes les sélections et les modifications non enregistrées seront ignorées"
   },
   "help": {
     "helpIconTooltip": "Aide"
   },
   "filter": {
     "noFeatureFoundText": "Aucune entité trouvée pour cette valeur.",
-    "distinctQueryFailed": "æ_No distinct values found for the field_____________Â.",
+    "distinctQueryFailed": "Aucune valeur distincte trouvée pour le champ.",
     "andText": "et",
-    "filterInEditModeAlert": "æ_Filters unavailable while editing___________Â.",
+    "filterInEditModeAlert": "Les filtres sont indisponibles pendant la mise à jour.",
     "dropdownSelectOption": "Sélectionner",
-    "filterInShowSelectedEditModeAlert": "æ_Filters unavailable in 'Show Selected' mode______________Â."
+    "filterInShowSelectedEditModeAlert": "Les filtres sont indisponibles en mode Afficher les entités sélectionnées."
   },
   "detailsPanel": {
     "editContentText": "Mettre à jour l'enregistrement"
@@ -135,8 +137,8 @@ define({
     "reSignInMessage": "Cliquez ici pour vous connecter"
   },
   "selectionOptions": {
-    "selectionOptionsIconTooltip": "æ_Selection Options______Â",
-    "showAllOptionText": "æ_Show All___Â",
-    "showSelectedOptionText": "æ_Show Selected_____Â"
+    "selectionOptionsIconTooltip": "Options de sélection",
+    "showAllOptionText": "Afficher tout",
+    "showSelectedOptionText": "Afficher les entités sélectionnées"
   }
 });

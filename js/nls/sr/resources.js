@@ -63,7 +63,8 @@ define({
     "cancelButtonTooltip": "Otkaži",
     "geoformBackButtonTooltip": "Vrati se na listu izveštaja",
     "updateFeaturesConfirmationMsg": "${count} geoobjekata će biti ažurirano",
-    "attachmentHeaderText": "Prilozi"
+    "attachmentHeaderText": "Prilozi",
+    "unknownPopupAttachment": "Č_FILE__ž"
   },
   "mapViewer": {
     "zoomInToolTip": "Uvećanje",
@@ -83,7 +84,7 @@ define({
     "valueRadioButtonLabel": "Vrednost",
     "uniqueRadioButtonLabel": "Jedinstveno",
     "selectLayerToBegin": "Odaberite kategoriju da biste otpočeli",
-    "layerFeatureCount": "Č_${selectedFeatureCount} selected / ${featureCount} records__________________ž"
+    "layerFeatureCount": "${selectedFeatureCount} izabrani / ${featureCount} zapisi"
   },
   "timeSlider": {
     "timeSliderLabel": "Vremenski opseg",
@@ -102,7 +103,8 @@ define({
     "selectFileText": "Pregledaj",
     "attachmentSelectedMsg": "izabrani prilog/prilozi",
     "attachmentHeaderText": "Prilozi",
-    "addRecordText": "Č_Add Record____ž"
+    "addRecordText": "Dodaj zapis",
+    "unknownCommentAttachment": "Č_FILE__ž"
   },
   "main": {
     "noGroup": "Nijedna grupa nije konfigurisana"
@@ -114,18 +116,18 @@ define({
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Osveži",
-    "confirmManualRefreshText": "Č_All selections and unsaved changes will be discarded_________________ž"
+    "confirmManualRefreshText": "Svi izbori i nesačuvane izmene će biti odbačene"
   },
   "help": {
     "helpIconTooltip": "Pomoć"
   },
   "filter": {
     "noFeatureFoundText": "Nema pronađenih geoobjekata za ovu vrednost.",
-    "distinctQueryFailed": "Č_No distinct values found for the field_____________ž.",
+    "distinctQueryFailed": "Nema pronađenih posebnih vrednosti za ovo polje.",
     "andText": "i",
-    "filterInEditModeAlert": "Č_Filters unavailable while editing___________ž.",
+    "filterInEditModeAlert": "Filteri nisu dostupni za vreme uređivanja.",
     "dropdownSelectOption": "Odaberi",
-    "filterInShowSelectedEditModeAlert": "Č_Filters unavailable in 'Show Selected' mode______________ž."
+    "filterInShowSelectedEditModeAlert": "Filteri nisu dostupni u režimu „Prikaži izabrano”."
   },
   "detailsPanel": {
     "editContentText": "Izmeni zapis"
@@ -135,8 +137,8 @@ define({
     "reSignInMessage": "Kliknite ovde da se prijavite"
   },
   "selectionOptions": {
-    "selectionOptionsIconTooltip": "Č_Selection Options______ž",
-    "showAllOptionText": "Č_Show All___ž",
-    "showSelectedOptionText": "Č_Show Selected_____ž"
+    "selectionOptionsIconTooltip": "Opcije odabira",
+    "showAllOptionText": "Prikaži sve",
+    "showSelectedOptionText": "Pokaži izabrano"
   }
 });

@@ -178,6 +178,11 @@ define([
                         $('<div class="item"><img onclick="window.open(this.src)" src="' + infos[i].url + '"></div>').appendTo('.carousel-inner');
                         this._totalSlides++;
                     }
+                    // add to carousel only if it is an mp4 attachment
+                    if (infos[i].contentType && infos[i].contentType.toLowerCase().indexOf("video/mp4") > -1) {
+                        $('<div class="item"><video src="' + infos[i].url + '" height="auto" width="430" controls><source src="' + infos[i].url + '" type="' + infos[i].contentType + '" poster="' + infos[i].url + '"></video></div>').appendTo('.carousel-inner');
+                        this._totalSlides++;
+                    }
                 }
             }
             // add images and videos from hyperlinks of info popup in carousel pod and return the slideCount
