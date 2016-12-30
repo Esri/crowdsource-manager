@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link href="css/common.css" rel="stylesheet" type="text/css" />
     <link href="css/media-queries.css" rel="stylesheet" type="text/css" />
+    <link href="css/font-icon-styles.css" rel="stylesheet" type="text/css" />
 </head>
 <body class="claro app-loading">
     <!-- Loading indicator -->
@@ -44,15 +45,15 @@
     <!-- Main container -->
     <div class="esriCTMainContainer esriCTHidden" id="mainWrapperContainer">
         <!-- Application header container -->
-        <div class="esriCTApplicationHeaderWrapperContainer" id="applicationHeaderWrapperContainer">
+        <div class="esriCTApplicationHeaderWrapperContainer esriCTHeaderTextColorAsBorder" id="applicationHeaderWrapperContainer">
         </div>
         <!-- Upper & Lower wrapper container -->
         <div class="esriCTUpperAndLowerWrapperContainer" id="UpperAndLowerWrapperContainer">
             <div class="esriCTWebMapListWrapperContainer esriCTWebMapListOpen" id="webMapListWrapperContainer">
                 <!-- Webmap list banner container -->
-                <div class="esriCTWebMapListBannerContainer" id="webMapListBannerContainer">
+                <div class="esriCTWebMapListBannerContainer esriCTCalculatedBodyTextColorAsBackground" id="webMapListBannerContainer">
                     <div class="esriCTWebMapPanelToggleBtnPosition" id="webMapPanelToggleBtnPosition">
-                        <div class="esriCTBGLightColor esriCTWebMapPanelToggleButtonStyle" id="webmapListToggleButton">
+                        <div class="esriCTBGLightColor esriCTWebMapPanelToggleButtonStyle esriCTCalculatedHeaderBackgroundColor" id="webmapListToggleButton">
                         </div>
                     </div>
                 </div>
@@ -65,10 +66,10 @@
             </div>
             <div class="esriCTUpperContainerEmptySlider" id="upperContainer">
                 <!-- Operational layer name container -->
-                <div class="esriCTOperationalLayerNameContainer" id="operationalLayerNameContainer">
-                    <div class="esriCTOperationalLayerName" id="operationalLayerName">
+                <div class="esriCTOperationalLayerNameContainer esriCTBodyBackgroundColor" id="operationalLayerNameContainer">
+                    <div class="esriCTOperationalLayerName esriCTBodyTextColor" id="operationalLayerName">
                     </div>
-                    <div class="esriCTFeatureCount" id="layerFeatureCountContainer"></div>
+                    <div class="esriCTFeatureCount esriCTCalculatedBodyTextColor" id="layerFeatureCountContainer"></div>
                 </div>
                 <!-- Data viewer container -->
                 <div class="esriCTDataViewerWrapperContainerEmptySlider" id="dataViewerWrapperContainer">
@@ -81,7 +82,7 @@
             </div>
             <div class="esriCTLowerContainerEmptySlider" id="lowerContainer">
                 <!-- Details panel container -->
-                <div class="esriCTDetailsPanelWrapperContainer" id="detailsPanelWrapperContainer">
+                <div class="esriCTDetailsPanelWrapperContainer esriCTCalculatedBodyBackgroundColor" id="detailsPanelWrapperContainer">
                 </div>
                 <!-- Map panel container -->
                 <div class="esriCTMapPanelWrapperContainer" id="mapPanelWrapperContainer">

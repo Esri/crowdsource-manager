@@ -176,7 +176,7 @@ define([
                 pThis = this;
                 this._relatedRecords = relatedFeatures;
                 commentsContainerDiv = domConstruct.create("div", {}, parentDiv);
-                commentsParentDiv = domConstruct.create("div", { "class": "esriCTcommentsParentDiv" }, commentsContainerDiv);
+                commentsParentDiv = domConstruct.create("div", { "class": "esriCTCommentsParentDiv" }, commentsContainerDiv);
                 function sortComments(a, b) {
                     if (a.attributes[pThis._commentsTable.objectIdField] > b.attributes[pThis._commentsTable.objectIdField]) {
                         return -1; // order a before b
@@ -263,7 +263,7 @@ define([
         _displayCommentsAndAttachments: function () {
             var i, commentContentPaneContainer, commentContentPane, commentsParentDiv;
             for (i = 0; i < this._entireCommentsArr.length; i++) {
-                commentsParentDiv = query(".esriCTcommentsParentDiv")[0];
+                commentsParentDiv = query(".esriCTCommentsParentDiv")[0];
                 commentContentPaneContainer = domConstruct.create("div", { "class": "esriCTCommentsPopup" }, commentsParentDiv);
                 commentContentPane = new ContentPane({}, commentContentPaneContainer);
                 if (!this._entireCommentsArr[i][1].features[0].infoTemplate) {
@@ -425,7 +425,7 @@ define([
         */
         _createCommentButton: function (parentDiv, graphic) {
             var commentBtnDiv;
-            commentBtnDiv = domConstruct.create("div", { "class": "esriCTCommentButton", "title": this.appConfig.i18n.detailsPanel.editContentText }, parentDiv);
+            commentBtnDiv = domConstruct.create("div", { "class": "esriCTCommentButton esrictfonticons esrictfonticons-pencil esriCTBodyTextColor", "title": this.appConfig.i18n.detailsPanel.editContentText }, parentDiv);
             on(commentBtnDiv, "click", lang.hitch(this, function () {
                 this.appUtils.showLoadingIndicator();
                 domClass.add(this.addCommentsBtnWrapperContainer, "esriCTHidden");

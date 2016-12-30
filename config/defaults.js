@@ -112,5 +112,24 @@ define({
     // to show/hide help icon
     "showHelpIcon": false,
     // to show as a label for attachment section in comments form where attachments can be added
-    "commentFormAttachmentSectionLabel": "Attachments"
+    "commentFormAttachmentSectionLabel": "Attachments",
+    // to apply org theming
+    "appTheme": {
+        "header": {
+            "background": "#f26e1f",
+            "text": "#fff",
+            "calculatedBackground": "#f7a878",
+            "calculatedText": "#bbbaba"
+        },
+        "body": {
+            "background": "#fff",
+            "text": "#515151",
+            "calculatedBackground": "#f0f0f0",
+            "calculatedText": "#888888"
+        },
+        "button": {
+            "background": "#fff",
+            "text": "#f26e1f"
+        }
+    }
 });
