@@ -141,6 +141,9 @@ define([
             if (!sharedTheme.button) {
                 sharedTheme.button = {};
             }
+            if (!sharedTheme.logo) {
+                sharedTheme.logo = {};
+            }
             if (!sharedTheme.header.background) {
                 sharedTheme.header.background = defaultTheme.header.background;
             }
@@ -159,6 +162,9 @@ define([
             if (!sharedTheme.button.text) {
                 sharedTheme.button.text = defaultTheme.button.text;
             }
+            if (!sharedTheme.logo.small && defaultTheme.logo && defaultTheme.logo.small) {
+                sharedTheme.logo.small = defaultTheme.logo.small;
+            }
             return sharedTheme;
         },
 
@@ -168,21 +174,44 @@ define([
         * @memberOf utils/utils
         */
         _setOrgTheme: function (appConfig) {
-            var sharedTheme, calculateColors;
+            var sharedTheme, calculateColors, defaultThemeSettings;
             calculateColors = false;
-            //if org provides theme info mixin it with configured theme info & calculate colors
-            if (appConfig.portalObject && appConfig.portalObject.portalProperties && appConfig.portalObject.portalProperties.sharedTheme) {
+            //get default theme settings using only previous single color configuration
+            defaultThemeSettings = this._getDefaultAppTheme(appConfig);
+            if (appConfig.portalObject && appConfig.portalObject.portalProperties &&
+                appConfig.portalObject.portalProperties.sharedTheme) {
                 sharedTheme = appConfig.portalObject.portalProperties.sharedTheme;
-                //set appTheme to default values as per the theme color
-                appConfig.appTheme = this._getDefaultAppTheme(appConfig);
-                //Update empty values in shared theme
-                sharedTheme = this._updateForEmptyColors(sharedTheme, appConfig.appTheme);
+                //Update EMPTY values of shard theme with default values if any
+                sharedTheme = this._updateForEmptyColors(sharedTheme, defaultThemeSettings);
+            }
+            //Check if user has configured any values using configuration panel
+            if (appConfig.headerBackgroundColor) {
+                appConfig.appTheme = {
+                    "header": {
+                        "background": appConfig.headerBackgroundColor,
+                        "text": appConfig.headerTextColor
+                    },
+                    "body": {
+                        "background": appConfig.bodyBackgroundColor,
+                        "text": appConfig.bodyTextColor
+                    },
+                    "button": {
+                        "background": appConfig.buttonBackgroundColor,
+                        "text": appConfig.buttonTextColor
+                    }
+                };
+                //Update empty values in app theme
+                if (sharedTheme) {
+                    appConfig.appTheme = this._updateForEmptyColors(appConfig.appTheme, sharedTheme);
+                }
+                calculateColors = true;
+            } else if (sharedTheme) {
                 //Mixin shared theme in appTheme
-                appConfig.appTheme = lang.mixin(appConfig.appTheme, sharedTheme);
+                appConfig.appTheme = sharedTheme;
                 //Calculate colors as we are getting values from shared theme
                 calculateColors = true;
             } else {
-                appConfig.appTheme = this._getDefaultAppTheme(appConfig);
+                appConfig.appTheme = defaultThemeSettings;
             }
             //if logo is not configured by user and in org properties we have valid logo then only use the logo from org
             if (!appConfig.applicationIcon && appConfig.appTheme.logo && appConfig.appTheme.logo.small) {
