@@ -69,7 +69,7 @@
 }
 
 
-/* Comments panel starts*/
+/** Comments panel starts*/
 
 .dj_rtl .esriCTCommentformContainer {
     right: auto;
@@ -107,17 +107,18 @@
     margin: 0 0 0 2px;
 }
 
-/* Comments panel ends*/
+
+/** Comments panel ends*/
 
 
-/* Popup panel starts*/
+/** Popup panel starts*/
 
 .dj_rtl .esriCTNonImageContainer {
     float: right;
 }
 
 
-/* Popup panel ends*/
+/** Popup panel ends*/
 
 
 /** Details panel container ends **/
@@ -169,6 +170,15 @@
     border-left: 1px solid #cccccc;
     border-right: 0px;
     box-shadow: -4px 1px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dj_rtl .esriCTRightWebMapOperationalLayerArrow {
+    float: left;
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
 }
 
 
@@ -253,7 +263,7 @@
 /** Filter panel container ends **/
 
 
-/** Time Slider container start **/
+/** Time Slider container starts **/
 
 .dj_rtl .esriCTTimeSliderContainer {
     float: right;
@@ -261,6 +271,7 @@
 
 .dj_rtl .esriCTDataViewerContainer .divTableWithFloatingHeader {
     width: 100%;
+    display: table;
 }
 
 .dj_rtl .esriCTTimeSliderTextContainer {
@@ -274,17 +285,17 @@
 /** Time Slider container end **/
 
 
-/* Help Dialog start */
+/** Help Dialog starts **/
 
 .dj_rtl .esriCTClose {
     float: left;
 }
 
 
-/* Help Dialog ends */
+/** Help Dialog ends **/
 
 
-/* Search Panel starts */
+/** Search Panel starts **/
 
 .dj_rtl .esriCTSearchContainer {
     right: auto;
@@ -292,10 +303,10 @@
 }
 
 
-/* Search Panel ends */
+/** Search Panel ends **/
 
 
-/* Sign-in container starts */
+/** Sign-in container starts **/
 
 .dj_rtl .esriCTSignInDetailContainer {
     float: left;
@@ -326,10 +337,10 @@
 }
 
 
-/* Sign-in container ends */
+/** Sign-in container ends **/
 
 
-/* Layer Title Container Starts */
+/** Layer Title Container Starts **/
 
 .dj_rtl .esriCTFeatureCount {
     padding-left: 15px;
@@ -339,4 +350,4 @@
 }
 
 
-/* Layer Title Container Ends */
+/** Layer Title Container Ends **/

@@ -17,24 +17,31 @@
  */
 define([
     "dojo/dom-class",
+    "dojo/_base/lang",
     "dojo/text!css/theme-template.css",
     "dojo/string",
     "dojo/dom-construct",
     "dojo/query",
     "dojo/number",
     "dojo/dom",
-    "dojo/_base/Color"
+    "dojo/_base/Color",
+    "dojo/colors",
+    "dojox/color"
 ], function (
     domClass,
+    lang,
     ThemeCss,
     string,
     domConstruct,
     query,
     numberformatter,
     dom,
-    Color
+    Color,
+    Colors,
+    dojoxColor
 ) {
     return {
+
         /**
         * This function is used to show loading indicator.
         * @memberOf utils/utils
@@ -90,22 +97,172 @@ define([
         },
 
         /**
+        * This function returns the app theme object for backward compatibility
+        * @param{object} application configuration
+        * @memberOf utils/utils
+        */
+        _getDefaultAppTheme: function (appConfig) {
+            var defaultTheme;
+            defaultTheme = {
+                "header": {
+                    "background": appConfig.theme,
+                    "text": "#fff",
+                    "calculatedBackground": this.getCalculatedColor(appConfig.theme, 70, 18),
+                    "calculatedText": "#bbbaba"
+                },
+                "body": {
+                    "background": "#fff",
+                    "text": "#515151",
+                    "calculatedBackground": "#f0f0f0",
+                    "calculatedText": "#888888"
+                },
+                "button": {
+                    "background": "#fff",
+                    "text": appConfig.theme
+                }
+            };
+            return defaultTheme;
+        },
+
+        /**
+        * Set's the default theme properties for empty colors in shared theme
+        * @memberOf utils/utils
+        */
+        _updateForEmptyColors: function (sharedTheme, defaultTheme) {
+            if (!sharedTheme) {
+                sharedTheme = {};
+            }
+            if (!sharedTheme.header) {
+                sharedTheme.header = {};
+            }
+            if (!sharedTheme.body) {
+                sharedTheme.body = {};
+            }
+            if (!sharedTheme.button) {
+                sharedTheme.button = {};
+            }
+            if (!sharedTheme.logo) {
+                sharedTheme.logo = {};
+            }
+            if (!sharedTheme.header.background) {
+                sharedTheme.header.background = defaultTheme.header.background;
+            }
+            if (!sharedTheme.header.text) {
+                sharedTheme.header.text = defaultTheme.header.text;
+            }
+            if (!sharedTheme.body.background) {
+                sharedTheme.body.background = defaultTheme.body.background;
+            }
+            if (!sharedTheme.body.text) {
+                sharedTheme.body.text = defaultTheme.body.text;
+            }
+            if (!sharedTheme.button.background) {
+                sharedTheme.button.background = defaultTheme.button.background;
+            }
+            if (!sharedTheme.button.text) {
+                sharedTheme.button.text = defaultTheme.button.text;
+            }
+            if (!sharedTheme.logo.small && defaultTheme.logo && defaultTheme.logo.small) {
+                sharedTheme.logo.small = defaultTheme.logo.small;
+            }
+            return sharedTheme;
+        },
+
+        /**
+        * This function is used set the theming according to org theming
+        * @param{object} application configuration
+        * @memberOf utils/utils
+        */
+        _setOrgTheme: function (appConfig) {
+            var sharedTheme, calculateColors, defaultThemeSettings;
+            calculateColors = false;
+            //get default theme settings using only previous single color configuration
+            defaultThemeSettings = this._getDefaultAppTheme(appConfig);
+            if (appConfig.portalObject && appConfig.portalObject.portalProperties &&
+                appConfig.portalObject.portalProperties.sharedTheme) {
+                sharedTheme = appConfig.portalObject.portalProperties.sharedTheme;
+                //Update EMPTY values of shard theme with default values if any
+                sharedTheme = this._updateForEmptyColors(sharedTheme, defaultThemeSettings);
+            }
+            //Check if user has configured any values using configuration panel
+            if (appConfig.headerBackgroundColor) {
+                appConfig.appTheme = {
+                    "header": {
+                        "background": appConfig.headerBackgroundColor,
+                        "text": appConfig.headerTextColor
+                    },
+                    "body": {
+                        "background": appConfig.bodyBackgroundColor,
+                        "text": appConfig.bodyTextColor
+                    },
+                    "button": {
+                        "background": appConfig.buttonBackgroundColor,
+                        "text": appConfig.buttonTextColor
+                    }
+                };
+                //Update empty values in app theme
+                if (sharedTheme) {
+                    appConfig.appTheme = this._updateForEmptyColors(appConfig.appTheme, sharedTheme);
+                }
+                calculateColors = true;
+            } else if (sharedTheme) {
+                //Mixin shared theme in appTheme
+                appConfig.appTheme = sharedTheme;
+                //Calculate colors as we are getting values from shared theme
+                calculateColors = true;
+            } else {
+                appConfig.appTheme = defaultThemeSettings;
+            }
+            //if logo is not configured by user and in org properties we have valid logo then only use the logo from org
+            if (!appConfig.applicationIcon && appConfig.appTheme.logo && appConfig.appTheme.logo.small) {
+                appConfig.applicationIcon = appConfig.appTheme.logo.small;
+            }
+            //if don't have calculated colors calculate it
+            if (appConfig.appTheme && calculateColors) {
+                appConfig.appTheme.body.calculatedBackground =
+                    this.getCalculatedColor(appConfig.appTheme.body.background, 50, 6);
+                appConfig.appTheme.body.calculatedText =
+                    this.getCalculatedColor(appConfig.appTheme.body.text, 50, 21);
+                appConfig.appTheme.header.calculatedBackground =
+                    this.getCalculatedColor(appConfig.appTheme.header.background, 70, 18);
+                appConfig.appTheme.header.calculatedText =
+                    this.getCalculatedColor(appConfig.appTheme.header.text, 50, 27);
+            }
+        },
+
+        /**
         * This function is used to load application theme.
         * @param{object} application configuration
         * @memberOf utils/utils
         */
         loadApplicationTheme: function (appConfig) {
             var cssString, head, style, link, rgbColor;
-            //if theme is configured
+            // if theme is configured
             if (appConfig.theme) {
+                // Set the org theme for application
+                this._setOrgTheme(appConfig);
                 //Convert hex color to rgb and add opacity to get lighter shade of configured color
                 rgbColor = new Color(appConfig.theme);
                 rgbColor.a = 0.6;
                 //substitute theme color values in theme template
                 cssString = string.substitute(ThemeCss, {
+                    /** Default theming */
                     SelectedThemeColor: appConfig.theme,
                     LighterShadeThemeColor: rgbColor,
-                    HighlightedRowColor: appConfig.highlightRow
+                    HighlightedRowColor: appConfig.highlightRow,
+                    /** Org Theming */
+                    // Configured/Org colors for app theme
+                    BodyBackgroundColor: appConfig.appTheme.body.background,
+                    BodyTextColor: appConfig.appTheme.body.text,
+                    HeaderBackgroundColor: appConfig.appTheme.header.background,
+                    HeaderTextColor: appConfig.appTheme.header.text,
+                    ButtonBackgroundColor: appConfig.appTheme.button.background,
+                    ButtonTextColor: appConfig.appTheme.button.text,
+                    // Calculated colors
+                    CalculatedBodyBackgroundColor: appConfig.appTheme.body.calculatedBackground,
+                    CalculatedBodyTextColor: appConfig.appTheme.body.calculatedText,
+                    CalculatedHeaderBackgroundColor: appConfig.appTheme.header.calculatedBackground,
+                    CalculatedHeaderTextColor: appConfig.appTheme.header.calculatedText
                 });
                 //Create Style using theme template and append it to head
                 //On Lower versions of IE10 Style tag is read only so create theme using styleSheet.cssText
@@ -235,6 +392,26 @@ define([
         isIos: function () {
             var ua = navigator.userAgent.toLowerCase();
             return ua.indexOf("ipad") > -1;
+        },
+
+        /**
+        * This function is used to get the calculated color from the configured color in org json
+        * @returns {bool}
+        * @memberOf utils/utils
+        */
+        getCalculatedColor: function (configuredColor, luminosityDifference, luminosity) {
+            var calculatedColor, calculatedHexColor, configuredColorObject, configuredColorHSLObject;
+            configuredColorObject = new Colors(configuredColor);
+            configuredColorHSLObject = configuredColorObject.toHsl();
+            if (configuredColorHSLObject.l < luminosityDifference) {
+                calculatedColor = dojoxColor.fromHsl(configuredColorHSLObject.h,
+                    configuredColorHSLObject.s, configuredColorHSLObject.l + luminosity);
+            } else {
+                calculatedColor = dojoxColor.fromHsl(configuredColorHSLObject.h,
+                    configuredColorHSLObject.s, configuredColorHSLObject.l - luminosity);
+            }
+            calculatedHexColor = calculatedColor.toHex();
+            return calculatedHexColor;
         }
     };
 });

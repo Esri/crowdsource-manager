@@ -275,7 +275,7 @@ define([
                             "<div class='esriCTDetailsContainerRow'><div class='esriCTDetailsContainerCell'>" +
                             "<div class='esriCTInfoHeader'>" +
                             this.appConfig.i18n.webMapList[field] +
-                            "</div><div class='esriCTInfoDetails'>" + value +
+                            "</div><div class='esriCTInfoDetails esriCTCalculatedBodyTextColorAsBorder'>" + value +
                             "</div></div></div>";
                     }
                 }

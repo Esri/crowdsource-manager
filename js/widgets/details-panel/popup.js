@@ -121,7 +121,7 @@ define([
         * @memberOf widgets/details-panel/popup
         */
         _createEditFormButton: function () {
-            var editFeatureButton = domConstruct.create("div", { "class": "esriCTEditFeatureButton", "title": this.appConfig.i18n.detailsPanel.editContentText }, this.popupContainer);
+            var editFeatureButton = domConstruct.create("div", { "class": "esriCTEditFeatureButton esrictfonticons esrictfonticons-pencil esriCTBodyTextColor", "title": this.appConfig.i18n.detailsPanel.editContentText }, this.popupContainer);
             //attach 'click event on edit button to display form
             on(editFeatureButton, "click", lang.hitch(this, function () {
                 this._createPopupForm();

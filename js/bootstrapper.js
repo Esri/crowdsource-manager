@@ -107,6 +107,10 @@ define([
             // create my main application. Start placing your logic in the main.js file.
             this._consoleApp = new Main();
             this._consoleApp.reload = lang.hitch(this, function (logInDetails) {
+                // As user is logged in with AGOL pass portal object, for feature reference
+                if (logInDetails.portal) {
+                    this._boilerPlateTemplateObject.config.portalObject = logInDetails.portal;
+                }
                 loggedInUser = {
                     "fullName": logInDetails.fullName,
                     "credential": {
@@ -115,6 +119,9 @@ define([
                 };
                 this._queryGroupInfo(loggedInUser, this._boilerPlateTemplateObject.config);
             });
+            if (!this._boilerPlateTemplateObject.config.portalObject) {
+                this._boilerPlateTemplateObject.config.portalObject = this._boilerPlateTemplateObject.portal;
+            }
             this._consoleApp.startup(this._boilerPlateTemplateObject, loggedInUser);
         },
 
