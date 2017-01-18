@@ -33,7 +33,8 @@
         "bodyBackgroundColor": "",
         "bodyTextColor": "",
         "buttonBackgroundColor": "",
-        "buttonTextColor": ""
+        "buttonTextColor": "",
+        "defaultDetailsTab": "Info"
     },
     "configurationSettings": [{
         "category": "<b>App</b>",
@@ -208,6 +209,21 @@
                 "fieldName": "commentField",
                 "label": "Provide the name of a single field to display, regardless of the popup settings. This value is ignored if you choose to build the form using the popup configuration.",
                 "tooltip": "Only content from related tables that have this field will be accessible through the application."
+            }]
+        }, {
+            "type": "options",
+            "fieldName": "defaultDetailsTab",
+            "tooltip": "Selected tab will be opened by default when a report is selected",
+            "label": "Default selected tab:",
+            "options": [{
+                "label": "Info",
+                "value": "Info"
+            }, {
+                "label": "Media",
+                "value": "Media"
+            }, {
+                "label": "Comments",
+                "value": "Comments"
             }]
         }]
     }, {

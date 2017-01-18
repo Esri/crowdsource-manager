@@ -65,48 +65,53 @@ define([
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
+
         _commentPopupTable: null, // stores object of comments popup table
         _relatedRecords: [], // stores object of related record features
         _commentformInstance: null, // to store instance of comments form
         _addCommentBtnClickHandle: null, // to store click handle of add comments button
         _entireCommentsArr: null, // to store comments
         _entireAttachmentsArr: null, // to store attachments
+
         i18n: {}, // to stores nls strings
 
         /**
-        * This function is called when widget is constructed
-        * @param{object} parameters of widget
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is called when widget is constructed
+         * @param{object} parameters of widget
+         * @memberOf widgets/details-panel/comments
+         */
         constructor: function (options) {
             lang.mixin(this, options);
             this.i18n = this.appConfig.i18n;
         },
 
         /**
-        * This function is designed to handle processing after any DOM fragments have been actually added to the document.
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is designed to handle processing after any DOM fragments
+         * have been actually added to the document.
+         * @memberOf widgets/details-panel/comments
+         */
         startup: function () {
             this._showComments(this.multipleFeatures[0], this.commentsContainer);
         },
 
         /**
-        * Method will get related table info and check if any relationship exist for comments.
-        * If Comments relationship exist as per the configured field then it will get the related table info for further use
-        * Considering only the first related table although the layer has many related table
-        * @memberOf widgets/details-panel/comments
-        */
+         * Method will get related table info and check if any relationship exist for comments.
+         * If Comments relationship exist as per the configured field then
+         * it will get the related table info for further use
+         * Considering only the first related table although the layer has many related table
+         * @memberOf widgets/details-panel/comments
+         */
         _showComments: function (graphic, parentDiv) {
             var relatedTableURL;
             this.appUtils.showLoadingIndicator();
             this._entireCommentsArr = null;
             this._entireAttachmentsArr = null;
             // if comment field is present in config file and the layer contains related table, fetch the first related table URL
-            if (this.selectedOperationalLayer.relationships.length > 0) {
+            if (this.selectedOperationalLayer.relationships && this.selectedOperationalLayer.relationships.length > 0) {
                 // Construct the related table URL form operational layer URL and the related table id
                 // We are considering only first related table although the layer has many related table.
-                // Hence, we are fetching relatedTableId from relationships[0] ie:"operationalLayer.relationships[0].relatedTableId"
+                // Hence, we are fetching relatedTableId from relationships[0]
+                // ie: "operationalLayer.relationships[0].relatedTableId"
                 // Create Comments table if not exist from the first related table of the layer
                 if (!this._commentsTable) {
                     relatedTableURL = this.selectedOperationalLayer.url.substr(0, this.selectedOperationalLayer.url.lastIndexOf('/') + 1) + this.selectedOperationalLayer.relationships[0].relatedTableId;
@@ -138,9 +143,9 @@ define([
         },
 
         /**
-        * This function is used to check whether comments are available or not to display
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used to check whether comments are available or not to display
+         * @memberOf widgets/details-panel/comments
+         */
         _loadCommentsIfExist: function (graphic, parentDiv) {
             if ((this.appConfig.usePopupConfigurationForComment) && (this._commentPopupTable) && (this._hasEditableField())) {
                 this._fetchComments(graphic, parentDiv);
@@ -153,10 +158,10 @@ define([
         },
 
         /**
-        * This function is used to fetch comments from table
-        * @param {object} graphic contains related feature object
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used to fetch comments from table
+         * @param {object} graphic contains related feature object
+         * @memberOf widgets/details-panel/comments
+         */
         _fetchComments: function (graphic, parentDiv) {
             var relatedQuery, currentID, commentsTableDefinitionExpression;
             currentID = graphic.attributes[this.selectedOperationalLayer.objectIdField];
@@ -212,9 +217,9 @@ define([
         },
 
         /**
-        * This function is used to get all the comments
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used to get all the comments
+         * @memberOf widgets/details-panel/comments
+         */
         _getAllComments: function (deferredListArr) {
             var deferredList;
             deferredList = new DeferredList(deferredListArr);
@@ -237,9 +242,9 @@ define([
         },
 
         /**
-        * This function is used to get all the attachments
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used to get all the attachments
+         * @memberOf widgets/details-panel/comments
+         */
         _getAllAttachments: function () {
             var deferredList, deferredListArr, i;
             deferredListArr = [];
@@ -257,9 +262,9 @@ define([
         },
 
         /**
-        * This function is used display comments and attachments
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used display comments and attachments
+         * @memberOf widgets/details-panel/comments
+         */
         _displayCommentsAndAttachments: function () {
             var i, commentContentPaneContainer, commentContentPane, commentsParentDiv;
             for (i = 0; i < this._entireCommentsArr.length; i++) {
@@ -280,9 +285,9 @@ define([
         },
 
         /**
-        * This function is used to check whether one of the field is editable or not
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used to check whether one of the field is editable or not
+         * @memberOf widgets/details-panel/comments
+         */
         _hasEditableField: function () {
             var hasEditableField = false, k;
             if (this._commentPopupTable && this._commentPopupTable.popupInfo) {
@@ -297,9 +302,9 @@ define([
         },
 
         /**
-        * This function is used to check whether comment's field that is configured is available in comments table or not.
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used to check whether comment's field that is configured is available in comments table or not.
+         * @memberOf widgets/details-panel/comments
+         */
         _hasCommentsField: function () {
             var k, hasCommentField = false;
             if (this.appConfig.commentField) {
@@ -315,9 +320,9 @@ define([
         },
 
         /**
-        * This function is used to create common popup comment contents
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used to create common popup comment contents
+         * @memberOf widgets/details-panel/comments
+         */
         _createPopUpContent: function (currentFeature) {
             var queryFeature, currentDateTime = new Date().getTime();
             queryFeature = new Query();
@@ -329,9 +334,9 @@ define([
         },
 
         /**
-        * Check whether attachments are available in layer and enabled in webmap
-        * @memberOf widgets/details-panel/comments
-        **/
+         * Check whether attachments are available in layer and enabled in webmap
+         * @memberOf widgets/details-panel/comments
+         */
         _checkAttachments: function (commentContentPaneContainer, index) {
             if (this._commentsTable.hasAttachments) {
                 var attachmentsDiv = $(".attachmentsSection", commentContentPaneContainer)[0];
@@ -345,11 +350,11 @@ define([
         },
 
         /**
-        * Query layer to get attachments
-        * @param{object} graphic
-        * @param{object} attachmentContainer
-        * @memberOf widgets/details-panel/comments
-        **/
+         * Query layer to get attachments
+         * @param{object} graphic
+         * @param{object} attachmentContainer
+         * @memberOf widgets/details-panel/comments
+         */
         _showAttachments: function (attachmentContainer, index) {
             var fieldContent, i, attachmentWrapper, imageThumbnailContainer, imageThumbnailContent, imageContainer, fileTypeContainer, isAttachmentAvailable, imagePath, imageDiv;
             //check if attachments found
@@ -379,10 +384,10 @@ define([
         },
 
         /**
-        * Function to fetch document content type
-        * @param{object} attachment object
-        * @memberOf widgets/details-panel/comments
-        **/
+         * Function to fetch document content type
+         * @param{object} attachment object
+         * @memberOf widgets/details-panel/comments
+         */
         _fetchDocumentContentType: function (attachmentData, fileTypeContainer) {
             var typeText, fileExtensionRegEx, fileExtension;
             fileExtensionRegEx = /(?:\.([^.]+))?$/; //ignore jslint
@@ -396,11 +401,11 @@ define([
         },
 
         /**
-        * Function to fetch document name
-        * @param{object} attachment object
-        * @param{object} dom node
-        * @memberOf widgets/details-panel/comments
-        **/
+         * Function to fetch document name
+         * @param{object} attachment object
+         * @param{object} dom node
+         * @memberOf widgets/details-panel/comments
+         */
         _fetchDocumentName: function (attachmentData, container) {
             var attachmentNameWrapper, attachmentName;
             attachmentNameWrapper = domConstruct.create("div", { "class": "esriCTNonImageName" }, container);
@@ -411,53 +416,60 @@ define([
         },
 
         /**
-        * This function is used to show attachments in new window when user clicks on the attachment thumbnail
-        * @param{object} evt
-        * @memberOf widgets/details-panel/comments
-        **/
+         * This function is used to show attachments in new window when user clicks on the attachment thumbnail
+         * @param{object} evt
+         * @memberOf widgets/details-panel/comments
+         */
         _displayImageAttachments: function (evt) {
             window.open(domAttr.get(evt.currentTarget, "alt"));
         },
 
         /**
-        * This function is used to create comments button
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used to create comments button
+         * @memberOf widgets/details-panel/comments
+         */
         _createCommentButton: function (parentDiv, graphic) {
             var commentBtnDiv;
-            commentBtnDiv = domConstruct.create("div", { "class": "esriCTCommentButton esrictfonticons esrictfonticons-pencil esriCTBodyTextColor", "title": this.appConfig.i18n.detailsPanel.editContentText }, parentDiv);
+            commentBtnDiv = domConstruct.create("div", {
+                "class": "esriCTCommentButton esrictfonticons esrictfonticons-pencil esriCTBodyTextColor",
+                "title": this.appConfig.i18n.detailsPanel.editContentText
+            }, parentDiv);
             on(commentBtnDiv, "click", lang.hitch(this, function () {
-                this.appUtils.showLoadingIndicator();
-                domClass.add(this.addCommentsBtnWrapperContainer, "esriCTHidden");
-                this._createCommentForm(graphic, false);
-                domStyle.set(this.commentsContainer, "display", "none");
-                $('#tabContent').animate({
-                    scrollTop: 0
-                });
+                if (this.appConfig.logInDetails.canEditFeatures) {
+                    this.appUtils.showLoadingIndicator();
+                    domClass.add(this.addCommentsBtnWrapperContainer, "esriCTHidden");
+                    this._createCommentForm(graphic, false);
+                    domStyle.set(this.commentsContainer, "display", "none");
+                    $('#tabContent').animate({
+                        scrollTop: 0
+                    });
+                } else {
+                    this.appUtils.showMessage(this.appConfig.i18n.comment.unableToAddOrEditCommentMessage);
+                }
             }));
         },
 
         /**
-        * This function is used hide comments Tab
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used hide comments Tab
+         * @memberOf widgets/details-panel/comments
+         */
         hideCommentsTab: function () {
             return;
         },
 
         /**
-        * This function is used show comments Tab
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used show comments Tab
+         * @memberOf widgets/details-panel/comments
+         */
         showCommentsTab: function () {
             return;
         },
 
         /**
-        * Instantiate comment-form widget
-        * @param {object} item contains selected feature object
-        * @memberOf widgets/details-panel/comments
-        */
+         * Instantiate comment-form widget
+         * @param {object} item contains selected feature object
+         * @memberOf widgets/details-panel/comments
+         */
         _createCommentForm: function (item, addComments) {
             if (this._commentformInstance) {
                 this._commentformInstance.destroy();
@@ -517,9 +529,9 @@ define([
         },
 
         /**
-        * shows and hides the div content
-        * @memberOf widgets/details-panel/comments
-        */
+         * shows and hides the div content
+         * @memberOf widgets/details-panel/comments
+         */
         _showPanel: function (domNode) {
             if (domClass.contains(domNode, "esriCTHidden")) {
                 domClass.remove(domNode, "esriCTHidden");
@@ -529,34 +541,39 @@ define([
         },
 
         /**
-        * Empties the list of comments.
-        * @memberOf widgets/details-panel/comments
-        */
+         * Empties the list of comments.
+         * @memberOf widgets/details-panel/comments
+         */
         _clearComments: function () {
             domConstruct.empty(this.commentsList);
             domConstruct.empty(this.noCommentsDiv);
         },
 
         /**
-        * This function is used to attach click event to add comment button
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used to attach click event to add comment button
+         * @memberOf widgets/details-panel/comments
+         */
         _attachEventToAddCommentButton: function () {
             if (this._addCommentBtnClickHandle) {
                 this._addCommentBtnClickHandle.remove();
             }
             if (this.addCommentsBtnWrapperContainer) {
-                this._addCommentBtnClickHandle = on(this.addCommentsBtnWrapperContainer, "click", lang.hitch(this, function () {
-                    this.appUtils.showLoadingIndicator();
-                    this._openAddCommentsForm();
-                }));
+                this._addCommentBtnClickHandle = on(this.addCommentsBtnWrapperContainer, "click",
+                    lang.hitch(this, function () {
+                        if (this.appConfig.logInDetails.canEditFeatures) {
+                            this.appUtils.showLoadingIndicator();
+                            this._openAddCommentsForm();
+                        } else {
+                            this.appUtils.showMessage(this.appConfig.i18n.comment.unableToAddOrEditCommentMessage);
+                        }
+                    }));
             }
         },
 
         /**
-        * This function is used to open add comments form
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used to open add comments form
+         * @memberOf widgets/details-panel/comments
+         */
         _openAddCommentsForm: function () {
             var item = {};
             domStyle.set(this.commentsContainer, "display", "none");
@@ -568,10 +585,10 @@ define([
         },
 
         /**
-        * This function is used to create popup template for single field
-        * @param {object} currentFeature contains selected feature object
-        * @memberOf widgets/details-panel/comments
-        */
+         * This function is used to create popup template for single field
+         * @param {object} currentFeature contains selected feature object
+         * @memberOf widgets/details-panel/comments
+         */
         _createPopUpForSingleField: function (currentFeature) {
             var popupInfo = {}, k, singlefieldComment;
             popupInfo.fieldInfos = [];
@@ -605,20 +622,20 @@ define([
         },
 
         /**
-        * sets the comments associated with an item.
-        * @param {array} commentsArr contains related features array
-        * @memberOf widgets/details-panel/comments
-        */
+         * sets the comments associated with an item.
+         * @param {array} commentsArr contains related features array
+         * @memberOf widgets/details-panel/comments
+         */
         _setComments: function (commentsArr) {
             domConstruct.empty(this.commentsContainer);
             arrayUtil.forEach(commentsArr, lang.hitch(this, this._buildCommentDiv));
         },
 
         /**
-        * display popup info for related features
-        * @param {object} item is selected related feature
-        * @memberOf widgets/details-panel/comments
-        */
+         * display popup info for related features
+         * @param {object} item is selected related feature
+         * @memberOf widgets/details-panel/comments
+         */
         _buildCommentDiv: function (item) {
             var commentDiv;
             commentDiv = domConstruct.create('div', { 'class': 'comment' }, this.commentsContainer);

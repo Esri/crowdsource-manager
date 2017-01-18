@@ -1921,6 +1921,10 @@ input.esriCTRadioButton {
     font-weight: bold;
 }
 
+.esriCTmediaWrapperContainer .editSummarySection {
+    display: none;
+}
+
 
 /** Media tab container ends **/
 

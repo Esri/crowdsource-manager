@@ -17,7 +17,6 @@
  */
 define([
     "dojo/dom-class",
-    "dojo/_base/lang",
     "dojo/text!css/theme-template.css",
     "dojo/string",
     "dojo/dom-construct",
@@ -29,7 +28,6 @@ define([
     "dojox/color"
 ], function (
     domClass,
-    lang,
     ThemeCss,
     string,
     domConstruct,
@@ -43,34 +41,34 @@ define([
     return {
 
         /**
-        * This function is used to show loading indicator.
-        * @memberOf utils/utils
-        */
+         * This function is used to show loading indicator.
+         * @memberOf utils/utils
+         */
         showLoadingIndicator: function () {
             domClass.add(document.body, "app-loading");
         },
 
         /**
-        * This function is used to hide loading indicator.
-        * @memberOf utils/utils
-        */
+         * This function is used to hide loading indicator.
+         * @memberOf utils/utils
+         */
         hideLoadingIndicator: function () {
             domClass.remove(document.body, "app-loading");
         },
 
         /**
-        * This function is used to hide overlay container.
-        * @memberOf utils/utils
-        */
+         * This function is used to hide overlay container.
+         * @memberOf utils/utils
+         */
         hideOverlayContainer: function () {
             var overlayContainer = dom.byId("overlayContainer");
             domClass.add(overlayContainer, "esriCTHidden");
         },
 
         /**
-        * This function is used to show overlay container.
-        * @memberOf utils/utils
-        */
+         * This function is used to show overlay container.
+         * @memberOf utils/utils
+         */
         showOverlayContainer: function () {
             var overlayContainer = dom.byId("overlayContainer");
             if (overlayContainer) {
@@ -79,28 +77,28 @@ define([
         },
 
         /**
-        * This function is used to show error
-        * @param {string} error to be shown
-        * @memberOf utils/utils
-        */
+         * This function is used to show error
+         * @param {string} error to be shown
+         * @memberOf utils/utils
+         */
         showError: function (error) {
             alert(error);
         },
 
         /**
-        * This function is used to show message.
-        * @param {string} message to be shown
-        * @memberOf utils/utils
-        */
+         * This function is used to show message.
+         * @param {string} message to be shown
+         * @memberOf utils/utils
+         */
         showMessage: function (message) {
             alert(message);
         },
 
         /**
-        * This function returns the app theme object for backward compatibility
-        * @param{object} application configuration
-        * @memberOf utils/utils
-        */
+         * This function returns the app theme object for backward compatibility
+         * @param{object} application configuration
+         * @memberOf utils/utils
+         */
         _getDefaultAppTheme: function (appConfig) {
             var defaultTheme;
             defaultTheme = {
@@ -125,9 +123,9 @@ define([
         },
 
         /**
-        * Set's the default theme properties for empty colors in shared theme
-        * @memberOf utils/utils
-        */
+         * Set's the default theme properties for empty colors in shared theme
+         * @memberOf utils/utils
+         */
         _updateForEmptyColors: function (sharedTheme, defaultTheme) {
             if (!sharedTheme) {
                 sharedTheme = {};
@@ -144,22 +142,22 @@ define([
             if (!sharedTheme.logo) {
                 sharedTheme.logo = {};
             }
-            if (!sharedTheme.header.background) {
+            if (!sharedTheme.header.background || sharedTheme.header.background === "no-color") {
                 sharedTheme.header.background = defaultTheme.header.background;
             }
-            if (!sharedTheme.header.text) {
+            if (!sharedTheme.header.text || sharedTheme.header.text === "no-color") {
                 sharedTheme.header.text = defaultTheme.header.text;
             }
-            if (!sharedTheme.body.background) {
+            if (!sharedTheme.body.background || sharedTheme.body.background === "no-color") {
                 sharedTheme.body.background = defaultTheme.body.background;
             }
-            if (!sharedTheme.body.text) {
+            if (!sharedTheme.body.text || sharedTheme.body.text === "no-color") {
                 sharedTheme.body.text = defaultTheme.body.text;
             }
-            if (!sharedTheme.button.background) {
+            if (!sharedTheme.button.background || sharedTheme.button.background === "no-color") {
                 sharedTheme.button.background = defaultTheme.button.background;
             }
-            if (!sharedTheme.button.text) {
+            if (!sharedTheme.button.text || sharedTheme.button.text === "no-color") {
                 sharedTheme.button.text = defaultTheme.button.text;
             }
             if (!sharedTheme.logo.small && defaultTheme.logo && defaultTheme.logo.small) {
@@ -169,17 +167,16 @@ define([
         },
 
         /**
-        * This function is used set the theming according to org theming
-        * @param{object} application configuration
-        * @memberOf utils/utils
-        */
+         * This function is used set the theming according to org theming
+         * @param{object} application configuration
+         * @memberOf utils/utils
+         */
         _setOrgTheme: function (appConfig) {
             var sharedTheme, calculateColors, defaultThemeSettings;
             calculateColors = false;
             //get default theme settings using only previous single color configuration
             defaultThemeSettings = this._getDefaultAppTheme(appConfig);
-            if (appConfig.portalObject && appConfig.portalObject.portalProperties &&
-                appConfig.portalObject.portalProperties.sharedTheme) {
+            if (appConfig.portalObject && appConfig.portalObject.portalProperties && appConfig.portalObject.portalProperties.sharedTheme) {
                 sharedTheme = appConfig.portalObject.portalProperties.sharedTheme;
                 //Update EMPTY values of shard theme with default values if any
                 sharedTheme = this._updateForEmptyColors(sharedTheme, defaultThemeSettings);
@@ -231,10 +228,10 @@ define([
         },
 
         /**
-        * This function is used to load application theme.
-        * @param{object} application configuration
-        * @memberOf utils/utils
-        */
+         * This function is used to load application theme.
+         * @param{object} application configuration
+         * @memberOf utils/utils
+         */
         loadApplicationTheme: function (appConfig) {
             var cssString, head, style, link, rgbColor;
             // if theme is configured
@@ -287,10 +284,10 @@ define([
         },
 
         /**
-        * This function is used to get format of date
-        * @param{string} type of date
-        * @memberOf utils/utils
-        */
+         * This function is used to get format of date
+         * @param{string} type of date
+         * @memberOf utils/utils
+         */
         getDateFormat: function (type) {
             var obj = {};
             switch (type) {
@@ -366,39 +363,39 @@ define([
         },
 
         /**
-        * This function is used to convert number to thousand separator
-        * @param{integer} number that needs to be converted into thousand separator
-        * @memberOf utils/utils
-        */
+         * This function is used to convert number to thousand separator
+         * @param{integer} number that needs to be converted into thousand separator
+         * @memberOf utils/utils
+         */
         convertNumberToThousandSeparator: function (number, decimalPlace) {
             return numberformatter.format(number, { places: decimalPlace });
         },
 
         /**
-        * To determine the android operating system
-        * @returns {bool}
-        * @memberOf utils/utils
-        */
+         * To determine the android operating system
+         * @returns {bool}
+         * @memberOf utils/utils
+         */
         isAndroid: function () {
             var ua = navigator.userAgent.toLowerCase();
             return ua.indexOf("android") > -1;
         },
 
         /**
-        * To determine the ios operating system
-        * @returns {bool}
-        * @memberOf utils/utils
-        */
+         * To determine the ios operating system
+         * @returns {bool}
+         * @memberOf utils/utils
+         */
         isIos: function () {
             var ua = navigator.userAgent.toLowerCase();
             return ua.indexOf("ipad") > -1;
         },
 
         /**
-        * This function is used to get the calculated color from the configured color in org json
-        * @returns {bool}
-        * @memberOf utils/utils
-        */
+         * This function is used to get the calculated color from the configured color in org json
+         * @returns {bool}
+         * @memberOf utils/utils
+         */
         getCalculatedColor: function (configuredColor, luminosityDifference, luminosity) {
             var calculatedColor, calculatedHexColor, configuredColorObject, configuredColorHSLObject;
             configuredColorObject = new Colors(configuredColor);
