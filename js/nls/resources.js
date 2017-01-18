@@ -65,7 +65,8 @@ define({
             geoformBackButtonTooltip: "Return to the report list", //tooltip for Geoform back button
             updateFeaturesConfirmationMsg: "${count} features will be updated", //confirmation message to be displayed before updating the features
             attachmentHeaderText: "Attachments", //attachment header Text
-            unknownPopupAttachment: "FILE" // displayed for attached file having unknown extension
+            unknownPopupAttachment: "FILE", // displayed for attached file having unknown extension
+            unableToEditPopupMessage: "You do not have permission to perform this action." // to display message when unauthorized user tries to edit the popup info
         },
         mapViewer: {
             zoomInToolTip: "Zoom in", // Display tool-tip on command button to zoom in map
@@ -105,7 +106,8 @@ define({
             attachmentSelectedMsg: "attachment(s) selected", // Shown besides the select file button indicating the number of files attached
             attachmentHeaderText: "Attachments", //attachment header Text
             addRecordText: "Add Record", // shown to add record in comments tab under details panel
-            unknownCommentAttachment: "FILE" // displayed for attached file having unknown extension
+            unknownCommentAttachment: "FILE", // displayed for attached file having unknown extension
+            unableToAddOrEditCommentMessage: "You do not have permission to perform this action." // to display message when unauthorized user tries to add/edit the comment
         },
         main: {
             noGroup: "No group configured" // Appears when no group is configured

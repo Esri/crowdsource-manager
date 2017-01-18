@@ -36,7 +36,9 @@ define([
     "dijit/_WidgetsInTemplateMixin",
     "dojo/query",
     "dojo/_base/array",
-    "dojo/aspect"
+    "dojo/aspect",
+    'esri/geometry/Extent',
+    'esri/SpatialReference'
 ], function (
     declare,
     lang,
@@ -58,33 +60,38 @@ define([
     _WidgetsInTemplateMixin,
     query,
     array,
-    aspect
+    aspect,
+    Extent,
+    SpatialReference
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: dijitTemplate,
+
         _filteredWebMapResponseArr: [], // to store web-map that needs to be displayed in list
         _lastWebMapSelected: "", // used to store last web map that is selected
-        _layersToRemove: {}, // object of arrays for each webmap item having list of operational id's which are not valid.
+        // object of arrays for each webmap item having list of operational id's which are not valid.
+        _layersToRemove: {},
         _selectedMapResponse: null, // object of selected map response object, this will reduce the unnecessary calls to API to get all the required properties of layer or map
+
         mapDivID: "webMapListMapDiv", // id of div in which web-map is created
         lastSelectedWebMapExtent: null, // to store last extent of web-map that was selected
         lastSelectedWebMapItemInfo: null, // to store item info of web-map that was last selected
         selectedLayerId: null, // to store id of selected layer
 
         /**
-        * This function is called when widget is constructed.
-        * @param{object} options to be mixed
-        * @param{object} source reference node
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is called when widget is constructed.
+         * @param{object} options to be mixed
+         * @param{object} source reference node
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         constructor: function (options) {
             lang.mixin(this, options);
         },
 
         /**
-        * This function is called on startup of widget.
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is called on startup of widget.
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         startup: function () {
             this._filteredWebMapResponseArr = [];
             this._createFilteredWebMapArr();
@@ -104,26 +111,26 @@ define([
         },
 
         /**
-        * This function is used when there is no web map to display
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used when there is no web map to display
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         noMapsFound: function () {
             return true;
         },
 
         /**
-        * This function is used to return selected operational layer
-        * @param{object} details of operational layer selected
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to return selected operational layer
+         * @param{object} details of operational layer selected
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         onOperationalLayerSelected: function (details) {
             return details;
         },
 
         /**
-        * This function is used to create web-map array that needs to be displayed in list
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to create web-map array that needs to be displayed in list
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _createFilteredWebMapArr: function () {
             var i, itemInfo, requestArray = [],
                 dl, results = this.appConfig.groupItems.results, mapContainerID;
@@ -157,12 +164,12 @@ define([
         },
 
         /**
-        * This function is used to create map
-        * @param{string} web-map ID
-        * @param{string} map container ID
-        * @memberOf widgets/webmap-list/webmap-list
-        */
-        _createMap: function (webMapID, mapDivID) {
+         * This function is used to create map
+         * @param{string} web-map ID
+         * @param{string} map container ID
+         * @memberOf widgets/webmap-list/webmap-list
+         */
+        _createMap: function (webMapID, mapDivID, isBaseMapLoaded) {
             if (this.map) {
                 this.map.destroy();
             }
@@ -175,12 +182,21 @@ define([
                 autoResize: this.autoResize
             });
             webMapInstance.then(lang.hitch(this, function (response) {
+                var portalDefaultExtent, baseMapExtent;
                 this._selectedMapResponse = response;
                 this.map = response.map;
-                //Disable default infowindow
+                //Disable default info-window
                 this.map.infoWindow.set("popupWindow", false);
-                //Disable default symbol highlighting of infowindow
+                //Disable default symbol highlighting of info-window
                 this.map.infoWindow.set("highlight", false);
+                // use org extents to load initial basemap
+                if (isBaseMapLoaded && this.appConfig.portalObject && this.appConfig.portalObject.defaultExtent) {
+                    portalDefaultExtent = this.appConfig.portalObject.defaultExtent;
+                    baseMapExtent = new Extent(portalDefaultExtent.xmin,
+                        portalDefaultExtent.ymin, portalDefaultExtent.xmax, portalDefaultExtent.ymax,
+                        new SpatialReference({ wkid: this.map.spatialReference.wkid }));
+                    this.map.setExtent(baseMapExtent);
+                }
                 //Raise map loaded event
                 this.onMapLoaded(response);
             }));
@@ -188,22 +204,22 @@ define([
         },
 
         /**
-        * This function is used to indicate that map is loaded
-        * @param{object} response of web-map created
-        */
+         * This function is used to indicate that map is loaded
+         * @param{object} response of web-map created
+         */
         onMapLoaded: function () {
             return;
         },
 
         /**
-        * This function is used to validate web map.
-        * @param{object} response of web-map created
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to validate web map.
+         * @param{object} response of web-map created
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _filterWebMaps: function (response) {
             var i, showWebmapInList, j, removeLayerFromList, operationalLayerCount;
             for (i = 0; i < response.length; i++) {
-                // check if webmap has any operational layer if not then dont show that webmap in list
+                // check if webmap has any operational layer if not then don't show that webmap in list
                 if (response[i][0] && response[i][1].itemInfo.itemData.operationalLayers.length > 0) {
                     showWebmapInList = false;
                     operationalLayerCount = response[i][1].itemInfo.itemData.operationalLayers.length;
@@ -239,7 +255,7 @@ define([
                             j--;
                         }
                     }
-                    // if not then dont show that layer in webmap list
+                    // if not then don't show that layer in webmap list
                     if (showWebmapInList) {
                         this._filteredWebMapResponseArr.push(response[i]);
                     }
@@ -251,10 +267,10 @@ define([
         },
 
         /**
-        * This function is used to create description info.
-        * @param{object} web map item
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to create description info.
+         * @param{object} web map item
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _createWebMapDescription: function (webMapItem) {
             var descriptionInfo = "",
                 field,
@@ -284,10 +300,10 @@ define([
         },
 
         /**
-        * This function is used to highlight selected web map
-        * @param{string} selected web map ID
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to highlight selected web map
+         * @param{string} selected web map ID
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _selectWebMapItem: function (selectedWebMapID) {
             if ($('div[webMapID="' + this._lastWebMapSelected + '"]').length > 0) {
                 domClass.replace($('div[webMapID="' + this._lastWebMapSelected + '"]')[0], "esriCTWebMapBorder", "esriCTBorder");
@@ -299,9 +315,9 @@ define([
         },
 
         /**
-        * This function is used to create UI for web map list.
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to create UI for web map list.
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _createWebMapListUI: function () {
             var parentDiv, i, templateString, thumbnailSrc, tokenString, infoDescription, editCapabilityLayerCount, operationalLayersLength, obj;
             thumbnailSrc = "";
@@ -384,20 +400,20 @@ define([
         },
 
         /**
-        * This function is used to hide header icons like search, manual refresh
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to hide header icons like search, manual refresh
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         displayInitialLoad: function () {
             return;
         },
 
         /**
-        * This function is used to hide layer
-        * @param{string} web-map ID
-        * @param{string} operational layer ID
-        * @param{object} operational layer details
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to hide layer
+         * @param{string} web-map ID
+         * @param{string} operational layer ID
+         * @param{object} operational layer details
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _displaySelectedOperationalLayer: function (obj) {
             var layer, featureLayer, i;
             this.selectedLayerId = obj.operationalLayerId;
@@ -434,11 +450,11 @@ define([
         },
 
         /**
-        * This function is used to highlight(change font to bold) the selected webmap item and selected layer
-        * @param{string} web map ID
-        * @param{string} operational layer ID
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to highlight(change font to bold) the selected webmap item and selected layer
+         * @param{string} web map ID
+         * @param{string} operational layer ID
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _highlightSelectedItem: function (webMapID, layerID) {
             //Remove Selected class from previously selected WebMap and Layer
             query(".esriCTSelectedItem").removeClass("esriCTSelectedItem");
@@ -451,14 +467,14 @@ define([
         },
 
         /**
-        * This function is used to process execution on load of feature layer
-        * @param{object} feature layer to attach on-load event
-        * @param{string} web map ID
-        * @param{string} operational layer ID
-        * @param{object} operational layer details
-        * @param{object} web-map item info
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to process execution on load of feature layer
+         * @param{object} feature layer to attach on-load event
+         * @param{string} web map ID
+         * @param{string} operational layer ID
+         * @param{object} operational layer details
+         * @param{object} web-map item info
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _onFeatureLayerLoad: function (featureLayer, webMapID, layerID, layerDetails, itemInfo) {
             if (!featureLayer.loaded) {
                 on(featureLayer, "load", lang.hitch(this, function () {
@@ -473,13 +489,13 @@ define([
         },
 
         /**
-        * This function is used to process execution after the feature layer is loaded
-        * @param{string} web map ID
-        * @param{string} operational layer ID
-        * @param{object} operational layer details
-        * @param{object} web-map item info
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to process execution after the feature layer is loaded
+         * @param{string} web map ID
+         * @param{string} operational layer ID
+         * @param{object} operational layer details
+         * @param{object} web-map item info
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _featureLayerLoaded: function (webMapID, layerID, layerDetails, itemInfo) {
             //Highlight the Selected Item in webmap list
             this._highlightSelectedItem(webMapID, layerID);
@@ -496,11 +512,11 @@ define([
         },
 
         /**
-        * This function is used to handle web map click
-        * @param{object} parent div container in which web-map list will be added
-        * @param{object} details of operational layer
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to handle web map click
+         * @param{object} parent div container in which web-map list will be added
+         * @param{object} details of operational layer
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _handleWebMapClick: function (parentDiv, operationalLayerDetails) {
             this.appUtils.showLoadingIndicator();
             on($(".esriCTMediaBody", parentDiv)[0], "click", lang.hitch(this, function () {
@@ -512,11 +528,11 @@ define([
         },
 
         /**
-        * This function is used to handle web map Toggling
-        * @param{object} parent div container in which web-map list will be added
-        * @param{object} details of operational layer
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to handle web map Toggling
+         * @param{object} parent div container in which web-map list will be added
+         * @param{object} details of operational layer
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _handleWebmapToggling: function (node, operationalLayerDetails) {
             var webMapId, selectedWebMapList, operationalLayerId, descriptionDiv;
             this.appUtils.showLoadingIndicator();
@@ -578,19 +594,19 @@ define([
         },
 
         /**
-        * This function is used to generate event on all-ready selected webmap clicked
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to generate event on all-ready selected webmap clicked
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         onSelectedWebMapClicked: function (webMapId) {
             return webMapId;
         },
 
         /**
-        * This function is used to add operational layer in list
-        * @param{object} parent container in which operational layer list will be added
-        * @param{object} details of web map
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to add operational layer in list
+         * @param{object} parent container in which operational layer list will be added
+         * @param{object} details of web map
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _createOperationalLayerList: function (parentContainer, webMap) {
             var i, parentListNode, childListNode, operationalLayerString;
             parentListNode = domConstruct.create("div", {
@@ -614,11 +630,11 @@ define([
         },
 
         /**
-        * This function is used to handle operational layer click.
-        * @param{object} operational layer node
-        * @param{object} operational layer details
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to handle operational layer click.
+         * @param{object} operational layer node
+         * @param{object} operational layer details
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _handleOperationalLayerClick: function (childListNode, operationalLayerDetails) {
             var operationalLayerId;
             on(childListNode, "click", lang.hitch(this, function (evt) {
@@ -659,19 +675,19 @@ define([
         },
 
         /**
-        * This function is used to set default height of upper and lower container
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to set default height of upper and lower container
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         setDefaultHeightOfContainers: function () {
             return;
         },
 
         /**
-        * This function is used to handle information click
-        * @param{object} information of web map
-        * @param{object} web-map item div container
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to handle information click
+         * @param{object} information of web map
+         * @param{object} web-map item div container
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _attachInformationClick: function (information, parentDiv) {
             var infoIcon, descriptionDiv, webMapId, layerList;
             infoIcon = query('.esriCTInfoImg', parentDiv)[0];
@@ -713,10 +729,10 @@ define([
         },
 
         /**
-        * This function is used to validate the capabilities of the layer
-        * @param{object} capabilities of layer
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to validate the capabilities of the layer
+         * @param{object} capabilities of layer
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _validateLayerCapabilities: function (layerCapabilities) {
             // if layer has capability of create & update than return true
             if (layerCapabilities && layerCapabilities.indexOf("Create") > -1 && layerCapabilities.indexOf("Update") > -1) {
@@ -730,11 +746,11 @@ define([
         },
 
         /**
-        * This function is used to validate popup fields
-        * @param{object} pop-up info
-        * @param{object} layer fields
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to validate popup fields
+         * @param{object} pop-up info
+         * @param{object} layer fields
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _validatePopupFields: function (popupInfo, fields) {
             var i, j;
             // check if popup-info is available if not then return false
@@ -754,9 +770,9 @@ define([
         },
 
         /**
-        * This function is used maintain and toggle the state of web map list
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used maintain and toggle the state of web map list
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _toggleWebMapList: function () {
             var toggleButton = dom.byId("webmapListToggleButton"), requiredClass;
             this._setTooltip(toggleButton, true);
@@ -776,9 +792,9 @@ define([
         },
 
         /**
-        * This function is used to animate webmap list
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to animate webmap list
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _animateWebMapList: function () {
             var toggleButton = dom.byId("webmapListToggleButton");
             if (this.appConfig.i18n.direction === "rtl") {
@@ -835,40 +851,40 @@ define([
         },
 
         /**
-        * This function is used to display non editable layers along with single selected editable layer
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to display non editable layers along with single selected editable layer
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _displayNonEditableLayers: function () {
             array.forEach(this._selectedMapResponse.itemInfo.itemData.operationalLayers, lang.hitch(this, function (currentLayer, index) { //ignore jslint
                 if (currentLayer.resourceInfo && currentLayer.resourceInfo.capabilities && currentLayer.layerType === "ArcGISFeatureLayer") {
                     // condition to check if feature layer is non-editable & it is visible in the TOC
-                    if ((currentLayer.resourceInfo.capabilities.indexOf("Create") === -1) &&
-                            ((currentLayer.resourceInfo.capabilities.indexOf("Update") === -1) || (currentLayer.resourceInfo.capabilities.indexOf("Editing") === -1)) &&
-                            currentLayer.visibility) {
+                    if ((currentLayer.resourceInfo.capabilities.indexOf("Create") === -1) && ((currentLayer.resourceInfo.capabilities.indexOf("Update") === -1) || (currentLayer.resourceInfo.capabilities.indexOf("Editing") === -1)) && currentLayer.visibility) {
                         currentLayer.layerObject.show();
                         // condition to check feature layer with create, edit, delete permissions and popup enabled, but all fields marked display only
-                    } else if ((currentLayer.resourceInfo.capabilities.indexOf("Create") !== -1) &&
-                            (currentLayer.resourceInfo.capabilities.indexOf("Editing") !== -1) &&
-                            (currentLayer.resourceInfo.capabilities.indexOf("Update") !== -1) &&
-                            (currentLayer.popupInfo) &&
-                            this._checkDisplayPropertyOfFields(currentLayer.popupInfo, currentLayer.layerObject.fields) &&
-                            this.selectedLayerId !== currentLayer.id) {
+                    } else if ((currentLayer.resourceInfo.capabilities.indexOf("Create") !== -1) && (currentLayer.resourceInfo.capabilities.indexOf("Editing") !== -1) && (currentLayer.resourceInfo.capabilities.indexOf("Update") !== -1) && (currentLayer.popupInfo) && this._checkDisplayPropertyOfFields(currentLayer.popupInfo, currentLayer.layerObject.fields) && this.selectedLayerId !== currentLayer.id) {
                         currentLayer.layerObject.show(); // display non-editable layer
                         // display layer which is not having popup
-                    } else if ((!currentLayer.popupInfo) &&
-                            (currentLayer.visibility)) {
+                    } else if ((!currentLayer.popupInfo) && (currentLayer.visibility)) {
                         currentLayer.layerObject.show(); // display non-editable layer
                     } else {
                         currentLayer.layerObject.hide();
                     }
+                } else if (currentLayer.featureCollection) {
+                    // Handle feature collection layers and show them on the map as non-editable layer
+                    array.forEach(currentLayer.featureCollection.layers,
+                        lang.hitch(this, function (featureCollectionLayer) {
+                            if (featureCollectionLayer.layerObject && (featureCollectionLayer.layerObject.capabilities.indexOf("Create") === -1) && ((featureCollectionLayer.layerObject.capabilities.indexOf("Editing") === -1) || (featureCollectionLayer.layerObject.capabilities.indexOf("Update") === -1)) && currentLayer.visibility) {
+                                featureCollectionLayer.layerObject.show();
+                            }
+                        }));
                 }
             }));
         },
 
         /**
-        * This function is used to check whether all fields are marked display or not
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to check whether all fields are marked display or not
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _checkDisplayPropertyOfFields: function (popupInfo, fields) {
             var i, j;
             if (!popupInfo) {
@@ -896,9 +912,9 @@ define([
         },
 
         /**
-        * This function is used to set tooltip to webmap list toggle button
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to set tooltip to webmap list toggle button
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         _setTooltip: function (toggleButton, isOpen) {
             if (isOpen) {
                 domAttr.set(toggleButton, "title", this.appConfig.i18n.webMapList.closeWebmapList);
@@ -908,9 +924,9 @@ define([
         },
 
         /**
-        * This function is used to hide webmap list
-        * @memberOf widgets/webmap-list/webmap-list
-        */
+         * This function is used to hide webmap list
+         * @memberOf widgets/webmap-list/webmap-list
+         */
         hideWebMapList: function () {
             var toggleButton = dom.byId("webmapListToggleButton");
             if (this.appConfig.i18n.direction === "rtl") {

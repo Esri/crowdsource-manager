@@ -119,5 +119,7 @@ define({
     "bodyBackgroundColor": "",
     "bodyTextColor": "",
     "buttonBackgroundColor": "",
-    "buttonTextColor": ""
+    "buttonTextColor": "",
+    // to configure which tab will be opened by default when a report is selected.
+    "defaultDetailsTab": "Info" // Info, Media, Comments
 });

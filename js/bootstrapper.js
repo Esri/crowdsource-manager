@@ -47,9 +47,9 @@ define([
         _identityManagerCancelHandler: null, // stores cancel click handler of identity manager
 
         /**
-        * This function is called when user needs to start operation of widget
-        * @memberOf js/bootstrapper
-        */
+         * This function is called when user needs to start operation of widget
+         * @memberOf js/bootstrapper
+         */
         startup: function () {
             // create the template. This will take care of all the logic required for template applications
             this._boilerPlateTemplateObject = new Template(templateConfig);
@@ -80,11 +80,11 @@ define([
         },
 
         /**
-        * This function is used to query for group info
-        * @param{object} loggedInUser's credentials
-        * @param{object} configuration details
-        * @memberOf js/bootstrapper
-        */
+         * This function is used to query for group info
+         * @param{object} loggedInUser's credentials
+         * @param{object} configuration details
+         * @memberOf js/bootstrapper
+         */
         _queryGroupInfo: function (loggedInUser) {
             if (this._identityManagerCancelHandler) {
                 this._identityManagerCancelHandler.remove();
@@ -98,10 +98,10 @@ define([
         },
 
         /**
-        * This function is used to initiate the main application
-        * @param{object} loggedInUser's credentials
-        * @memberOf js/bootstrapper
-        */
+         * This function is used to initiate the main application
+         * @param{object} loggedInUser's credentials
+         * @memberOf js/bootstrapper
+         */
         _initApplication: function (loggedInUser) {
             domClass.remove("mainWrapperContainer", "esriCTHidden");
             // create my main application. Start placing your logic in the main.js file.
@@ -115,7 +115,9 @@ define([
                     "fullName": logInDetails.fullName,
                     "credential": {
                         "token": logInDetails.credential.token
-                    }
+                    },
+                    "level": logInDetails.level,
+                    "privileges": logInDetails.privileges
                 };
                 this._queryGroupInfo(loggedInUser, this._boilerPlateTemplateObject.config);
             });
@@ -126,9 +128,9 @@ define([
         },
 
         /**
-        * This function is used to screen of error message
-        * @memberOf js/bootstrapper
-        */
+         * This function is used to screen of error message
+         * @memberOf js/bootstrapper
+         */
         _displayErrorMessageScreen: function (error) {
             var errorMessage, node;
             domClass.add("mainWrapperContainer", "esriCTHidden");
