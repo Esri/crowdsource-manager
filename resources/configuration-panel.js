@@ -51,16 +51,18 @@
             "type": "string",
             "fieldName": "applicationName"
         }, {
-            "label": "URL to a logo to display in the application header",
-            "tooltip": "Image should be 48px tall.",
+            "label": "Application logo",
+            "tooltip": "Logo displays in top left corner of application. Image should be 48px tall.",
             "type": "string",
             "sharedThemeProperty": "logo.small",
-            "fieldName": "applicationIcon"
+            "fieldName": "applicationIcon",
+            "placeHolder": "/images/app-icon.png"
         }, {
-            "label": "URL to a favicon to display in browser tabs where your application is loaded",
+            "label": "Application favicon",
             "tooltip": "Icon to display in browser tabs",
             "type": "string",
-            "fieldName": "applicationFavicon"
+            "fieldName": "applicationFavicon",
+            "placeHolder": "/images/favicon.ico"
         }, {
             "label": "Application color",
             "tooltip": "Application color scheme",
@@ -89,8 +91,11 @@
             "type": "subcategory",
             "label": "Zoom Level"
         }, {
-            "label": "When a report is selected from the table, the map will pan and zoom to show the location of that report. Specify how near (larger number) or far (smaller number) the map should zoom relative to the ground.",
-            "tooltip": "When a new report is selected in the table, the map will zoom to the associated feature using this zoom level.",
+            "type": "paragraph",
+            "value": "When a report is selected from the list, the map will pan and zoom to show the location of that report. Specify how near (larger number) or far (smaller number) the map should zoom relative to the ground."
+        }, {
+            "label": "Zoom level for selected report",
+            "tooltip": "Specify how near (larger number) or far (smaller number) the map should zoom relative to the ground.",
             "type": "string",
             "fieldName": "zoomLevel"
         }, {
@@ -154,7 +159,7 @@
         "category": "<b>Filters</b>",
         "fields": [{
             "type": "paragraph",
-            "value": "Attribute filters that that use the option to 'Ask For Values' and the time slider will be exposed in Crowdsource Manager when they have been configured on layers in the map."
+            "value": "Attribute filters that use the option to 'Ask For Values' and the time slider will be exposed in Crowdsource Manager when they have been configured on layers in the map."
         }, {
             "type": "paragraph",
             "value": "By default, the application will honor the initial values of these filters. If you use several of these filters, that may mean that no features are visible when your application loads. Optionally, uncheck the following parameter to choose to ignore the default filter and time slider values when the app loads. Users of the application will be able to choose the filter values they would like to apply. and let your users apply the filters as necessary. Crowdsource Manager apps will always honor static filters on your map layers."
@@ -168,31 +173,40 @@
         "category": "<b>Reports</b>",
         "fields": [{
             "type": "subcategory",
-            "label": "Details Tab"
+            "label": "Info tab"
         }, {
-            "label": "Provide a label for the tab that displays the information for each report as it is <a href=\"http://links.esri.com/ArcGISOnline/Configurepop-ups\" target=\"_blank\">configured in the popup<\/a> for that layer. This tab is also used for editing report attributes and viewing non-media attachments.",
-            "tooltip": "Name of tab for displaying popup details information. This tab is also used for editing report attributes and viewing non-media attachments.",
+            "type": "paragraph",
+            "value": "This tab displays the information for each report as it is <a href=\"http://links.esri.com/ArcGISOnline/Configurepop-ups\" target=\"_blank\">configured in the popup<\/a> for that layer. User can edit report attributes and view non-media attachments."
+        }, {
+            "label": "Tab label",
+            "tooltip": "Tab label to display popup details, edit report attributes and view non-media attachments.",
             "type": "string",
             "fieldName": "popupTabText"
         }, {
             "type": "subcategory",
-            "label": "Media Tab"
+            "label": "Media tab"
         }, {
-            "label": "Provide a label for the tab that displays images and charts associated with the currently selected report. This tab is only visible when the selected report contains at least one image <a href=\"http://links.esri.com/ArcGISOnline/AlterHostedService\" target=\"_blank\">attachment<\/a>, or <a href=\"http://links.esri.com/ArcGISOnline/Configurepop-ups/ShowImages\" target=\"_blank\">images<\/a> and <a href=\"http://links.esri.com/ArcGISOnline/Configurepop-ups/ShowCharts\" target=\"_blank\">charts<\/a> defined as part of the popup configuration. ",
-            "tooltip": "Name of tab for displaying image attachments and popup media.",
+            "type": "paragraph",
+            "value": "This tab displays images and charts associated with the currently selected report. This tab is only visible when the selected report contains at least one image <a href=\"http://links.esri.com/ArcGISOnline/AlterHostedService\" target=\"_blank\">attachment<\/a>, or <a href=\"http://links.esri.com/ArcGISOnline/Configurepop-ups/ShowImages\" target=\"_blank\">images<\/a> and <a href=\"http://links.esri.com/ArcGISOnline/Configurepop-ups/ShowCharts\" target=\"_blank\">charts<\/a> defined as part of the popup configuration."
+        }, {
+            "label": "Tab label",
+            "tooltip": "Tab label to display image attachments and popup media.",
             "type": "string",
             "fieldName": "mediaTabText"
         }, {
             "type": "subcategory",
-            "label": "Related Records Tab"
+            "label": "Comments tab"
         }, {
-            "label": "Provide a label for the tab that displays <a href=\"http://links.esri.com/localgovernment/relationshipclass\">related records<\/a> associated with the currently selected report. This tab, which also toggles to an editing mode, is only visible when the selected report contains at least one visible related record.",
-            "tooltip": "The related records tab displays records from a single table that are related to the currently selected report. The values of editable fields in this related table can be updated in this panel as well. This tab is only visible when a report has at least one related record.",
+            "type": "paragraph",
+            "value": "This tab displays <a href=\"http://links.esri.com/localgovernment/relationshipclass\">related records<\/a> associated with the currently selected report. Users can toggle to an editing mode which is only visible when the selected report contains at least one visible related record."            
+        }, {
+            "label": "Tab label",
+            "tooltip": "Tab label for comments",
             "type": "string",
             "fieldName": "commentsTabText"
-        }, {
-            "label": "Header for section of the comments form where photos and other supporting files can be added to the comments. ",
-            "tooltip": "Header for the section of the comments form where supporting files can be attached to the comments. This section is only available when attachments are enabled on the related records layer.",
+        },  {
+            "label": "Header for attachment section of comment form",
+            "tooltip": "Name to display on the comments form where supporting files can be attached to the comments. This section is only available when attachments are enabled on the related records layer.",
             "type": "string",
             "fieldName": "commentFormAttachmentSectionLabel"
         }, {
@@ -205,9 +219,12 @@
             "tooltip": "Enable to display related records and the editing form based on the table layer's popup configuration instead of a single field. Fields that are marked editable in the popup will be editable in the application.",
             "condition": true,
             "items": [{
+            "type": "paragraph",
+            "value": "Name of a single field to display, regardless of the popup settings. This value is ignored if you choose to build the form using the popup configuration."
+        },{
                 "type": "string",
                 "fieldName": "commentField",
-                "label": "Provide the name of a single field to display, regardless of the popup settings. This value is ignored if you choose to build the form using the popup configuration.",
+                "label": "Name of a single field to display",
                 "tooltip": "Only content from related tables that have this field will be accessible through the application."
             }]
         }, {
@@ -248,7 +265,7 @@
             }]
         }]
     }, {
-        "category": "<b>Org Theme</b>",
+        "category": "<b>App color</b>",
         "fields": [{
             "type": "paragraph",
             "value": "User can change the theme settings and choose different colors for header, body and button sections"
