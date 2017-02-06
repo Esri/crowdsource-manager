@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Gå tilbake til rapportlisten",
     "updateFeaturesConfirmationMsg": "${count} geoobjekter blir oppdatert",
     "attachmentHeaderText": "Vedlegg",
-    "unknownPopupAttachment": "å_FILE__ø"
+    "unknownPopupAttachment": "FIL",
+    "unableToEditPopupMessage": "å_You do not have permission to perform this action________________ø."
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom inn",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "vedlegg valgt",
     "attachmentHeaderText": "Vedlegg",
     "addRecordText": "Legg til post",
-    "unknownCommentAttachment": "å_FILE__ø"
+    "unknownCommentAttachment": "FIL",
+    "unableToAddOrEditCommentMessage": "å_You do not have permission to perform this action________________ø."
   },
   "main": {
     "noGroup": "Ingen gruppe er konfigurert"

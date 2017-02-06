@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Вернуться к списку отчетов",
     "updateFeaturesConfirmationMsg": "${count} объектов будет обновлено",
     "attachmentHeaderText": "Вложения",
-    "unknownPopupAttachment": "Ж_FILE__Я"
+    "unknownPopupAttachment": "ФАЙЛ",
+    "unableToEditPopupMessage": "Ж_You do not have permission to perform this action________________Я."
   },
   "mapViewer": {
     "zoomInToolTip": "Увеличить",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "выбранные вложения",
     "attachmentHeaderText": "Вложения",
     "addRecordText": "Добавить запись",
-    "unknownCommentAttachment": "Ж_FILE__Я"
+    "unknownCommentAttachment": "ФАЙЛ",
+    "unableToAddOrEditCommentMessage": "Ж_You do not have permission to perform this action________________Я."
   },
   "main": {
     "noGroup": "Не задана группа"

@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Revenir à la liste des rapports",
     "updateFeaturesConfirmationMsg": "${count} entités vont être mises à jour",
     "attachmentHeaderText": "Pièces jointes",
-    "unknownPopupAttachment": "æ_FILE__Â"
+    "unknownPopupAttachment": "FICHIER",
+    "unableToEditPopupMessage": "æ_You do not have permission to perform this action________________Â."
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom avant",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "pièce(s) jointe(s) sélectionnée(s)",
     "attachmentHeaderText": "Pièces jointes",
     "addRecordText": "Ajouter un enregistrement",
-    "unknownCommentAttachment": "æ_FILE__Â"
+    "unknownCommentAttachment": "FICHIER",
+    "unableToAddOrEditCommentMessage": "æ_You do not have permission to perform this action________________Â."
   },
   "main": {
     "noGroup": "Aucun groupe configuré"

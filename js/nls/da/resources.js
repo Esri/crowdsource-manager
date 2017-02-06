@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Vend tilbage til rapportlisten",
     "updateFeaturesConfirmationMsg": "${count} objekter vil blive opdateret",
     "attachmentHeaderText": "Vedhæftninger",
-    "unknownPopupAttachment": "ø_FILE__å"
+    "unknownPopupAttachment": "FIL",
+    "unableToEditPopupMessage": "ø_You do not have permission to perform this action________________å."
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom ind",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "vedhæftning(er) valgt",
     "attachmentHeaderText": "Vedhæftninger",
     "addRecordText": "Tilføj post",
-    "unknownCommentAttachment": "ø_FILE__å"
+    "unknownCommentAttachment": "FIL",
+    "unableToAddOrEditCommentMessage": "ø_You do not have permission to perform this action________________å."
   },
   "main": {
     "noGroup": "Ingen gruppe konfigureret"

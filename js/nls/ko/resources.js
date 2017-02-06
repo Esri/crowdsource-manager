@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "보고서 목록으로 돌아가기",
     "updateFeaturesConfirmationMsg": "${count} 피처가 업데이트됨",
     "attachmentHeaderText": "첨부 파일",
-    "unknownPopupAttachment": "한_FILE__빠"
+    "unknownPopupAttachment": "파일",
+    "unableToEditPopupMessage": "한_You do not have permission to perform this action________________빠."
   },
   "mapViewer": {
     "zoomInToolTip": "확대",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "첨부 파일이 선택됨",
     "attachmentHeaderText": "첨부 파일",
     "addRecordText": "레코드 추가",
-    "unknownCommentAttachment": "한_FILE__빠"
+    "unknownCommentAttachment": "파일",
+    "unableToAddOrEditCommentMessage": "한_You do not have permission to perform this action________________빠."
   },
   "main": {
     "noGroup": "구성된 그룹 없음"

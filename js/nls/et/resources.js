@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Tagasi aruandelehele",
     "updateFeaturesConfirmationMsg": "${count} objekti värskendatakse",
     "attachmentHeaderText": "Manused",
-    "unknownPopupAttachment": "Š_FILE__ä"
+    "unknownPopupAttachment": "FAIL",
+    "unableToEditPopupMessage": "Š_You do not have permission to perform this action________________ä."
   },
   "mapViewer": {
     "zoomInToolTip": "Suurenda",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "valitud manus(ed)",
     "attachmentHeaderText": "Manused",
     "addRecordText": "Lisa kirje",
-    "unknownCommentAttachment": "Š_FILE__ä"
+    "unknownCommentAttachment": "FAIL",
+    "unableToAddOrEditCommentMessage": "Š_You do not have permission to perform this action________________ä."
   },
   "main": {
     "noGroup": "Ühtki gruppi ei ole konfigureeritud"

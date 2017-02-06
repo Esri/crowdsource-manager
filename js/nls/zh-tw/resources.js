@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "傳回至報告清單",
     "updateFeaturesConfirmationMsg": "將更新 ${count} 個圖徵",
     "attachmentHeaderText": "附件",
-    "unknownPopupAttachment": "試_FILE__驗"
+    "unknownPopupAttachment": "檔案",
+    "unableToEditPopupMessage": "試_You do not have permission to perform this action________________驗."
   },
   "mapViewer": {
     "zoomInToolTip": "放大",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "已選定附件",
     "attachmentHeaderText": "附件",
     "addRecordText": "新增記錄",
-    "unknownCommentAttachment": "試_FILE__驗"
+    "unknownCommentAttachment": "檔案",
+    "unableToAddOrEditCommentMessage": "試_You do not have permission to perform this action________________驗."
   },
   "main": {
     "noGroup": "未配置任何群組"

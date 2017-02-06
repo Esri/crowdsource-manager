@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "الرجوع إلى قائمة التقرير",
     "updateFeaturesConfirmationMsg": "سيتم تحديث المعالم ${count}",
     "attachmentHeaderText": "مرفقات",
-    "unknownPopupAttachment": "بيت_FILE__لاحقة"
+    "unknownPopupAttachment": "ملف",
+    "unableToEditPopupMessage": "بيت_You do not have permission to perform this action________________لاحقة."
   },
   "mapViewer": {
     "zoomInToolTip": "التكبير",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "المرفقات المحددة",
     "attachmentHeaderText": "مرفقات",
     "addRecordText": "إضافة تسجيل",
-    "unknownCommentAttachment": "بيت_FILE__لاحقة"
+    "unknownCommentAttachment": "ملف",
+    "unableToAddOrEditCommentMessage": "بيت_You do not have permission to perform this action________________لاحقة."
   },
   "main": {
     "noGroup": "لم يتم تكوين المجموعة"

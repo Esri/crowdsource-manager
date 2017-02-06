@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Retornar para lista de relatório",
     "updateFeaturesConfirmationMsg": "${count} feições serão atualizadas",
     "attachmentHeaderText": "Anexos",
-    "unknownPopupAttachment": "ã_FILE__Ç"
+    "unknownPopupAttachment": "ARQUIVO",
+    "unableToEditPopupMessage": "ã_You do not have permission to perform this action________________Ç."
   },
   "mapViewer": {
     "zoomInToolTip": "Mais Zoom",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "anexos selecionados",
     "attachmentHeaderText": "Anexos",
     "addRecordText": "Adicionar Registros",
-    "unknownCommentAttachment": "ã_FILE__Ç"
+    "unknownCommentAttachment": "ARQUIVO",
+    "unableToAddOrEditCommentMessage": "ã_You do not have permission to perform this action________________Ç."
   },
   "main": {
     "noGroup": "Nenhum grupo configurado"

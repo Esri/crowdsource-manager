@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "レポート リストに戻る",
     "updateFeaturesConfirmationMsg": "${count} フィーチャが更新されます",
     "attachmentHeaderText": "添付ファイル",
-    "unknownPopupAttachment": "須_FILE__鷗"
+    "unknownPopupAttachment": "ファイル",
+    "unableToEditPopupMessage": "須_You do not have permission to perform this action________________鷗."
   },
   "mapViewer": {
     "zoomInToolTip": "拡大",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "添付ファイルが選択されています",
     "attachmentHeaderText": "添付ファイル",
     "addRecordText": "レコードの追加",
-    "unknownCommentAttachment": "須_FILE__鷗"
+    "unknownCommentAttachment": "ファイル",
+    "unableToAddOrEditCommentMessage": "須_You do not have permission to perform this action________________鷗."
   },
   "main": {
     "noGroup": "グループが構成されていません"

@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Vrati se na listu izveštaja",
     "updateFeaturesConfirmationMsg": "${count} geoobjekata će biti ažurirano",
     "attachmentHeaderText": "Prilozi",
-    "unknownPopupAttachment": "Č_FILE__ž"
+    "unknownPopupAttachment": "DATOTEKA",
+    "unableToEditPopupMessage": "Č_You do not have permission to perform this action________________ž."
   },
   "mapViewer": {
     "zoomInToolTip": "Uvećanje",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "izabrani prilog/prilozi",
     "attachmentHeaderText": "Prilozi",
     "addRecordText": "Dodaj zapis",
-    "unknownCommentAttachment": "Č_FILE__ž"
+    "unknownCommentAttachment": "DATOTEKA",
+    "unableToAddOrEditCommentMessage": "Č_You do not have permission to perform this action________________ž."
   },
   "main": {
     "noGroup": "Nijedna grupa nije konfigurisana"

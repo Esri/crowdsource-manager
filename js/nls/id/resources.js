@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Kembali ke daftar laporan",
     "updateFeaturesConfirmationMsg": "${count} feature akan diperbarui",
     "attachmentHeaderText": "Lampiran",
-    "unknownPopupAttachment": "ng_FILE__ny"
+    "unknownPopupAttachment": "FILE",
+    "unableToEditPopupMessage": "ng_You do not have permission to perform this action________________ny."
   },
   "mapViewer": {
     "zoomInToolTip": "Perbesar",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "lampiran dipilih",
     "attachmentHeaderText": "Lampiran",
     "addRecordText": "Tambah Rekaman (Record)",
-    "unknownCommentAttachment": "ng_FILE__ny"
+    "unknownCommentAttachment": "FILE",
+    "unableToAddOrEditCommentMessage": "ng_You do not have permission to perform this action________________ny."
   },
   "main": {
     "noGroup": "Tidak ada grup yang dikonfigurasikan"

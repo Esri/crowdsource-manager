@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Wróć do listy raportów",
     "updateFeaturesConfirmationMsg": "Liczba obiektów, które zostaną zaktualizowane: ${count}",
     "attachmentHeaderText": "Załączniki",
-    "unknownPopupAttachment": "ł_FILE__ą"
+    "unknownPopupAttachment": "PLIK",
+    "unableToEditPopupMessage": "ł_You do not have permission to perform this action________________ą."
   },
   "mapViewer": {
     "zoomInToolTip": "Powiększ",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "wybrany(-e/-ych) załącznik(-i/-ów)",
     "attachmentHeaderText": "Załączniki",
     "addRecordText": "Dodaj rekord",
-    "unknownCommentAttachment": "ł_FILE__ą"
+    "unknownCommentAttachment": "PLIK",
+    "unableToAddOrEditCommentMessage": "ł_You do not have permission to perform this action________________ą."
   },
   "main": {
     "noGroup": "Nie skonfigurowano żadnej grupy"

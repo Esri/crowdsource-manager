@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Zur Berichtsliste zurückkehren",
     "updateFeaturesConfirmationMsg": "${count} Features werden aktualisiert",
     "attachmentHeaderText": "Anlagen",
-    "unknownPopupAttachment": "ä_FILE__Ü"
+    "unknownPopupAttachment": "DATEI",
+    "unableToEditPopupMessage": "ä_You do not have permission to perform this action________________Ü."
   },
   "mapViewer": {
     "zoomInToolTip": "Vergrößern",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "Anlage(n) ausgewählt",
     "attachmentHeaderText": "Anlagen",
     "addRecordText": "Datensatz hinzufügen",
-    "unknownCommentAttachment": "ä_FILE__Ü"
+    "unknownCommentAttachment": "DATEI",
+    "unableToAddOrEditCommentMessage": "ä_You do not have permission to perform this action________________Ü."
   },
   "main": {
     "noGroup": "Keine Gruppe konfiguriert"

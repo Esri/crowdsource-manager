@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Reveniţi la lista de rapoarte",
     "updateFeaturesConfirmationMsg": "${count} obiecte spaţiale vor fi actualizate",
     "attachmentHeaderText": "Ataşări",
-    "unknownPopupAttachment": "Ă_FILE__ș"
+    "unknownPopupAttachment": "FIŞIER",
+    "unableToEditPopupMessage": "Ă_You do not have permission to perform this action________________ș."
   },
   "mapViewer": {
     "zoomInToolTip": "Mărire",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "ataşări selectate",
     "attachmentHeaderText": "Ataşări",
     "addRecordText": "Adăugare înregistrare",
-    "unknownCommentAttachment": "Ă_FILE__ș"
+    "unknownCommentAttachment": "FIŞIER",
+    "unableToAddOrEditCommentMessage": "Ă_You do not have permission to perform this action________________ș."
   },
   "main": {
     "noGroup": "Niciun grup configurat"

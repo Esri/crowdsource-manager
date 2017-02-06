@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Vrátit se do seznamu zpráv",
     "updateFeaturesConfirmationMsg": "Bude aktualizováno ${count} prvků",
     "attachmentHeaderText": "Přílohy",
-    "unknownPopupAttachment": "Ř_FILE__ů"
+    "unknownPopupAttachment": "SOUBOR",
+    "unableToEditPopupMessage": "Ř_You do not have permission to perform this action________________ů."
   },
   "mapViewer": {
     "zoomInToolTip": "Přiblížit",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "příloh vybráno",
     "attachmentHeaderText": "Přílohy",
     "addRecordText": "Přidat záznam",
-    "unknownCommentAttachment": "Ř_FILE__ů"
+    "unknownCommentAttachment": "SOUBOR",
+    "unableToAddOrEditCommentMessage": "Ř_You do not have permission to perform this action________________ů."
   },
   "main": {
     "noGroup": "Není nakonfigurována žádná skupina"
