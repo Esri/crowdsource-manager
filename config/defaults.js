@@ -114,12 +114,12 @@ define({
     // to show as a label for attachment section in comments form where attachments can be added
     "commentFormAttachmentSectionLabel": "Attachments",
     // to apply org theming
-    "headerBackgroundColor": "",
-    "headerTextColor": "",
-    "bodyBackgroundColor": "",
-    "bodyTextColor": "",
-    "buttonBackgroundColor": "",
-    "buttonTextColor": "",
+    "headerBackgroundColor": "#f26e1f",
+    "headerTextColor": "#fff",
+    "bodyBackgroundColor": "#fff",
+    "bodyTextColor": "#515151",
+    "buttonBackgroundColor": "#fff",
+    "buttonTextColor": "#f26e1f",
     // to configure which tab will be opened by default when a report is selected.
     "defaultDetailsTab": "Info" // Info, Media, Comments
 });
