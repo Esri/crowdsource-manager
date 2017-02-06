@@ -1295,7 +1295,7 @@ define([
                 domConstruct.destroy(dojo.query(".esriCTNoContentDetailsPanelWrapperContainer")[0]);
             }
             noContentWrapperContainer = domConstruct.create("div", { "class": "esriCTNoContentDetailsPanelWrapperContainer" }, dom.byId("detailsPanelWrapperContainer"));
-            domConstruct.create("div", { "class": "esriCTNoContentDetailsPanelContainer", "innerHTML": this.appConfig.selectFeatureMessage }, noContentWrapperContainer);
+            domConstruct.create("div", { "class": "esriCTNoContentDetailsPanelContainer esriCTBodyTextColor", "innerHTML": this.appConfig.selectFeatureMessage }, noContentWrapperContainer);
         },
 
         /**

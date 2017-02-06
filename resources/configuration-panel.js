@@ -28,12 +28,12 @@
         "commentsTabText": "Comments",
         "showHelpIcon": false,
         "commentFormAttachmentSectionLabel": "Attachments",
-        "headerBackgroundColor": "",
-        "headerTextColor": "",
-        "bodyBackgroundColor": "",
-        "bodyTextColor": "",
-        "buttonBackgroundColor": "",
-        "buttonTextColor": "",
+        "headerBackgroundColor": "#f26e1f",
+        "headerTextColor": "#fff",
+        "bodyBackgroundColor": "#fff",
+        "bodyTextColor": "#515151",
+        "buttonBackgroundColor": "#fff",
+        "buttonTextColor": "#f26e1f",
         "defaultDetailsTab": "Info"
     },
     "configurationSettings": [{
@@ -67,7 +67,8 @@
             "label": "Application color",
             "tooltip": "Application color scheme",
             "type": "color",
-            "fieldName": "theme"
+            "fieldName": "theme",
+            "sharedThemeProperty": "header.background"
         }, {
             "label": "Color of selected table rows",
             "tooltip": "Choose the color for highlighting selected rows in the table",
