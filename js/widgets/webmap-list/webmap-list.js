@@ -194,7 +194,7 @@ define([
                     portalDefaultExtent = this.appConfig.portalObject.defaultExtent;
                     baseMapExtent = new Extent(portalDefaultExtent.xmin,
                         portalDefaultExtent.ymin, portalDefaultExtent.xmax, portalDefaultExtent.ymax,
-                        new SpatialReference({ wkid: this.map.spatialReference.wkid }));
+                        this.map.spatialReference);
                     this.map.setExtent(baseMapExtent);
                 }
                 //Raise map loaded event
