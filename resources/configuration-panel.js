@@ -39,6 +39,9 @@
     "configurationSettings": [{
         "category": "<b>App</b>",
         "fields": [{
+            "type": "subcategory",
+            "label": "App settings"
+        },{
             "type": "paragraph",
             "value": "For more information on configuring this app, check out the <a href=\"http://links.esri.com/localgovernment/help/crowdsource-manager\" target=\"_blank\">Crowdsource Manager documentation<\/a>."
         }, {
@@ -79,7 +82,7 @@
         "category": "<b>Map</b>",
         "fields": [{
             "type": "subcategory",
-            "label": "Reference Layers"
+            "label": "Reference layers"
         }, {
             "type": "paragraph",
             "value": "By default, Crowdsource Manager apps will show only one editable layer at a time. Optionally, choose to also display non-editable map layers for additional context."
@@ -90,7 +93,7 @@
             "fieldName": "showNonEditableLayers"
         }, {
             "type": "subcategory",
-            "label": "Zoom Level"
+            "label": "Zoom level"
         }, {
             "type": "paragraph",
             "value": "When a report is selected from the list, the map will pan and zoom to show the location of that report. Specify how near (larger number) or far (smaller number) the map should zoom relative to the ground."
@@ -101,7 +104,7 @@
             "fieldName": "zoomLevel"
         }, {
             "type": "subcategory",
-            "label": "Map Information"
+            "label": "Map information"
         }, {
             "type": "paragraph",
             "value": "Select the item details elements that will be visible for each map:"
@@ -159,6 +162,9 @@
     }, {
         "category": "<b>Filters</b>",
         "fields": [{
+            "type": "subcategory",
+            "label": "Filters"
+        },{
             "type": "paragraph",
             "value": "Attribute filters that use the option to 'Ask For Values' and the time slider will be exposed in Crowdsource Manager when they have been configured on layers in the map."
         }, {
@@ -247,6 +253,9 @@
     }, {
         "category": "<b>Help</b>",
         "fields": [{
+            "type": "subcategory",
+            "label": "Help"
+        },{
             "type": "conditional",
             "fieldName": "showHelpIcon",
             "label": "Enable the help window",
@@ -268,6 +277,9 @@
     }, {
         "category": "<b>App color</b>",
         "fields": [{
+            "type": "subcategory",
+            "label": "App color"
+        },{
             "type": "paragraph",
             "value": "User can change the theme settings and choose different colors for header, body and button sections"
         }, {
