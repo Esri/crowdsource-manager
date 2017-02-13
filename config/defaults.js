@@ -112,9 +112,7 @@ define({
     // to show/hide help icon
     "showHelpIcon": false,
     // to show as a label for attachment section in comments form where attachments can be added
-    "commentFormAttachmentSectionLabel": "Attachments",
-    // to apply org theming
-    "headerBackgroundColor": "#f26e1f",
+    "commentFormAttachmentSectionLabel": "Attachments",   
     "headerTextColor": "#fff",
     "bodyBackgroundColor": "#fff",
     "bodyTextColor": "#515151",
