@@ -28,7 +28,6 @@
         "commentsTabText": "Comments",
         "showHelpIcon": false,
         "commentFormAttachmentSectionLabel": "Attachments",
-        "headerBackgroundColor": "#f26e1f",
         "headerTextColor": "#fff",
         "bodyBackgroundColor": "#fff",
         "bodyTextColor": "#515151",
@@ -282,12 +281,6 @@
         },{
             "type": "paragraph",
             "value": "User can change the theme settings and choose different colors for header, body and button sections"
-        }, {
-            "label": "Header background color",
-            "tooltip": "Set header background color",
-            "type": "color",
-            "sharedThemeProperty": "header.background",
-            "fieldName": "headerBackgroundColor"
         }, {
             "label": "Header text color",
             "tooltip": "Set header text color",
