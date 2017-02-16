@@ -102,7 +102,7 @@ define([
         _setOrgTheme: function (appConfig) {
             appConfig.appTheme = {
                 "header": {
-                    "background": appConfig.headerBackgroundColor,
+                    "background": appConfig.theme,
                     "text": appConfig.headerTextColor
                 },
                 "body": {
@@ -153,7 +153,7 @@ define([
                     // Configured/Org colors for app theme
                     BodyBackgroundColor: appConfig.appTheme.body.background,
                     BodyTextColor: appConfig.appTheme.body.text,
-                    HeaderBackgroundColor: appConfig.appTheme.header.background,
+                    HeaderBackgroundColor: appConfig.theme,
                     HeaderTextColor: appConfig.appTheme.header.text,
                     ButtonBackgroundColor: appConfig.appTheme.button.background,
                     ButtonTextColor: appConfig.appTheme.button.text,
