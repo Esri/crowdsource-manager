@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} elementos serão atualizados",
     "attachmentHeaderText": "Anexos",
     "unknownPopupAttachment": "FICHEIRO",
-    "unableToEditPopupMessage": "ã_You do not have permission to perform this action________________Ç."
+    "unableToEditPopupMessage": "Não tem permissões para executar esta ação."
   },
   "mapViewer": {
     "zoomInToolTip": "Aumentar Zoom",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Anexos",
     "addRecordText": "Adicionar Registo",
     "unknownCommentAttachment": "FICHEIRO",
-    "unableToAddOrEditCommentMessage": "ã_You do not have permission to perform this action________________Ç."
+    "unableToAddOrEditCommentMessage": "Não tem permissões para executar esta ação."
   },
   "main": {
     "noGroup": "Nenhum grupo configurado"

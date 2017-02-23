@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "Liczba obiektów, które zostaną zaktualizowane: ${count}",
     "attachmentHeaderText": "Załączniki",
     "unknownPopupAttachment": "PLIK",
-    "unableToEditPopupMessage": "ł_You do not have permission to perform this action________________ą."
+    "unableToEditPopupMessage": "Nie masz uprawnień do wykonania tego działania."
   },
   "mapViewer": {
     "zoomInToolTip": "Powiększ",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Załączniki",
     "addRecordText": "Dodaj rekord",
     "unknownCommentAttachment": "PLIK",
-    "unableToAddOrEditCommentMessage": "ł_You do not have permission to perform this action________________ą."
+    "unableToAddOrEditCommentMessage": "Nie masz uprawnień do wykonania tego działania."
   },
   "main": {
     "noGroup": "Nie skonfigurowano żadnej grupy"

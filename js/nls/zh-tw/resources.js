@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "將更新 ${count} 個圖徵",
     "attachmentHeaderText": "附件",
     "unknownPopupAttachment": "檔案",
-    "unableToEditPopupMessage": "試_You do not have permission to perform this action________________驗."
+    "unableToEditPopupMessage": "您沒有執行此動作的權限。"
   },
   "mapViewer": {
     "zoomInToolTip": "放大",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "附件",
     "addRecordText": "新增記錄",
     "unknownCommentAttachment": "檔案",
-    "unableToAddOrEditCommentMessage": "試_You do not have permission to perform this action________________驗."
+    "unableToAddOrEditCommentMessage": "您沒有執行此動作的權限。"
   },
   "main": {
     "noGroup": "未配置任何群組"

@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} objecten worden bijgewerkt",
     "attachmentHeaderText": "Bijlagen",
     "unknownPopupAttachment": "BESTAND",
-    "unableToEditPopupMessage": "Ĳ_You do not have permission to perform this action________________ä."
+    "unableToEditPopupMessage": "U hebt geen toestemming om deze actie uit te voeren."
   },
   "mapViewer": {
     "zoomInToolTip": "Inzoomen",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Bijlagen",
     "addRecordText": "Item toevoegen",
     "unknownCommentAttachment": "BESTAND",
-    "unableToAddOrEditCommentMessage": "Ĳ_You do not have permission to perform this action________________ä."
+    "unableToAddOrEditCommentMessage": "U hebt geen toestemming om deze actie uit te voeren."
   },
   "main": {
     "noGroup": "Geen groep geconfigureerd"

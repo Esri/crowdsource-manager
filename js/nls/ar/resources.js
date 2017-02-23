@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "سيتم تحديث المعالم ${count}",
     "attachmentHeaderText": "مرفقات",
     "unknownPopupAttachment": "ملف",
-    "unableToEditPopupMessage": "بيت_You do not have permission to perform this action________________لاحقة."
+    "unableToEditPopupMessage": "لا يتوفر لديك إذن تنفيذ هذا الحدث."
   },
   "mapViewer": {
     "zoomInToolTip": "التكبير",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "مرفقات",
     "addRecordText": "إضافة تسجيل",
     "unknownCommentAttachment": "ملف",
-    "unableToAddOrEditCommentMessage": "بيت_You do not have permission to perform this action________________لاحقة."
+    "unableToAddOrEditCommentMessage": "لا يتوفر لديك إذن تنفيذ هذا الحدث."
   },
   "main": {
     "noGroup": "لم يتم تكوين المجموعة"

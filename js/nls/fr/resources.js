@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} entités vont être mises à jour",
     "attachmentHeaderText": "Pièces jointes",
     "unknownPopupAttachment": "FICHIER",
-    "unableToEditPopupMessage": "æ_You do not have permission to perform this action________________Â."
+    "unableToEditPopupMessage": "Vous n’êtes pas autorisé à effectuer cette action."
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom avant",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Pièces jointes",
     "addRecordText": "Ajouter un enregistrement",
     "unknownCommentAttachment": "FICHIER",
-    "unableToAddOrEditCommentMessage": "æ_You do not have permission to perform this action________________Â."
+    "unableToAddOrEditCommentMessage": "Vous n’êtes pas autorisé à effectuer cette action."
   },
   "main": {
     "noGroup": "Aucun groupe configuré"

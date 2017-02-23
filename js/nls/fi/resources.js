@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} kohdetta päivitetään",
     "attachmentHeaderText": "Liitteet",
     "unknownPopupAttachment": "TIEDOSTO",
-    "unableToEditPopupMessage": "Å_You do not have permission to perform this action________________ö."
+    "unableToEditPopupMessage": "Sinulla ei ole oikeuksia tämän toiminnon toteuttamiseen."
   },
   "mapViewer": {
     "zoomInToolTip": "Lähennä",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Liitteet",
     "addRecordText": "Lisää tietue",
     "unknownCommentAttachment": "TIEDOSTO",
-    "unableToAddOrEditCommentMessage": "Å_You do not have permission to perform this action________________ö."
+    "unableToAddOrEditCommentMessage": "Sinulla ei ole oikeuksia tämän toiminnon toteuttamiseen."
   },
   "main": {
     "noGroup": "Yhtään ryhmää ei ole määritetty"

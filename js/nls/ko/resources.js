@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} 피처가 업데이트됨",
     "attachmentHeaderText": "첨부 파일",
     "unknownPopupAttachment": "파일",
-    "unableToEditPopupMessage": "한_You do not have permission to perform this action________________빠."
+    "unableToEditPopupMessage": "이 작업을 수행할 권한이 없습니다."
   },
   "mapViewer": {
     "zoomInToolTip": "확대",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "첨부 파일",
     "addRecordText": "레코드 추가",
     "unknownCommentAttachment": "파일",
-    "unableToAddOrEditCommentMessage": "한_You do not have permission to perform this action________________빠."
+    "unableToAddOrEditCommentMessage": "이 작업을 수행할 권한이 없습니다."
   },
   "main": {
     "noGroup": "구성된 그룹 없음"

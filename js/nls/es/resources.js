@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} entidades se actualizarán",
     "attachmentHeaderText": "Adjuntos",
     "unknownPopupAttachment": "ARCHIVO",
-    "unableToEditPopupMessage": "á_You do not have permission to perform this action________________Ó."
+    "unableToEditPopupMessage": "No tiene permiso para realizar esta acción."
   },
   "mapViewer": {
     "zoomInToolTip": "Acercar",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Adjuntos",
     "addRecordText": "Agregar registro",
     "unknownCommentAttachment": "ARCHIVO",
-    "unableToAddOrEditCommentMessage": "á_You do not have permission to perform this action________________Ó."
+    "unableToAddOrEditCommentMessage": "No tiene permiso para realizar esta acción."
   },
   "main": {
     "noGroup": "No hay ningún grupo configurado"

@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} obiecte spaţiale vor fi actualizate",
     "attachmentHeaderText": "Ataşări",
     "unknownPopupAttachment": "FIŞIER",
-    "unableToEditPopupMessage": "Ă_You do not have permission to perform this action________________ș."
+    "unableToEditPopupMessage": "Nu aveţi permisiunea pentru a efectua această acţiune."
   },
   "mapViewer": {
     "zoomInToolTip": "Mărire",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Ataşări",
     "addRecordText": "Adăugare înregistrare",
     "unknownCommentAttachment": "FIŞIER",
-    "unableToAddOrEditCommentMessage": "Ă_You do not have permission to perform this action________________ș."
+    "unableToAddOrEditCommentMessage": "Nu aveţi permisiunea pentru a efectua această acţiune."
   },
   "main": {
     "noGroup": "Niciun grup configurat"

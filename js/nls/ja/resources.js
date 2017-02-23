@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} フィーチャが更新されます",
     "attachmentHeaderText": "添付ファイル",
     "unknownPopupAttachment": "ファイル",
-    "unableToEditPopupMessage": "須_You do not have permission to perform this action________________鷗."
+    "unableToEditPopupMessage": "この操作を実行する権限がありません。"
   },
   "mapViewer": {
     "zoomInToolTip": "拡大",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "添付ファイル",
     "addRecordText": "レコードの追加",
     "unknownCommentAttachment": "ファイル",
-    "unableToAddOrEditCommentMessage": "須_You do not have permission to perform this action________________鷗."
+    "unableToAddOrEditCommentMessage": "この操作を実行する権限がありません。"
   },
   "main": {
     "noGroup": "グループが構成されていません"

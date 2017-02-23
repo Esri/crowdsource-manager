@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "Bude aktualizováno ${count} prvků",
     "attachmentHeaderText": "Přílohy",
     "unknownPopupAttachment": "SOUBOR",
-    "unableToEditPopupMessage": "Ř_You do not have permission to perform this action________________ů."
+    "unableToEditPopupMessage": "K této akci nemáte oprávnění."
   },
   "mapViewer": {
     "zoomInToolTip": "Přiblížit",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Přílohy",
     "addRecordText": "Přidat záznam",
     "unknownCommentAttachment": "SOUBOR",
-    "unableToAddOrEditCommentMessage": "Ř_You do not have permission to perform this action________________ů."
+    "unableToAddOrEditCommentMessage": "K této akci nemáte oprávnění."
   },
   "main": {
     "noGroup": "Není nakonfigurována žádná skupina"

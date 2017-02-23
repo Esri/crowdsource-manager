@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} objekti värskendatakse",
     "attachmentHeaderText": "Manused",
     "unknownPopupAttachment": "FAIL",
-    "unableToEditPopupMessage": "Š_You do not have permission to perform this action________________ä."
+    "unableToEditPopupMessage": "Teil puudub õigus selle toimingu tegemiseks."
   },
   "mapViewer": {
     "zoomInToolTip": "Suurenda",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Manused",
     "addRecordText": "Lisa kirje",
     "unknownCommentAttachment": "FAIL",
-    "unableToAddOrEditCommentMessage": "Š_You do not have permission to perform this action________________ä."
+    "unableToAddOrEditCommentMessage": "Teil puudub õigus selle toimingu tegemiseks."
   },
   "main": {
     "noGroup": "Ühtki gruppi ei ole konfigureeritud"

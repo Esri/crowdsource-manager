@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} geoobjekt uppdateras",
     "attachmentHeaderText": "Bilagor",
     "unknownPopupAttachment": "ARKIV",
-    "unableToEditPopupMessage": "Å_You do not have permission to perform this action________________ö."
+    "unableToEditPopupMessage": "Du har inte behörighet att utföra den här åtgärden."
   },
   "mapViewer": {
     "zoomInToolTip": "Zooma in",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Bilagor",
     "addRecordText": "Lägg till post",
     "unknownCommentAttachment": "ARKIV",
-    "unableToAddOrEditCommentMessage": "Å_You do not have permission to perform this action________________ö."
+    "unableToAddOrEditCommentMessage": "Du har inte behörighet att utföra den här åtgärden."
   },
   "main": {
     "noGroup": "Ingen grupp konfigurerad"

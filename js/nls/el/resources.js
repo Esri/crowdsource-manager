@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} στοιχεία θα ενημερωθούν",
     "attachmentHeaderText": "Συνημμένα",
     "unknownPopupAttachment": "ΑΡΧΕΙΟ",
-    "unableToEditPopupMessage": "Đ_You do not have permission to perform this action________________ớ."
+    "unableToEditPopupMessage": "Δεν έχετε δικαίωμα να εκτελέσετε αυτή την ενέργεια."
   },
   "mapViewer": {
     "zoomInToolTip": "Εστίαση σε μεγαλύτερη κλίμακα",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Συνημμένα",
     "addRecordText": "Προσθήκη εγγραφής",
     "unknownCommentAttachment": "ΑΡΧΕΙΟ",
-    "unableToAddOrEditCommentMessage": "Đ_You do not have permission to perform this action________________ớ."
+    "unableToAddOrEditCommentMessage": "Δεν έχετε δικαίωμα να εκτελέσετε αυτή την ενέργεια."
   },
   "main": {
     "noGroup": "Δεν έχει παραμετροποιηθεί κάποια ομάδα"

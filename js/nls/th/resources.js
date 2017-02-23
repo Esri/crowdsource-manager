@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} ฟีเจอร์จะถูกอัพเดท",
     "attachmentHeaderText": "แนบ",
     "unknownPopupAttachment": "ไฟล์",
-    "unableToEditPopupMessage": "ก้_You do not have permission to perform this action________________ษฺ."
+    "unableToEditPopupMessage": "คุณไม่ได้รับอนุญาตให้ดำเนินการนี้"
   },
   "mapViewer": {
     "zoomInToolTip": "ขยายภาพ",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "แนบ",
     "addRecordText": "เพิ่มเรคคอร์ด",
     "unknownCommentAttachment": "ไฟล์",
-    "unableToAddOrEditCommentMessage": "ก้_You do not have permission to perform this action________________ษฺ."
+    "unableToAddOrEditCommentMessage": "คุณไม่ได้รับอนุญาตให้ดำเนินการนี้"
   },
   "main": {
     "noGroup": "ยังไม่กำหนดกลุ่ม"

@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} תכונות יעודכנו",
     "attachmentHeaderText": "קבצים מקושרים",
     "unknownPopupAttachment": "קובץ",
-    "unableToEditPopupMessage": "כן_You do not have permission to perform this action________________ש."
+    "unableToEditPopupMessage": "אין לך הרשאה לבצע את הפעולה הזו."
   },
   "mapViewer": {
     "zoomInToolTip": "התמקד פנימה",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "קבצים מקושרים",
     "addRecordText": "הוסף רשומה",
     "unknownCommentAttachment": "קובץ",
-    "unableToAddOrEditCommentMessage": "כן_You do not have permission to perform this action________________ש."
+    "unableToAddOrEditCommentMessage": "אין לך הרשאה לבצע את הפעולה הזו."
   },
   "main": {
     "noGroup": "לא הוגדרה קבוצה"

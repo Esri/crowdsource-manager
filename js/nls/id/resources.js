@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} feature akan diperbarui",
     "attachmentHeaderText": "Lampiran",
     "unknownPopupAttachment": "FILE",
-    "unableToEditPopupMessage": "ng_You do not have permission to perform this action________________ny."
+    "unableToEditPopupMessage": "Anda tidak memiliki izin untuk menjalankan tindakan ini."
   },
   "mapViewer": {
     "zoomInToolTip": "Perbesar",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Lampiran",
     "addRecordText": "Tambah Rekaman (Record)",
     "unknownCommentAttachment": "FILE",
-    "unableToAddOrEditCommentMessage": "ng_You do not have permission to perform this action________________ny."
+    "unableToAddOrEditCommentMessage": "Anda tidak memiliki izin untuk menjalankan tindakan ini."
   },
   "main": {
     "noGroup": "Tidak ada grup yang dikonfigurasikan"

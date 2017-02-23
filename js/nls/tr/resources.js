@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} detay güncellenecek",
     "attachmentHeaderText": "Ekler",
     "unknownPopupAttachment": "DOSYA",
-    "unableToEditPopupMessage": "ı_You do not have permission to perform this action________________İ."
+    "unableToEditPopupMessage": "Bu işlemi yapma izniniz yok."
   },
   "mapViewer": {
     "zoomInToolTip": "Büyüt",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Ekler",
     "addRecordText": "Kayıt Ekle",
     "unknownCommentAttachment": "DOSYA",
-    "unableToAddOrEditCommentMessage": "ı_You do not have permission to perform this action________________İ."
+    "unableToAddOrEditCommentMessage": "Bu işlemi yapma izniniz yok."
   },
   "main": {
     "noGroup": "Yapılandırılan grup yok"

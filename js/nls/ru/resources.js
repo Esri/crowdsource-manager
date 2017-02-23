@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} объектов будет обновлено",
     "attachmentHeaderText": "Вложения",
     "unknownPopupAttachment": "ФАЙЛ",
-    "unableToEditPopupMessage": "Ж_You do not have permission to perform this action________________Я."
+    "unableToEditPopupMessage": "У вас нет прав для выполнения этого действия."
   },
   "mapViewer": {
     "zoomInToolTip": "Увеличить",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Вложения",
     "addRecordText": "Добавить запись",
     "unknownCommentAttachment": "ФАЙЛ",
-    "unableToAddOrEditCommentMessage": "Ж_You do not have permission to perform this action________________Я."
+    "unableToAddOrEditCommentMessage": "У вас нет прав для выполнения этого действия."
   },
   "main": {
     "noGroup": "Не задана группа"

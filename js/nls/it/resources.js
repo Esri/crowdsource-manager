@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} feature verranno aggiornate",
     "attachmentHeaderText": "Allegati",
     "unknownPopupAttachment": "FILE",
-    "unableToEditPopupMessage": "é_You do not have permission to perform this action________________È."
+    "unableToEditPopupMessage": "Non si è autorizzati a completare questa azione."
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom avanti",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Allegati",
     "addRecordText": "Aggiungi record",
     "unknownCommentAttachment": "FILE",
-    "unableToAddOrEditCommentMessage": "é_You do not have permission to perform this action________________È."
+    "unableToAddOrEditCommentMessage": "Non si è autorizzati a completare questa azione."
   },
   "main": {
     "noGroup": "Nessun gruppo configurato"

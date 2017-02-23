@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} elementi tiks atjaunināti",
     "attachmentHeaderText": "Piesaistes",
     "unknownPopupAttachment": "FAILS",
-    "unableToEditPopupMessage": "ķ_You do not have permission to perform this action________________ū."
+    "unableToEditPopupMessage": "Jums nav atļaujas izpildīt šo darbību."
   },
   "mapViewer": {
     "zoomInToolTip": "Pietuvināt",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Piesaistes",
     "addRecordText": "Pievienot ierakstu",
     "unknownCommentAttachment": "FAILS",
-    "unableToAddOrEditCommentMessage": "ķ_You do not have permission to perform this action________________ū."
+    "unableToAddOrEditCommentMessage": "Jums nav atļaujas izpildīt šo darbību."
   },
   "main": {
     "noGroup": "Nav konfigurētas grupas"

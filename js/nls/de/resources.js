@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} Features werden aktualisiert",
     "attachmentHeaderText": "Anlagen",
     "unknownPopupAttachment": "DATEI",
-    "unableToEditPopupMessage": "ä_You do not have permission to perform this action________________Ü."
+    "unableToEditPopupMessage": "Sie sind nicht berechtigt, diese Aktion auszuführen."
   },
   "mapViewer": {
     "zoomInToolTip": "Vergrößern",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Anlagen",
     "addRecordText": "Datensatz hinzufügen",
     "unknownCommentAttachment": "DATEI",
-    "unableToAddOrEditCommentMessage": "ä_You do not have permission to perform this action________________Ü."
+    "unableToAddOrEditCommentMessage": "Sie sind nicht berechtigt, diese Aktion auszuführen."
   },
   "main": {
     "noGroup": "Keine Gruppe konfiguriert"

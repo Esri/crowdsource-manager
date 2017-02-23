@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} geoobjekata će biti ažurirano",
     "attachmentHeaderText": "Prilozi",
     "unknownPopupAttachment": "DATOTEKA",
-    "unableToEditPopupMessage": "Č_You do not have permission to perform this action________________ž."
+    "unableToEditPopupMessage": "Nemate dozvolu za ovu radnju."
   },
   "mapViewer": {
     "zoomInToolTip": "Uvećanje",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Prilozi",
     "addRecordText": "Dodaj zapis",
     "unknownCommentAttachment": "DATOTEKA",
-    "unableToAddOrEditCommentMessage": "Č_You do not have permission to perform this action________________ž."
+    "unableToAddOrEditCommentMessage": "Nemate dozvolu za ovu radnju."
   },
   "main": {
     "noGroup": "Nijedna grupa nije konfigurisana"

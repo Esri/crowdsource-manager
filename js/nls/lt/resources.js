@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "Bus atnaujinta elementų: ${count}",
     "attachmentHeaderText": "Priedai",
     "unknownPopupAttachment": "FAILAS",
-    "unableToEditPopupMessage": "Į_You do not have permission to perform this action________________š."
+    "unableToEditPopupMessage": "Neturite leidimo atlikti šį veiksmą."
   },
   "mapViewer": {
     "zoomInToolTip": "Artinti",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Priedai",
     "addRecordText": "Pridėti įrašą",
     "unknownCommentAttachment": "FAILAS",
-    "unableToAddOrEditCommentMessage": "Į_You do not have permission to perform this action________________š."
+    "unableToAddOrEditCommentMessage": "Neturite leidimo atlikti šį veiksmą."
   },
   "main": {
     "noGroup": "Sukonfigūruotų grupių nėra"

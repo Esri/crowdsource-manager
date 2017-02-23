@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} विशेषताएं अद्यतन की जाएंगी",
     "attachmentHeaderText": "अनुलग्नक",
     "unknownPopupAttachment": "फ़ाइल",
-    "unableToEditPopupMessage": "आ_You do not have permission to perform this action________________ज."
+    "unableToEditPopupMessage": "आप को इस कार्य को करने की अनुमति नहीं है।"
   },
   "mapViewer": {
     "zoomInToolTip": "ज़ूम इन",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "अनुलग्नक",
     "addRecordText": "रिकॉर्ड सम्मिलित करें",
     "unknownCommentAttachment": "फ़ाइल",
-    "unableToAddOrEditCommentMessage": "आ_You do not have permission to perform this action________________ज."
+    "unableToAddOrEditCommentMessage": "आप को इस कार्य को करने की अनुमति नहीं है।"
   },
   "main": {
     "noGroup": "कोई समूह कॉन्फ़िगर नहीं"

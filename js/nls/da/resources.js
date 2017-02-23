@@ -65,7 +65,7 @@ define({
     "updateFeaturesConfirmationMsg": "${count} objekter vil blive opdateret",
     "attachmentHeaderText": "Vedhæftninger",
     "unknownPopupAttachment": "FIL",
-    "unableToEditPopupMessage": "ø_You do not have permission to perform this action________________å."
+    "unableToEditPopupMessage": "Du har ikke tilladelse til at udføre denne handling."
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom ind",
@@ -106,7 +106,7 @@ define({
     "attachmentHeaderText": "Vedhæftninger",
     "addRecordText": "Tilføj post",
     "unknownCommentAttachment": "FIL",
-    "unableToAddOrEditCommentMessage": "ø_You do not have permission to perform this action________________å."
+    "unableToAddOrEditCommentMessage": "Du har ikke tilladelse til at udføre denne handling."
   },
   "main": {
     "noGroup": "Ingen gruppe konfigureret"
