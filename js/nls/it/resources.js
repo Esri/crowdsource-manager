@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Torna all'elenco dei report",
     "updateFeaturesConfirmationMsg": "${count} feature verranno aggiornate",
     "attachmentHeaderText": "Allegati",
-    "unknownPopupAttachment": "é_FILE__È"
+    "unknownPopupAttachment": "FILE",
+    "unableToEditPopupMessage": "Non si è autorizzati a completare questa azione."
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom avanti",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "allegato/i selezionato/i",
     "attachmentHeaderText": "Allegati",
     "addRecordText": "Aggiungi record",
-    "unknownCommentAttachment": "é_FILE__È"
+    "unknownCommentAttachment": "FILE",
+    "unableToAddOrEditCommentMessage": "Non si è autorizzati a completare questa azione."
   },
   "main": {
     "noGroup": "Nessun gruppo configurato"

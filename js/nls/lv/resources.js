@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Atgriezties pārskatu sarakstā",
     "updateFeaturesConfirmationMsg": "${count} elementi tiks atjaunināti",
     "attachmentHeaderText": "Piesaistes",
-    "unknownPopupAttachment": "ķ_FILE__ū"
+    "unknownPopupAttachment": "FAILS",
+    "unableToEditPopupMessage": "Jums nav atļaujas izpildīt šo darbību."
   },
   "mapViewer": {
     "zoomInToolTip": "Pietuvināt",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "atlasītais(-ie) pielikums(-i)",
     "attachmentHeaderText": "Piesaistes",
     "addRecordText": "Pievienot ierakstu",
-    "unknownCommentAttachment": "ķ_FILE__ū"
+    "unknownCommentAttachment": "FAILS",
+    "unableToAddOrEditCommentMessage": "Jums nav atļaujas izpildīt šo darbību."
   },
   "main": {
     "noGroup": "Nav konfigurētas grupas"

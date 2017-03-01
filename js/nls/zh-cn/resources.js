@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "返回至报告列表",
     "updateFeaturesConfirmationMsg": "将更新 ${count} 个要素",
     "attachmentHeaderText": "附件",
-    "unknownPopupAttachment": "试_FILE__验"
+    "unknownPopupAttachment": "文件",
+    "unableToEditPopupMessage": "您无权执行此操作。"
   },
   "mapViewer": {
     "zoomInToolTip": "放大",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "附件已选定",
     "attachmentHeaderText": "附件",
     "addRecordText": "添加记录",
-    "unknownCommentAttachment": "试_FILE__验"
+    "unknownCommentAttachment": "文件",
+    "unableToAddOrEditCommentMessage": "您无权执行此操作。"
   },
   "main": {
     "noGroup": "未配置任何群组"

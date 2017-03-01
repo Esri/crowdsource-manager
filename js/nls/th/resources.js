@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "กลับสู่ลิสต์ของรายงาน",
     "updateFeaturesConfirmationMsg": "${count} ฟีเจอร์จะถูกอัพเดท",
     "attachmentHeaderText": "แนบ",
-    "unknownPopupAttachment": "ก้_FILE__ษฺ"
+    "unknownPopupAttachment": "ไฟล์",
+    "unableToEditPopupMessage": "คุณไม่ได้รับอนุญาตให้ดำเนินการนี้"
   },
   "mapViewer": {
     "zoomInToolTip": "ขยายภาพ",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "เลือกไฟล์แนบ",
     "attachmentHeaderText": "แนบ",
     "addRecordText": "เพิ่มเรคคอร์ด",
-    "unknownCommentAttachment": "ก้_FILE__ษฺ"
+    "unknownCommentAttachment": "ไฟล์",
+    "unableToAddOrEditCommentMessage": "คุณไม่ได้รับอนุญาตให้ดำเนินการนี้"
   },
   "main": {
     "noGroup": "ยังไม่กำหนดกลุ่ม"

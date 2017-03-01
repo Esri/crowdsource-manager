@@ -123,6 +123,7 @@ define([
         */
         _setSignOutOptionText: function () {
             this.signOutOption.innerHTML = this.appConfig.i18n.applicationHeader.signOutOption;
+            this.signOutOption.title = this.appConfig.i18n.applicationHeader.signOutOption;
         },
 
         /**

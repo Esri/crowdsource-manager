@@ -64,6 +64,7 @@ define([
     domGeom
 ) {
     return declare(null, {
+
         _boilerPlateTemplate: null, // to store object of boilerplate
         _loggedInUser: null, // to store details of logged in user
         _applicationHeader: null, // to store object of application header widget
@@ -94,15 +95,17 @@ define([
         _disableTimeSliderClickHandle: null, // to store handle of disable time slider
 
         /**
-        * This method is designed to handle processing after any DOM fragments have been actually added to the document.
-        * @param{object} boilerplate template object
-        * @param{object} logged in user details
-        * @memberOf widgets/main/main
-        */
+         * This method is designed to handle processing after any
+         * DOM fragments have been actually added to the document.
+         * @param{object} boilerplate template object
+         * @param{object} logged in user details
+         * @memberOf widgets/main/main
+         */
         startup: function (boilerPlateTemplateObject, loggedInUser) {
             this._loggedInUser = loggedInUser;
             var queryParams = {};
-            // config will contain application and user defined info for the template such as i18n strings, the web map id
+            // config will contain application and user defined info for the
+            // template such as i18n strings, the web map id
             // and application id
             // any url parameters and any application specific configuration information.
             if (boilerPlateTemplateObject) {
@@ -112,19 +115,22 @@ define([
                 if (this._loggedInUser) {
                     this.appConfig.logInDetails = {
                         "userName": this._loggedInUser.fullName,
-                        "token": this._loggedInUser.credential.token
+                        "token": this._loggedInUser.credential.token,
+                        "canEditFeatures": this._checkUserPrivileges()
                     };
                     queryParams.token = this._loggedInUser.credential.token;
                 } else {
                     this.appConfig.logInDetails = {
                         "userName": this.appConfig.i18n.applicationHeader.signInOption,
-                        "token": ""
+                        "token": "",
+                        "canEditFeatures": true
                     };
                 }
                 // enable queryForGroupItems in templateconfig
                 this._boilerPlateTemplate.templateConfig.queryForGroupItems = true;
                 // construct the query params. If found in group info mixin configured group params
-                // so that in case of private group where we dont get the group info, items will be loaded as configured in templateconfig
+                // so that in case of private group where we dont get the group info,
+                // items will be loaded as configured in templateconfig
                 lang.mixin(queryParams, this._boilerPlateTemplate.templateConfig.groupParams);
                 if (this.appConfig.groupInfo.results && this.appConfig.groupInfo.results.length > 0) {
                     if (this.appConfig.groupInfo.results[0].sortField) {
@@ -145,19 +151,19 @@ define([
         },
 
         /**
-        * This function is used to load group items
-        * @param{object} parameter used to query group items
-        * @memberOf widgets/main/main
-        */
+         * This function is used to load group items
+         * @param{object} parameter used to query group items
+         * @memberOf widgets/main/main
+         */
         _loadGroupItems: function (queryParams) {
             this._boilerPlateTemplate.queryGroupItems(queryParams).then(lang.hitch(this, this._groupItemsLoaded));
         },
 
         /**
-        * This function is executed when group items are loaded
-        * @param{object} response once group item are loaded
-        * @memberOf widgets/main/main
-        */
+         * This function is executed when group items are loaded
+         * @param{object} response once group item are loaded
+         * @memberOf widgets/main/main
+         */
         _groupItemsLoaded: function (response) {
             this._groupItems.push.apply(this._groupItems, response.groupItems.results);
             if (response.groupItems.nextQueryParams.start < 0) {
@@ -173,9 +179,9 @@ define([
         },
 
         /**
-        * This function is used to load application
-        * @memberOf widgets/main/main
-        */
+         * This function is used to load application
+         * @memberOf widgets/main/main
+         */
         _loadApplication: function () {
             if (this.appConfig.groupItems.results.length > 0) {
                 domClass.remove("UpperAndLowerWrapperContainer", "esriCTHidden");
@@ -227,10 +233,10 @@ define([
         },
 
         /**
-        * This function is used to attach click event to details panel for closing filter UI.
-        * On click of details panel hide webmap list
-        * @memberOf widgets/main/main
-        */
+         * This function is used to attach click event to details panel for closing filter UI.
+         * On click of details panel hide webmap list
+         * @memberOf widgets/main/main
+         */
         _attachClickEventToDetailsPanel: function () {
             on(dom.byId("detailsPanelWrapperContainer"), "click", lang.hitch(this, function () {
                 $(".esriCTFilterParentContainer").css("display", "none");
@@ -242,9 +248,9 @@ define([
         },
 
         /**
-        * This function is used to attach click event to application header for closing filter UI.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to attach click event to application header for closing filter UI.
+         * @memberOf widgets/main/main
+         */
         _attachClickEventToApplicationHeader: function () {
             on(dom.byId("applicationHeaderWrapperContainer"), "click", lang.hitch(this, function () {
                 $(".esriCTFilterParentContainer").css("display", "none");
@@ -252,9 +258,9 @@ define([
         },
 
         /**
-        * This function is used to attach click event to operational name container for closing filter UI.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to attach click event to operational name container for closing filter UI.
+         * @memberOf widgets/main/main
+         */
         _attachClickEventToOperationalLayerName: function () {
             on(dom.byId("operationalLayerNameContainer"), "click", lang.hitch(this, function () {
                 $(".esriCTFilterParentContainer").css("display", "none");
@@ -262,9 +268,9 @@ define([
         },
 
         /**
-        * This function is executed when window is resized
-        * @memberOf widgets/main/main
-        */
+         * This function is executed when window is resized
+         * @memberOf widgets/main/main
+         */
         _onWindowResize: function () {
             if (this._applicationHeader) {
                 this._applicationHeader._setWidthOfApplicationNameContainer();
@@ -289,9 +295,9 @@ define([
         },
 
         /**
-        * This function is used to instantiate application header.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to instantiate application header.
+         * @memberOf widgets/main/main
+         */
         _createApplicationHeader: function (displaySignInText) {
             var appHeaderParameter;
             this._destroyApplicationHeaderWidget();
@@ -309,9 +315,9 @@ define([
         },
 
         /**
-        * This function is used to attach event listener to application header widget
-        * @memberOf widgets/main/main
-        */
+         * This function is used to attach event listener to application header widget
+         * @memberOf widgets/main/main
+         */
         _attachApplicationHeaderEventListener: function () {
             this._applicationHeader.hideWebMapList = lang.hitch(this, function () {
                 if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
@@ -354,17 +360,17 @@ define([
         },
 
         /**
-        * This method is used to reload the app
-        * @memberOf widgets/main/main
-        */
+         * This method is used to reload the app
+         * @memberOf widgets/main/main
+         */
         reload: function (logInDetails) {
             return logInDetails;
         },
 
         /**
-        * This function is used to destroy all the widgets.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to destroy all the widgets.
+         * @memberOf widgets/main/main
+         */
         _destroyWidgets: function () {
             this._destroyApplicationHeaderWidget();
             this._destroyWebMapPanelWidget();
@@ -375,9 +381,9 @@ define([
         },
 
         /**
-        * This function is used to destroy application header widget.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to destroy application header widget.
+         * @memberOf widgets/main/main
+         */
         _destroyApplicationHeaderWidget: function () {
             if (this._applicationHeader) {
                 this._applicationHeader.destroy();
@@ -385,9 +391,9 @@ define([
         },
 
         /**
-        * This function is used to destroy webmap panel widget.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to destroy webmap panel widget.
+         * @memberOf widgets/main/main
+         */
         _destroyWebMapPanelWidget: function () {
             if (this._webMapListWidget) {
                 this._webMapListWidget.destroy();
@@ -395,9 +401,9 @@ define([
         },
 
         /**
-        * This function is used to instantiate map panel
-        * @memberOf widgets/main/main
-        */
+         * This function is used to instantiate map panel
+         * @memberOf widgets/main/main
+         */
         _createMapPanel: function () {
             var mapViewerParameter;
             // parameters needed for instantiate map viewer panel
@@ -410,9 +416,9 @@ define([
         },
 
         /**
-        * This function is used to destroy map panel widget
-        * @memberOf widgets/main/main
-        */
+         * This function is used to destroy map panel widget
+         * @memberOf widgets/main/main
+         */
         _destroyMapPanelWidget: function () {
             if (this._mapPanelWidget) {
                 this._mapPanelWidget.destroy();
@@ -420,9 +426,9 @@ define([
         },
 
         /**
-        * This function is used to instantiate webMapList widget.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to instantiate webMapList widget.
+         * @memberOf widgets/main/main
+         */
         _createWebMapList: function () {
             var webMapDescriptionFields, webMapListConfigData;
             this._addWebMapListToggleIcon();
@@ -455,9 +461,9 @@ define([
         },
 
         /**
-        * This function is used listen events raised by webmap list widget
-        * @memberOf widgets/main/main
-        */
+         * This function is used listen events raised by webmap list widget
+         * @memberOf widgets/main/main
+         */
         _attachWebMapListEventListener: function () {
             var timeAnimation;
             // when new operational layer is selected show it in data-viewer
@@ -472,7 +478,8 @@ define([
                     // Reset last updated feature array
                     this.updatedFeature = null;
                     // Reset filter state object for a new layer
-                    // Filter state object will always became empty when a new operational layer is selected from the list
+                    // Filter state object will always became empty when a new operational layer
+                    // is selected from the list
                     this.appConfig._filterObject = null;
                     if (this.appConfig.i18n.direction === "rtl") {
                         //Remove disable class from webmap list toggle button
@@ -528,9 +535,9 @@ define([
         },
 
         /**
-        * This function is used to reset the height of upper and lower container
-        * @memberOf widgets/main/main
-        */
+         * This function is used to reset the height of upper and lower container
+         * @memberOf widgets/main/main
+         */
         _resetUpperAndLowerContainer: function () {
             $("#upperContainer").height('54%');
             $("#lowerContainer").height('45%');
@@ -539,9 +546,9 @@ define([
         },
 
         /**
-        * This function is used to attach event listener to map
-        * @memberOf widgets/main/main
-        */
+         * This function is used to attach event listener to map
+         * @memberOf widgets/main/main
+         */
         _attachMapEvents: function () {
             if (this._mapResizeHandle) {
                 this._mapResizeHandle.remove();
@@ -589,9 +596,9 @@ define([
         },
 
         /**
-        * This function is used to enable header icons
-        * @memberOf widgets/main/main
-        */
+         * This function is used to enable header icons
+         * @memberOf widgets/main/main
+         */
         _enableHeaderIcons: function () {
             var searchParameter, manualRefreshParameter;
             searchParameter = {
@@ -608,9 +615,9 @@ define([
         },
 
         /**
-        * This function is used to display the container of time slider
-        * @memberOf widgets/main/main
-        */
+         * This function is used to display the container of time slider
+         * @memberOf widgets/main/main
+         */
         _displayContainerOfTimeSlider: function () {
             domClass.replace(dom.byId("upperContainer"), "esriCTUpperContainer", "esriCTUpperContainerEmptySlider");
             domClass.replace(dom.byId("lowerContainer"), "esriCTLowerContainer", "esriCTLowerContainerEmptySlider");
@@ -620,9 +627,9 @@ define([
         },
 
         /**
-        * This function is used to hide the container of time slider
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is used to hide the container of time slider
+         * @memberOf widgets/time-slider/time-slider
+         */
         _hideContainerOfTimeSlider: function () {
             domClass.replace(dom.byId("upperContainer"), "esriCTUpperContainerEmptySlider", "esriCTUpperContainer");
             domClass.replace(dom.byId("lowerContainer"), "esriCTLowerContainerEmptySlider", "esriCTLowerContainer");
@@ -632,10 +639,10 @@ define([
         },
 
         /**
-        * This function is used to check time animation in webmap Json.
-        * @param{object} parameters to check time animation
-        * @memberOf widgets/main/main
-        */
+         * This function is used to check time animation in webmap Json.
+         * @param{object} parameters to check time animation
+         * @memberOf widgets/main/main
+         */
         _checkTimeAnimation: function (itemData) {
             var isEnableTimeAnimation = true,
                 timeAnimationKey = "timeAnimation",
@@ -652,9 +659,9 @@ define([
         },
 
         /**
-        * This function is used get existing index of layer
-        * @memberOf widgets/main/main
-        */
+         * This function is used get existing index of layer
+         * @memberOf widgets/main/main
+         */
         _getExistingIndex: function (layerID) {
             var index, i;
             this._existingLayerIndex = null;
@@ -667,9 +674,9 @@ define([
         },
 
         /**
-        * This function is used add selected operational layer in snapshot mode
-        * @memberOf widgets/main/main
-        */
+         * This function is used add selected operational layer in snapshot mode
+         * @memberOf widgets/main/main
+         */
         _addOperationalLayerInSnapShotMode: function () {
             var opLayerInfo, staticDefinitionExpression, cloneRenderer, cloneLabelingInfo;
             //get selected operation layer details
@@ -712,17 +719,17 @@ define([
         },
 
         /**
-        * This function is used disable header icons
-        * @memberOf widgets/main/main
-        */
+         * This function is used disable header icons
+         * @memberOf widgets/main/main
+         */
         _disableHeaderIcons: function () {
             this._addOrganizationBaseMap();
         },
 
         /**
-        * This function is used add first basemap of organization on initial load
-        * @memberOf widgets/main/main
-        */
+         * This function is used add first basemap of organization on initial load
+         * @memberOf widgets/main/main
+         */
         _addOrganizationBaseMap: function () {
             var webMapListObj, portal, params;
             webMapListObj = this._webMapListWidget;
@@ -748,7 +755,7 @@ define([
                                 }
                             }
                             if (baseMapID) {
-                                webMapListObj._createMap(baseMapID, "mapDiv");
+                                webMapListObj._createMap(baseMapID, "mapDiv", true);
                             } else {
                                 webMapListObj._createMap(results.results[0].id, "mapDiv");
                             }
@@ -762,9 +769,9 @@ define([
         },
 
         /**
-        * This function is used to add webmap toggle button
-        * @memberOf widgets/main/main
-        */
+         * This function is used to add webmap toggle button
+         * @memberOf widgets/main/main
+         */
         _addWebMapListToggleIcon: function () {
             if (this.appConfig.i18n.direction === "rtl") {
                 dojo.addClass(dom.byId('webmapListToggleButton'), "esriCTWebMapPanelToggleButtonClose");
@@ -774,9 +781,9 @@ define([
         },
 
         /**
-        * This function is used to handle scenario when there is no web map
-        * @memberOf widgets/main/main
-        */
+         * This function is used to handle scenario when there is no web map
+         * @memberOf widgets/main/main
+         */
         _handleNoWebMapToDisplay: function () {
             var error = {};
             error.message = this.appConfig.i18n.webMapList.noWebMapInGroup;
@@ -785,17 +792,17 @@ define([
         },
 
         /**
-        * This function is used to set application header title after selection of operational layer
-        * @memberOf widgets/main/main
-        */
+         * This function is used to set application header title after selection of operational layer
+         * @memberOf widgets/main/main
+         */
         _setApplicationHeaderTitle: function () {
             dom.byId("operationalLayerName").innerHTML = this._layerSelectionDetails.operationalLayerDetails.title;
         },
 
         /**
-        * This function is used to set count of total number features present in layer
-        * @memberOf widgets/main/main
-        */
+         * This function is used to set count of total number features present in layer
+         * @memberOf widgets/main/main
+         */
         _setFeatureLayerCountLabel: function (graphics) {
             var count, countLabelString, selectedFeatureCountValue;
             selectedFeatureCountValue = 0;
@@ -809,10 +816,10 @@ define([
         },
 
         /**
-        * This function is used to instantiate data-viewer widget.
-        * @param{object} details of newly selected layer
-        * @memberOf widgets/main/main
-        */
+         * This function is used to instantiate data-viewer widget.
+         * @param{object} details of newly selected layer
+         * @memberOf widgets/main/main
+         */
         _createDataViewer: function () {
             var dataViewerConfigData, layerDefinition;
             layerDefinition = this._layerSelectionDetails.operationalLayerDetails.layerDefinition;
@@ -849,9 +856,9 @@ define([
         },
 
         /**
-        * This function is used to remove handle attached with data viewer widget
-        * @memberOf widgets/main/main
-        */
+         * This function is used to remove handle attached with data viewer widget
+         * @memberOf widgets/main/main
+         */
         _removeDataViewerHandle: function () {
             if (this._selectRowGraphicsClickHandle) {
                 this._selectRowGraphicsClickHandle.remove();
@@ -859,9 +866,9 @@ define([
         },
 
         /**
-        * This function is used to listen events raised by data viewer widget
-        * @memberOf widgets/main/main
-        */
+         * This function is used to listen events raised by data viewer widget
+         * @memberOf widgets/main/main
+         */
         _attachDataViewerEventListener: function () {
             this._dataViewerWidget.showDetailsPanel = lang.hitch(this, function (showDetailsPanelDataObj) {
                 this._toggleNoFeatureFoundDiv(false);
@@ -912,9 +919,9 @@ define([
         },
 
         /**
-        * This function is used to show all the records
-        * @memberOf widgets/main/main
-        */
+         * This function is used to show all the records
+         * @memberOf widgets/main/main
+         */
         _showAllRecords: function () {
             this._dataViewerWidget.isShowSelectedClicked = false;
             this._dataViewerWidget.isShowAllClicked = true;
@@ -927,9 +934,9 @@ define([
         },
 
         /**
-        * This function is used to destroy data-viewer widget.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to destroy data-viewer widget.
+         * @memberOf widgets/main/main
+         */
         _destroyDataViewerWidget: function () {
             var dataViewerGraphicsLayer;
             if (this.map) {
@@ -950,9 +957,9 @@ define([
         },
 
         /**
-        * This function is used to reorder all the layers on map
-        * @memberOf widgets/main/main
-        */
+         * This function is used to reorder all the layers on map
+         * @memberOf widgets/main/main
+         */
         _reorderAllLayers: function () {
             var layer, i, layerInstance, index, basemapLength;
             basemapLength = 1;
@@ -973,9 +980,9 @@ define([
         },
 
         /**
-        * This function is used to pull label layer on top
-        * @memberOf widgets/main/main
-        */
+         * This function is used to pull label layer on top
+         * @memberOf widgets/main/main
+         */
         _getLayerLayerOnTop: function () {
             var labelLayerObj, numberOfLayers;
             labelLayerObj = this.map.getLayer("labels");
@@ -989,9 +996,9 @@ define([
         },
 
         /**
-        * This function is used to add feature layer in label layer
-        * @memberOf widgets/main/main
-        */
+         * This function is used to add feature layer in label layer
+         * @memberOf widgets/main/main
+         */
         _addFeatureLayerInLabelLayer: function () {
             var labelLayerObj;
             labelLayerObj = this.map.getLayer("labels");
@@ -1004,9 +1011,9 @@ define([
         },
 
         /**
-        * This function is used to remove feature layer in label layer
-        * @memberOf widgets/main/main
-        */
+         * This function is used to remove feature layer in label layer
+         * @memberOf widgets/main/main
+         */
         _removeLayerFromLabelLayer: function (layerID) {
             var labelLayerObj, i;
             labelLayerObj = this.map.getLayer("labels");
@@ -1021,10 +1028,10 @@ define([
         },
 
         /**
-        * This function is used to create event handles
-        * @param{object} operational layer to which event needs to be attached
-        * @memberOf widgets/main/main
-        */
+         * This function is used to create event handles
+         * @param{object} operational layer to which event needs to be attached
+         * @memberOf widgets/main/main
+         */
         _createFeatureLayerHandle: function () {
             if (this._refinedOperationalLayer) {
                 this._dataViewerFeatureLayerUpdateEndHandle = on(this._refinedOperationalLayer, "update-end", lang.hitch(this, function () {
@@ -1072,9 +1079,9 @@ define([
         },
 
         /**
-        * This function is used to instantiate time slider widget.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to instantiate time slider widget.
+         * @memberOf widgets/main/main
+         */
         _createTimeSlider: function () {
             this._destroyTimeSliderWidget();
             var timeSliderParameters;
@@ -1107,9 +1114,9 @@ define([
         },
 
         /**
-        * This function is used to destroy time slider widget.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to destroy time slider widget.
+         * @memberOf widgets/main/main
+         */
         _destroyTimeSliderWidget: function () {
             if (this._timeSliderWidget) {
                 this._timeSliderWidget.destroy();
@@ -1118,9 +1125,9 @@ define([
         },
 
         /**
-        * This function is used to resize the map when its container is resized.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to resize the map when its container is resized.
+         * @memberOf widgets/main/main
+         */
         _resizeMap: function () {
             var mapCenter;
             if ((this.map) && (domStyle.get(dom.byId("mapDiv"), "display") === "block")) {
@@ -1138,9 +1145,9 @@ define([
         },
 
         /**
-        * This function is used to instantiate details panel widget.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to instantiate details panel widget.
+         * @memberOf widgets/main/main
+         */
         _createDetailsPanel: function (showDetailsPanelDataObj) {
             this._destroyDetailsPanelWidget();
             var detailsPanelParameters;
@@ -1164,9 +1171,9 @@ define([
 
 
         /**
-        * This function is used to attach event listener to details panel widget
-        * @memberOf widgets/main/main
-        */
+         * This function is used to attach event listener to details panel widget
+         * @memberOf widgets/main/main
+         */
         _attachDetailsPanelEventListener: function () {
             this._detailsPanelWidget.hideWebMapList = lang.hitch(this, function () {
                 if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
@@ -1210,9 +1217,9 @@ define([
         },
 
         /**
-        * This function is used to destroy details panel widget.
-        * @memberOf widgets/main/main
-        */
+         * This function is used to destroy details panel widget.
+         * @memberOf widgets/main/main
+         */
         _destroyDetailsPanelWidget: function () {
             if (this._detailsPanelWidget) {
                 this._detailsPanelWidget.destroyPopupWidget();
@@ -1226,9 +1233,9 @@ define([
         },
 
         /**
-        * This function is used to resize upper and lower container using resize handler
-        * @memberOf widgets/main/main
-        */
+         * This function is used to resize upper and lower container using resize handler
+         * @memberOf widgets/main/main
+         */
         _resizeUpperAndLowerContainer: function () {
             //set jquery resizable on upper container
             $("#upperContainer").resizable({
@@ -1268,9 +1275,9 @@ define([
         },
 
         /**
-        * This function is used to remove event handles
-        * @memberOf widgets/main/main
-        */
+         * This function is used to remove event handles
+         * @memberOf widgets/main/main
+         */
         _removeFeatureLayerHandle: function () {
             // removes previous feature layer update end handle
             if (this._dataViewerFeatureLayerUpdateEndHandle) {
@@ -1279,22 +1286,22 @@ define([
         },
 
         /**
-        * This function is used to show appropriate message when details panel is empty
-        * @memberOf widgets/main/main
-        */
+         * This function is used to show appropriate message when details panel is empty
+         * @memberOf widgets/main/main
+         */
         _handleEmptyDetailsPanel: function () {
             var noContentWrapperContainer;
             if (dojo.query(".esriCTNoContentDetailsPanelWrapperContainer")[0]) {
                 domConstruct.destroy(dojo.query(".esriCTNoContentDetailsPanelWrapperContainer")[0]);
             }
             noContentWrapperContainer = domConstruct.create("div", { "class": "esriCTNoContentDetailsPanelWrapperContainer" }, dom.byId("detailsPanelWrapperContainer"));
-            domConstruct.create("div", { "class": "esriCTNoContentDetailsPanelContainer", "innerHTML": this.appConfig.selectFeatureMessage }, noContentWrapperContainer);
+            domConstruct.create("div", { "class": "esriCTNoContentDetailsPanelContainer esriCTBodyTextColor", "innerHTML": this.appConfig.selectFeatureMessage }, noContentWrapperContainer);
         },
 
         /**
-        * This function is used to show appropriate message when Data viewer panel is empty
-        * @memberOf widgets/main/main
-        */
+         * This function is used to show appropriate message when Data viewer panel is empty
+         * @memberOf widgets/main/main
+         */
         _handleEmptyDataViewerPanel: function () {
             var noDataWrapperContainer, webMapListContainer, webMapListContainerWidth;
             webMapListContainer = dom.byId('webMapListContainer');
@@ -1313,9 +1320,9 @@ define([
         },
 
         /**
-        * This function is align the no data message when Data viewer panel is empty from the top
-        * @memberOf widgets/main/main
-        */
+         * This function is align the no data message when Data viewer panel is empty from the top
+         * @memberOf widgets/main/main
+         */
         _setNoDataDataViewerMessagePosition: function () {
             var noDataViewerContainer, upperContainerHeight;
             upperContainerHeight = parseFloat(domStyle.get("upperContainer", "height") / 2);
@@ -1326,9 +1333,9 @@ define([
         },
 
         /**
-        * This function is used to screen of error message
-        * @memberOf widgets/main/main
-        */
+         * This function is used to screen of error message
+         * @memberOf widgets/main/main
+         */
         _displayErrorMessageScreen: function (error) {
             var errorMessage, signInErrorMessageContainerHeight;
             domClass.add("UpperAndLowerWrapperContainer", "esriCTHidden");
@@ -1346,9 +1353,9 @@ define([
         },
 
         /**
-        * This function is used to show/hide state of empty details panel
-        * @memberOf widgets/main/main
-        */
+         * This function is used to show/hide state of empty details panel
+         * @memberOf widgets/main/main
+         */
         _toggleNoFeatureFoundDiv: function (isVisible) {
             //Show/hide initial load message
             if (query(".esriCTNoContentDetailsPanelWrapperContainer")[0]) {
@@ -1361,9 +1368,9 @@ define([
         },
 
         /**
-        * This function is used to extract statice definition expression of layer
-        * @memberOf widgets/main/main
-        */
+         * This function is used to extract statice definition expression of layer
+         * @memberOf widgets/main/main
+         */
         _extractStaticExpression: function (opLayerInfo) {
             var arrayList = [], parameterizedExpression, expressionArray = [], expressionValue, andExpression = false, newExpression = "";
             parameterizedExpression = opLayerInfo.definitionEditor.parameterizedExpression;
@@ -1408,6 +1415,21 @@ define([
                 }
             }));
             return newExpression;
+        },
+
+        /**
+         * Check for user account and his privileges to show/hide editing buttons
+         * @memberOf widgets/main/main
+         */
+        _checkUserPrivileges: function () {
+            var userActLevel;
+            if (this._loggedInUser && this._loggedInUser.hasOwnProperty("level") && this._loggedInUser.hasOwnProperty("privileges")) {
+                userActLevel = parseInt(this._loggedInUser.level, 10);
+                if (userActLevel > 1 && this._loggedInUser.privileges.indexOf("features:user:edit") >= 0) {
+                    return true;
+                }
+            }
+            return false;
         }
     });
 });

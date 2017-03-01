@@ -112,5 +112,13 @@ define({
     // to show/hide help icon
     "showHelpIcon": false,
     // to show as a label for attachment section in comments form where attachments can be added
-    "commentFormAttachmentSectionLabel": "Attachments"
+    "commentFormAttachmentSectionLabel": "Attachments",
+    // to apply org theming
+    "headerTextColor": "#fff",
+    "bodyBackgroundColor": "#fff",
+    "bodyTextColor": "#515151",
+    "buttonBackgroundColor": "#fff",
+    "buttonTextColor": "#f26e1f",
+    // to configure which tab will be opened by default when a report is selected.
+    "defaultDetailsTab": "Info" // Info, Media, Comments
 });

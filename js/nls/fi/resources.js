@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Palaa raporttiluetteloon",
     "updateFeaturesConfirmationMsg": "${count} kohdetta päivitetään",
     "attachmentHeaderText": "Liitteet",
-    "unknownPopupAttachment": "Å_FILE__ö"
+    "unknownPopupAttachment": "TIEDOSTO",
+    "unableToEditPopupMessage": "Sinulla ei ole oikeuksia tämän toiminnon toteuttamiseen."
   },
   "mapViewer": {
     "zoomInToolTip": "Lähennä",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "liite(ttä) on valittu",
     "attachmentHeaderText": "Liitteet",
     "addRecordText": "Lisää tietue",
-    "unknownCommentAttachment": "Å_FILE__ö"
+    "unknownCommentAttachment": "TIEDOSTO",
+    "unableToAddOrEditCommentMessage": "Sinulla ei ole oikeuksia tämän toiminnon toteuttamiseen."
   },
   "main": {
     "noGroup": "Yhtään ryhmää ei ole määritetty"

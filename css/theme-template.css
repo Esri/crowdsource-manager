@@ -1,4 +1,4 @@
-﻿/* Theme style CSS starts */
+﻿/** Theme style CSS starts **/
 
 /** Application color starts **/
 
@@ -34,53 +34,287 @@
 
 /** Border starts **/
 
-.esriCTBorder, .esriCTBorderLeft, .esriCTBorderTop, .esriCTBorderRight, .esriCTBorderBottom
+.esriCTBorder
 {
-    border-color: ${SelectedThemeColor} !important;
+    border-color: ${HeaderTextColor} !important;
 }
 
 /** Border ends **/
 
-/** Time Slider start **/
+/** Time Slider starts **/
 
 .claro .dijitSlider .dijitSliderProgressBarH
 {
-    background-color: ${SelectedThemeColor} !important;
+    background-color: ${ButtonBackgroundColor} !important;
+}
+
+.claro .dijitSlider .dijitSliderRemainingBarH,
+.claro .dijitSlider .dijitSliderRightBumper,
+.dijitSlider.dojoxRangeSlider .dijitSliderLeftBumper {
+    background-color: ${BodyTextColor} !important;
+}
+
+.claro .dijitSliderImageHandleH {
+    background-color: ${BodyTextColor} !important;
 }
 
 /** Time Slider Ends **/
 
-/* Data viewer */
+/** Data viewer starts **/
 
 .esriCTRowHighlighted
 {
     background-color: ${HighlightedRowColor} !important;
 }
 
-/* Data viewer ends */
+/** Data viewer ends **/
 
-/* Details panel starts */
+/** Details panel starts **/
 
 .esriCTDetailsPanelWrapperContainer .nav-tabs>li>a:hover
 {
-    border-top-color: ${SelectedThemeColor};
-    background-color: ${LighterShadeThemeColor};
+    border-top-color: ${HeaderBackgroundColor};
+    background-color: ${CalculatedHeaderBackgroundColor};
 }
 
-.esriCTPostPopupButton:hover, .esriCTPostPopupButton, .esriCTPostCommentButton, .esriCTPostCommentButton:hover, .esriCTAddCommentsBtnWrapperContainer:hover
-{
-      background-color: ${SelectedThemeColor} !important;
+/** Details panel ends **/
+
+/** Webmap list panel starts **/
+
+.esriCTWebMapBorder {
+    border-bottom-width: 1px !important;
+    border-bottom-style: solid !important;
+    border-bottom-color: ${CalculatedBodyTextColor} !important;
 }
 
-.esriCTCancelPopupButton:hover,.esriCTCancelCommentButton:hover
+.esriCTMultiLineEllipsisdiv {
+    color: ${BodyTextColor} !important;
+}
+
+.esriCTWebMapLayerTitle {
+    color: ${BodyTextColor} !important;
+}
+
+.esriCTWebMapListWrapperContainer {
+    border-right-width: 1px !important;
+    border-right-style: solid !important;
+    border-right-color: ${HeaderTextColor} !important;
+}
+
+.esriCTWebMapListContainer {
+    background-color: ${BodyBackgroundColor} !important;
+}
+
+.esriCTDisplayList, .esriCTDisplayWebMapTemplate:hover .esriCTWebMapbgColor {
+    background-color: ${CalculatedBodyBackgroundColor} !important;
+}
+
+.esriCTDisplayList, .esriCTDisplayWebMapTemplate:hover .esriCTMediaBody {
+    background-color: ${CalculatedBodyBackgroundColor} !important;
+}
+
+.esriCTDisplayList, .esriCTDisplayWebMapTemplate:hover .esriCTMultiLineFill {
+    background-color: ${CalculatedBodyBackgroundColor} !important;
+}
+
+.esriCTWebMapbgColor {
+    background-color: ${CalculatedBodyBackgroundColor} !important;
+}
+
+.esriCTDisplayList, .esriCTDisplayWebMapTemplate {
+    background-color: ${BodyBackgroundColor} !important;
+}
+
+.esriCTMediaBody {
+    background-color: ${BodyBackgroundColor} !important;
+}
+
+.esriCTWebMapLayer:hover {
+    background-color: ${CalculatedBodyBackgroundColor} !important;
+}
+
+.esriCTDescription {
+    color: ${BodyTextColor} !important;
+    background-color: ${CalculatedBodyBackgroundColor} !important;
+}
+
+.esriCTSelectedItem {
+    background-color: ${CalculatedBodyBackgroundColor} !important;
+}
+
+.esriCTMediaBorder {
+    border-color: ${CalculatedBodyTextColor} !important;
+}
+
+/** Webmap list panel ends **/
+
+/** Search panel starts **/
+
+.esriCTSearchPanelBorder {
+    border-bottom-width: 1px !important;
+    border-bottom-style: solid !important;
+    border-bottom-color: ${HeaderTextColor} !important;
+}
+
+.esriCTSearchIconBGColor
 {
-    color: ${SelectedThemeColor} !important;
+    background-color: none;
+}
+
+/** Search panel ends **/
+
+/** Comments & Info tab starts **/
+
+.esriCTCommentsParentDiv .esriViewPopup .hzLine,
+.esriCTPopupInfoParentContainer .esriViewPopup .hzLine
+{
+    border-top-width: 1px !important;
+    border-top-style: solid !important;
+    border-top-color: ${CalculatedBodyTextColor} !important;
+}
+
+.esriCTCommentsParentDiv .esriViewPopup .mainSection .attrTable td.attrName,
+.esriCTPopupInfoParentContainer .esriViewPopup .mainSection .attrTable td.attrName
+{
+    color: ${CalculatedBodyTextColor} !important;
+}
+
+.esriCTCommentsParentDiv .esriViewPopup .mainSection .attrTable td,
+.esriCTPopupInfoParentContainer .esriViewPopup .mainSection .attrTable td
+{
+    color: ${BodyTextColor} !important;
+}
+
+.esriCTCommentsParentDiv .esriViewPopup .header,
+.esriCTPopupInfoParentContainer .esriViewPopup .header
+{
+    color: ${BodyTextColor} !important;
+}
+
+.esriCTPostCommentButton, .esriCTPostCommentButton:hover,
+.esriCTPostPopupButton, .esriCTPostPopupButton:hover
+{
+      background-color: ${ButtonTextColor} !important;
+      color: ${ButtonBackgroundColor} !important;
+}
+
+.esriCTCancelCommentButton, .esriCTCancelCommentButton:hover,
+.esriCTCancelPopupButton, .esriCTCancelPopupButton:hover
+{
+    background-color: ${ButtonBackgroundColor} !important;
+    color: ${ButtonTextColor} !important;
 }
 
 .esriCTAddCommentAttachmentsButton, .esriCTAddCommentAttachmentsButton:hover
 {
-      background-color: ${SelectedThemeColor} !important;
+    background-color: ${ButtonBackgroundColor} !important;
+    color: ${ButtonTextColor} !important;
 }
-/* Details panel ends */
 
-/* Theme style CSS ends */
+.esriCTDetailsPanelWrapperContainer .nav-tabs>li.active>a {
+    background-color: ${CalculatedBodyBackgroundColor} !important;
+    color: ${BodyTextColor} !important;
+}
+
+.esriCTDetailsPanelWrapperContainer .nav-tabs.nav-justified>.active>a {
+    border-bottom-color: ${CalculatedBodyBackgroundColor} !important;
+}
+
+.esriCTAddCommentsBtnWrapperContainer:hover {
+    background-color: ${ButtonTextColor} !important;
+    color: ${ButtonBackgroundColor} !important;
+}
+
+.esriCTPopupInfoContainer .esriCTAttachmentHeader, .esriCTCommentsContainer .esriCTAttachmentHeader {
+    color: ${BodyTextColor} !important;
+    border-bottom-color: ${CalculatedBodyTextColor} !important;
+}
+
+/** Comments & Info tab ends **/
+
+/** Manual refresh, selection option & search icon starts **/
+
+.esriCTManualRefreshIconContainer, .esriCTSearchIconContainer, .esriCTSelectionOptionsContainerEnabled {
+    color: ${HeaderTextColor} !important;
+}
+
+.esriCTManualRefreshIconContainerDisable, .esriCTSearchIconContainerDisabled, .esriCTSelectionOptionsContainerDisabled {
+    color: ${CalculatedHeaderTextColor} !important;
+}
+
+/** Manual refresh, selection option & search icon ends **/
+
+/** Org theming classes starts **/
+
+.esriCTBodyBackgroundColor {
+    background-color: ${BodyBackgroundColor} !important;
+}
+
+.esriCTCalculatedBodyBackgroundColor {
+    background-color: ${CalculatedBodyBackgroundColor} !important;
+}
+
+.esriCTBodyTextColor {
+    color: ${BodyTextColor} !important;
+}
+
+.esriCTCalculatedBodyTextColor {
+    color: ${CalculatedBodyTextColor} !important;
+}
+
+.esriCTHeaderBackgroundColor {
+    background-color: ${HeaderBackgroundColor} !important;
+}
+
+.esriCTCalculatedHeaderBackgroundColor {
+    background-color: ${CalculatedHeaderBackgroundColor} !important;
+}
+
+.esriCTHeaderTextColor {
+    color: ${HeaderTextColor} !important;
+}
+
+.esriCTCalculatedHeaderTextColor {
+    color: ${CalculatedHeaderTextColor} !important;
+}
+
+.esriCTButtonBackgroundColor {
+    background-color: ${ButtonBackgroundColor} !important;
+}
+
+.esriCTButtonTextColor {
+    color: ${ButtonTextColor} !important;
+}
+
+.esriCTHeaderTextColorAsBorder {
+    border-color: ${HeaderTextColor} !important;
+}
+
+.esriCTHeaderTextColorAsBackground {
+    background-color: ${HeaderTextColor} !important;
+}
+
+.esriCTHeaderBackgroundColorAsTextColor {
+    color: ${HeaderBackgroundColor} !important;
+}
+
+.esriCTHeaderBackgroundColorAsBorder {
+    border-color: ${HeaderBackgroundColor} !important;
+}
+
+.esriCTCalculatedBodyTextColorAsBackground {
+    background-color: ${CalculatedBodyTextColor} !important;
+}
+
+.esriCTCalculatedBodyTextColorAsBorder {
+    border-color: ${CalculatedBodyTextColor} !important;
+}
+
+.esriCTCalculatedHeaderTextColorAsBorder {
+    border-color: ${CalculatedHeaderTextColor} !important;
+}
+
+
+/** Org theming classes ends **/
+
+/** Theme style CSS ends **/

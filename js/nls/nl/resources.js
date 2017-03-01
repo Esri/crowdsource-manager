@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Terug naar de meldlijst",
     "updateFeaturesConfirmationMsg": "${count} objecten worden bijgewerkt",
     "attachmentHeaderText": "Bijlagen",
-    "unknownPopupAttachment": "Ĳ_FILE__ä"
+    "unknownPopupAttachment": "BESTAND",
+    "unableToEditPopupMessage": "U hebt geen toestemming om deze actie uit te voeren."
   },
   "mapViewer": {
     "zoomInToolTip": "Inzoomen",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "bijlage(n) geselecteerd",
     "attachmentHeaderText": "Bijlagen",
     "addRecordText": "Item toevoegen",
-    "unknownCommentAttachment": "Ĳ_FILE__ä"
+    "unknownCommentAttachment": "BESTAND",
+    "unableToAddOrEditCommentMessage": "U hebt geen toestemming om deze actie uit te voeren."
   },
   "main": {
     "noGroup": "Geen groep geconfigureerd"

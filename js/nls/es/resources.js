@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Volver a la lista de informes",
     "updateFeaturesConfirmationMsg": "${count} entidades se actualizarán",
     "attachmentHeaderText": "Adjuntos",
-    "unknownPopupAttachment": "á_FILE__Ó"
+    "unknownPopupAttachment": "ARCHIVO",
+    "unableToEditPopupMessage": "No tiene permiso para realizar esta acción."
   },
   "mapViewer": {
     "zoomInToolTip": "Acercar",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "adjuntos seleccionados",
     "attachmentHeaderText": "Adjuntos",
     "addRecordText": "Agregar registro",
-    "unknownCommentAttachment": "á_FILE__Ó"
+    "unknownCommentAttachment": "ARCHIVO",
+    "unableToAddOrEditCommentMessage": "No tiene permiso para realizar esta acción."
   },
   "main": {
     "noGroup": "No hay ningún grupo configurado"

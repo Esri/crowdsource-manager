@@ -1,16 +1,17 @@
 ﻿<div class="esriCTFullHeightWidth">
     <div data-dojo-attach-point="esriCTDetailsPanelTabContainer" class="esriCTDetailsPanelTabContainer">
         <ul class="nav nav-tabs nav-justified" data-dojo-attach-point="tabList" style="display: none;">
-            <li id="popupTab" class="active"><a class="esriCTTabAnchor" data-toggle="pill" href="#popupTabPanel">
-                ${appConfig.popupTabText}</a></li>
-            <li id="mediaTab" style="display: none;"><a class="esriCTTabAnchor" data-toggle="pill" href="#mediaTabPanel">${appConfig.mediaTabText}</a></li>
+            <li id="popupTab" class="active">
+                <a class="esriCTTabAnchor" data-toggle="pill" href="#popupTabPanel">${appConfig.popupTabText}</a>
+            </li>
+            <li id="mediaTab" style="display: none;">
+                <a class="esriCTTabAnchor" data-toggle="pill" href="#mediaTabPanel">${appConfig.mediaTabText}</a>
+            </li>
             <li id="commentsTab" style="display: none;">
                 <a class="esriCTTabAnchor2" data-toggle="pill" href="#commentsTabPanel">
                     <div class="esriCTCommentTabTextContainer">
-                        <div class="esriCTCommentsBadgeContainer">
-                            ${appConfig.commentsTabText}</div>
-                        <div id="commentsTotalCount" class="esriCTCommentsTotalCount">
-                        </div>
+                        <div class="esriCTCommentsBadgeContainer">${appConfig.commentsTabText}</div>
+                        <div id="commentsTotalCount" class="esriCTCommentsTotalCount"></div>
                     </div>
                 </a>
             </li>
@@ -25,7 +26,7 @@
                 </div>
             </div>
             <div id="commentsTabPanel" class="tab-pane fade">
-                <div id="commentsWrapperContainer">
+                <div id="commentsWrapperContainer" class="esriCTCalculatedBodyBackgroundColor">
                 </div>
             </div>
         </div>

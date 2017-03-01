@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Återgå till rapportlistan",
     "updateFeaturesConfirmationMsg": "${count} geoobjekt uppdateras",
     "attachmentHeaderText": "Bilagor",
-    "unknownPopupAttachment": "Å_FILE__ö"
+    "unknownPopupAttachment": "ARKIV",
+    "unableToEditPopupMessage": "Du har inte behörighet att utföra den här åtgärden."
   },
   "mapViewer": {
     "zoomInToolTip": "Zooma in",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "bilagor markerade",
     "attachmentHeaderText": "Bilagor",
     "addRecordText": "Lägg till post",
-    "unknownCommentAttachment": "Å_FILE__ö"
+    "unknownCommentAttachment": "ARKIV",
+    "unableToAddOrEditCommentMessage": "Du har inte behörighet att utföra den här åtgärden."
   },
   "main": {
     "noGroup": "Ingen grupp konfigurerad"

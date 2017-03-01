@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Grįžti į ataskaitų sąrašą",
     "updateFeaturesConfirmationMsg": "Bus atnaujinta elementų: ${count}",
     "attachmentHeaderText": "Priedai",
-    "unknownPopupAttachment": "Į_FILE__š"
+    "unknownPopupAttachment": "FAILAS",
+    "unableToEditPopupMessage": "Neturite leidimo atlikti šį veiksmą."
   },
   "mapViewer": {
     "zoomInToolTip": "Artinti",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "pasirinktas (-i) priedas (-ai)",
     "attachmentHeaderText": "Priedai",
     "addRecordText": "Pridėti įrašą",
-    "unknownCommentAttachment": "Į_FILE__š"
+    "unknownCommentAttachment": "FAILAS",
+    "unableToAddOrEditCommentMessage": "Neturite leidimo atlikti šį veiksmą."
   },
   "main": {
     "noGroup": "Sukonfigūruotų grupių nėra"

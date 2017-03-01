@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Tagasi aruandelehele",
     "updateFeaturesConfirmationMsg": "${count} objekti värskendatakse",
     "attachmentHeaderText": "Manused",
-    "unknownPopupAttachment": "Š_FILE__ä"
+    "unknownPopupAttachment": "FAIL",
+    "unableToEditPopupMessage": "Teil puudub õigus selle toimingu tegemiseks."
   },
   "mapViewer": {
     "zoomInToolTip": "Suurenda",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "valitud manus(ed)",
     "attachmentHeaderText": "Manused",
     "addRecordText": "Lisa kirje",
-    "unknownCommentAttachment": "Š_FILE__ä"
+    "unknownCommentAttachment": "FAIL",
+    "unableToAddOrEditCommentMessage": "Teil puudub õigus selle toimingu tegemiseks."
   },
   "main": {
     "noGroup": "Ühtki gruppi ei ole konfigureeritud"

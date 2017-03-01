@@ -21,8 +21,8 @@
         rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="js/vendor/touch-spinner/jquery.bootstrap-touchspin.min.css" />
     <!-- Use protocol relative urls that way if the browser is viewing the page via HTTPS the js/css file will be requested using the HTTPS protocol -->
-    <link rel="stylesheet" href="//js.arcgis.com/3.19/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="//js.arcgis.com/3.19/esri/css/esri.css">
+    <link rel="stylesheet" href="//js.arcgis.com/3.20/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="//js.arcgis.com/3.20/esri/css/esri.css">
     <!-- Calcite Bootstrap CSS -->
     <link href="js/vendor/calcite-bootstrap/calcite-bootstrap.min.css" rel="stylesheet"
         type="text/css" />
@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link href="css/common.css" rel="stylesheet" type="text/css" />
     <link href="css/media-queries.css" rel="stylesheet" type="text/css" />
+    <link href="css/font-icon-styles.css" rel="stylesheet" type="text/css" />
 </head>
 <body class="claro app-loading">
     <!-- Loading indicator -->
@@ -44,15 +45,15 @@
     <!-- Main container -->
     <div class="esriCTMainContainer esriCTHidden" id="mainWrapperContainer">
         <!-- Application header container -->
-        <div class="esriCTApplicationHeaderWrapperContainer" id="applicationHeaderWrapperContainer">
+        <div class="esriCTApplicationHeaderWrapperContainer esriCTHeaderTextColorAsBorder" id="applicationHeaderWrapperContainer">
         </div>
         <!-- Upper & Lower wrapper container -->
         <div class="esriCTUpperAndLowerWrapperContainer" id="UpperAndLowerWrapperContainer">
             <div class="esriCTWebMapListWrapperContainer esriCTWebMapListOpen" id="webMapListWrapperContainer">
                 <!-- Webmap list banner container -->
-                <div class="esriCTWebMapListBannerContainer" id="webMapListBannerContainer">
+                <div class="esriCTWebMapListBannerContainer esriCTCalculatedBodyBackgroundColor" id="webMapListBannerContainer">
                     <div class="esriCTWebMapPanelToggleBtnPosition" id="webMapPanelToggleBtnPosition">
-                        <div class="esriCTBGLightColor esriCTWebMapPanelToggleButtonStyle" id="webmapListToggleButton">
+                        <div class="esriCTBGLightColor esriCTWebMapPanelToggleButtonStyle esriCTHeaderBackgroundColor" id="webmapListToggleButton">
                         </div>
                     </div>
                 </div>
@@ -65,10 +66,10 @@
             </div>
             <div class="esriCTUpperContainerEmptySlider" id="upperContainer">
                 <!-- Operational layer name container -->
-                <div class="esriCTOperationalLayerNameContainer" id="operationalLayerNameContainer">
-                    <div class="esriCTOperationalLayerName" id="operationalLayerName">
+                <div class="esriCTOperationalLayerNameContainer esriCTBodyBackgroundColor" id="operationalLayerNameContainer">
+                    <div class="esriCTOperationalLayerName esriCTBodyTextColor" id="operationalLayerName">
                     </div>
-                    <div class="esriCTFeatureCount" id="layerFeatureCountContainer"></div>
+                    <div class="esriCTFeatureCount esriCTCalculatedBodyTextColor" id="layerFeatureCountContainer"></div>
                 </div>
                 <!-- Data viewer container -->
                 <div class="esriCTDataViewerWrapperContainerEmptySlider" id="dataViewerWrapperContainer">
@@ -81,7 +82,7 @@
             </div>
             <div class="esriCTLowerContainerEmptySlider" id="lowerContainer">
                 <!-- Details panel container -->
-                <div class="esriCTDetailsPanelWrapperContainer" id="detailsPanelWrapperContainer">
+                <div class="esriCTDetailsPanelWrapperContainer esriCTBodyBackgroundColor" id="detailsPanelWrapperContainer">
                 </div>
                 <!-- Map panel container -->
                 <div class="esriCTMapPanelWrapperContainer" id="mapPanelWrapperContainer">
@@ -107,7 +108,7 @@
     <script src="js/vendor/table-sorter-2.25.3/table-fixed-header.js" type="text/javascript"></script>
     <script type="text/javascript" src="js/vendor/touch-spinner/jquery.bootstrap-touchspin.min.js"></script>
     <!-- Load any application specific styles -->
-    <script type="text/javascript" src="//js.arcgis.com/3.19/"></script>
+    <script type="text/javascript" src="//js.arcgis.com/3.20/"></script>
     <script type="text/javascript">
         require([
             "application/bootstrapper"

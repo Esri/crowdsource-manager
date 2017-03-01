@@ -64,7 +64,8 @@ define({
     "geoformBackButtonTooltip": "Rapor listesine dön",
     "updateFeaturesConfirmationMsg": "${count} detay güncellenecek",
     "attachmentHeaderText": "Ekler",
-    "unknownPopupAttachment": "ı_FILE__İ"
+    "unknownPopupAttachment": "DOSYA",
+    "unableToEditPopupMessage": "Bu işlemi yapma izniniz yok."
   },
   "mapViewer": {
     "zoomInToolTip": "Büyüt",
@@ -104,7 +105,8 @@ define({
     "attachmentSelectedMsg": "ek seçildi",
     "attachmentHeaderText": "Ekler",
     "addRecordText": "Kayıt Ekle",
-    "unknownCommentAttachment": "ı_FILE__İ"
+    "unknownCommentAttachment": "DOSYA",
+    "unableToAddOrEditCommentMessage": "Bu işlemi yapma izniniz yok."
   },
   "main": {
     "noGroup": "Yapılandırılan grup yok"
