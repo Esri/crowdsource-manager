@@ -45,7 +45,7 @@
 
 .claro .dijitSlider .dijitSliderProgressBarH
 {
-    background-color: ${ButtonBackgroundColor} !important;
+    background-color: ${TimeSliderProgressBarColor} !important;
 }
 
 .claro .dijitSlider .dijitSliderRemainingBarH,
