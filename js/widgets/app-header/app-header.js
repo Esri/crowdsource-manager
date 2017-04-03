@@ -62,18 +62,18 @@ define([
         _selectionOptionsWidgetObj: null, // to store object of selection options widget
 
         /**
-        * This function is called when widget is constructed
-        * @param{object} parameters of the widget
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is called when widget is constructed
+         * @param{object} parameters of the widget
+         * @memberOf widgets/app-header/app-header
+         */
         constructor: function (options) {
             lang.mixin(this, options);
         },
 
         /**
-        * This function is designed to handle processing after any DOM fragments have been actually added to the document.
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is designed to handle processing after any DOM fragments have been actually added to the document.
+         * @memberOf widgets/app-header/app-header
+         */
         startup: function () {
             this._onApplicationIconLoad();
             this._setMaxWidthOfApplicationIcon();
@@ -81,9 +81,9 @@ define([
         },
 
         /**
-        * This function is executed when application icon is loaded inside its container
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is executed when application icon is loaded inside its container
+         * @memberOf widgets/app-header/app-header
+         */
         _onApplicationIconLoad: function () {
             on(this.applicationHeaderIcon, "load, error", lang.hitch(this, function () {
                 this._displaySignedInUserDetails();
@@ -107,9 +107,9 @@ define([
         },
 
         /**
-        * This function is used to display sign in text
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to display sign in text
+         * @memberOf widgets/app-header/app-header
+         */
         _displaySignInText: function () {
             domClass.add(this.refreshButton, "esriCTHidden");
             domClass.add(this.searchButton, "esriCTHidden");
@@ -118,18 +118,18 @@ define([
         },
 
         /**
-        * This function is used to set text of sign-out option
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to set text of sign-out option
+         * @memberOf widgets/app-header/app-header
+         */
         _setSignOutOptionText: function () {
             this.signOutOption.innerHTML = this.appConfig.i18n.applicationHeader.signOutOption;
             this.signOutOption.title = this.appConfig.i18n.applicationHeader.signOutOption;
         },
 
         /**
-        * This function is used to set shortcut icon of an application.
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to set shortcut icon of an application.
+         * @memberOf widgets/app-header/app-header
+         */
         _setApplicationShortcutIcon: function () {
             var faviconIconValue;
             faviconIconValue = lang.trim(this.appConfig.applicationFavicon);
@@ -141,11 +141,11 @@ define([
         },
 
         /**
-        * This function is used to load icons.
-        * @param{string} rel specifies the relationship between documents
-        * @param{string} iconPath shows path of image
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to load icons.
+         * @param{string} rel specifies the relationship between documents
+         * @param{string} iconPath shows path of image
+         * @memberOf widgets/app-header/app-header
+         */
         _loadIcons: function (rel, iconPath) {
             var icon;
             icon = domConstruct.create("link");
@@ -160,9 +160,9 @@ define([
         },
 
         /**
-        * This function is used to set tooltip for application header icon
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to set tooltip for application header icon
+         * @memberOf widgets/app-header/app-header
+         */
         _setToolTip: function () {
             domAttr.set(this.searchButton, "title", this.appConfig.i18n.search.searchIconTooltip);
             domAttr.set(this.refreshButton, "title", this.appConfig.i18n.manualRefresh.manualRefreshIconTooltip);
@@ -171,9 +171,9 @@ define([
         },
 
         /**
-        * This function is used to display details of signed in user
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to display details of signed in user
+         * @memberOf widgets/app-header/app-header
+         */
         _displaySignedInUserDetails: function () {
             this.signedInUserDetails.innerHTML = this.appConfig.logInDetails.userName;
             if (this.appConfig.logInDetails.userName !== this.appConfig.i18n.applicationHeader.signInOption) {
@@ -182,9 +182,9 @@ define([
         },
 
         /**
-        * This function is used to set max width of the application icon container
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to set max width of the application icon container
+         * @memberOf widgets/app-header/app-header
+         */
         _setMaxWidthOfApplicationIcon: function () {
             var searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth, signInSeparatorWidth, signedInUserDetailsContainerWidth;
             applicationHeaderContainerWidth = $(this.applicationHeaderContainer).outerWidth(true);
@@ -204,9 +204,9 @@ define([
         },
 
         /**
-        * This function is used to set application icon
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to set application icon
+         * @memberOf widgets/app-header/app-header
+         */
         _setApplicationIcon: function () {
             var applicationIcon;
             // first check if application icon is configured than display that
@@ -236,9 +236,9 @@ define([
         },
 
         /**
-        * This function is used to set width of application name container
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to set width of application name container
+         * @memberOf widgets/app-header/app-header
+         */
         _setWidthOfApplicationNameContainer: function () {
             var applicationIconWidth, searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth, applicationNameContainerWidth, signInSeparatorWidth, signedInUserDetailsContainerWidth, selectOptionContainerWidth;
             applicationHeaderContainerWidth = $(this.applicationHeaderContainer).outerWidth(true);
@@ -264,9 +264,9 @@ define([
         },
 
         /**
-        * This function is used to set name of application
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to set name of application
+         * @memberOf widgets/app-header/app-header
+         */
         _setApplicationName: function () {
             var applicationName;
             // first check if application name is configured than display that
@@ -289,9 +289,9 @@ define([
         },
 
         /**
-        * This function is used to create help widget
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to create help widget
+         * @memberOf widgets/app-header/app-header
+         */
         _initializeHelpWidget: function () {
             var helpParameters;
             this._destroyHelpWidget();
@@ -308,9 +308,9 @@ define([
         },
 
         /**
-        * This function is used to create selection option widget
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to create selection option widget
+         * @memberOf widgets/app-header/app-header
+         */
         _initializeSelectionOptionsWidget: function () {
             var selectionOptionsParameters;
             this._destroySelectionOptionsWidget();
@@ -340,9 +340,9 @@ define([
         },
 
         /**
-        * This function is used to destroy help widget
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to destroy help widget
+         * @memberOf widgets/app-header/app-header
+         */
         _destroyHelpWidget: function () {
             if (this._helpWidgetObj) {
                 this._helpWidgetObj.destroy();
@@ -350,9 +350,9 @@ define([
         },
 
         /**
-        * This function is used to destroy selection options widget
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to destroy selection options widget
+         * @memberOf widgets/app-header/app-header
+         */
         _destroySelectionOptionsWidget: function () {
             if (this._selectionOptionsWidgetObj) {
                 this._selectionOptionsWidgetObj.destroy();
@@ -360,9 +360,9 @@ define([
         },
 
         /**
-        * This method is used to create search widget.
-        * @memberOf widgets/app-header/app-header
-        */
+         * This method is used to create search widget.
+         * @memberOf widgets/app-header/app-header
+         */
         _initializeSearchWidget: function () {
             var searchParameters;
             searchParameters = {
@@ -388,12 +388,24 @@ define([
             this._searchWidgetObj.onSearchApplied = lang.hitch(this, function (lastSearchedString) {
                 this.onSearchApplied(lastSearchedString);
             });
+
+            this._searchWidgetObj.refreshSelectedLayer = lang.hitch(this, function () {
+                this.refreshSelectedLayer();
+            });
         },
 
         /**
-        * This method is used to create manual refresh widget
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to refresh selected layer
+         * @memberOf widgets/app-header/app-header
+         */
+        refreshSelectedLayer: function () {
+            return;
+        },
+
+        /**
+         * This method is used to create manual refresh widget
+         * @memberOf widgets/app-header/app-header
+         */
         _initializeManualRefreshWidget: function () {
             var refreshParameters;
             refreshParameters = {
@@ -416,46 +428,50 @@ define([
             this._manualRefreshWidgetObj.refreshLayerWithSearchDefExpression = lang.hitch(this, function () {
                 this._searchWidgetObj.searchFeatureRecords();
             });
+
+            this._manualRefreshWidgetObj.refreshSelectedLayer = lang.hitch(this, function () {
+                this.refreshSelectedLayer();
+            });
         },
 
         /**
-        * This method is used to toggle manual refresh icon
-        * @memberOf widgets/app-header/app-header
-        */
+         * This method is used to toggle manual refresh icon
+         * @memberOf widgets/app-header/app-header
+         */
         toggleManualRefreshIcon: function (manualRefreshParameter) {
             manualRefreshParameter.refreshButton = this.refreshButton;
             this._manualRefreshWidgetObj.enableManualRefreshIcon(manualRefreshParameter);
         },
 
         /**
-        * This method is used to enable/disable search icon based on it configuration
-        * @memberOf widgets/app-header/app-header
-        */
+         * This method is used to enable/disable search icon based on it configuration
+         * @memberOf widgets/app-header/app-header
+         */
         toggleSearchIcon: function (searchParameter) {
             searchParameter.searchButton = this.searchButton;
             this.isSearchActive = this._searchWidgetObj.resetSearchPanel(searchParameter);
         },
 
         /**
-        * This function is used to hide webmap list
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to hide webmap list
+         * @memberOf widgets/app-header/app-header
+         */
         hideWebMapList: function () {
             return;
         },
 
         /**
-        * This function is used to publish confirmation of manual refresh to other widget
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to publish confirmation of manual refresh to other widget
+         * @memberOf widgets/app-header/app-header
+         */
         confirmedManualRefresh: function () {
             return;
         },
 
         /**
-        * This function is used enable/disable search icon
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used enable/disable search icon
+         * @memberOf widgets/app-header/app-header
+         */
         _handleSearchIconVisibility: function (featureLength) {
             if (this.isSearchActive) {
                 if (featureLength > 1) {
@@ -474,9 +490,9 @@ define([
         },
 
         /**
-        * This method is used to create sign in widget
-        * @memberOf widgets/app-header/app-header
-        */
+         * This method is used to create sign in widget
+         * @memberOf widgets/app-header/app-header
+         */
         _initializeSignInWidget: function () {
             var signInParameters;
             signInParameters = {
@@ -514,42 +530,42 @@ define([
         },
 
         /**
-        * This method is used to reload the app
-        * @memberOf widgets/app-header/app-header
-        */
+         * This method is used to reload the app
+         * @memberOf widgets/app-header/app-header
+         */
         reload: function (logInDetails) {
             return logInDetails;
         },
 
         /**
-        * This method is used to destroy widgets
-        * @memberOf widgets/app-header/app-header
-        */
+         * This method is used to destroy widgets
+         * @memberOf widgets/app-header/app-header
+         */
         destroyWidgets: function () {
             return;
         },
 
         /**
-        * This method is return last searched string from search
-        * @memberOf widgets/app-header/app-header
-        */
+         * This method is return last searched string from search
+         * @memberOf widgets/app-header/app-header
+         */
         onSearchApplied: function (lastSearchedString) {
             return lastSearchedString;
         },
 
         /**
-        * This function is used to enable selection option icon
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to enable selection option icon
+         * @memberOf widgets/app-header/app-header
+         */
         enableSelectionOptionsIcon: function () {
             domClass.replace(this.selectionOptionsButton, "esriCTSelectionOptionsContainerEnabled", "esriCTSelectionOptionsContainerDisabled");
             domClass.replace(this.selectionOptionsButton, "esriCTPointerCursor", "esriCTDefaultCursor");
         },
 
         /**
-        * This function is used to disable selection option icon
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to disable selection option icon
+         * @memberOf widgets/app-header/app-header
+         */
         disableSelectionOptionsIcon: function () {
             domClass.replace(this.selectionOptionsButton, "esriCTSelectionOptionsContainerDisabled", "esriCTSelectionOptionsContainerEnabled");
             domClass.replace(this.selectionOptionsButton, "esriCTDefaultCursor", "esriCTPointerCursor");
@@ -557,33 +573,33 @@ define([
         },
 
         /**
-        * This function is used to notify that show all is clicked
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to notify that show all is clicked
+         * @memberOf widgets/app-header/app-header
+         */
         showAllClicked: function () {
             return;
         },
 
         /**
-        * This function is used to notify that show selected is clicked
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to notify that show selected is clicked
+         * @memberOf widgets/app-header/app-header
+         */
         showSelectedClicked: function () {
             return;
         },
 
         /**
-        * This function is used to disable search icon
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to disable search icon
+         * @memberOf widgets/app-header/app-header
+         */
         disableSearchIcon: function () {
             this._searchWidgetObj.disableSearchIcon();
         },
 
         /**
-        * This function is used to enable search icon
-        * @memberOf widgets/app-header/app-header
-        */
+         * This function is used to enable search icon
+         * @memberOf widgets/app-header/app-header
+         */
         enableSearchIcon: function () {
             if (this.isSearchActive) {
                 this._searchWidgetObj.enableSearchIcon();

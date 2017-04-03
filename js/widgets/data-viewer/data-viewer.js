@@ -253,6 +253,7 @@ define([
                 }
             }));
             this._graphicLayerClearHandle = on(this._selectRowGraphicsLayer, "graphics-clear", lang.hitch(this, function () {
+                this._updateSelectedAndTotalRecordCounts();
                 if (this._graphicLayerRemoveHandle) {
                     this._graphicLayerRemoveHandle.resume();
                 }

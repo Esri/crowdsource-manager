@@ -199,7 +199,7 @@
             "label": "Comments tab"
         }, {
             "type": "paragraph",
-            "value": "This tab displays <a href=\"http://links.esri.com/localgovernment/relationshipclass\">related records<\/a> associated with the currently selected report. Users can toggle to an editing mode which is only visible when the selected report contains at least one visible related record."            
+            "value": "This tab displays <a href=\"http://links.esri.com/localgovernment/relationshipclass\">related records<\/a> associated with the currently selected report. Users can toggle to an editing mode which is only visible when the selected report contains at least one visible related record."
         }, {
             "label": "Tab label",
             "tooltip": "Tab label for comments",

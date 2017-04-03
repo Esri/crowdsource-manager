@@ -37,8 +37,7 @@ define([
     "dojo/query",
     "dojo/_base/array",
     "dojo/aspect",
-    'esri/geometry/Extent',
-    'esri/SpatialReference'
+    'esri/geometry/Extent'
 ], function (
     declare,
     lang,
@@ -61,8 +60,7 @@ define([
     query,
     array,
     aspect,
-    Extent,
-    SpatialReference
+    Extent
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: dijitTemplate,
@@ -427,7 +425,7 @@ define([
                                 if (this.map._layers[layer].id !== obj.operationalLayerId) {
                                     this.map._layers[layer].hide();
                                 } else {
-                                    this.map._layers[layer].show();
+                                    this.map._layers[layer].hide();
                                     this.map.getLayer(obj.operationalLayerId).refresh();
                                     featureLayer = new FeatureLayer(this.map._layers[layer].url);
                                     this._onFeatureLayerLoad(featureLayer, obj.webMapId, obj.operationalLayerId, obj.operationalLayerDetails, obj.itemInfo);
@@ -735,11 +733,11 @@ define([
          */
         _validateLayerCapabilities: function (layerCapabilities) {
             // if layer has capability of create & update than return true
-            if (layerCapabilities && layerCapabilities.indexOf("Create") > -1 && layerCapabilities.indexOf("Update") > -1) {
+            if ((layerCapabilities && layerCapabilities.indexOf("Create") > -1) || layerCapabilities.indexOf("Update") > -1) {
                 return true;
             }
             // if layer has capability of create & editing than return true
-            if (layerCapabilities && layerCapabilities.indexOf("Create") > -1 && layerCapabilities.indexOf("Editing") > -1) {
+            if ((layerCapabilities && layerCapabilities.indexOf("Create") > -1) || layerCapabilities.indexOf("Editing") > -1) {
                 return true;
             }
             return false;

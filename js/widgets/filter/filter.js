@@ -1392,9 +1392,8 @@ define([
         * @memberOf widgets/filter/filter
         */
         _applyParameterizedExpression: function () {
-            this.filterRefresh();
             this.selectedOperationalLayer.setDefinitionExpression(this._currentExpression);
-            this.selectedOperationalLayer.refresh();
+            this.filterRefresh();
         },
 
         /**

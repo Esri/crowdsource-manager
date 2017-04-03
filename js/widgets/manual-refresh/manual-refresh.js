@@ -28,27 +28,28 @@ define([
     domClass
 ) {
     return declare([_WidgetBase], {
+
         /**
-        * This function is called when widget is constructed
-        * @param{object} parameters of widget
-        * @memberOf widgets/manual-refresh/manual-refresh
-        */
+         * This function is called when widget is constructed
+         * @param{object} parameters of widget
+         * @memberOf widgets/manual-refresh/manual-refresh
+         */
         constructor: function (options) {
             lang.mixin(this, options);
         },
 
         /**
-        * This function is designed to handle processing after any DOM fragments have been actually added to the document.
-        * @memberOf widgets/manual-refresh/manual-refresh
-        */
+         * This function is designed to handle processing after any DOM fragments have been actually added to the document.
+         * @memberOf widgets/manual-refresh/manual-refresh
+         */
         startup: function () {
             this._manualRefreshApplication();
         },
 
         /**
-        * This function is used to enable manual refresh icon
-        * @memberOf widgets/manual-refresh/manual-refresh
-        */
+         * This function is used to enable manual refresh icon
+         * @memberOf widgets/manual-refresh/manual-refresh
+         */
         enableManualRefreshIcon: function (manualRefreshParameter) {
             this._mixinSearchParameter(manualRefreshParameter);
             domClass.replace(this.refreshButton, "esriCTManualRefreshIconContainer", "esriCTManualRefreshIconContainerDisable");
@@ -56,17 +57,17 @@ define([
         },
 
         /**
-        * This function is used to mixin search parameter
-        * @memberOf widgets/manual-refresh/manual-refresh
-        */
+         * This function is used to mixin search parameter
+         * @memberOf widgets/manual-refresh/manual-refresh
+         */
         _mixinSearchParameter: function (options) {
             lang.mixin(this, options);
         },
 
         /**
-        * This function is used to do manual refresh
-        * @memberOf widgets/manual-refresh/manual-refresh
-        */
+         * This function is used to do manual refresh
+         * @memberOf widgets/manual-refresh/manual-refresh
+         */
         _manualRefreshApplication: function () {
             var searchEnabledIcon, confirmValue;
             confirmValue = confirm(this.appConfig.i18n.manualRefresh.confirmManualRefreshText);
@@ -77,24 +78,32 @@ define([
                 if ((searchEnabledIcon) && (searchEnabledIcon.length > 0)) {
                     this.refreshLayerWithSearchDefExpression();
                 } else {
-                    this.selectedOperationalLayer.refresh();
+                    this.refreshSelectedLayer();
                 }
             }
         },
 
         /**
-        * This function is used to publish confirmation of manual refresh to other widget
-        * @memberOf widgets/manual-refresh/manual-refresh
-        */
+         * This function is used to publish confirmation of manual refresh to other widget
+         * @memberOf widgets/manual-refresh/manual-refresh
+         */
         confirmedManualRefresh: function () {
             return;
         },
 
         /**
-        * This function is used to refresh  layer
-        * @memberOf widgets/manual-refresh/manual-refresh
-        */
+         * This function is used to refresh  layer
+         * @memberOf widgets/manual-refresh/manual-refresh
+         */
         refreshLayerWithSearchDefExpression: function () {
+            return;
+        },
+
+        /**
+         * This function is used to refresh selected layer
+         * @memberOf widgets/manual-refresh/manual-refresh
+         */
+        refreshSelectedLayer: function () {
             return;
         }
     });
