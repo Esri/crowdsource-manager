@@ -610,6 +610,10 @@ table {
     background-color: #ffffff;
 }
 
+.table-striped tr:nth-child(even) td {
+    background-color: transparent;
+}
+
 
 /** Data viewer container ends **/
 
