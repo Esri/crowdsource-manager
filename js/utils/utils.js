@@ -127,6 +127,8 @@ define([
                 this.getCalculatedColor(appConfig.appTheme.header.background, 70, 18);
             appConfig.appTheme.header.calculatedText =
                 this.getCalculatedColor(appConfig.appTheme.header.text, 50, 27);
+            appConfig.timeSliderProgressBarColor =
+                this._getTimeSliderProgressBarColor(appConfig.buttonTextColor, appConfig.buttonBackgroundColor);
         },
 
         /**
@@ -161,7 +163,9 @@ define([
                     CalculatedBodyBackgroundColor: appConfig.appTheme.body.calculatedBackground,
                     CalculatedBodyTextColor: appConfig.appTheme.body.calculatedText,
                     CalculatedHeaderBackgroundColor: appConfig.appTheme.header.calculatedBackground,
-                    CalculatedHeaderTextColor: appConfig.appTheme.header.calculatedText
+                    CalculatedHeaderTextColor: appConfig.appTheme.header.calculatedText,
+                    // Customized timeslider progress bar color
+                    TimeSliderProgressBarColor: appConfig.timeSliderProgressBarColor
                 });
                 //Create Style using theme template and append it to head
                 //On Lower versions of IE10 Style tag is read only so create theme using styleSheet.cssText
@@ -183,6 +187,23 @@ define([
                     document.getElementsByTagName('head')[0].appendChild(link);
                 }
             }
+        },
+
+        /**
+         * This function is used compare button text and its background color and
+         * return which is having higher saturation value
+         * @memberOf utils/utils
+         */
+        _getTimeSliderProgressBarColor: function (buttonTextColor, buttonBackgroundColor) {
+            var buttonTextColorObj, buttonBackgroundColorObj, buttonBackgroundHSLObject, buttonTextHSLObject;
+            buttonTextColorObj = new Colors(buttonTextColor);
+            buttonBackgroundColorObj = new Colors(buttonBackgroundColor);
+            buttonTextHSLObject = buttonTextColorObj.toHsl();
+            buttonBackgroundHSLObject = buttonBackgroundColorObj.toHsl();
+            if (buttonBackgroundHSLObject.s > buttonTextHSLObject.s) {
+                return buttonBackgroundColor;
+            }
+            return buttonTextColor;
         },
 
         /**

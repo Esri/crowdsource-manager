@@ -148,12 +148,26 @@ define([
          */
         _loadCommentsIfExist: function (graphic, parentDiv) {
             if ((this.appConfig.usePopupConfigurationForComment) && (this._commentPopupTable) && (this._hasEditableField())) {
+                this._displayAddCommentsButton();
                 this._fetchComments(graphic, parentDiv);
             } else if ((!this.appConfig.usePopupConfigurationForComment) && (this._hasCommentsField() && (this._hasEditableField()))) {
+                this._displayAddCommentsButton();
                 this._fetchComments(graphic, parentDiv);
             } else {
                 this.hideCommentsTab();
                 this.appUtils.hideLoadingIndicator();
+            }
+        },
+
+        /**
+         * This function is used to display the comments button
+         * @memberOf widgets/details-panel/comments
+         */
+        _displayAddCommentsButton: function () {
+            if (this.selectedOperationalLayer.capabilities.indexOf("Create") > -1) {
+                domClass.remove(this.addCommentsBtnWrapperContainer, "esriCTHidden");
+            } else {
+                domClass.add(this.addCommentsBtnWrapperContainer, "esriCTHidden");
             }
         },
 
@@ -491,14 +505,8 @@ define([
             // attach cancel button click event
             this._commentformInstance.onCancelButtonClick = lang.hitch(this, function () {
                 this._showPanel(dom.byId("commentformContainer"));
-                // display add comment button
-                domClass.remove(this.addCommentsBtnWrapperContainer, "esriCTHidden");
+                this._displayAddCommentsButton();
                 this.isCommentFormOpen = false;
-                //Check if application is running on android devices, and show/hide the details panel
-                //This resolves the jumbling of content in details panel on android devices
-                if (this.appUtils.isAndroid()) {
-                    this.toggleDetailsPanel();
-                }
                 domStyle.set(this.commentsContainer, "display", "block");
                 //Scroll to top position when clicked cancel need ID to use scrollTop
                 dom.byId("tabContent").scrollTop = 0;
@@ -507,8 +515,7 @@ define([
             this._commentformInstance.onCommentFormSubmitted = lang.hitch(this, function () {
                 //close the comment form after submitting new comment
                 this._showPanel(dom.byId("commentformContainer"));
-                // display add comment button
-                domClass.remove(this.addCommentsBtnWrapperContainer, "esriCTHidden");
+                this._displayAddCommentsButton();
                 this.isCommentFormOpen = false;
                 //update comment list
                 domConstruct.empty(this.commentsContainer);
@@ -519,9 +526,6 @@ define([
             this._showPanel(dom.byId("commentformContainer"));
             //If Comment form is close, update the comment form open flag
             if (domClass.contains(dom.byId("commentformContainer"), "esriCTHidden")) {
-                if (this.appUtils.isAndroid()) {
-                    this.toggleDetailsPanel();
-                }
                 this.isCommentFormOpen = false;
             } else {
                 this.isCommentFormOpen = true;

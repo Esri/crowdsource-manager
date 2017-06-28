@@ -24,7 +24,7 @@ define({
     "created": "Luontipäivämäärä",
     "modified": "Muokkauspäivämäärä",
     "description": "Kuvaus",
-    "snippet": "Summary",
+    "snippet": "Yhteenveto",
     "licenseInfo": "Käyttörajoitukset",
     "accessInformation": "Krediitit",
     "tags": "Tunnisteet",

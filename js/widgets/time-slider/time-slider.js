@@ -53,18 +53,18 @@ define([
         templateString: template,
         currentTimeInfo: null,
         /**
-        * This function is called when widget is constructed
-        * @param{object} parameters of widget
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is called when widget is constructed
+         * @param{object} parameters of widget
+         * @memberOf widgets/time-slider/time-slider
+         */
         constructor: function (options) {
             lang.mixin(this, options);
         },
 
         /**
-        * This function is called after all properties of a widget are defined
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is called after all properties of a widget are defined
+         * @memberOf widgets/time-slider/time-slider
+         */
         startup: function () {
             //Remove disable class id applied
             domClass.add(dom.byId("disableTimeSliderWrapperContainer"), "esriCTHidden");
@@ -74,10 +74,10 @@ define([
         },
 
         /**
-        * This function is used to create UI for time slider list.
-        * @param{object} parameters to create timeSlider
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is used to create UI for time slider list.
+         * @param{object} parameters to create timeSlider
+         * @memberOf widgets/time-slider/time-slider
+         */
         _createTimeSlider: function (timeInfoData) {
             var timeExtent, timeSlider, lastTickCount;
             this.timeInfoData = timeInfoData;
@@ -117,9 +117,9 @@ define([
         },
 
         /**
-        * check count of stops created in time slider and hide the stops/ticks if count is more thane 30
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * check count of stops created in time slider and hide the stops/ticks if count is more thane 30
+         * @memberOf widgets/time-slider/time-slider
+         */
         _checkTimeSliderStops: function (timeSlider) {
             if (timeSlider.timeStops && timeSlider.timeStops.length > 30) {
                 var ruler = query(".dijitRuleContainer", this.timeSliderContainer)[0];
@@ -130,9 +130,9 @@ define([
         },
 
         /**
-        * This function is used to remove slider and its date/time value.
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is used to remove slider and its date/time value.
+         * @memberOf widgets/time-slider/time-slider
+         */
         _removeTimeSlider: function () {
             domConstruct.empty(this.timeSliderContainer);
             domConstruct.empty(this.timeSliderDateContainer);
@@ -140,17 +140,17 @@ define([
         },
 
         /**
-        * This function is used to create Time Extent for timeSlider.
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is used to create Time Extent for timeSlider.
+         * @memberOf widgets/time-slider/time-slider
+         */
         _createTimeExtent: function (timeInfoData) {
             return new TimeExtent(new Date(timeInfoData.startTime), new Date(timeInfoData.endTime));
         },
 
         /**
-        * This function is used to hide webmap list on slider tick click
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is used to hide webmap list on slider tick click
+         * @memberOf widgets/time-slider/time-slider
+         */
         _hideWebmapList: function () {
             var sliderHandle = query(".dijitSliderImageHandleH"), i;
             if (sliderHandle && sliderHandle.length > 0) {
@@ -162,18 +162,18 @@ define([
         },
 
         /**
-        * This function is used to hide webmap list
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is used to hide webmap list
+         * @memberOf widgets/time-slider/time-slider
+         */
         hideWebMapList: function () {
             return;
         },
 
         /**
-        * This function is used to show current slider date/time info.
-        * @param{object} parameters to create timeSlider
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is used to show current slider date/time info.
+         * @param{object} parameters to create timeSlider
+         * @memberOf widgets/time-slider/time-slider
+         */
         _showSliderInfo: function (sliderValue) {
             var startDate, endDate;
             this.appUtils.showLoadingIndicator();
@@ -182,15 +182,23 @@ define([
             endDate = new Date(sliderValue.endTime);
             this._getWebmapFormattedDate(startDate, endDate);
             setTimeout(lang.hitch(this, function () {
-                this.selectedLayer.refresh();
+                this.refreshSelectedLayer();
             }), 1200);
         },
 
         /**
-        * This function is use to handle enabling/disabling of time slider
-        * @param{string} selected feature length
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is used to refresh selected layer
+         * @memberOf widgets/time-slider/time-slider
+         */
+        refreshSelectedLayer: function () {
+            return;
+        },
+
+        /**
+         * This function is use to handle enabling/disabling of time slider
+         * @param{string} selected feature length
+         * @memberOf widgets/time-slider/time-slider
+         */
         handleTimeSliderVisibility: function (featureLength) {
             if (featureLength > 1) {
                 domClass.remove(dom.byId("disableTimeSliderWrapperContainer"), "esriCTHidden");
@@ -200,10 +208,10 @@ define([
         },
 
         /**
-        * This function is use to convert date in webmap format
-        * @param{string} start and end date to display
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is use to convert date in webmap format
+         * @param{string} start and end date to display
+         * @memberOf widgets/time-slider/time-slider
+         */
         _getWebmapFormattedDate: function (startDate, endDate) {
             var webmapTimeSliderInfo, timeDiff, diffDays, intervalUnit;
             webmapTimeSliderInfo = this.webmapJSON.itemData.widgets.timeSlider.properties;
@@ -220,10 +228,10 @@ define([
         },
 
         /**
-        * This function is use to display date in webmap format
-        * @param{string} start and end date to display
-        * @memberOf widgets/time-slider/time-slider
-        */
+         * This function is use to display date in webmap format
+         * @param{string} start and end date to display
+         * @memberOf widgets/time-slider/time-slider
+         */
         _displayDateTime: function (startDate, endDate) {
             var displayDate;
             //Check for the configuration of time slider, and accordingly set the date string

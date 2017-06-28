@@ -38,6 +38,10 @@ define([
     "esri/dijit/PopupTemplate",
     "dojo/dom-attr",
     "dojo/dom-geometry",
+    "esri/tasks/QueryTask",
+    "esri/tasks/query",
+    "dojo/Deferred",
+    "dojo/promise/all",
     "dojo/domReady!"
 ], function (
     declare,
@@ -61,7 +65,11 @@ define([
     query,
     PopupTemplate,
     domAttr,
-    domGeom
+    domGeom,
+    QueryTask,
+    Query,
+    Deferred,
+    all
 ) {
     return declare(null, {
 
@@ -93,6 +101,9 @@ define([
         _isGraphicLayerClicked: false, // to track whether graphic layer is clicked or not
         _isShowSelectedClicked: false,
         _disableTimeSliderClickHandle: null, // to store handle of disable time slider
+        _minScale: null, // to save the min scale of selected operational layer
+        _maxScale: null, // to save the max scale of selected operational layer
+        _mapExtentChangeHandle: null, // to store extent change handle of map
 
         /**
          * This method is designed to handle processing after any
@@ -357,6 +368,9 @@ define([
                 this._applicationHeader.disableSearchIcon();
                 this._dataViewerWidget.createDataViewerUI(false);
             });
+            this._applicationHeader.refreshSelectedLayer = lang.hitch(this, function () {
+                this._refreshOperationalLayer();
+            });
         },
 
         /**
@@ -520,6 +534,7 @@ define([
                         this._hideContainerOfTimeSlider();
                     }
                     this.map.addLayer(this._refinedOperationalLayer, this._existingLayerIndex);
+                    this._checkFeatureScaleAndMaxRecordCount();
                 }), 10);
             });
             // show message when there is no web map to display
@@ -546,6 +561,42 @@ define([
         },
 
         /**
+         * This function is used to check whether layer is visible at current map scale
+         * @memberOf widgets/main/main
+         */
+        _isLayerVisible: function () {
+            var currentScale = this.map.getScale();
+            // ignored min scale = 0, max scale = 0
+            if (this._refinedOperationalLayer.clonedMinScale !== null &&
+                    this._refinedOperationalLayer.clonedMinScale !== undefined &&
+                    this._refinedOperationalLayer.clonedMaxScale !== null &&
+                    this._refinedOperationalLayer.clonedMaxScale !== undefined) {
+                if (this._refinedOperationalLayer.clonedMinScale === 0 && this._refinedOperationalLayer.clonedMaxScale === 0) {
+                    return true;
+                }
+                // min scale = value, max scale = 0
+                if ((this._refinedOperationalLayer.clonedMinScale >= currentScale) && (this._refinedOperationalLayer.clonedMaxScale === 0)) {
+                    return true;
+                    // min scale = 0, max scale = value
+                }
+                if ((this._refinedOperationalLayer.clonedMinScale === 0) && (this._refinedOperationalLayer.clonedMaxScale <= currentScale)) {
+                    return true;
+                    // min scale = value, max scale = value
+                }
+                if ((this._refinedOperationalLayer.clonedMinScale <= currentScale) && (this._refinedOperationalLayer.clonedMaxScale <= currentScale)) {
+                    return false;
+                }
+                if ((this._refinedOperationalLayer.clonedMinScale >= currentScale) && (this._refinedOperationalLayer.clonedMaxScale >= currentScale)) {
+                    return false;
+                }
+                if ((this._refinedOperationalLayer.clonedMinScale >= currentScale) && (this._refinedOperationalLayer.clonedMaxScale <= currentScale)) {
+                    return true;
+                }
+            }
+            return true;
+        },
+
+        /**
          * This function is used to attach event listener to map
          * @memberOf widgets/main/main
          */
@@ -561,6 +612,9 @@ define([
             }
             if (this._mapZoomOutHandle) {
                 this._mapZoomOutHandle.remove();
+            }
+            if (this._mapExtentChangeHandle) {
+                this._mapExtentChangeHandle.remove();
             }
             this._mapResizeHandle = on(this.map, "resize", lang.hitch(this, function () {
                 this._resizeMap();
@@ -586,13 +640,43 @@ define([
                     this._webMapListWidget.hideWebMapList();
                 }
             }));
-
             this._mapZoomOutHandle = on(query(".esriSimpleSliderDecrementButton")[0], "click", lang.hitch(this, function () {
                 $(".esriCTFilterParentContainer").css("display", "none");
                 if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
                     this._webMapListWidget.hideWebMapList();
                 }
             }));
+
+            this._mapExtentChangeHandle = on(this.map, "extent-change", lang.hitch(this, this.onMapExtentChange));
+        },
+
+        /**
+         * This function is used to toggle the visibility of feature layer on change of map extent.
+         * @memberOf widgets/main/main
+         */
+        onMapExtentChange: function () {
+            var currentScale = this.map.getScale();
+            // ignored min scale = 0, max scale = 0
+            if (this._refinedOperationalLayer.clonedMinScale !== null && this._refinedOperationalLayer.clonedMinScale !== undefined &&
+                    this._refinedOperationalLayer.clonedMaxScale !== null && this._refinedOperationalLayer.clonedMaxScale !== undefined) {
+                if (this._refinedOperationalLayer.clonedMinScale === 0 && this._refinedOperationalLayer.clonedMaxScale === 0) {
+                    return;
+                }
+                // min scale = value, max scale = 0
+                if ((this._refinedOperationalLayer.clonedMinScale >= currentScale) && (this._refinedOperationalLayer.clonedMaxScale === 0)) {
+                    this._refinedOperationalLayer.setVisibility(true);
+                    // min scale = 0, max scale = value
+                } else if ((this._refinedOperationalLayer.clonedMinScale === 0) && (this._refinedOperationalLayer.clonedMaxScale <= currentScale)) {
+                    this._refinedOperationalLayer.setVisibility(true);
+                    // min scale = value, max scale = value
+                } else if ((this._refinedOperationalLayer.clonedMinScale <= currentScale) && (this._refinedOperationalLayer.clonedMaxScale <= currentScale)) {
+                    this._refinedOperationalLayer.setVisibility(false);
+                } else if ((this._refinedOperationalLayer.clonedMinScale >= currentScale) && (this._refinedOperationalLayer.clonedMaxScale >= currentScale)) {
+                    this._refinedOperationalLayer.setVisibility(false);
+                } else if ((this._refinedOperationalLayer.clonedMinScale >= currentScale) && (this._refinedOperationalLayer.clonedMaxScale <= currentScale)) {
+                    this._refinedOperationalLayer.setVisibility(true);
+                }
+            }
         },
 
         /**
@@ -685,6 +769,10 @@ define([
             cloneRenderer = lang.clone(this.map.getLayer(opLayerInfo.id).renderer);
             // clone labeling info
             cloneLabelingInfo = lang.clone(this.map.getLayer(opLayerInfo.id).labelingInfo);
+            // min scale
+            this._minScale = opLayerInfo.layerObject.minScale;
+            // max scale
+            this._maxScale = opLayerInfo.layerObject.maxScale;
             // get index of layer
             this._getExistingIndex(opLayerInfo.id);
             //remove selected layer from map
@@ -715,7 +803,11 @@ define([
             if (cloneLabelingInfo) {
                 this._refinedOperationalLayer.setLabelingInfo(cloneLabelingInfo);
             }
-
+            if (this._minScale !== null && this._maxScale !== null) {
+                this._refinedOperationalLayer.clonedMinScale = this._minScale;
+                this._refinedOperationalLayer.clonedMaxScale = this._maxScale;
+            }
+            this._refinedOperationalLayer.maxRecordCount = opLayerInfo.layerObject.maxRecordCount;
         },
 
         /**
@@ -896,6 +988,7 @@ define([
             this._dataViewerWidget.updateFilterRefreshData = lang.hitch(this, function (data) {
                 this._isFilterRefreshClicked = true;
                 this._filterRefreshDataObj = data;
+                this._refreshOperationalLayer();
             });
             // to enable selection option icon
             this._dataViewerWidget.enableSelectionOptionsIcon = lang.hitch(this, function () {
@@ -1028,53 +1121,149 @@ define([
         },
 
         /**
+         * This function is used to check the scale and max record count of feature layer
+         * @memberOf widgets/main/main
+         */
+        _checkFeatureScaleAndMaxRecordCount: function () {
+            this._getAllFeaturesID().then(lang.hitch(this, function (featureIDs) {
+                if (this._refinedOperationalLayer.isExplicitlyFeaturesAdded || featureIDs.length > this._refinedOperationalLayer.maxRecordCount || !this._isLayerVisible()) {
+                    this._getFeatureByChunks(featureIDs).then(lang.hitch(this, function (entireFeatureArr) {
+                        this._refinedOperationalLayer.clear();
+                        array.forEach(entireFeatureArr, lang.hitch(this, function (graphic) {
+                            graphic.infoTemplate = this._refinedOperationalLayer.infoTemplate;
+                            this._refinedOperationalLayer._add(graphic);
+                        }));
+                        this._refinedOperationalLayer.isExplicitlyFeaturesAdded = true;
+                        this._removeFeatureLayerHandle();
+                        this._onFeatureLayerUpdateEnd();
+                    }));
+                }
+            }));
+        },
+
+        /**
+         * This function is used to get the features in chunks
+         * @memberOf widgets/main/main
+         */
+        _getFeatureByChunks: function (featureIds) {
+            var deferredList, deferred, chunkArr, chunkSize;
+            deferred = new Deferred();
+            deferredList = [];
+            chunkArr = [];
+            chunkSize = this._refinedOperationalLayer.maxRecordCount;
+            while (featureIds.length > 0) {
+                deferredList.push(this._getFeatures(featureIds.splice(0, chunkSize)));
+            }
+            all(deferredList).then(lang.hitch(this, function (featuresArr) {
+                var intersectingFeatures;
+                intersectingFeatures = [];
+                array.forEach(featuresArr, lang.hitch(this, function (features) {
+                    intersectingFeatures = intersectingFeatures.concat(features);
+                }));
+                deferred.resolve(intersectingFeatures);
+            }));
+            return deferred.promise;
+        },
+
+        /**
+         * This function is used to get the features
+         * @memberOf widgets/main/main
+         */
+        _getFeatures: function (featureIds) {
+            var deferred, queryTask, queryObj;
+            deferred = new Deferred();
+            queryObj = new Query();
+            queryObj.outFields = ["*"];
+            queryObj.returnGeometry = true;
+            queryObj.objectIds = featureIds;
+            queryObj.outSpatialReference = this.map.spatialReference;
+            queryTask = new QueryTask(this._refinedOperationalLayer.url);
+            queryTask.execute(queryObj, lang.hitch(this, function (featureSet) {
+                if (featureSet.features) {
+                    deferred.resolve(featureSet.features);
+                } else {
+                    deferred.resolve([]);
+                }
+            }), lang.hitch(this, function () {
+                deferred.resolve([]);
+            }));
+            return deferred.promise;
+        },
+
+        /**
+         * This function is used to check whether features are exceeding max record count
+         * @param{object} operational layer to which event needs to be attached
+         * @memberOf widgets/main/main
+         */
+        _getAllFeaturesID: function () {
+            var queryTask, queryParameters, deferred;
+            deferred = new Deferred();
+            queryTask = new QueryTask(this._refinedOperationalLayer.url);
+            queryParameters = new Query();
+            queryParameters.returnGeometry = false;
+            queryParameters.where = this._refinedOperationalLayer.getDefinitionExpression() || "1=1";
+            queryTask.executeForIds(queryParameters).then(lang.hitch(this, function (ids) {
+                if (ids) {
+                    deferred.resolve(ids);
+                } else {
+                    deferred.resolve([]);
+                }
+            }), lang.hitch(this, function () {
+                deferred.resolve([]);
+            }));
+            return deferred.promise;
+        },
+
+        _onFeatureLayerUpdateEnd: function () {
+            if (this._isShowSelectedClicked) {
+                this._isShowSelectedClicked = false;
+                this._dataViewerWidget.createDataViewerUI(false);
+            } else {
+                if (this._reorderLayers) {
+                    this._reorderLayers = false;
+                    this._reorderAllLayers();
+                }
+                this._removeLayerFromLabelLayer(this._refinedOperationalLayer.id);
+                this._addFeatureLayerInLabelLayer();
+                this._getLayerLayerOnTop();
+                this._refinedOperationalLayer.clearSelection();
+                this._toggleNoFeatureFoundDiv(true);
+                //Enable time slider if it was disable
+                if (this._timeSliderWidget) {
+                    this._timeSliderWidget.handleTimeSliderVisibility(0);
+                }
+                //Enable search if it was disable
+                if (this._applicationHeader) {
+                    this._applicationHeader._handleSearchIconVisibility(0);
+                }
+                //Check if time slider widget exist, if yes then query and fetch features within current time extent
+                if (this._timeSliderWidget) {
+                    var timeExtent, timeQuery;
+                    timeExtent = this._timeSliderWidget._createTimeExtent(this._timeSliderWidget.currentTimeInfo);
+                    timeQuery = new EsriQuery();
+                    timeQuery.timeExtent = timeExtent;
+                    timeQuery.where = "1=1";
+                    this._refinedOperationalLayer.queryFeatures(timeQuery, lang.hitch(this, function (featureSet) {
+                        //Change graphics of layer with latest fetched features
+                        this._refinedOperationalLayer.graphics = featureSet.features || [];
+                        this._setFeatureLayerCountLabel(this._refinedOperationalLayer.graphics);
+                        this._createDataViewer();
+                    }));
+                } else {
+                    this._setFeatureLayerCountLabel(this._refinedOperationalLayer.graphics);
+                    this._createDataViewer();
+                }
+            }
+        },
+
+        /**
          * This function is used to create event handles
          * @param{object} operational layer to which event needs to be attached
          * @memberOf widgets/main/main
          */
         _createFeatureLayerHandle: function () {
             if (this._refinedOperationalLayer) {
-                this._dataViewerFeatureLayerUpdateEndHandle = on(this._refinedOperationalLayer, "update-end", lang.hitch(this, function () {
-                    if (this._isShowSelectedClicked) {
-                        this._isShowSelectedClicked = false;
-                        this._dataViewerWidget.createDataViewerUI(false);
-                    } else {
-                        if (this._reorderLayers) {
-                            this._reorderLayers = false;
-                            this._reorderAllLayers();
-                        }
-                        this._removeLayerFromLabelLayer(this._refinedOperationalLayer.id);
-                        this._addFeatureLayerInLabelLayer();
-                        this._getLayerLayerOnTop();
-                        this._refinedOperationalLayer.clearSelection();
-                        this._toggleNoFeatureFoundDiv(true);
-                        //Enable time slider if it was disable
-                        if (this._timeSliderWidget) {
-                            this._timeSliderWidget.handleTimeSliderVisibility(0);
-                        }
-                        //Enable search if it was disable
-                        if (this._applicationHeader) {
-                            this._applicationHeader._handleSearchIconVisibility(0);
-                        }
-                        //Check if time slider widget exist, if yes then query and fetch features within current time extent
-                        if (this._timeSliderWidget) {
-                            var timeExtent, timeQuery;
-                            timeExtent = this._timeSliderWidget._createTimeExtent(this._timeSliderWidget.currentTimeInfo);
-                            timeQuery = new EsriQuery();
-                            timeQuery.timeExtent = timeExtent;
-                            timeQuery.where = "1=1";
-                            this._refinedOperationalLayer.queryFeatures(timeQuery, lang.hitch(this, function (featureSet) {
-                                //Change graphics of layer with latest fetched features
-                                this._refinedOperationalLayer.graphics = featureSet.features || [];
-                                this._setFeatureLayerCountLabel(this._refinedOperationalLayer.graphics);
-                                this._createDataViewer();
-                            }));
-                        } else {
-                            this._setFeatureLayerCountLabel(this._refinedOperationalLayer.graphics);
-                            this._createDataViewer();
-                        }
-                    }
-                }));
+                this._dataViewerFeatureLayerUpdateEndHandle = on(this._refinedOperationalLayer, "update-end", lang.hitch(this, this._onFeatureLayerUpdateEnd));
             }
         },
 
@@ -1100,6 +1289,10 @@ define([
                 if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
                     this._webMapListWidget.hideWebMapList();
                 }
+            });
+
+            this._timeSliderWidget.refreshSelectedLayer = lang.hitch(this, function () {
+                this._refreshOperationalLayer();
             });
 
             this._timeSliderWidget.startup();
@@ -1168,7 +1361,13 @@ define([
             this._detailsPanelWidget.startup();
         },
 
-
+        _refreshOperationalLayer: function () {
+            if (this._refinedOperationalLayer.isExplicitlyFeaturesAdded) {
+                this._checkFeatureScaleAndMaxRecordCount();
+            } else {
+                this._refinedOperationalLayer.refresh();
+            }
+        },
 
         /**
          * This function is used to attach event listener to details panel widget
@@ -1185,7 +1384,7 @@ define([
                 this.updatedFeature = updatedfeature;
                 // Refresh selected layer to get updated features
                 this._isShowSelectedClicked = isShowSelectedClicked;
-                this._refinedOperationalLayer.refresh();
+                this._refreshOperationalLayer();
             });
 
             this._detailsPanelWidget.onMultipleFeatureEditCancel = lang.hitch(this, function (feature) {

@@ -36,11 +36,8 @@
         "defaultDetailsTab": "Info"
     },
     "configurationSettings": [{
-        "category": "<b>App</b>",
+        "category": "<b>General</b>",
         "fields": [{
-            "type": "subcategory",
-            "label": "App settings"
-        },{
             "type": "paragraph",
             "value": "For more information on configuring this app, check out the <a href=\"http://links.esri.com/localgovernment/help/crowdsource-manager\" target=\"_blank\">Crowdsource Manager documentation<\/a>."
         }, {
@@ -52,6 +49,77 @@
             "tooltip": "Title displays in application header",
             "type": "string",
             "fieldName": "applicationName"
+        }, {
+            "label": "Greeting message",
+            "tooltip": "Provide a message to display when no features are currently selected.",
+            "type": "string",
+            "fieldName": "selectFeatureMessage",
+            "placeholder": "Choose a report from the table or map."
+        }, {
+            "type": "subcategory",
+            "label": "Help"
+        },{
+            "type": "conditional",
+            "fieldName": "showHelpIcon",
+            "label": "Enable the help window",
+            "tooltip": "When disabled, the help window will not be accessible",
+            "condition": false,
+            "items": [{
+                "type": "string",
+                "fieldName": "helpDialogTitle",
+                "label": "Help window title",
+                "tooltip": "Text displayed at the top of the help window"
+            }, {
+                "type": "string",
+                "fieldName": "helpDialogContent",
+                "label": "Dialog content",
+                "stringFieldOption": "richtext",
+                "tooltip": "Text and graphics that will display in the help window."
+            }]
+        }]
+    }, {
+        "category": "<b>Theme</b>",
+        "fields": [{
+            "label": "Header text color",
+            "tooltip": "Set header text color",
+            "type": "color",
+            "sharedThemeProperty": "header.text",
+            "fieldName": "headerTextColor"
+        }, {
+            "label": "Header background color",
+            "tooltip": "Set header background color",
+            "type": "color",
+            "fieldName": "theme",
+            "sharedThemeProperty": "header.background"
+        }, {
+            "label": "Body text color",
+            "tooltip": "Set body text color",
+            "type": "color",
+            "sharedThemeProperty": "body.text",
+            "fieldName": "bodyTextColor"
+        }, {
+            "label": "Body background color",
+            "tooltip": "Set body background color",
+            "type": "color",
+            "sharedThemeProperty": "body.background",
+            "fieldName": "bodyBackgroundColor"
+        }, {
+            "label": "Button text color",
+            "tooltip": "Set button text color",
+            "type": "color",
+            "sharedThemeProperty": "button.text",
+            "fieldName": "buttonTextColor"
+        }, {
+            "label": "Button background color",
+            "tooltip": "Set button background color",
+            "type": "color",
+            "sharedThemeProperty": "button.background",
+            "fieldName": "buttonBackgroundColor"
+        }, {
+            "label": "Color of selected table rows",
+            "tooltip": "Choose the color for highlighting selected rows in the table",
+            "type": "color",
+            "fieldName": "highlightRow"
         }, {
             "label": "Application logo",
             "tooltip": "Logo displays in top left corner of application. Image should be 48px tall.",
@@ -65,15 +133,9 @@
             "type": "string",
             "fieldName": "applicationFavicon",
             "placeHolder": "/images/favicon.ico"
-        }, {
-            "label": "Greeting message",
-            "tooltip": "Provide a message to display when no features are currently selected.",
-            "type": "string",
-            "fieldName": "selectFeatureMessage",
-            "placeholder": "Choose a report from the table or map."
         }]
     }, {
-        "category": "<b>Map</b>",
+        "category": "<b>Options</b>",
         "fields": [{
             "type": "subcategory",
             "label": "Reference layers"
@@ -154,23 +216,6 @@
             "fieldName": "webMapInfoAvgRating"
         }]
     }, {
-        "category": "<b>Filters</b>",
-        "fields": [{
-            "type": "subcategory",
-            "label": "Filters"
-        },{
-            "type": "paragraph",
-            "value": "Attribute filters that use the option to 'Ask For Values' and the time slider will be exposed in Crowdsource Manager when they have been configured on layers in the map."
-        }, {
-            "type": "paragraph",
-            "value": "By default, the application will honor the initial values of these filters. If you use several of these filters, that may mean that no features are visible when your application loads. Optionally, uncheck the following parameter to choose to ignore the default filter and time slider values when the app loads. Users of the application will be able to choose the filter values they would like to apply. and let your users apply the filters as necessary. Crowdsource Manager apps will always honor static filters on your map layers."
-        }, {
-            "label": "Apply default filters automatically",
-            "tooltip": "Enable to load the application with the default values of all dynamic filters applied.",
-            "type": "boolean",
-            "fieldName": "enableFilter"
-        }]
-    }, {
         "category": "<b>Reports</b>",
         "fields": [{
             "type": "subcategory",
@@ -199,7 +244,7 @@
             "label": "Comments tab"
         }, {
             "type": "paragraph",
-            "value": "This tab displays <a href=\"http://links.esri.com/localgovernment/relationshipclass\">related records<\/a> associated with the currently selected report. Users can toggle to an editing mode which is only visible when the selected report contains at least one visible related record."            
+            "value": "This tab displays <a href=\"http://links.esri.com/localgovernment/relationshipclass\">related records<\/a> associated with the currently selected report. Users can toggle to an editing mode which is only visible when the selected report contains at least one visible related record."
         }, {
             "label": "Tab label",
             "tooltip": "Tab label for comments",
@@ -220,9 +265,9 @@
             "tooltip": "Enable to display related records and the editing form based on the table layer's popup configuration instead of a single field. Fields that are marked editable in the popup will be editable in the application.",
             "condition": true,
             "items": [{
-            "type": "paragraph",
-            "value": "Name of a single field to display, regardless of the popup settings. This value is ignored if you choose to build the form using the popup configuration."
-        },{
+                "type": "paragraph",
+                "value": "Name of a single field to display, regardless of the popup settings. This value is ignored if you choose to build the form using the popup configuration."
+            },{
                 "type": "string",
                 "fieldName": "commentField",
                 "label": "Name of a single field to display",
@@ -245,78 +290,18 @@
             }]
         }]
     }, {
-        "category": "<b>Help</b>",
+        "category": "<b>Filters</b>",
         "fields": [{
-            "type": "subcategory",
-            "label": "Help"
-        },{
-            "type": "conditional",
-            "fieldName": "showHelpIcon",
-            "label": "Enable the help window",
-            "tooltip": "When disabled, the help window will not be accessible",
-            "condition": false,
-            "items": [{
-                "type": "string",
-                "fieldName": "helpDialogTitle",
-                "label": "Help window title",
-                "tooltip": "Text displayed at the top of the help window"
-            }, {
-                "type": "string",
-                "fieldName": "helpDialogContent",
-                "label": "Dialog content",
-                "stringFieldOption": "richtext",
-                "tooltip": "Text and graphics that will display in the help window."
-            }]
-        }]
-    }, {
-        "category": "<b>App color</b>",
-        "fields": [{
-            "type": "subcategory",
-            "label": "App color"
-        },{
             "type": "paragraph",
-            "value": "User can change the theme settings and choose different colors for header, body and button sections"
+            "value": "Attribute filters that use the option to 'Ask For Values' and the time slider will be exposed in Crowdsource Manager when they have been configured on layers in the map."
         }, {
-            "label": "Application color",
-            "tooltip": "Application color scheme",
-            "type": "color",
-            "fieldName": "theme",
-            "sharedThemeProperty": "header.background"
+            "type": "paragraph",
+            "value": "By default, the application will honor the initial values of these filters. If you use several of these filters, that may mean that no features are visible when your application loads. Optionally, uncheck the following parameter to choose to ignore the default filter and time slider values when the app loads. Users of the application will be able to choose the filter values they would like to apply. and let your users apply the filters as necessary. Crowdsource Manager apps will always honor static filters on your map layers."
         }, {
-            "label": "Header text color",
-            "tooltip": "Set header text color",
-            "type": "color",
-            "sharedThemeProperty": "header.text",
-            "fieldName": "headerTextColor"
-        }, {
-            "label": "Body background color",
-            "tooltip": "Set body background color",
-            "type": "color",
-            "sharedThemeProperty": "body.background",
-            "fieldName": "bodyBackgroundColor"
-        }, {
-            "label": "Body text color",
-            "tooltip": "Set body text color",
-            "type": "color",
-            "sharedThemeProperty": "body.text",
-            "fieldName": "bodyTextColor"
-        }, {
-            "label": "Button background color",
-            "tooltip": "Set button background color",
-            "type": "color",
-            "sharedThemeProperty": "button.background",
-            "fieldName": "buttonBackgroundColor"
-        }, {
-            "label": "Button text color",
-            "tooltip": "Set button text color",
-            "type": "color",
-            "sharedThemeProperty": "button.text",
-            "fieldName": "buttonTextColor"
-        }, {
-            "label": "Color of selected table rows",
-            "tooltip": "Choose the color for highlighting selected rows in the table",
-            "type": "color",
-            "fieldName": "highlightRow"
+            "label": "Apply default filters automatically",
+            "tooltip": "Enable to load the application with the default values of all dynamic filters applied.",
+            "type": "boolean",
+            "fieldName": "enableFilter"
         }]
     }]
 }

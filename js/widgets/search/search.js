@@ -128,11 +128,19 @@ define([
                 //if function is called for manual refresh and search is empty,
                 //then just set the existing def expression so that the layer will get updated records
                 if (!this._searchedFromSearchWidget) {
-                    this.selectedOperationalLayer.refresh();
+                    this.refreshSelectedLayer();
                 } else {
                     this.appUtils.hideLoadingIndicator();
                 }
             }
+        },
+
+        /**
+         * This function is used to refresh selected layer
+         * @memberOf widgets/manual-refresh/manual-refresh
+         */
+        refreshSelectedLayer: function () {
+            return;
         },
 
         /**
@@ -173,7 +181,7 @@ define([
                     }
                     this.selectedOperationalLayer.setDefinitionExpression(this._newDefinitionExpression);
                     this._removeNoResultFoundMessage();
-
+                    this.refreshSelectedLayer();
                 } else {
                     this.searchBox.value = "";
                     this._getExistingDefinitionExpression();
@@ -182,6 +190,7 @@ define([
                     if (this._searchedFromSearchWidget) {
                         this._displayNoResultFoundMessage();
                     }
+                    this.refreshSelectedLayer();
                 }
             }), lang.hitch(this, function () {
                 // if any error occur while querying the current expression
@@ -274,7 +283,7 @@ define([
                     this._removeNoResultFoundMessage();
                     this._toggleOptions();
                     this.selectedOperationalLayer.setDefinitionExpression(this._existingDefinitionExpression);
-                    this.selectedOperationalLayer.refresh();
+                    this.refreshSelectedLayer();
                 } else {
                     this.appUtils.showLoadingIndicator();
                     if ((lang.trim(this.searchBox.value) !== "")) {
