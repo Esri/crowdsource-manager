@@ -27,7 +27,7 @@ define({
     "snippet": "Podsumowanie",
     "licenseInfo": "Ograniczenia dostępu i użytkowania",
     "accessInformation": "Udostępniający zasoby",
-    "tags": "Tags",
+    "tags": "Znaczniki",
     "numViews": "Liczba wyświetleń",
     "avgRating": "Ocena",
     "noWebMapInGroup": "Skonfigurowana grupa jest nieprawidłowa lub tej grupie nie udostępniono jeszcze żadnych elementów",

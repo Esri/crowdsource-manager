@@ -26,7 +26,7 @@ define({
     "description": "Beskrivelse",
     "snippet": "Sammendrag",
     "licenseInfo": "Begrensning av tilgang og bruk",
-    "accessInformation": "Credits",
+    "accessInformation": "Krediteringer",
     "tags": "Merker",
     "numViews": "Antall visninger",
     "avgRating": "Vurdering",
