@@ -147,6 +147,7 @@ define([
             this._sortedFields = [];
             // DataTypes to be excluded from Geo Form
             excludeDataTypes = ["esriFieldTypeOID", "esriFieldTypeBlob", "esriFieldTypeRaster", "esriFieldTypeGUID", "esriFieldTypeGlobalID", "esriFieldTypeXML"];
+
             if (this.itemInfos && this.itemInfos.itemData) {
                 //To maintain the order of the fields form pop up configuration first get all fields info in layerFields array
                 //then iterate through popupInfo and create fields to be shown in geo form.
@@ -163,7 +164,7 @@ define([
                     // have to do Check for reported by field in case logged in user
                     layerField = layerFields[popupField.fieldName];
                     // check if layer is editable
-                    if (layerField && popupField.isEditable && $.inArray(layerField.type, excludeDataTypes) === -1) {
+                    if ((layerField && popupField.isEditable && ($.inArray(layerField.type, excludeDataTypes) === -1) && (this.selectedLayer.objectIdField !== layerField.name)) || (layerField && this.selectedLayer.typeIdField === layerField.name)) {
                         layerField.alias = popupField.label;
                         layerField.editable = popupField.isEditable;
                         layerField.tooltip = popupField.tooltip;
@@ -398,6 +399,9 @@ define([
             userFormNode = this.popupForm;
             //code to put asterisk mark for mandatory fields and also to give it a mandatory class.
             formContent = domConstruct.create("div", {}, userFormNode);
+            if (currentField.typeField && (!currentField.editable)) {
+                domClass.add(formContent, "esriCTHidden");
+            }
             // If dependent field has Reference Node
             if (referenceNode) {
                 domConstruct.place(formContent, referenceNode, "after");
