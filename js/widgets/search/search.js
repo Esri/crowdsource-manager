@@ -224,7 +224,7 @@ define([
         _getNewDefinitionExpression: function () {
             var layerObject, i, definitionExpression = null, searchDefinitionExpression;
             // After user search for a particular value that definition expression, including the default one if merged together and returned
-            if (this.itemInfo.itemData.applicationProperties.viewing.search && this.itemInfo.itemData.applicationProperties.viewing.search.enabled) {
+            if (this.itemInfo.itemData.applicationProperties && this.itemInfo.itemData.applicationProperties.viewing.search && this.itemInfo.itemData.applicationProperties.viewing.search.enabled) {
                 for (i = 0; i < this.itemInfo.itemData.applicationProperties.viewing.search.layers.length; i++) {
                     if (this.selectedOperationalLayerID === this.itemInfo.itemData.applicationProperties.viewing.search.layers[i].id) {
                         layerObject = this.itemInfo.itemData.applicationProperties.viewing.search.layers[i];

@@ -148,7 +148,7 @@ define([
                     // have to do Check for reported by field in case logged in user
                     layerField = layerFields[popupField.fieldName];
                     // check if layer is editable
-                    if (layerField && popupField.isEditable && $.inArray(layerField.type, excludeDataTypes) === -1) {
+                    if ((layerField && popupField.isEditable && $.inArray(layerField.type, excludeDataTypes) === -1) || (layerField && this.commentTable.typeIdField === layerField.name)) {
                         layerField.alias = popupField.label;
                         layerField.editable = popupField.isEditable;
                         layerField.tooltip = popupField.tooltip;
@@ -478,6 +478,9 @@ define([
             userFormNode = this.commentForm;
             //code to put asterisk mark for mandatory fields and also to give it a mandatory class.
             formContent = domConstruct.create("div", {}, userFormNode);
+            if (currentField.typeField && (!currentField.editable)) {
+                domClass.add(formContent, "esriCTHidden");
+            }
             // If dependent field has Reference Node
             if (referenceNode) {
                 domConstruct.place(formContent, referenceNode, "after");

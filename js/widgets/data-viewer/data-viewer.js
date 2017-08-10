@@ -558,6 +558,9 @@ define([
                         type = this._displayColumn[j].type;
                         value = this._features[i].attributes[fieldName];
                         dateFormat = this.appUtils.getDateFormat(format).dateFormat;
+                        if (fieldName === this.selectedOperationalLayer.objectIdField) {
+                            type = "esriFieldTypeOID";
+                        }
                         switch (type) {
                         case "esriFieldTypeOID":
                             dataSet.push(value);
@@ -692,7 +695,7 @@ define([
                     theadClass = this._createClassName(this._displayColumn[i].fieldName);
                     // if objectId field flag visible not true on pop up and this column is of object id fields
                     // then hide this column
-                    if ((this._displayColumn[i].type === "esriFieldTypeOID") && (!this._displayColumn[i].showObjectIdField)) {
+                    if ((this._displayColumn[i].type === "esriFieldTypeOID" || this.selectedOperationalLayer.objectIdField === this._displayColumn[i].fieldName) && (!this._displayColumn[i].showObjectIdField)) {
                         columnHeader = domConstruct.create("th", { "class": "esriCTHiddenColumn " + theadClass, "style": "min-width:300px;" });
                         domAttr.set(columnHeader, "colid", i);
                     } else {
