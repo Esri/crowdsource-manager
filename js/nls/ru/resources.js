@@ -68,8 +68,8 @@ define({
     "unableToEditPopupMessage": "У вас нет прав для выполнения этого действия."
   },
   "mapViewer": {
-    "zoomInToolTip": "Увеличить",
-    "zoomOutToolTip": "Уменьшить"
+    "zoomInToolTip": "Приблизить",
+    "zoomOutToolTip": "Отдалить"
   },
   "applicationHeader": {
     "signInOption": "Вход",
