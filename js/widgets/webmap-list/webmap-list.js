@@ -1,4 +1,4 @@
-﻿/*global define,$,setTimeout,moment,dojoConfig*/
+﻿/*global define,$,setTimeout,moment,dojoConfig,alert,document*/
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -167,7 +167,7 @@ define([
          * @param{string} map container ID
          * @memberOf widgets/webmap-list/webmap-list
          */
-        _createMap: function (webMapID, mapDivID, isBaseMapLoaded) {
+        _createMap: function (webMapID, mapDivID, isBaseMapLoaded, isUrl) {
             if (this.map) {
                 this.map.destroy();
             }
@@ -188,6 +188,9 @@ define([
                 //Disable default symbol highlighting of info-window
                 this.map.infoWindow.set("highlight", false);
                 // use org extents to load initial basemap
+                if (isUrl) {
+                    this.loadWebMapFromUrlParams();
+                }
                 if (isBaseMapLoaded && this.appConfig.portalObject && this.appConfig.portalObject.defaultExtent) {
                     portalDefaultExtent = this.appConfig.portalObject.defaultExtent;
                     baseMapExtent = new Extent(portalDefaultExtent.xmin,
@@ -803,7 +806,7 @@ define([
                     $('#webMapListWrapperContainer').animate({
                         'right': "-30%" // moves right
                     }, 500, function () {
-                        domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonOpen", "esriCTWebMapPanelToggleButtonClose");
+                        domClass.replace(toggleButton, "esrictfonticons-angle-double-left", "esrictfonticons-angle-double-right");
                         domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPositionClose", "esriCTWebMapPanelToggleBtnPosition");
                         domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainerFull", "esriCTWebMapListBannerContainer");
                     });
@@ -814,7 +817,7 @@ define([
                     $('#webMapListWrapperContainer').animate({
                         'right': "0%" // moves right
                     }, 500, function () {
-                        domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonClose", "esriCTWebMapPanelToggleButtonOpen");
+                        domClass.replace(toggleButton, "esrictfonticons-angle-double-right", "esrictfonticons-angle-double-left");
                         domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPosition", "esriCTWebMapPanelToggleBtnPositionClose");
                         domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainer", "esriCTWebMapListBannerContainerFull");
                     });
@@ -829,7 +832,7 @@ define([
                     $('#webMapListWrapperContainer').animate({
                         'left': "-30%" // moves left
                     }, 500, function () {
-                        domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonClose", "esriCTWebMapPanelToggleButtonOpen");
+                        domClass.replace(toggleButton, "esrictfonticons-angle-double-right", "esrictfonticons-angle-double-left");
                         domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPositionClose", "esriCTWebMapPanelToggleBtnPosition");
                         domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainerFull", "esriCTWebMapListBannerContainer");
                     });
@@ -840,7 +843,7 @@ define([
                     $('#webMapListWrapperContainer').animate({
                         'left': "0%" // moves left
                     }, 500, function () {
-                        domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonOpen", "esriCTWebMapPanelToggleButtonClose");
+                        domClass.replace(toggleButton, "esrictfonticons-angle-double-left", "esrictfonticons-angle-double-right");
                         domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPosition", "esriCTWebMapPanelToggleBtnPositionClose");
                         domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainer", "esriCTWebMapListBannerContainerFull");
                     });
@@ -935,7 +938,7 @@ define([
                     $('#webMapListWrapperContainer').animate({
                         'right': "-30%" // moves right
                     }, 500, function () {
-                        domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonOpen", "esriCTWebMapPanelToggleButtonClose");
+                        domClass.replace(toggleButton, "esrictfonticons-angle-double-left", "esrictfonticons-angle-double-right");
                         domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPositionClose", "esriCTWebMapPanelToggleBtnPosition");
                         domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainerFull", "esriCTWebMapListBannerContainer");
                     });
@@ -950,11 +953,83 @@ define([
                     $('#webMapListWrapperContainer').animate({
                         'left': "-30%" // moves left
                     }, 500, function () {
-                        domClass.replace(toggleButton, "esriCTWebMapPanelToggleButtonClose", "esriCTWebMapPanelToggleButtonOpen");
+                        domClass.replace(toggleButton, "esrictfonticons-angle-double-right", "esrictfonticons-angle-double-left");
                         domClass.replace(dom.byId("webMapPanelToggleBtnPosition"), "esriCTWebMapPanelToggleBtnPositionClose", "esriCTWebMapPanelToggleBtnPosition");
                         domClass.replace(dom.byId("webMapListBannerContainer"), "esriCTWebMapListBannerContainerFull", "esriCTWebMapListBannerContainer");
                     });
                 }
+            }
+        },
+
+        loadWebMapFromUrlParams: function () {
+            var webmapDivToSelect, layerToSelect, layerDetails, layerObject;
+            //Check if valid webmap with webmap id is present in webmap list
+            if (this.appConfig.urlObject.query.webmap) {
+                webmapDivToSelect = $(".esriCTWebMapListParentDiv div[webmapid=" + "'" + this.appConfig.urlObject.query.webmap + "'" + "]");
+                if (webmapDivToSelect) {
+                    array.forEach(this._filteredWebMapResponseArr, lang.hitch(this, function (itemDetails) {
+                        if (itemDetails[1].itemInfo.item.id === this.appConfig.urlObject.query.webmap) {
+                            this.webmapData = itemDetails[1].itemInfo;
+                        }
+                    }));
+                } else {
+                    //If webmap is not found, delete the url params stop the functionality
+                    this.appUtils.showMessage(this.appConfig.i18n.main.featureNotFoundMessage);
+                    delete this.appConfig.urlObject;
+                    return;
+                }
+            }
+            //If webmap is found and layer id is specified in url, try to fetch layer
+            if (this.webmapData && this.appConfig.urlObject.query.layer) {
+                array.forEach(this.webmapData.itemData.operationalLayers, lang.hitch(this, function (layer) {
+                    if (layer.id === this.appConfig.urlObject.query.layer) {
+                        layerDetails = layer;
+                        layerToSelect = $(".esriCTWebMapListParentDiv div[operationallayerid=" + "'" + layer.id + "'" + "]");
+                    }
+                }));
+                //Check if layer specified in url is present in webmap list, is not select webmap's first layer
+                if (!layerDetails && !layerToSelect && this.webmapData.itemData.operationalLayers.length === 1) {
+                    layerObject = {
+                        "webMapId": this.appConfig.urlObject.query.webmap,
+                        "operationalLayerId": this.webmapData.itemData.operationalLayers[0].id,
+                        "operationalLayerDetails": this.webmapData.itemData.operationalLayers[0],
+                        "itemInfo": this.webmapData
+                    };
+                    delete this.appConfig.urlObject;
+                } else if (!layerDetails && !layerToSelect) {
+                    // If layer is not found, stop the functionality
+                    this.appUtils.showMessage(this.appConfig.i18n.main.featureNotFoundMessage);
+                    delete this.appConfig.urlObject;
+                } else {
+                    layerObject = {
+                        "webMapId": this.appConfig.urlObject.query.webmap,
+                        "operationalLayerId": this.appConfig.urlObject.query.layer,
+                        "operationalLayerDetails": layerDetails,
+                        "itemInfo": this.webmapData
+                    };
+                }
+                //If layer is not present,select webmap's first layer
+            } else if (this.webmapData && this.webmapData.itemData.operationalLayers.length === 1) {
+                layerObject = {
+                    "webMapId": this.appConfig.urlObject.query.webmap,
+                    "operationalLayerId": this.webmapData.itemData.operationalLayers[0].id,
+                    "operationalLayerDetails": this.webmapData.itemData.operationalLayers[0],
+                    "itemInfo": this.webmapData
+                };
+            } else {
+                this.appUtils.showMessage(this.appConfig.i18n.main.featureNotFoundMessage);
+                delete this.appConfig.urlObject;
+            }
+            if (layerObject) {
+                this._handleWebmapToggling(webmapDivToSelect[0],
+                    layerObject ? layerObject.operationalLayerDetails : null);
+                //If valid layer is not found in webmap list, we need to select first layer in the webmap
+                if (!layerToSelect) {
+                    layerToSelect = $(".esriCTWebMapListParentDiv div[operationallayerid=" + "'" + layerObject.operationalLayerId + "'" + "]");
+                }
+            }
+            if (layerToSelect) {
+                layerToSelect.click();
             }
         }
     });

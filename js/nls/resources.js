@@ -110,7 +110,10 @@ define({
             unableToAddOrEditCommentMessage: "You do not have permission to perform this action." // to display message when unauthorized user tries to add/edit the comment
         },
         main: {
-            noGroup: "No group configured" // Appears when no group is configured
+            noGroup: "No group configured", // Appears when no group is configured
+            basemapGalleryText: "Basemap Gallery", // Basemap gallery text
+            legendText: "Legend", //Legend text
+            featureNotFoundMessage: "Requested feature not found" //Message displayed when feature is not found
         },
         search: {
             searchIconTooltip: "Search this layer", // Displayed on hover of search icon

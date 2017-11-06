@@ -6,6 +6,7 @@
         "applicationIcon": "",
         "applicationFavicon": "/images/favicon.ico",
         "zoomLevel": 12,
+        "basemapGroup": "",
         "commentField": "COMMENTS",
         "usePopupConfigurationForComment": false,
         "webMapInfoDescription": true,
@@ -33,7 +34,9 @@
         "bodyTextColor": "#515151",
         "buttonBackgroundColor": "#fff",
         "buttonTextColor": "#f26e1f",
-        "defaultDetailsTab": "Info"
+        "defaultDetailsTab": "Info",
+        "showBaseMapGallery": false,
+        "showLegend": false
     },
     "configurationSettings": [{
         "category": "<b>General</b>",
@@ -58,7 +61,7 @@
         }, {
             "type": "subcategory",
             "label": "Help"
-        },{
+        }, {
             "type": "conditional",
             "fieldName": "showHelpIcon",
             "label": "Enable the help window",
@@ -76,6 +79,29 @@
                 "stringFieldOption": "richtext",
                 "tooltip": "Text and graphics that will display in the help window."
             }]
+        }, {
+            "type": "subcategory",
+            "label": "Basemap and Legend settings"
+        }, {
+            "type": "paragraph",
+            "value": "User can enable/disable basemap gallery and legend."
+        }, {
+            "label": "Show basemap gallery",
+            "tooltip": "When disabled, basemap gallery button will not be displayed in map navigation buttons",
+            "type": "conditional",
+            "condition": false,
+            "fieldName": "showBaseMapGallery",
+            "items": [{
+            "label": "Select basemap group",
+            "tooltip": "Group displayed in the base map gallery",
+            "type": "basemapgroup",
+            "fieldName": "basemapGroup"
+            }]
+        }, {
+            "label": "Show Legend",
+            "tooltip": "When disabled, legend button will not be displayed in map navigation buttons",
+            "type": "boolean",
+            "fieldName": "showLegend"
         }]
     }, {
         "category": "<b>Theme</b>",

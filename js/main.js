@@ -1,4 +1,4 @@
-/*global define,setTimeout,window,dojo,$ */
+/*global define,setTimeout,window,dojo,$,document */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -19,6 +19,7 @@ define([
     "dojo/_base/declare",
     "dojo/_base/lang",
     "dojo/_base/array",
+    "dojo/_base/html",
     "dojo/dom",
     "dojo/dom-style",
     "dojo/dom-construct",
@@ -42,11 +43,14 @@ define([
     "esri/tasks/query",
     "dojo/Deferred",
     "dojo/promise/all",
+    "esri/dijit/BasemapGallery",
+    "esri/dijit/Legend",
     "dojo/domReady!"
 ], function (
     declare,
     lang,
     array,
+    html,
     dom,
     domStyle,
     domConstruct,
@@ -69,7 +73,9 @@ define([
     QueryTask,
     Query,
     Deferred,
-    all
+    all,
+    BasemapGallery,
+    Legend
 ) {
     return declare(null, {
 
@@ -104,6 +110,9 @@ define([
         _minScale: null, // to save the min scale of selected operational layer
         _maxScale: null, // to save the max scale of selected operational layer
         _mapExtentChangeHandle: null, // to store extent change handle of map
+        _initialLoad: true, //flag to check if refresh layer event is fired for the first time
+        _basemapGallery: null, // to store the object of basemap gallery widget
+        _legend: null,  // to store the object of legend gallery widget
 
         /**
          * This method is designed to handle processing after any
@@ -122,6 +131,8 @@ define([
             if (boilerPlateTemplateObject) {
                 this._boilerPlateTemplate = boilerPlateTemplateObject;
                 this.appConfig = boilerPlateTemplateObject.config;
+                this.appConfig.urlObject = lang.clone(boilerPlateTemplateObject.urlObject);
+                this.clonedURLObject = lang.clone(this.appConfig.urlObject);
                 // if login details are not available set it to anonymousUserName
                 if (this._loggedInUser) {
                     this.appConfig.logInDetails = {
@@ -156,6 +167,21 @@ define([
                 // items will be sorted according to modified date.
                 this._groupItems = [];
                 this._loadGroupItems(queryParams);
+                on(document, "click", lang.hitch(this, function (event) {
+                    var target, basemapPanel, legendPanel, isInternal;
+                    target = event.target || event.srcElement;
+                    basemapPanel = query(".esriCTOnScreenBasemap")[0];
+                    legendPanel = query(".esriCTOnScreenLegend")[0];
+                    //Check for click event and accordingly show/hide on screen widgets
+                    if (basemapPanel && legendPanel) {
+                        isInternal = target === basemapPanel || target === legendPanel ||
+                            html.isDescendant(target, basemapPanel) || html.isDescendant(target, legendPanel);
+                        if (!isInternal) {
+                            this._hidePanel("Basemap");
+                            this._hidePanel("Legend");
+                        }
+                    }
+                }));
             } else {
                 ApplicationUtils.showError(this.appConfig.i18n.config.configNotDefined);
             }
@@ -392,6 +418,29 @@ define([
             this._destroyDataViewerWidget();
             this._destroyDetailsPanelWidget();
             this._destroyMapPanelWidget();
+            this._destroyBasemapGalleryWidget();
+            this._destroyLegendWidget();
+        },
+
+        /**
+         * This function is used to destroy basemap gallery widget.
+         * @memberOf widgets/main/main
+         */
+        _destroyBasemapGalleryWidget: function () {
+            if (query(".esriCTBasemapGalleryButton")[0]) {
+                domConstruct.destroy(query(".esriCTBasemapGalleryButton")[0]);
+            }
+
+        },
+
+        /**
+         * This function is used to destroy legend widget.
+         * @memberOf widgets/main/main
+         */
+        _destroyLegendWidget: function () {
+            if (query(".esriCTLegendButton")[0]) {
+                domConstruct.destroy(query(".esriCTLegendButton")[0]);
+            }
         },
 
         /**
@@ -487,6 +536,7 @@ define([
                     ApplicationUtils.hideOverlayContainer();
                     this._applicationHeader.disableSelectionOptionsIcon();
                     this._reorderLayers = true;
+                    this._initialLoad = true;
                     $(".esriCTSignOutOption").addClass("esriCTHidden");
                     this._resetUpperAndLowerContainer();
                     // Reset last updated feature array
@@ -512,6 +562,8 @@ define([
                     this._timeInfo = details.operationalLayerDetails.layerObject.timeInfo;
                     this._isManualRefreshedClicked = false;
                     this._isFilterRefreshClicked = false;
+                    this._destroyBasemapGalleryWidget();
+                    this._destroyLegendWidget();
                     //destroy time slider instance
                     this._destroyTimeSliderWidget();
                     this._addOperationalLayerInSnapShotMode();
@@ -535,6 +587,7 @@ define([
                     }
                     this.map.addLayer(this._refinedOperationalLayer, this._existingLayerIndex);
                     this._checkFeatureScaleAndMaxRecordCount();
+                    this._handleMapControls();
                 }), 10);
             });
             // show message when there is no web map to display
@@ -620,17 +673,51 @@ define([
                 this._resizeMap();
             }));
             this._mapClickHandle = on(this.map, "click", lang.hitch(this, function (evt) {
+                var detailsPanelParameters, popupInfo;
                 $(".esriCTFilterParentContainer").css("display", "none");
                 if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
                     this._webMapListWidget.hideWebMapList();
                 }
-                if ((evt.graphic) && (evt.graphic._layer) && ((evt.graphic._layer.id === this._refinedOperationalLayer.id) || (evt.graphic._layer.id === "selectedRowGraphicsLayer"))) {
-                    // to track that feature is clicked of feature layer
-                    if (this._isGraphicLayerClicked) {
-                        this._dataViewerWidget.onFeatureClick(evt, true);
-                        this._isGraphicLayerClicked = false;
+                if ((evt.graphic) && (evt.graphic._layer)) {
+                    if ((evt.graphic._layer.id === this._refinedOperationalLayer.id) || (evt.graphic._layer.id === "selectedRowGraphicsLayer")) {
+                        if (this._dataViewerWidget.isNonEditableFeature) {
+                            this._dataViewerWidget._clearSelection();
+                        }
+                        // detects that feature of non-editable layer is clicked.
+                        this._dataViewerWidget.isNonEditableFeature = false;
+                        // to track that feature is clicked of feature layer
+                        if (this._isGraphicLayerClicked) {
+                            this._dataViewerWidget.onFeatureClick(evt, true);
+                            this._isGraphicLayerClicked = false;
+                        } else {
+                            this._dataViewerWidget.onFeatureClick(evt, false);
+                        }
                     } else {
-                        this._dataViewerWidget.onFeatureClick(evt, false);
+                        // detects that feature of non-editable layer is clicked.
+                        this._dataViewerWidget.isNonEditableFeature = true;
+                        array.forEach(this._itemInfo.itemData.operationalLayers, lang.hitch(this, function (operationalLayer) {
+                            if (operationalLayer.id === evt.graphic._layer.id) {
+                                popupInfo = operationalLayer.popupInfo;
+                            }
+                        }));
+                        if (popupInfo) {
+                            // clear previous selected feature
+                            this._dataViewerWidget._highlightNoneditableFeature(evt.graphic);
+                            detailsPanelParameters = {
+                                "appConfig": this.appConfig,
+                                "selectedFeatureSet": evt.graphic,
+                                "selectedOperationalLayer": evt.graphic._layer,
+                                "map": this.map,
+                                "appUtils": ApplicationUtils,
+                                "itemInfo": this._itemInfo,
+                                "popupInfo": popupInfo,
+                                "multipleFeatures": [evt.graphic],
+                                "isShowSelectedClicked": null,
+                                "isShowAllClicked": null
+                            };
+                            this._toggleNoFeatureFoundDiv(false);
+                            this._createDetailsPanel(null, detailsPanelParameters);
+                        }
                     }
                 }
             }));
@@ -807,6 +894,15 @@ define([
                 this._refinedOperationalLayer.clonedMinScale = this._minScale;
                 this._refinedOperationalLayer.clonedMaxScale = this._maxScale;
             }
+            if (this._refinedOperationalLayer.setScaleRange) {
+                if (this._minScale !== null && this._maxScale !== null) {
+                    this._refinedOperationalLayer.setScaleRange(this._minScale, this._maxScale);
+                } else if (this._minScale !== null && (this._maxScale === null || this._maxScale === undefined)) {
+                    this._refinedOperationalLayer.setScaleRange(this._minScale, 0);
+                } else if (this._maxScale !== null && (this._minScale === null || this._minScale === undefined)) {
+                    this._refinedOperationalLayer.setScaleRange(0, this._maxScale);
+                }
+            }
             this._refinedOperationalLayer.maxRecordCount = opLayerInfo.layerObject.maxRecordCount;
         },
 
@@ -823,7 +919,7 @@ define([
          * @memberOf widgets/main/main
          */
         _addOrganizationBaseMap: function () {
-            var webMapListObj, portal, params;
+            var webMapListObj, portal, params, isUrlParams = false;
             webMapListObj = this._webMapListWidget;
             params = {
                 q: this.appConfig.orgInfo.basemapGalleryGroupQuery
@@ -846,15 +942,24 @@ define([
                                     }
                                 }
                             }
+                            //Check if url contains webmap parameter and accordingly handle the flag value
+                            if (this.appConfig.urlObject && (this.appConfig.urlObject.query.webmap || this.appConfig.urlObject.query.layer ||
+                                this.appConfig.urlObject.query.oid)) {
+                                isUrlParams = true;
+                            }
                             if (baseMapID) {
-                                webMapListObj._createMap(baseMapID, "mapDiv", true);
+                                webMapListObj._createMap(baseMapID, "mapDiv", true, isUrlParams);
                             } else {
-                                webMapListObj._createMap(results.results[0].id, "mapDiv");
+                                webMapListObj._createMap(results.results[0].id, "mapDiv", null, isUrlParams);
                             }
                         }
                         ApplicationUtils.hideLoadingIndicator();
                     }));
                 } else {
+                    //Check if url contains webmap parameter start processing the parameters
+                    if (this.appConfig.urlObject.query.webmap) {
+                        this._webMapListWidget.loadWebMapFromUrlParams();
+                    }
                     ApplicationUtils.hideLoadingIndicator();
                 }
             }));
@@ -866,9 +971,9 @@ define([
          */
         _addWebMapListToggleIcon: function () {
             if (this.appConfig.i18n.direction === "rtl") {
-                dojo.addClass(dom.byId('webmapListToggleButton'), "esriCTWebMapPanelToggleButtonClose");
+                dojo.addClass(dom.byId('webmapListToggleButton'), "esrictfonticons-angle-double-right");
             } else {
-                dojo.addClass(dom.byId('webmapListToggleButton'), "esriCTWebMapPanelToggleButtonOpen");
+                dojo.addClass(dom.byId('webmapListToggleButton'), "esrictfonticons-angle-double-left");
             }
         },
 
@@ -965,7 +1070,7 @@ define([
             this._dataViewerWidget.showDetailsPanel = lang.hitch(this, function (showDetailsPanelDataObj) {
                 this._toggleNoFeatureFoundDiv(false);
                 // create details panel
-                this._createDetailsPanel(showDetailsPanelDataObj);
+                this._createDetailsPanel(showDetailsPanelDataObj, null);
             });
             this._dataViewerWidget.attachEventToGraphicsLayer = lang.hitch(this, function (graphicsLayer) {
                 // to select graphics on click of activated feature
@@ -1292,6 +1397,15 @@ define([
             });
 
             this._timeSliderWidget.refreshSelectedLayer = lang.hitch(this, function () {
+                //Time slider causes layer selection process to fire twice
+                //To handle this just create a flag and make it false on first load
+                if (this._initialLoad) {
+                    this.appConfig.urlObject = {};
+                    this.appConfig.urlObject = this.clonedURLObject;
+                    this._initialLoad = false;
+                } else {
+                    delete this.appConfig.urlObject;
+                }
                 this._refreshOperationalLayer();
             });
 
@@ -1341,21 +1455,25 @@ define([
          * This function is used to instantiate details panel widget.
          * @memberOf widgets/main/main
          */
-        _createDetailsPanel: function (showDetailsPanelDataObj) {
+        _createDetailsPanel: function (showDetailsPanelDataObj, detailsPanelParametersObj) {
             this._destroyDetailsPanelWidget();
             var detailsPanelParameters;
-            detailsPanelParameters = {
-                "appConfig": this.appConfig,
-                "selectedFeatureSet": showDetailsPanelDataObj.singleFeature,
-                "selectedOperationalLayer": this._refinedOperationalLayer,
-                "map": this.map,
-                "appUtils": ApplicationUtils,
-                "itemInfo": this._itemInfo,
-                "popupInfo": this._layerSelectionDetails.operationalLayerDetails.popupInfo,
-                "multipleFeatures": showDetailsPanelDataObj.multipleFeature,
-                "isShowSelectedClicked": this._dataViewerWidget.isShowSelectedClicked,
-                "isShowAllClicked": this._dataViewerWidget.isShowAllClicked
-            };
+            if (showDetailsPanelDataObj) {
+                detailsPanelParameters = {
+                    "appConfig": this.appConfig,
+                    "selectedFeatureSet": showDetailsPanelDataObj.singleFeature,
+                    "selectedOperationalLayer": this._refinedOperationalLayer,
+                    "map": this.map,
+                    "appUtils": ApplicationUtils,
+                    "itemInfo": this._itemInfo,
+                    "popupInfo": this._layerSelectionDetails.operationalLayerDetails.popupInfo,
+                    "multipleFeatures": showDetailsPanelDataObj.multipleFeature,
+                    "isShowSelectedClicked": this._dataViewerWidget.isShowSelectedClicked,
+                    "isShowAllClicked": this._dataViewerWidget.isShowAllClicked
+                };
+            } else {
+                detailsPanelParameters = detailsPanelParametersObj;
+            }
             this._detailsPanelWidget = new DetailsPanel(detailsPanelParameters, domConstruct.create("div", {}, dom.byId("detailsPanelWrapperContainer")));
             this._attachDetailsPanelEventListener();
             this._detailsPanelWidget.startup();
@@ -1463,7 +1581,9 @@ define([
                 }
                 this._resizeMap();
                 if (query(".esriCTDataViewerMainContainer") && (query(".esriCTDataViewerMainContainer").length > 0) && query(".esriCTDataViewerMainContainer")[0].clientHeight) {
-                    domStyle.set(this._dataViewerWidget.dataViewerContainer, "height", query(".esriCTDataViewerMainContainer")[0].clientHeight + "px");
+                    if (this._dataViewerWidget && this._dataViewerWidget.dataViewerContainer) {
+                        domStyle.set(this._dataViewerWidget.dataViewerContainer, "height", query(".esriCTDataViewerMainContainer")[0].clientHeight + "px");
+                    }
                 }
                 // fit charts in media panel
                 if (this._detailsPanelWidget) {
@@ -1629,6 +1749,228 @@ define([
                 }
             }
             return false;
+        },
+
+        /* Section for basemap gallery and legend */
+
+        _handleMapControls: function () {
+            var basemapG, basemapGalleryButtonDiv, legendButtonDiv, legend;
+            //Create basemap widget on every layer/webmap change
+            this._legend = null;
+            this._basemapGallery = null;
+            if (this.appConfig.showBaseMapGallery) {
+                if (!this._basemapGallery) {
+                    basemapG = this._createOnScreenWidgetPanel("Basemap");
+                    basemapGalleryButtonDiv = domConstruct.create("div", {
+                        "class": "esriCTMapNavigationButton esriCTBasemapGalleryButton",
+                        "title": this.appConfig.i18n.main.basemapGalleryText
+                    });
+                    on(basemapGalleryButtonDiv, "click", lang.hitch(this, function (event) {
+                        event.stopPropagation();
+                        if (!this._basemapGallery) {
+                            this._fetchBasemapGalleryGroup().then(lang.hitch(this, function (id) {
+                                this._createBasemapGallery(basemapG, id);
+                            }));
+                        }
+                        this._showPanel("Basemap");
+                    }));
+                    domConstruct.place(basemapGalleryButtonDiv, query(".esriSimpleSliderDecrementButton", dom.byId("mapDiv"))[0], "after");
+                }
+            }
+            if (this.appConfig.showLegend) {
+                legendButtonDiv = domConstruct.create("div", {
+                    "class": "esriCTMapNavigationButton esriCTLegendButton",
+                    "title": this.appConfig.i18n.main.legendText
+                });
+                legend = this._createOnScreenWidgetPanel("Legend");
+                on(legendButtonDiv, "click", lang.hitch(this, function (event) {
+                    event.stopPropagation();
+                    if (!this._legend) {
+                        this._createLegend(legend);
+                    }
+                    this._showPanel("Legend");
+                }));
+                if (this.appConfig.showBaseMapGallery) {
+                    domConstruct.place(legendButtonDiv, basemapGalleryButtonDiv, "after");
+                } else {
+                    domConstruct.place(legendButtonDiv, query(".esriSimpleSliderDecrementButton", dom.byId("mapDiv"))[0], "after");
+                }
+            }
+        },
+
+        _fetchBasemapGalleryGroup: function () {
+            var basemapGroup, basemapDef, groupId, params;
+            basemapDef = new Deferred();
+            if (this.appConfig.basemapGroup) {
+                basemapGroup = this.appConfig.basemapGroup;
+            } else if (this.appConfig.orgInfo.useVectorBasemaps) {
+                basemapGroup = this.appConfig.orgInfo.vectorBasemapGalleryGroupQuery;
+            } else {
+                basemapGroup = this.appConfig.orgInfo.basemapGalleryGroupQuery;
+            }
+            params = {
+                q: basemapGroup
+            };
+            this.appConfig.portalObject.queryGroups(params).then(lang.hitch(this, function (groups) {
+                //Check if configured group is valid
+                if (groups.results && groups.results[0] && groups.results[0].id) {
+                    groupId = groups.results[0].id;
+                } else {
+                    groupId = null;
+                }
+                basemapDef.resolve(groupId);
+            }), function () {
+                //reject deferred
+                basemapDef.reject(null);
+            });
+            return basemapDef.promise;
+        },
+
+        /**
+        * create panel for on screen widget
+        * @param{string} name of panel to be created
+        * @memberOf main
+        */
+        _createOnScreenWidgetPanel: function (panel) {
+            var headerTitle, container, titleContainer, contentWrapper, closeBtn;
+            //Clear widgets dom
+            if (query(".esriCTOnScreen" + panel)[0]) {
+                domConstruct.destroy(query(".esriCTOnScreen" + panel)[0]);
+            }
+            //Set the title based on panel
+            if (panel === "Basemap") {
+                headerTitle = this.appConfig.i18n.main.basemapGalleryText;
+            } else {
+                headerTitle = this.appConfig.i18n.main.legendText;
+            }
+            container = domConstruct.create("div", {
+                "class": "esriCTOnScreenWidgetContainer esriCTHidden esriCTOnScreen" + panel
+            }, dojo.body());
+            titleContainer = domConstruct.create("div", {
+                "class": "esriCTOnScreenWidgetTitleContainer esriCTHeaderBackgroundColor esriCTHeaderTextColor esriCTHeaderTextColorAsBorder",
+                title: panel
+            }, container);
+            domConstruct.create("div", {
+                "class": "esriCTHeaderTitle",
+                innerHTML: headerTitle
+            }, titleContainer);
+
+            closeBtn = domConstruct.create("div", {
+                "class": "esriCTCloseHelpWindow esrictfonticons esrictfonticons-close-1 esriCTHeaderTextColor esriCTHeaderBackgroundColor"
+            }, domConstruct.create("div", { "class": "esriCTPanelCloseBtn esriCTFloatLeft" }, titleContainer));
+
+            //Listen for close button click
+            on(closeBtn, "click", lang.hitch(this, function () {
+                domClass.add(container, "esriCTHidden");
+            }));
+            //Create dom for on screen panel
+            contentWrapper = domConstruct.create("div", {
+                "class": "esriCTOnScreenWidgetWrapper esriCTBodyTextColor esriCTBodyBackgroundColor"
+            }, container);
+            return contentWrapper;
+        },
+
+        /**
+        * create basemap gallery widget
+        * @param{object} parent node
+        * @memberOf main
+        */
+        _createBasemapGallery: function (parentNode, id) {
+            var configuredGroup = {}, loadingIndicatorDiv, basemapErrorHandler;
+            configuredGroup.id = id;
+            loadingIndicatorDiv = domConstruct.create("div", {
+                "class": "esriCTBasemapLoading"
+            }, parentNode);
+            this._basemapGallery = new BasemapGallery({
+                showArcGISBasemaps: true,
+                map: this.map,
+                basemapsGroup: configuredGroup,
+                portalUrl: this.appConfig.sharinghost,
+                "class": "esriCTHidden"
+            }, domConstruct.create('div', {}, parentNode));
+            this._basemapGallery.startup();
+            //Hide loading indicator on load
+            this._basemapGallery.on("load", lang.hitch(this, function () {
+                domClass.add(loadingIndicatorDiv, "esriCTHidden");
+                domClass.remove(this._basemapGallery.domNode, "esriCTHidden");
+                if (basemapErrorHandler) {
+                    basemapErrorHandler.remove();
+                }
+            }));
+            //Hide basemap gallery after selecting a basemap
+            this._basemapGallery.on("selection-change", lang.hitch(this, function () {
+                this._hidePanel("Basemap");
+            }));
+            //Handle basemap gallery error
+            basemapErrorHandler = this._basemapGallery.on("error", lang.hitch(this, function (err) {
+                domClass.add(loadingIndicatorDiv, "esriCTHidden");
+                domClass.remove(this._basemapGallery.domNode, "esriCTHidden");
+                domAttr.set(this._basemapGallery.domNode, "innerHTML", err.message);
+            }));
+        },
+
+        /**
+        * create legend widget
+        * @param{object} parent node
+        * @memberOf main
+        */
+        _createLegend: function (parentNode) {
+            var layerInfo = [], isNonEditableLayer, capabilities, showLegend;
+            //Loop through all the layers and filter them based on capabilities
+            array.forEach(this._itemInfo.itemData.operationalLayers,
+                lang.hitch(this, function (layer) {
+                    isNonEditableLayer = false;
+                    showLegend = true;
+                    capabilities = layer.resourceInfo.capabilities;
+                    if (capabilities) {
+                        isNonEditableLayer = capabilities.indexOf("Create") === -1 && (capabilities.indexOf("Editing") === -1 ||
+                            capabilities.indexOf("Update") === -1);
+                    }
+                    //Honor show/hide legend prperty from webmap
+                    if (layer.hasOwnProperty("showLegend")) {
+                        showLegend = layer.showLegend;
+                    }
+                    //Filter layer based on different criteria
+                    if (showLegend && (layer.id === this._refinedOperationalLayer.id || (this.appConfig.showNonEditableLayers && isNonEditableLayer))) {
+                        layerInfo.push({ layer: this.map._layers[layer.id], title: layer.title });
+                    }
+                }));
+            this._legend = new Legend({
+                map: this.map,
+                layerInfos: layerInfo,
+                respectVisibility: false
+            }, domConstruct.create('div', {}, parentNode));
+            this._legend.startup();
+        },
+
+        /**
+        * show on screen panel
+        * @param{string} name of panel to be shown
+        * @memberOf main
+        */
+        _showPanel: function (panel) {
+            var nodeClass;
+            //Before showing the selected panel, close all the other panels
+            query(".esriCTOnScreenWidgetContainer").forEach(lang.hitch(this,
+                function (node) {
+                    if (node) {
+                        domClass.add(node, "esriCTHidden");
+                    }
+                }));
+            nodeClass = ".esriCTOnScreen" + panel;
+            domClass.remove(query(nodeClass)[0], "esriCTHidden");
+        },
+
+        /**
+        * show on screen panel
+        * @param{string} name of panel to be shown
+        * @memberOf main
+        */
+        _hidePanel: function (panel) {
+            var nodeClass;
+            nodeClass = ".esriCTOnScreen" + panel;
+            domClass.add(query(nodeClass)[0], "esriCTHidden");
         }
+        /* End of section for basemap gallery and legend */
     });
 });

@@ -146,6 +146,14 @@
     border-color: ${CalculatedBodyTextColor} !important;
 }
 
+.esrictfonticons-angle-double-left {
+    color: ${HeaderTextColor} !important;
+}
+
+.esrictfonticons-angle-double-right {
+    color: ${HeaderTextColor} !important;
+}
+
 /** Webmap list panel ends **/
 
 /** Search panel starts **/
