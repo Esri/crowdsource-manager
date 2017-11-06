@@ -38,48 +38,54 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.esrictfonticons-search:before {
-  content: "\61";
-}
-.esrictfonticons-refresh:before {
-  content: "\62";
-}
-.esrictfonticons-close:before {
-  content: "\63";
+.esrictfonticons-close-1:before {
+  content: "\4b";
 }
 .esrictfonticons-delete:before {
-  content: "\64";
+  content: "\61";
 }
 .esrictfonticons-help-1:before {
-  content: "\65";
+  content: "\62";
 }
 .esrictfonticons-help-2:before {
-  content: "\66";
+  content: "\63";
 }
 .esrictfonticons-info:before {
-  content: "\67";
+  content: "\64";
 }
 .esrictfonticons-left-arrow:before {
-  content: "\68";
+  content: "\65";
 }
 .esrictfonticons-list:before {
-  content: "\69";
+  content: "\66";
 }
 .esrictfonticons-map:before {
-  content: "\6a";
+  content: "\67";
 }
 .esrictfonticons-pencil:before {
-  content: "\6b";
+  content: "\68";
 }
 .esrictfonticons-right-arrow:before {
-  content: "\6c";
+  content: "\69";
 }
 .esrictfonticons-setting:before {
-  content: "\6d";
-}
-.esrictfonticons-user:before {
-  content: "\6e";
+  content: "\6a";
 }
 .esrictfonticons-setting-1:before {
+  content: "\6b";
+}
+.esrictfonticons-user:before {
+  content: "\6c";
+}
+.esrictfonticons-refresh:before {
+  content: "\6d";
+}
+.esrictfonticons-search:before {
+  content: "\6e";
+}
+.esrictfonticons-angle-double-right:before {
   content: "\6f";
+}
+.esrictfonticons-angle-double-left:before {
+  content: "\70";
 }

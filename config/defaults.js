@@ -53,6 +53,7 @@ define({
             "url": null
         }]
     },
+    "basemapGroup": "",
     // name of the application
     "applicationName": "",
     // application icon
@@ -120,5 +121,7 @@ define({
     "buttonBackgroundColor": "#fff",
     "buttonTextColor": "#f26e1f",
     // to configure which tab will be opened by default when a report is selected.
-    "defaultDetailsTab": "Info" // Info, Media, Comments
+    "defaultDetailsTab": "Info", // Info, Media, Comments
+    "showBaseMapGallery": false,
+    "showLegend": false
 });

@@ -121,11 +121,29 @@ define([
          * @memberOf widgets/details-panel/popup
          */
         _createEditFormButton: function () {
-            var editFeatureButton = domConstruct.create("div", {
+            var isNonEditableLayer, capabilities, editFeatureButton;
+            isNonEditableLayer = false;
+            // create edit icon to edit feature
+            editFeatureButton = domConstruct.create("div", {
                 "class": "esriCTEditFeatureButton esrictfonticons esrictfonticons-pencil esriCTBodyTextColor",
                 "title": this.appConfig.i18n.detailsPanel.editContentText
             }, this.popupContainer);
-            //attach 'click event on edit button to display form
+            // check if the layer is non-editable
+            array.forEach(this.itemInfo.itemData.operationalLayers, lang.hitch(this, function (operationalLayer) {
+                if (this.selectedOperationalLayer.id === operationalLayer.id) {
+                    if (operationalLayer.resourceInfo.capabilities) {
+                        capabilities = operationalLayer.resourceInfo.capabilities;
+                        if (capabilities.indexOf("Create") === -1 && (capabilities.indexOf("Editing") === -1 || capabilities.indexOf("Update") === -1)) {
+                            isNonEditableLayer = true;
+                        }
+                    }
+                }
+            }));
+            // hide the editable icon for non-editable layer
+            if (isNonEditableLayer) {
+                domClass.add(editFeatureButton, "esriCTHidden");
+            }
+            // attach 'click event on edit button to display form
             on(editFeatureButton, "click", lang.hitch(this, function () {
                 if (this.appConfig.logInDetails.canEditFeatures) {
                     this._createPopupForm();

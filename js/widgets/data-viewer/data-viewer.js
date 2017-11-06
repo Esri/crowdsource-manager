@@ -1,4 +1,4 @@
-﻿/*global define,moment,$,setTimeout,clearTimeout */
+﻿/*global define,moment,$,setTimeout,clearTimeout,alert */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -103,6 +103,7 @@ define([
         isShowAllClicked: null, // to notify that show all option is clicked
         _selectedRowIndex: null, // to store index of row that is selected
         _isRowRemovedAfterMapClick: null, // to track whether row is removed after map click
+        isNonEditableFeature: false,
 
         /**
         * This function is called when widget is constructed
@@ -180,6 +181,9 @@ define([
             var filteredFeature, filteredFeatureArr, filterFeatureID, selectedFeatureArr, i, j;
             filteredFeatureArr = [];
             selectedFeatureArr = [];
+            if (this.isNonEditableFeature) {
+                return selectedFeatureArr;
+            }
             for (i = 0; i < this._selectRowGraphicsLayer.graphics.length; i++) {
                 filterFeatureID = this._selectRowGraphicsLayer.graphics[i].attributes[this._selectedOperationalLayer.objectIdField];
                 filteredFeature = this._getFilteredFeature(filterFeatureID);
@@ -209,10 +213,16 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _updateSelectedAndTotalRecordCounts: function () {
-            var countLabelString;
+            var countLabelString, selectedFeatureCount;
+            selectedFeatureCount = this._selectRowGraphicsLayer.graphics.length;
+            // on click of non-editable feature, selected count displayed on top right should not
+            // incremented. Hence, set it to 0 on click of it.
+            if (this.isNonEditableFeature) {
+                selectedFeatureCount = 0;
+            }
             countLabelString = string.substitute(this.appConfig.i18n.dataviewer.layerFeatureCount, {
                 featureCount: this._selectedOperationalLayer.graphics.length,
-                selectedFeatureCount: this._selectRowGraphicsLayer.graphics.length
+                selectedFeatureCount: selectedFeatureCount
             });
             dom.byId("layerFeatureCountContainer").innerHTML = countLabelString;
         },
@@ -234,6 +244,7 @@ define([
             }
             // Update record count on selection of feature
             this._graphicLayerAddHandle = on(this._selectRowGraphicsLayer, "graphic-add", lang.hitch(this, function () {
+
                 this._updateSelectedAndTotalRecordCounts();
                 if (this._selectRowGraphicsLayer.graphics.length > 0) {
                     this.enableSelectionOptionsIcon();
@@ -545,7 +556,7 @@ define([
         */
         _createDataViewerDataPanel: function () {
             var i, j, number, fieldName, format, type, value, dateValue, dateFormat, k,
-                n, id, m, isCodeMatched, entireFeatureDataArr, dataSet, objectIdIndex;
+                n, id, m, isCodeMatched, entireFeatureDataArr, dataSet, objectIdIndex, isGraphicFound, rowToSelect, scrollTopValue;
             // Stores all rows
             entireFeatureDataArr = [];
             for (i = 0; i < this._features.length; i++) {
@@ -675,6 +686,32 @@ define([
             }));
             // Pass entire data for creation of a data-viewer table
             this._createTableRows(entireFeatureDataArr, objectIdIndex);
+            //If url parameter contains feature id, check if feature exists and select the same
+            if (this.appConfig.urlObject && this.appConfig.urlObject.query.oid) {
+                isGraphicFound = false;
+                array.some(this.selectedOperationalLayer.graphics,
+                    lang.hitch(this, function (graphic) {
+                        if (graphic.attributes[this.selectedOperationalLayer.objectIdField] ===
+                                parseInt(this.appConfig.urlObject.query.oid, 10)) {
+                            isGraphicFound = true;
+                            rowToSelect = $("tr[OBJID=" + "'" + this.appConfig.urlObject.query.oid + "'" + "]");
+                            return true;
+                        }
+                    }));
+                //If feature is present in layer select it in data viewer otherwise show
+                //alert message
+                if (isGraphicFound && rowToSelect.length > 0) {
+                    rowToSelect.click();
+                    //Scroll to selected feature in data viewer
+                    scrollTopValue = rowToSelect.offset().top - 150;
+                    $('.esriCTDataViewerContainer').animate({
+                        scrollTop: $('.esriCTDataViewerContainer').scrollTop() + scrollTopValue
+                    }, 400);
+                } else {
+                    this.appUtils.showMessage(this.appConfig.i18n.main.featureNotFoundMessage);
+                }
+                delete this.appConfig.urlObject;
+            }
         },
 
         /**
@@ -1047,6 +1084,11 @@ define([
             // Click event binded on table rows for feature selection
             on(tr, "click", lang.hitch(this, function (evt) {
                 this.appUtils.showLoadingIndicator();
+                if (this.isNonEditableFeature) {
+                    // detects that feature of non-editable layer is clicked.
+                    this.isNonEditableFeature = false;
+                    this._clearSelection();
+                }
                 this.hideWebMapList();
                 this._hideFilterContainer();
                 this._featureObjectID = parseInt(domAttr.get(evt.currentTarget, "OBJID"), 10);
@@ -1319,6 +1361,9 @@ define([
         */
         _selectRowOnFeatureClick: function (objectId, selectRow, ctrlFlag) { //ignore jslint
             var i, selectedRowObjID, rowNumber, isRowSelected = false;
+            if (this.isNonEditableFeature) {
+                return;
+            }
             this._isRowFound = false;
             if (this._table && this._table.rows && this._table.rows.length > 1) {
                 for (i = 0; i < this._table.rows.length; i++) {
@@ -1677,6 +1722,16 @@ define([
         _hideFilterContainer: function () {
             $(".esriCTFilterParentContainer").css("display", "none");
             $(".bootstrap-datetimepicker-widget.dropdown-menu").remove();
+        },
+
+        /**
+         * This function is used to highlight the feature of non-editable layer
+         * @memberOf widgets/data-viewer/data-viewer
+         */
+        _highlightNoneditableFeature: function (graphic) {
+            this._clearSelection();
+            this._deselectTableRows();
+            this._selectRowGraphicsLayer.add(this._getHighLightSymbol(graphic, false));
         }
     });
 });

@@ -351,3 +351,19 @@
 
 
 /** Layer Title Container Ends **/
+
+
+/** basemap gallery and legend panels **/
+
+.dj_rtl .esriCTHeaderTitle {
+    float: right;
+    margin-right: 5px;
+    margin-left: 0px;
+}
+
+.dj_rtl .esriCTPanelCloseBtn {
+    margin-left: 5px;
+}
+
+
+/** basemap gallery and legend panels **/

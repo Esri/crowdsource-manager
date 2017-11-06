@@ -875,20 +875,28 @@ table {
     width: 40px;
 }
 
-.esriCTWebMapPanelToggleButtonOpen {
-    background-image: url("../images/close-panel.png");
+.esrictfonticons-angle-double-left {
+    height: 35px;
+    width: 40px;
+    font-size: 25px;
+    padding: 4px 8px;
 }
 
-.esriCTWebMapPanelToggleButtonClose {
-    background-image: url("../images/open-panel.png");
+.esrictfonticons-angle-double-right {
+    height: 35px;
+    width: 40px;
+    font-size: 25px;
+    padding: 4px 8px;
 }
 
 .esriCTWebMapPanelToggleButtonOpenDisabled {
     background-image: url("../images/close-panel-disabled.png");
+    font-size: 0px !important;
 }
 
 .esriCTWebMapPanelToggleButtonCloseDisabled {
     background-image: url("../images/open-panel-disabled.png");
+    font-size: 0px !important;
 }
 
 .esriCTWebMapListWrapperContainer {
@@ -2076,3 +2084,105 @@ input.esriCTRadioButton {
 
 
 /** Selection options container ends **/
+
+
+/** Basemap gallery section starts **/
+
+.esriCTFloatLeft {
+    float: left;
+}
+
+.esriCTBasemapGalleryButton {
+    background: url('../images/basemap.png') no-repeat center;
+}
+
+.esriCTLegendButton {
+    background: url('../images/legend.png') no-repeat center;
+}
+
+.esriSimpleSlider .esriCTMapNavigationButton {
+    height: 30px;
+    width: 30px;
+    background-size: 19px;
+    border-top: 1px solid #cccccc;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    padding: 0px;
+    background-color: #fff !important;
+}
+
+.esriCTOnScreenWidgetContainer {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 360px;
+    width: 300px;
+    -webkit-box-shadow: 1px 1px 5px #888;
+    -moz-box-shadow: 1px 1px 5px #888;
+    box-shadow: 1px 1px 5px #888;
+    z-index: 898;
+}
+
+.esriCTOnScreenWidgetTitleContainer {
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid;
+    font-size: 15px;
+    width: 100%;
+    float: left;
+}
+
+.esriCTHeaderTitle {
+    width: calc(100% - 30px);
+    float: left;
+    margin-left: 5px;
+}
+
+.esriCTOnScreenWidgetWrapper {
+    height: calc(100% - 50px);
+    width: 100%;
+    padding: 10px;
+    float: left;
+    overflow: auto;
+}
+
+.esriBasemapGallery img {
+    vertical-align: baseline;
+}
+
+.esriCTBasemapLoading {
+    height: 50px;
+    width: 50px;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    background-image: url('../images/loading-small.gif');
+    background-size: 33px 39px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+/* Override the style of selected basemap node to avoid the issue of basemap thumbnail displacement */
+
+.esriBasemapGallerySelectedNode .esriBasemapGalleryThumbnail {
+    margin: 1px;
+}
+
+
+/* Override this style from 2.5em to 2.8em to prevent name of basemap that gets cut off */
+
+.esriBasemapGalleryLabelContainer {
+    height: 2.9em;
+}
+
+
+/** Basemap gallery section ends **/
