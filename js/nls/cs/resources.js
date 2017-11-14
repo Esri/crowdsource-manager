@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "K této akci nemáte oprávnění."
   },
   "main": {
-    "noGroup": "Není nakonfigurována žádná skupina"
+    "noGroup": "Není nakonfigurována žádná skupina",
+    "basemapGalleryText": "Ř_Basemap Gallery______ů",
+    "legendText": "Ř_Legend___ů",
+    "featureNotFoundMessage": "Ř_Requested feature not found_________ů"
   },
   "search": {
     "searchIconTooltip": "Prohledat vrstvu",

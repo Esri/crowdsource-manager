@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "No tiene permiso para realizar esta acción."
   },
   "main": {
-    "noGroup": "No hay ningún grupo configurado"
+    "noGroup": "No hay ningún grupo configurado",
+    "basemapGalleryText": "á_Basemap Gallery______Ó",
+    "legendText": "á_Legend___Ó",
+    "featureNotFoundMessage": "á_Requested feature not found_________Ó"
   },
   "search": {
     "searchIconTooltip": "Buscar en esta capa",

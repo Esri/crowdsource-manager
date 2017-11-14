@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "U hebt geen toestemming om deze actie uit te voeren."
   },
   "main": {
-    "noGroup": "Geen groep geconfigureerd"
+    "noGroup": "Geen groep geconfigureerd",
+    "basemapGalleryText": "Ĳ_Basemap Gallery______ä",
+    "legendText": "Ĳ_Legend___ä",
+    "featureNotFoundMessage": "Ĳ_Requested feature not found_________ä"
   },
   "search": {
     "searchIconTooltip": "Deze laag zoeken",

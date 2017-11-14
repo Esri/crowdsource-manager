@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "この操作を実行する権限がありません。"
   },
   "main": {
-    "noGroup": "グループが構成されていません"
+    "noGroup": "グループが構成されていません",
+    "basemapGalleryText": "須_Basemap Gallery______鷗",
+    "legendText": "須_Legend___鷗",
+    "featureNotFoundMessage": "須_Requested feature not found_________鷗"
   },
   "search": {
     "searchIconTooltip": "このレイヤーを検索",

@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "لا يتوفر لديك إذن تنفيذ هذا الحدث."
   },
   "main": {
-    "noGroup": "لم يتم تكوين المجموعة"
+    "noGroup": "لم يتم تكوين المجموعة",
+    "basemapGalleryText": "بيت_Basemap Gallery______لاحقة",
+    "legendText": "بيت_Legend___لاحقة",
+    "featureNotFoundMessage": "بيت_Requested feature not found_________لاحقة"
   },
   "search": {
     "searchIconTooltip": "البحث عن هذه الطبقة",

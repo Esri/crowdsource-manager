@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Bạn không có quyền thực hiện thao tác này."
   },
   "main": {
-    "noGroup": "Không có nhóm nào được cấu hình"
+    "noGroup": "Không có nhóm nào được cấu hình",
+    "basemapGalleryText": "Đ_Basemap Gallery______ớ",
+    "legendText": "Đ_Legend___ớ",
+    "featureNotFoundMessage": "Đ_Requested feature not found_________ớ"
   },
   "search": {
     "searchIconTooltip": "Tìm kiếm lớp này",

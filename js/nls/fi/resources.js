@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Sinulla ei ole oikeuksia tämän toiminnon toteuttamiseen."
   },
   "main": {
-    "noGroup": "Yhtään ryhmää ei ole määritetty"
+    "noGroup": "Yhtään ryhmää ei ole määritetty",
+    "basemapGalleryText": "Å_Basemap Gallery______ö",
+    "legendText": "Å_Legend___ö",
+    "featureNotFoundMessage": "Å_Requested feature not found_________ö"
   },
   "search": {
     "searchIconTooltip": "Hae tätä karttatasoa",

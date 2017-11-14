@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Nu aveţi permisiunea pentru a efectua această acţiune."
   },
   "main": {
-    "noGroup": "Niciun grup configurat"
+    "noGroup": "Niciun grup configurat",
+    "basemapGalleryText": "Ă_Basemap Gallery______ș",
+    "legendText": "Ă_Legend___ș",
+    "featureNotFoundMessage": "Ă_Requested feature not found_________ș"
   },
   "search": {
     "searchIconTooltip": "Căutare în acest strat tematic",

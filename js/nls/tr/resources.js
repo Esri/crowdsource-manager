@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Bu işlemi yapma izniniz yok."
   },
   "main": {
-    "noGroup": "Yapılandırılan grup yok"
+    "noGroup": "Yapılandırılan grup yok",
+    "basemapGalleryText": "ı_Basemap Gallery______İ",
+    "legendText": "ı_Legend___İ",
+    "featureNotFoundMessage": "ı_Requested feature not found_________İ"
   },
   "search": {
     "searchIconTooltip": "Bu katmanı ara",

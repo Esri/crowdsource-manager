@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Du har ikke tilladelse til at udføre denne handling."
   },
   "main": {
-    "noGroup": "Ingen gruppe konfigureret"
+    "noGroup": "Ingen gruppe konfigureret",
+    "basemapGalleryText": "ø_Basemap Gallery______å",
+    "legendText": "ø_Legend___å",
+    "featureNotFoundMessage": "ø_Requested feature not found_________å"
   },
   "search": {
     "searchIconTooltip": "Søg i dette lag",

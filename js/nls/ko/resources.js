@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "이 작업을 수행할 권한이 없습니다."
   },
   "main": {
-    "noGroup": "구성된 그룹 없음"
+    "noGroup": "구성된 그룹 없음",
+    "basemapGalleryText": "한_Basemap Gallery______빠",
+    "legendText": "한_Legend___빠",
+    "featureNotFoundMessage": "한_Requested feature not found_________빠"
   },
   "search": {
     "searchIconTooltip": "이 레이어 검색",

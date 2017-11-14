@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Nemate dopuštenje za izvođenje ove radnje."
   },
   "main": {
-    "noGroup": "Nema konfiguriranih grupa"
+    "noGroup": "Nema konfiguriranih grupa",
+    "basemapGalleryText": "Č_Basemap Gallery______ž",
+    "legendText": "Č_Legend___ž",
+    "featureNotFoundMessage": "Č_Requested feature not found_________ž"
   },
   "search": {
     "searchIconTooltip": "Pretraži ovaj sloj",

@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Anda tidak memiliki izin untuk menjalankan tindakan ini."
   },
   "main": {
-    "noGroup": "Tidak ada grup yang dikonfigurasikan"
+    "noGroup": "Tidak ada grup yang dikonfigurasikan",
+    "basemapGalleryText": "ng_Basemap Gallery______ny",
+    "legendText": "ng_Legend___ny",
+    "featureNotFoundMessage": "ng_Requested feature not found_________ny"
   },
   "search": {
     "searchIconTooltip": "Cari layer ini",

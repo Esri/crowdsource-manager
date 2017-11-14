@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Neturite leidimo atlikti šį veiksmą."
   },
   "main": {
-    "noGroup": "Sukonfigūruotų grupių nėra"
+    "noGroup": "Sukonfigūruotų grupių nėra",
+    "basemapGalleryText": "Į_Basemap Gallery______š",
+    "legendText": "Į_Legend___š",
+    "featureNotFoundMessage": "Į_Requested feature not found_________š"
   },
   "search": {
     "searchIconTooltip": "Ieškoti šiame sluoksnyje",

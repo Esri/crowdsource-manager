@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "אין לך הרשאה לבצע את הפעולה הזו."
   },
   "main": {
-    "noGroup": "לא הוגדרה קבוצה"
+    "noGroup": "לא הוגדרה קבוצה",
+    "basemapGalleryText": "כן_Basemap Gallery______ש",
+    "legendText": "כן_Legend___ש",
+    "featureNotFoundMessage": "כן_Requested feature not found_________ש"
   },
   "search": {
     "searchIconTooltip": "חפש בשכבה זו",

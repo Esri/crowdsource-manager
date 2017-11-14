@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Teil puudub õigus selle toimingu tegemiseks."
   },
   "main": {
-    "noGroup": "Ühtki gruppi ei ole konfigureeritud"
+    "noGroup": "Ühtki gruppi ei ole konfigureeritud",
+    "basemapGalleryText": "Š_Basemap Gallery______ä",
+    "legendText": "Š_Legend___ä",
+    "featureNotFoundMessage": "Š_Requested feature not found_________ä"
   },
   "search": {
     "searchIconTooltip": "Otsi kihti",

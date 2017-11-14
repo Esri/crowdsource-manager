@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "У вас нет прав для выполнения этого действия."
   },
   "main": {
-    "noGroup": "Не задана группа"
+    "noGroup": "Не задана группа",
+    "basemapGalleryText": "Ж_Basemap Gallery______Я",
+    "legendText": "Ж_Legend___Я",
+    "featureNotFoundMessage": "Ж_Requested feature not found_________Я"
   },
   "search": {
     "searchIconTooltip": "Поиск в этом слое",

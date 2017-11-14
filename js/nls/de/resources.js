@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Sie sind nicht berechtigt, diese Aktion auszuführen."
   },
   "main": {
-    "noGroup": "Keine Gruppe konfiguriert"
+    "noGroup": "Keine Gruppe konfiguriert",
+    "basemapGalleryText": "ä_Basemap Gallery______Ü",
+    "legendText": "ä_Legend___Ü",
+    "featureNotFoundMessage": "ä_Requested feature not found_________Ü"
   },
   "search": {
     "searchIconTooltip": "Diesen Layer durchsuchen",
