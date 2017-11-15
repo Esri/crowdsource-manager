@@ -820,7 +820,7 @@ table {
 }
 
 .esriSimpleSlider div {
-    line-height: 27px;
+    line-height: 30px;
 }
 
 .esriSimpleSliderIncrementButton span {
@@ -828,7 +828,8 @@ table {
 }
 
 .esriSimpleSlider {
-    border: 1px solid #cccccc;
+    background-color: transparent !important;
+    border: 0px;
 }
 
 .esriSimpleSliderVertical .esriSimpleSliderIncrementButton {
@@ -836,8 +837,13 @@ table {
     -webkit-border-radius: 0px;
 }
 
+
+/* Navigation icon */
+
 .esriSimpleSliderIncrementButton, .esriSimpleSliderDecrementButton {
     color: #808080;
+    background-color: #ffffff;
+    box-shadow: 1px 1px 5px #888;
 }
 
 .esriSimpleSliderIncrementButton:hover, .esriSimpleSliderDecrementButton:hover {
@@ -845,6 +851,7 @@ table {
 }
 
 .esriSimpleSliderVertical .esriSimpleSliderDecrementButton {
+    margin-top: 0px;
     -webkit-border-radius: 0px;
 }
 
@@ -2100,17 +2107,22 @@ input.esriCTRadioButton {
     background: url('../images/legend.png') no-repeat center;
 }
 
+
+/* Basemap & legend widget icon */
+
 .esriSimpleSlider .esriCTMapNavigationButton {
     height: 30px;
     width: 30px;
     background-size: 19px;
     border-top: 1px solid #cccccc;
+    border-radius: 0px;
+    padding: 0px;
+    background-color: #ffffff !important;
+    box-shadow: 1px 1px 5px #888;
+    margin-top: 5px;
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     -o-border-radius: 0px;
-    border-radius: 0px;
-    padding: 0px;
-    background-color: #fff !important;
 }
 
 .esriCTOnScreenWidgetContainer {

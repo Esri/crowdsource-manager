@@ -113,6 +113,7 @@ define([
         _initialLoad: true, //flag to check if refresh layer event is fired for the first time
         _basemapGallery: null, // to store the object of basemap gallery widget
         _legend: null,  // to store the object of legend gallery widget
+        _lastSelectedNonEditableFeature: null,
 
         /**
          * This method is designed to handle processing after any
@@ -673,7 +674,7 @@ define([
                 this._resizeMap();
             }));
             this._mapClickHandle = on(this.map, "click", lang.hitch(this, function (evt) {
-                var detailsPanelParameters, popupInfo;
+                var detailsPanelParameters, popupInfo, showSelectedOption;
                 $(".esriCTFilterParentContainer").css("display", "none");
                 if ((!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonOpenDisabled")) && (!domClass.contains("webmapListToggleButton", "esriCTWebMapPanelToggleButtonCloseDisabled"))) {
                     this._webMapListWidget.hideWebMapList();
@@ -681,7 +682,7 @@ define([
                 if ((evt.graphic) && (evt.graphic._layer)) {
                     if ((evt.graphic._layer.id === this._refinedOperationalLayer.id) || (evt.graphic._layer.id === "selectedRowGraphicsLayer")) {
                         if (this._dataViewerWidget.isNonEditableFeature) {
-                            this._dataViewerWidget._clearSelection();
+                            this._dataViewerWidget.clearSelection();
                         }
                         // detects that feature of non-editable layer is clicked.
                         this._dataViewerWidget.isNonEditableFeature = false;
@@ -693,30 +694,47 @@ define([
                             this._dataViewerWidget.onFeatureClick(evt, false);
                         }
                     } else {
-                        // detects that feature of non-editable layer is clicked.
-                        this._dataViewerWidget.isNonEditableFeature = true;
-                        array.forEach(this._itemInfo.itemData.operationalLayers, lang.hitch(this, function (operationalLayer) {
-                            if (operationalLayer.id === evt.graphic._layer.id) {
-                                popupInfo = operationalLayer.popupInfo;
+                        if (this.appConfig.showPopupForNonEditableLayers) {
+                            // detects that feature of non-editable layer is clicked.
+                            this._dataViewerWidget.isNonEditableFeature = true;
+                            array.forEach(this._itemInfo.itemData.operationalLayers, lang.hitch(this, function (operationalLayer) {
+                                if (operationalLayer.id === evt.graphic._layer.id) {
+                                    popupInfo = operationalLayer.popupInfo;
+                                }
+                            }));
+                            if (popupInfo) {
+                                if (this._lastSelectedNonEditableFeature === evt.graphic.attributes[evt.graphic._layer.objectIdField]) {
+                                    this._lastSelectedNonEditableFeature = null;
+                                    this._dataViewerWidget.clearSelection();
+                                    this._toggleNoFeatureFoundDiv(true);
+                                    return;
+                                } else {
+                                    this._lastSelectedNonEditableFeature = evt.graphic.attributes[evt.graphic._layer.objectIdField];
+                                }
+                                // clear previous selected feature
+                                this._dataViewerWidget._highlightNonEditableFeature(evt.graphic);
+                                showSelectedOption = query(".esriCTShowSelectedOption");
+                                if (showSelectedOption && showSelectedOption.length > 0) {
+                                    showSelectedOption = showSelectedOption[0];
+                                }
+                                if (domClass.contains(showSelectedOption, "esriCTHidden")) {
+                                    this._applicationHeader.showSelectedClicked();
+                                }
+                                detailsPanelParameters = {
+                                    "appConfig": this.appConfig,
+                                    "selectedFeatureSet": evt.graphic,
+                                    "selectedOperationalLayer": evt.graphic._layer,
+                                    "map": this.map,
+                                    "appUtils": ApplicationUtils,
+                                    "itemInfo": this._itemInfo,
+                                    "popupInfo": popupInfo,
+                                    "multipleFeatures": [evt.graphic],
+                                    "isShowSelectedClicked": null,
+                                    "isShowAllClicked": null
+                                };
+                                this._toggleNoFeatureFoundDiv(false);
+                                this._createDetailsPanel(null, detailsPanelParameters);
                             }
-                        }));
-                        if (popupInfo) {
-                            // clear previous selected feature
-                            this._dataViewerWidget._highlightNoneditableFeature(evt.graphic);
-                            detailsPanelParameters = {
-                                "appConfig": this.appConfig,
-                                "selectedFeatureSet": evt.graphic,
-                                "selectedOperationalLayer": evt.graphic._layer,
-                                "map": this.map,
-                                "appUtils": ApplicationUtils,
-                                "itemInfo": this._itemInfo,
-                                "popupInfo": popupInfo,
-                                "multipleFeatures": [evt.graphic],
-                                "isShowSelectedClicked": null,
-                                "isShowAllClicked": null
-                            };
-                            this._toggleNoFeatureFoundDiv(false);
-                            this._createDetailsPanel(null, detailsPanelParameters);
                         }
                     }
                 }

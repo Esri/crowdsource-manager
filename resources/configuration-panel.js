@@ -36,7 +36,8 @@
         "buttonTextColor": "#f26e1f",
         "defaultDetailsTab": "Info",
         "showBaseMapGallery": false,
-        "showLegend": false
+        "showLegend": false,
+        "showPopupForNonEditableLayers": false
     },
     "configurationSettings": [{
         "category": "<b>General</b>",
@@ -173,6 +174,11 @@
             "tooltip": "Enable to show non-editable layers",
             "type": "boolean",
             "fieldName": "showNonEditableLayers"
+        }, {
+            "label": "Show popup for non-editable layers",
+            "tooltip": "Enable to show popup for non-editable layers",
+            "type": "boolean",
+            "fieldName": "showPopupForNonEditableLayers"
         }, {
             "type": "subcategory",
             "label": "Zoom level"
