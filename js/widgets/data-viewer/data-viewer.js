@@ -1,4 +1,4 @@
-﻿/*global define,moment,$,setTimeout,clearTimeout,alert */
+﻿/*global define,moment,$,setTimeout,clearTimeout */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -502,7 +502,7 @@ define([
         */
         highlightSelectedFeature: function (feature) {
             if (feature) {
-                this._clearSelection();
+                this.clearSelection();
                 this._deselectTableRows();
                 this._selectFeatureOnMapClick({ graphic: feature }, true, false);
             }
@@ -1087,7 +1087,7 @@ define([
                 if (this.isNonEditableFeature) {
                     // detects that feature of non-editable layer is clicked.
                     this.isNonEditableFeature = false;
-                    this._clearSelection();
+                    this.clearSelection();
                 }
                 this.hideWebMapList();
                 this._hideFilterContainer();
@@ -1117,7 +1117,7 @@ define([
         * This function will clear selected features
         * @memberOf widgets/data-viewer/data-viewer
         */
-        _clearSelection: function () {
+        clearSelection: function () {
             this._selectRowGraphicsLayer.clear();
         },
 
@@ -1208,81 +1208,85 @@ define([
             }
             featureLayer.queryFeatures(featureQuery, lang.hitch(this, function (featureSet) {
                 var i, showDetailsPanelDataObj, selectedRowArr;
-                this._rowScrollTimer = null;
-                this._isRowRemovedAfterMapClick = false;
-                this._getSelectedLayerOnTop();
-                // if ctrl key is pressed for multiple feature selection
-                // then set ctrlFlag to true else keep it as false
-                if (!evt.ctrlKey) {
-                    if (this.isShowSelectedClicked) {
-                        this._graphicLayerRemoveHandle.pause();
-                        this._clearSelection();
-                    } else {
-                        this._clearSelection();
-                    }
-                    if (featureSet && featureSet.hasOwnProperty("features") && featureSet.features.length > 1) {
-                        if (graphicLayerClick) {
-                            selectedRowArr = query(".esriCTRowHighlighted", this._table);
-                            if (selectedRowArr.length <= featureSet.features.length) {
-                                this._deselectTableRows();
-                                ctrlFlag = false;
-                            } else {
-                                graphicLayerClick = false;
-                                this._deselectTableRows();
-                                ctrlFlag = true;
-                            }
-                        } else {
-                            selectedRowArr = query(".esriCTRowHighlighted", this._table);
-                            if (selectedRowArr.length === featureSet.features.length) {
-                                graphicLayerClick = true;
-                                this._deselectTableRows();
-                                ctrlFlag = false;
-                            } else {
-                                this._deselectTableRows();
-                                ctrlFlag = true;
-                            }
-                        }
-                    }
-                } else {
-                    ctrlFlag = true;
-                }
-                if (this.updatedfeature) {
-                    this.updatedfeature = null;
-                }
                 if (featureSet && featureSet.hasOwnProperty("features") && featureSet.features.length > 0) {
-                    for (i = 0; i < featureSet.features.length; i++) {
-                        if (featureSet && featureSet.hasOwnProperty("features") && featureSet.features.length > 1 && graphicLayerClick) {
-                            selectFlag = false;
+                    this._rowScrollTimer = null;
+                    this._isRowRemovedAfterMapClick = false;
+                    this._getSelectedLayerOnTop();
+                    // if ctrl key is pressed for multiple feature selection
+                    // then set ctrlFlag to true else keep it as false
+                    if (!evt.ctrlKey) {
+                        if (this.isShowSelectedClicked) {
+                            this._graphicLayerRemoveHandle.pause();
+                            this.clearSelection();
                         } else {
-                            if (this.isManualRefreshedClicked) {
-                                this.isManualRefreshedClicked = false;
-                                selectFlag = this._selectRowOnFeatureClick(featureSet.features[i].attributes[this._selectedOperationalLayer.objectIdField], false, ctrlFlag);
+                            this.clearSelection();
+                        }
+                        if (featureSet && featureSet.hasOwnProperty("features") && featureSet.features.length > 1) {
+                            if (graphicLayerClick) {
+                                selectedRowArr = query(".esriCTRowHighlighted", this._table);
+                                if (selectedRowArr.length <= featureSet.features.length) {
+                                    this._deselectTableRows();
+                                    ctrlFlag = false;
+                                } else {
+                                    graphicLayerClick = false;
+                                    this._deselectTableRows();
+                                    ctrlFlag = true;
+                                }
                             } else {
-                                selectFlag = this._selectRowOnFeatureClick(featureSet.features[i].attributes[this._selectedOperationalLayer.objectIdField], true, ctrlFlag);
+                                selectedRowArr = query(".esriCTRowHighlighted", this._table);
+                                if (selectedRowArr.length === featureSet.features.length) {
+                                    graphicLayerClick = true;
+                                    this._deselectTableRows();
+                                    ctrlFlag = false;
+                                } else {
+                                    this._deselectTableRows();
+                                    ctrlFlag = true;
+                                }
                             }
                         }
-                        // feature is selected on table row click
-                        if ((selectFlag) || ((!selectFlag) && (this.isShowSelectedClicked) && (!this._isRowRemovedAfterMapClick))) {
-                            // if feature geometry found them show selected feature on map else
-                            // show error message
-                            if (featureSet.features[i].geometry) {
-                                this._selectRowGraphicsLayer.add(this._getHighLightSymbol(featureSet.features[i], false));
+                    } else {
+                        ctrlFlag = true;
+                    }
+                    if (this.updatedfeature) {
+                        this.updatedfeature = null;
+                    }
+                    if (featureSet && featureSet.hasOwnProperty("features") && featureSet.features.length > 0) {
+                        for (i = 0; i < featureSet.features.length; i++) {
+                            if (featureSet && featureSet.hasOwnProperty("features") && featureSet.features.length > 1 && graphicLayerClick) {
+                                selectFlag = false;
                             } else {
-                                this._selectRowGraphicsLayer.add(featureSet.features[i]);
-                                this.appUtils.showMessage(this.appConfig.i18n.dataviewer.noFeatureGeometry);
+                                if (this.isManualRefreshedClicked) {
+                                    this.isManualRefreshedClicked = false;
+                                    selectFlag = this._selectRowOnFeatureClick(featureSet.features[i].attributes[this._selectedOperationalLayer.objectIdField], false, ctrlFlag);
+                                } else {
+                                    selectFlag = this._selectRowOnFeatureClick(featureSet.features[i].attributes[this._selectedOperationalLayer.objectIdField], true, ctrlFlag);
+                                }
+                            }
+                            // feature is selected on table row click
+                            if ((selectFlag) || ((!selectFlag) && (this.isShowSelectedClicked) && (!this._isRowRemovedAfterMapClick))) {
+                                // if feature geometry found them show selected feature on map else
+                                // show error message
+                                if (featureSet.features[i].geometry) {
+                                    this._selectRowGraphicsLayer.add(this._getHighLightSymbol(featureSet.features[i], false));
+                                } else {
+                                    this._selectRowGraphicsLayer.add(featureSet.features[i]);
+                                    this.appUtils.showMessage(this.appConfig.i18n.dataviewer.noFeatureGeometry);
+                                }
                             }
                         }
                     }
+                    // Open details panel with feature information
+                    showDetailsPanelDataObj = {};
+                    showDetailsPanelDataObj.singleFeature = featureSet;
+                    showDetailsPanelDataObj.multipleFeature = this._selectRowGraphicsLayer.graphics;
+                    this.showDetailsPanel(showDetailsPanelDataObj);
+                    if (this.isShowSelectedClicked) {
+                        this.createDataViewerUI(false);
+                    }
+                    this.appUtils.hideLoadingIndicator();
+                } else {
+                    this.appUtils.hideLoadingIndicator();
                 }
-                // Open details panel with feature information
-                showDetailsPanelDataObj = {};
-                showDetailsPanelDataObj.singleFeature = featureSet;
-                showDetailsPanelDataObj.multipleFeature = this._selectRowGraphicsLayer.graphics;
-                this.showDetailsPanel(showDetailsPanelDataObj);
-                if (this.isShowSelectedClicked) {
-                    this.createDataViewerUI(false);
-                }
-                this.appUtils.hideLoadingIndicator();
             }), lang.hitch(this, function () {
                 this.appUtils.hideLoadingIndicator();
             }));
@@ -1318,7 +1322,7 @@ define([
                     // if ctrl key is pressed for multiple feature selection
                     // then set ctrlFlag to true else keep it as false
                     if (!evt.ctrlKey) {
-                        this._clearSelection();
+                        this.clearSelection();
                     } else {
                         ctrlFlag = true;
                     }
@@ -1379,12 +1383,12 @@ define([
                                 isRowSelected = false;
                             } else {
                                 if (query(".esriCTRowHighlighted", this._table).length > 1) {
-                                    this._clearSelection();
+                                    this.clearSelection();
                                     this._deselectTableRows();
                                     domClass.add(this._table.rows[i], "esriCTRowHighlighted");
                                     isRowSelected = true;
                                 } else {
-                                    this._clearSelection();
+                                    this.clearSelection();
                                     this._deselectTableRows();
                                     domClass.remove(this._table.rows[i], "esriCTRowHighlighted");
                                     isRowSelected = false;
@@ -1395,7 +1399,7 @@ define([
                                 domClass.add(this._table.rows[i], "esriCTRowHighlighted");
                                 isRowSelected = true;
                             } else {
-                                this._clearSelection();
+                                this.clearSelection();
                                 this._deselectTableRows();
                                 domClass.add(this._table.rows[i], "esriCTRowHighlighted");
                                 isRowSelected = true;
@@ -1728,8 +1732,8 @@ define([
          * This function is used to highlight the feature of non-editable layer
          * @memberOf widgets/data-viewer/data-viewer
          */
-        _highlightNoneditableFeature: function (graphic) {
-            this._clearSelection();
+        _highlightNonEditableFeature: function (graphic) {
+            this.clearSelection();
             this._deselectTableRows();
             this._selectRowGraphicsLayer.add(this._getHighLightSymbol(graphic, false));
         }

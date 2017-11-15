@@ -123,5 +123,6 @@ define({
     // to configure which tab will be opened by default when a report is selected.
     "defaultDetailsTab": "Info", // Info, Media, Comments
     "showBaseMapGallery": false,
-    "showLegend": false
+    "showLegend": false,
+    "showPopupForNonEditableLayers": false
 });
