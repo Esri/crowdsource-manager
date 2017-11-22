@@ -80,29 +80,6 @@
                 "stringFieldOption": "richtext",
                 "tooltip": "Text and graphics that will display in the help window."
             }]
-        }, {
-            "type": "subcategory",
-            "label": "Basemap and Legend settings"
-        }, {
-            "type": "paragraph",
-            "value": "User can enable/disable basemap gallery and legend."
-        }, {
-            "label": "Show basemap gallery",
-            "tooltip": "When disabled, basemap gallery button will not be displayed in map navigation buttons",
-            "type": "conditional",
-            "condition": false,
-            "fieldName": "showBaseMapGallery",
-            "items": [{
-            "label": "Select basemap group",
-            "tooltip": "Group displayed in the base map gallery",
-            "type": "basemapgroup",
-            "fieldName": "basemapGroup"
-            }]
-        }, {
-            "label": "Show Legend",
-            "tooltip": "When disabled, legend button will not be displayed in map navigation buttons",
-            "type": "boolean",
-            "fieldName": "showLegend"
         }]
     }, {
         "category": "<b>Theme</b>",
@@ -246,6 +223,29 @@
             "tooltip": "Enable to show webmap average rating",
             "type": "boolean",
             "fieldName": "webMapInfoAvgRating"
+        }, {
+            "type": "subcategory",
+            "label": "Basemap Settings"
+        }, {
+            "label": "Show basemap gallery",
+            "tooltip": "When disabled, basemap gallery toggle will not be displayed",
+            "type": "conditional",
+            "condition": false,
+            "fieldName": "showBaseMapGallery",
+            "items": [{
+                "label": "Select basemap group",
+                "tooltip": "Group displayed in the base map gallery",
+                "type": "basemapgroup",
+                "fieldName": "basemapGroup"
+            }]
+        }, {
+            "type": "subcategory",
+            "label": "Legend Settings"
+        }, {
+            "label": "Show Legend",
+            "tooltip": "When disabled, legend button will not be displayed",
+            "type": "boolean",
+            "fieldName": "showLegend"
         }]
     }, {
         "category": "<b>Reports</b>",
