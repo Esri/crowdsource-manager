@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Δεν έχει παραμετροποιηθεί κάποια ομάδα",
-    "basemapGalleryText": "π_Basemap Gallery______Ω",
-    "legendText": "π_Legend___Ω",
-    "featureNotFoundMessage": "π_Requested feature not found_________Ω"
+    "basemapGalleryText": "Συλλογή υποβάθρων",
+    "legendText": "Υπόμνημα",
+    "featureNotFoundMessage": "Το ζητούμενο στοιχείο δεν βρέθηκε"
   },
   "search": {
     "searchIconTooltip": "Αναζήτηση σε αυτό το θεματικό επίπεδο",

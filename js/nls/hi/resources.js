@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "कोई समूह कॉन्फ़िगर नहीं",
-    "basemapGalleryText": "आ_Basemap Gallery______ज",
-    "legendText": "आ_Legend___ज",
-    "featureNotFoundMessage": "आ_Requested feature not found_________ज"
+    "basemapGalleryText": "Basemap गैलरी",
+    "legendText": "लिजेंड",
+    "featureNotFoundMessage": "अनुरोधित फीचर नहीं मिले"
   },
   "search": {
     "searchIconTooltip": "यह लेयर खोजें",

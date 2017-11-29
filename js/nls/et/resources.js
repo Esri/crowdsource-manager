@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Ühtki gruppi ei ole konfigureeritud",
-    "basemapGalleryText": "Š_Basemap Gallery______ä",
-    "legendText": "Š_Legend___ä",
-    "featureNotFoundMessage": "Š_Requested feature not found_________ä"
+    "basemapGalleryText": "Aluskaardi galerii",
+    "legendText": "Legend",
+    "featureNotFoundMessage": "Päritud objekti ei leitud"
   },
   "search": {
     "searchIconTooltip": "Otsi kihti",

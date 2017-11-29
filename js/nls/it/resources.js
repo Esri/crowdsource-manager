@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Nessun gruppo configurato",
-    "basemapGalleryText": "é_Basemap Gallery______È",
-    "legendText": "é_Legend___È",
-    "featureNotFoundMessage": "é_Requested feature not found_________È"
+    "basemapGalleryText": "Galleria di mappe di base",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Feature richiesta non trovata"
   },
   "search": {
     "searchIconTooltip": "Cerca nel layer",

@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Nav konfigurētas grupas",
-    "basemapGalleryText": "ķ_Basemap Gallery______ū",
-    "legendText": "ķ_Legend___ū",
-    "featureNotFoundMessage": "ķ_Requested feature not found_________ū"
+    "basemapGalleryText": "Pamatkaršu galerija",
+    "legendText": "Apzīmējumi",
+    "featureNotFoundMessage": "Pieprasītais elements nav atrasts"
   },
   "search": {
     "searchIconTooltip": "Meklēt šo slāni",

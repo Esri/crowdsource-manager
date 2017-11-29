@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "구성된 그룹 없음",
-    "basemapGalleryText": "한_Basemap Gallery______빠",
-    "legendText": "한_Legend___빠",
-    "featureNotFoundMessage": "한_Requested feature not found_________빠"
+    "basemapGalleryText": "베이스맵 갤러리",
+    "legendText": "범례",
+    "featureNotFoundMessage": "요청한 피처가 없음"
   },
   "search": {
     "searchIconTooltip": "이 레이어 검색",

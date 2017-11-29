@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Yhtään ryhmää ei ole määritetty",
-    "basemapGalleryText": "Å_Basemap Gallery______ö",
-    "legendText": "Å_Legend___ö",
-    "featureNotFoundMessage": "Å_Requested feature not found_________ö"
+    "basemapGalleryText": "Taustakartat",
+    "legendText": "Selite",
+    "featureNotFoundMessage": "Pyydettyä kohdetta ei löydy"
   },
   "search": {
     "searchIconTooltip": "Hae tätä karttatasoa",

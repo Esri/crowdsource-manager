@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "لم يتم تكوين المجموعة",
-    "basemapGalleryText": "بيت_Basemap Gallery______لاحقة",
-    "legendText": "بيت_Legend___لاحقة",
-    "featureNotFoundMessage": "بيت_Requested feature not found_________لاحقة"
+    "basemapGalleryText": "معرض خرائط الأساس",
+    "legendText": "وسيلة الإيضاح",
+    "featureNotFoundMessage": "لم يتم العثور على المعلم المطلوب"
   },
   "search": {
     "searchIconTooltip": "البحث عن هذه الطبقة",

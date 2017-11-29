@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Ni konfiguriranih skupin",
-    "basemapGalleryText": "Š_Basemap Gallery______č",
-    "legendText": "Š_Legend___č",
-    "featureNotFoundMessage": "Š_Requested feature not found_________č"
+    "basemapGalleryText": "Galerija temeljnih kart",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Zahtevani geoobjekt ni najden"
   },
   "search": {
     "searchIconTooltip": "Preišči ta sloj",

@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Niciun grup configurat",
-    "basemapGalleryText": "Ă_Basemap Gallery______ș",
-    "legendText": "Ă_Legend___ș",
-    "featureNotFoundMessage": "Ă_Requested feature not found_________ș"
+    "basemapGalleryText": "Galerie de hărţi fundal",
+    "legendText": "Legendă",
+    "featureNotFoundMessage": "Obiectul spaţial nu a fost găsit"
   },
   "search": {
     "searchIconTooltip": "Căutare în acest strat tematic",

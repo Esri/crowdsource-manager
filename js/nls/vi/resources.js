@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Không có nhóm nào được cấu hình",
-    "basemapGalleryText": "Đ_Basemap Gallery______ớ",
-    "legendText": "Đ_Legend___ớ",
-    "featureNotFoundMessage": "Đ_Requested feature not found_________ớ"
+    "basemapGalleryText": "Bộ sưu tập bản đồ nền",
+    "legendText": "Chú giải",
+    "featureNotFoundMessage": "Không tìm thấy đối tượng được yêu cầu"
   },
   "search": {
     "searchIconTooltip": "Tìm kiếm lớp này",

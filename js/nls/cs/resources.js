@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Není nakonfigurována žádná skupina",
-    "basemapGalleryText": "Ř_Basemap Gallery______ů",
-    "legendText": "Ř_Legend___ů",
-    "featureNotFoundMessage": "Ř_Requested feature not found_________ů"
+    "basemapGalleryText": "Galerie podkladových map",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Požadovaný prvek nebyl nalezen."
   },
   "search": {
     "searchIconTooltip": "Prohledat vrstvu",

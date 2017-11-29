@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Не задана группа",
-    "basemapGalleryText": "Ж_Basemap Gallery______Я",
-    "legendText": "Ж_Legend___Я",
-    "featureNotFoundMessage": "Ж_Requested feature not found_________Я"
+    "basemapGalleryText": "Галерея базовых карт",
+    "legendText": "Легенда",
+    "featureNotFoundMessage": "Требуемый объект не найден"
   },
   "search": {
     "searchIconTooltip": "Поиск в этом слое",

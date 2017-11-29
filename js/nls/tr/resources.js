@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Yapılandırılan grup yok",
-    "basemapGalleryText": "ı_Basemap Gallery______İ",
-    "legendText": "ı_Legend___İ",
-    "featureNotFoundMessage": "ı_Requested feature not found_________İ"
+    "basemapGalleryText": "Altlık Harita Galerisi",
+    "legendText": "Gösterim",
+    "featureNotFoundMessage": "İstenen detay bulunamadı"
   },
   "search": {
     "searchIconTooltip": "Bu katmanı ara",

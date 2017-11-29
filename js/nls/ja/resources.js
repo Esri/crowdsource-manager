@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "グループが構成されていません",
-    "basemapGalleryText": "須_Basemap Gallery______鷗",
-    "legendText": "須_Legend___鷗",
-    "featureNotFoundMessage": "須_Requested feature not found_________鷗"
+    "basemapGalleryText": "ベースマップ ギャラリー",
+    "legendText": "凡例",
+    "featureNotFoundMessage": "要求されたフィーチャが見つかりません"
   },
   "search": {
     "searchIconTooltip": "このレイヤーを検索",

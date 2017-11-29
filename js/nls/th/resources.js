@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "ยังไม่กำหนดกลุ่ม",
-    "basemapGalleryText": "ก้_Basemap Gallery______ษฺ",
-    "legendText": "ก้_Legend___ษฺ",
-    "featureNotFoundMessage": "ก้_Requested feature not found_________ษฺ"
+    "basemapGalleryText": "แกลเลอรี่แผนที่ฐาน",
+    "legendText": "คำอธิบายสัญลักษณ์",
+    "featureNotFoundMessage": "ไม่พบฟีเจอร์ที่ขอ"
   },
   "search": {
     "searchIconTooltip": "ค้นหาชั้นข้อมูล",

@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Tidak ada grup yang dikonfigurasikan",
-    "basemapGalleryText": "ng_Basemap Gallery______ny",
-    "legendText": "ng_Legend___ny",
-    "featureNotFoundMessage": "ng_Requested feature not found_________ny"
+    "basemapGalleryText": "Galeri Peta Dasar",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Fitur yang diminta tidak ditemukan"
   },
   "search": {
     "searchIconTooltip": "Cari layer ini",

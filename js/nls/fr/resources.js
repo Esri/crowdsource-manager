@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Aucun groupe configuré",
-    "basemapGalleryText": "æ_Basemap Gallery______Â",
-    "legendText": "æ_Legend___Â",
-    "featureNotFoundMessage": "æ_Requested feature not found_________Â"
+    "basemapGalleryText": "Bibliothèque de fonds de carte",
+    "legendText": "Légende",
+    "featureNotFoundMessage": "Entité demandée introuvable"
   },
   "search": {
     "searchIconTooltip": "Rechercher dans cette couche",

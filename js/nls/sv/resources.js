@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Ingen grupp konfigurerad",
-    "basemapGalleryText": "Å_Basemap Gallery______ö",
-    "legendText": "Å_Legend___ö",
-    "featureNotFoundMessage": "Å_Requested feature not found_________ö"
+    "basemapGalleryText": "Baskartgalleri",
+    "legendText": "Teckenförklaring",
+    "featureNotFoundMessage": "Det begärda geoobjektet hittades inte"
   },
   "search": {
     "searchIconTooltip": "Sök i det här lagret",

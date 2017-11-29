@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Nenhum grupo configurado",
-    "basemapGalleryText": "ã_Basemap Gallery______Ç",
-    "legendText": "ã_Legend___Ç",
-    "featureNotFoundMessage": "ã_Requested feature not found_________Ç"
+    "basemapGalleryText": "Galeria de Mapas Base",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Elemento solicitado não encontrado"
   },
   "search": {
     "searchIconTooltip": "Pesquisar esta camada",

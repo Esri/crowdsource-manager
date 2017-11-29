@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Sukonfigūruotų grupių nėra",
-    "basemapGalleryText": "Į_Basemap Gallery______š",
-    "legendText": "Į_Legend___š",
-    "featureNotFoundMessage": "Į_Requested feature not found_________š"
+    "basemapGalleryText": "Pagrindo žemėlapiai",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Prašomas elementas nerastas"
   },
   "search": {
     "searchIconTooltip": "Ieškoti šiame sluoksnyje",

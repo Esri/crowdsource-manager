@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Ingen gruppe konfigureret",
-    "basemapGalleryText": "ø_Basemap Gallery______å",
-    "legendText": "ø_Legend___å",
-    "featureNotFoundMessage": "ø_Requested feature not found_________å"
+    "basemapGalleryText": "Galleri over baggrundskort",
+    "legendText": "Signaturforklaring",
+    "featureNotFoundMessage": "Det objekt, der er blevet anmodet om, kunne ikke findes"
   },
   "search": {
     "searchIconTooltip": "Søg i dette lag",

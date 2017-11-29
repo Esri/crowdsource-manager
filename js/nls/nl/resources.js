@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "Geen groep geconfigureerd",
-    "basemapGalleryText": "Ĳ_Basemap Gallery______ä",
-    "legendText": "Ĳ_Legend___ä",
-    "featureNotFoundMessage": "Ĳ_Requested feature not found_________ä"
+    "basemapGalleryText": "Basiskaartgalerij",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Gevraagd object niet gevonden"
   },
   "search": {
     "searchIconTooltip": "Deze laag zoeken",

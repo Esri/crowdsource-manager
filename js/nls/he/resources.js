@@ -110,9 +110,9 @@ define({
   },
   "main": {
     "noGroup": "לא הוגדרה קבוצה",
-    "basemapGalleryText": "כן_Basemap Gallery______ש",
-    "legendText": "כן_Legend___ש",
-    "featureNotFoundMessage": "כן_Requested feature not found_________ש"
+    "basemapGalleryText": "גלרית מפות בסיס",
+    "legendText": "מקרא",
+    "featureNotFoundMessage": "הישות המבוקשת לא נמצאה"
   },
   "search": {
     "searchIconTooltip": "חפש בשכבה זו",
