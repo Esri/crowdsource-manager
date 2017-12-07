@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "لا يتوفر لديك إذن تنفيذ هذا الحدث."
   },
   "main": {
-    "noGroup": "لم يتم تكوين المجموعة"
+    "noGroup": "لم يتم تكوين المجموعة",
+    "basemapGalleryText": "معرض خرائط الأساس",
+    "legendText": "وسيلة الإيضاح",
+    "featureNotFoundMessage": "لم يتم العثور على المعلم المطلوب"
   },
   "search": {
     "searchIconTooltip": "البحث عن هذه الطبقة",

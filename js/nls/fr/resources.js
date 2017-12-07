@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Vous n’êtes pas autorisé à effectuer cette action."
   },
   "main": {
-    "noGroup": "Aucun groupe configuré"
+    "noGroup": "Aucun groupe configuré",
+    "basemapGalleryText": "Bibliothèque de fonds de carte",
+    "legendText": "Légende",
+    "featureNotFoundMessage": "Entité demandée introuvable"
   },
   "search": {
     "searchIconTooltip": "Rechercher dans cette couche",

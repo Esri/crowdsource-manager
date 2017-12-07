@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "この操作を実行する権限がありません。"
   },
   "main": {
-    "noGroup": "グループが構成されていません"
+    "noGroup": "グループが構成されていません",
+    "basemapGalleryText": "ベースマップ ギャラリー",
+    "legendText": "凡例",
+    "featureNotFoundMessage": "要求されたフィーチャが見つかりません"
   },
   "search": {
     "searchIconTooltip": "このレイヤーを検索",

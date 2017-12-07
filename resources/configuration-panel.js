@@ -6,6 +6,7 @@
         "applicationIcon": "",
         "applicationFavicon": "/images/favicon.ico",
         "zoomLevel": 12,
+        "basemapGroup": "",
         "commentField": "COMMENTS",
         "usePopupConfigurationForComment": false,
         "webMapInfoDescription": true,
@@ -33,7 +34,10 @@
         "bodyTextColor": "#515151",
         "buttonBackgroundColor": "#fff",
         "buttonTextColor": "#f26e1f",
-        "defaultDetailsTab": "Info"
+        "defaultDetailsTab": "Info",
+        "showBaseMapGallery": false,
+        "showLegend": false,
+        "showPopupForNonEditableLayers": false
     },
     "configurationSettings": [{
         "category": "<b>General</b>",
@@ -58,7 +62,7 @@
         }, {
             "type": "subcategory",
             "label": "Help"
-        },{
+        }, {
             "type": "conditional",
             "fieldName": "showHelpIcon",
             "label": "Enable the help window",
@@ -148,6 +152,11 @@
             "type": "boolean",
             "fieldName": "showNonEditableLayers"
         }, {
+            "label": "Show popup for non-editable layers",
+            "tooltip": "Enable to show popup for non-editable layers",
+            "type": "boolean",
+            "fieldName": "showPopupForNonEditableLayers"
+        }, {
             "type": "subcategory",
             "label": "Zoom level"
         }, {
@@ -214,6 +223,29 @@
             "tooltip": "Enable to show webmap average rating",
             "type": "boolean",
             "fieldName": "webMapInfoAvgRating"
+        }, {
+            "type": "subcategory",
+            "label": "Basemap Settings"
+        }, {
+            "label": "Show basemap gallery",
+            "tooltip": "When disabled, basemap gallery toggle will not be displayed",
+            "type": "conditional",
+            "condition": false,
+            "fieldName": "showBaseMapGallery",
+            "items": [{
+                "label": "Select basemap group",
+                "tooltip": "Group displayed in the base map gallery",
+                "type": "basemapgroup",
+                "fieldName": "basemapGroup"
+            }]
+        }, {
+            "type": "subcategory",
+            "label": "Legend Settings"
+        }, {
+            "label": "Show Legend",
+            "tooltip": "When disabled, legend button will not be displayed",
+            "type": "boolean",
+            "fieldName": "showLegend"
         }]
     }, {
         "category": "<b>Reports</b>",

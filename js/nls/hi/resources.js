@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "आप को इस कार्य को करने की अनुमति नहीं है।"
   },
   "main": {
-    "noGroup": "कोई समूह कॉन्फ़िगर नहीं"
+    "noGroup": "कोई समूह कॉन्फ़िगर नहीं",
+    "basemapGalleryText": "Basemap गैलरी",
+    "legendText": "लिजेंड",
+    "featureNotFoundMessage": "अनुरोधित फीचर नहीं मिले"
   },
   "search": {
     "searchIconTooltip": "यह लेयर खोजें",

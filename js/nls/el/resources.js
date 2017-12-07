@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Δεν έχετε δικαίωμα να εκτελέσετε αυτή την ενέργεια."
   },
   "main": {
-    "noGroup": "Δεν έχει παραμετροποιηθεί κάποια ομάδα"
+    "noGroup": "Δεν έχει παραμετροποιηθεί κάποια ομάδα",
+    "basemapGalleryText": "Συλλογή υποβάθρων",
+    "legendText": "Υπόμνημα",
+    "featureNotFoundMessage": "Το ζητούμενο στοιχείο δεν βρέθηκε"
   },
   "search": {
     "searchIconTooltip": "Αναζήτηση σε αυτό το θεματικό επίπεδο",

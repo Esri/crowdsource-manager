@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Du har ikke tillatelse til å utføre denne handlingen."
   },
   "main": {
-    "noGroup": "Ingen gruppe er konfigurert"
+    "noGroup": "Ingen gruppe er konfigurert",
+    "basemapGalleryText": "Bakgrunnskartgalleri",
+    "legendText": "Tegnforklaring",
+    "featureNotFoundMessage": "Finner ikke forespurt geoobjekt"
   },
   "search": {
     "searchIconTooltip": "Søk i dette laget",

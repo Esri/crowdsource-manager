@@ -68,8 +68,8 @@ define({
     "unableToEditPopupMessage": "У вас нет прав для выполнения этого действия."
   },
   "mapViewer": {
-    "zoomInToolTip": "Увеличить",
-    "zoomOutToolTip": "Уменьшить"
+    "zoomInToolTip": "Приблизить",
+    "zoomOutToolTip": "Отдалить"
   },
   "applicationHeader": {
     "signInOption": "Вход",
@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "У вас нет прав для выполнения этого действия."
   },
   "main": {
-    "noGroup": "Не задана группа"
+    "noGroup": "Не задана группа",
+    "basemapGalleryText": "Галерея базовых карт",
+    "legendText": "Легенда",
+    "featureNotFoundMessage": "Требуемый объект не найден"
   },
   "search": {
     "searchIconTooltip": "Поиск в этом слое",

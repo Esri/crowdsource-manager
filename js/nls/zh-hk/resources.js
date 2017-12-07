@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "您沒有執行此動作的權限。"
   },
   "main": {
-    "noGroup": "未配置任何群組"
+    "noGroup": "未配置任何群組",
+    "basemapGalleryText": "底圖庫",
+    "legendText": "圖例",
+    "featureNotFoundMessage": "找不到請求的功能"
   },
   "search": {
     "searchIconTooltip": "搜尋此圖層",

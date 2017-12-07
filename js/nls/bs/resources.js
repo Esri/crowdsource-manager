@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Nemate dopuštenje za izvođenje ove radnje."
   },
   "main": {
-    "noGroup": "Nema konfiguriranih grupa"
+    "noGroup": "Nema konfiguriranih grupa",
+    "basemapGalleryText": "Galerija kartografskih podloga",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Zatraženi geoobjekt nije pronađen"
   },
   "search": {
     "searchIconTooltip": "Pretraži ovaj sloj",

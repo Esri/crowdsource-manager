@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Nie masz uprawnień do wykonania tego działania."
   },
   "main": {
-    "noGroup": "Nie skonfigurowano żadnej grupy"
+    "noGroup": "Nie skonfigurowano żadnej grupy",
+    "basemapGalleryText": "Galeria map bazowych",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Nie znaleziono żądanego obiektu"
   },
   "search": {
     "searchIconTooltip": "Przeszukaj tę warstwę",

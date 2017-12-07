@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Teil puudub õigus selle toimingu tegemiseks."
   },
   "main": {
-    "noGroup": "Ühtki gruppi ei ole konfigureeritud"
+    "noGroup": "Ühtki gruppi ei ole konfigureeritud",
+    "basemapGalleryText": "Aluskaardi galerii",
+    "legendText": "Legend",
+    "featureNotFoundMessage": "Päritud objekti ei leitud"
   },
   "search": {
     "searchIconTooltip": "Otsi kihti",

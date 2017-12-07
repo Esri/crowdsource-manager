@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Jums nav atļaujas izpildīt šo darbību."
   },
   "main": {
-    "noGroup": "Nav konfigurētas grupas"
+    "noGroup": "Nav konfigurētas grupas",
+    "basemapGalleryText": "Pamatkaršu galerija",
+    "legendText": "Apzīmējumi",
+    "featureNotFoundMessage": "Pieprasītais elements nav atrasts"
   },
   "search": {
     "searchIconTooltip": "Meklēt šo slāni",

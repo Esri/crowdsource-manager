@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Anda tidak memiliki izin untuk menjalankan tindakan ini."
   },
   "main": {
-    "noGroup": "Tidak ada grup yang dikonfigurasikan"
+    "noGroup": "Tidak ada grup yang dikonfigurasikan",
+    "basemapGalleryText": "Galeri Peta Dasar",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Fitur yang diminta tidak ditemukan"
   },
   "search": {
     "searchIconTooltip": "Cari layer ini",

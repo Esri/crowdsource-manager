@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "U hebt geen toestemming om deze actie uit te voeren."
   },
   "main": {
-    "noGroup": "Geen groep geconfigureerd"
+    "noGroup": "Geen groep geconfigureerd",
+    "basemapGalleryText": "Basiskaartgalerij",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Gevraagd object niet gevonden"
   },
   "search": {
     "searchIconTooltip": "Deze laag zoeken",

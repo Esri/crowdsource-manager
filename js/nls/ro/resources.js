@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Nu aveţi permisiunea pentru a efectua această acţiune."
   },
   "main": {
-    "noGroup": "Niciun grup configurat"
+    "noGroup": "Niciun grup configurat",
+    "basemapGalleryText": "Galerie de hărţi fundal",
+    "legendText": "Legendă",
+    "featureNotFoundMessage": "Obiectul spaţial nu a fost găsit"
   },
   "search": {
     "searchIconTooltip": "Căutare în acest strat tematic",

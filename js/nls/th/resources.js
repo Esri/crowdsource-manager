@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "คุณไม่ได้รับอนุญาตให้ดำเนินการนี้"
   },
   "main": {
-    "noGroup": "ยังไม่กำหนดกลุ่ม"
+    "noGroup": "ยังไม่กำหนดกลุ่ม",
+    "basemapGalleryText": "แกลเลอรี่แผนที่ฐาน",
+    "legendText": "คำอธิบายสัญลักษณ์",
+    "featureNotFoundMessage": "ไม่พบฟีเจอร์ที่ขอ"
   },
   "search": {
     "searchIconTooltip": "ค้นหาชั้นข้อมูล",

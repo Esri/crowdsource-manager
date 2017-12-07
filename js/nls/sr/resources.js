@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Nemate dozvolu za ovu radnju."
   },
   "main": {
-    "noGroup": "Nijedna grupa nije konfigurisana"
+    "noGroup": "Nijedna grupa nije konfigurisana",
+    "basemapGalleryText": "Galerija pozadinskih mapa",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Zahtevani geoobjekat nije pronađen"
   },
   "search": {
     "searchIconTooltip": "Pretraži ovaj sloj",

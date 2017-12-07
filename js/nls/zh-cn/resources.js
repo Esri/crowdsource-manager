@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "您无权执行此操作。"
   },
   "main": {
-    "noGroup": "未配置任何群组"
+    "noGroup": "未配置任何群组",
+    "basemapGalleryText": "底图库",
+    "legendText": "图例",
+    "featureNotFoundMessage": "未找到请求的要素"
   },
   "search": {
     "searchIconTooltip": "搜索此图层",

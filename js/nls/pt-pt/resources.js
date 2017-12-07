@@ -109,7 +109,10 @@ define({
     "unableToAddOrEditCommentMessage": "Não tem permissões para executar esta ação."
   },
   "main": {
-    "noGroup": "Nenhum grupo configurado"
+    "noGroup": "Nenhum grupo configurado",
+    "basemapGalleryText": "Galeria de Mapas Base",
+    "legendText": "Legenda",
+    "featureNotFoundMessage": "Elemento solicitado não encontrado"
   },
   "search": {
     "searchIconTooltip": "Pesquisar esta camada",
