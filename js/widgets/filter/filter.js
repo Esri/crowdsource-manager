@@ -1197,6 +1197,31 @@ define([
         },
 
         /**
+         * This function is used to convert single quotes to double single quotes
+         * @memberOf widgets/filter/filter
+         */
+        _addSingleQuotes: function (currentExpression) {
+            var singleQuoteValueArr;
+            singleQuoteValueArr = currentExpression.split(/OR|AND|=|\)|\(/).
+                filter(function (n) { return n !== " "; }).
+                filter(function (n) { return n !== ""; }).
+                filter(function (element, index) { return (index % 2 !== 0); }). //ignore jslint
+                map(Function.prototype.call, String.prototype.trim);
+
+            array.forEach(singleQuoteValueArr, lang.hitch(this, function (singleQuoteValue) {
+                var searchString, changeString, result, regex;
+                regex = /'(.*)'/g;
+                result = regex.exec(singleQuoteValue);
+                if (result && result.length >= 2) {
+                    searchString = result[1];
+                    changeString = searchString.replace(/'/g, "''");
+                    currentExpression = currentExpression.replace(searchString, changeString);
+                }
+            }));
+            return currentExpression;
+        },
+
+        /**
         * This function will count features for the entered textbox value
         * @param{input} contains textbox node
         * @param{int} contains the index/parameter id of the input layer detail
@@ -1209,7 +1234,7 @@ define([
             deferred = new Deferred();
             query = new Query();
             queryTask = new QueryTask(this.selectedOperationalLayer.url);
-            query.where = this._currentExpression;
+            query.where = this._addSingleQuotes(lang.clone(this._currentExpression));
             queryTask.executeForCount(query, lang.hitch(this, function (results) {
                 deferred.resolve(results);
                 // if the count of features is 0,
@@ -1392,7 +1417,7 @@ define([
         * @memberOf widgets/filter/filter
         */
         _applyParameterizedExpression: function () {
-            this.selectedOperationalLayer.setDefinitionExpression(this._currentExpression);
+            this.selectedOperationalLayer.setDefinitionExpression(this._addSingleQuotes(lang.clone(this._currentExpression)));
             this.filterRefresh();
         },
 
