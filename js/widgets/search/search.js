@@ -359,18 +359,35 @@ define([
         },
 
         /**
+         * This function is used to add or remove parent parentheses for definition expression
+         * @memberOf widgets/search/search
+         */
+        _removeOrAddParentParentheses: function () {
+            if (this._existingDefinitionExpression !== null &&
+                this._existingDefinitionExpression !== "" &&
+                this._existingDefinitionExpression !== undefined) {
+                if (this._existingDefinitionExpression.charAt(0) === "(" &&
+                    this._existingDefinitionExpression.charAt(1) === "(") {
+                    this._existingDefinitionExpression = this._existingDefinitionExpression.replace(/^\((.+)\)$/, '$1');
+                } else {
+                    this._existingDefinitionExpression = "(" + this._existingDefinitionExpression + ")";
+                }
+            }
+        },
+
+        /**
         * This function is used to get existing definition expression applied on layer
         * @memberOf widgets/search/search
         */
         _getExistingDefinitionExpression: function () {
             if (this.selectedOperationalLayer._defnExpr) {
-                this._existingDefinitionExpression = this.selectedOperationalLayer._defnExpr;
-
+                this._existingDefinitionExpression = lang.clone(this.selectedOperationalLayer._defnExpr);
                 if (this._lastDefinitionExprAppliedBySearch) {
                     this._lastDefinitionExprAppliedBySearch = lang.trim(this._lastDefinitionExprAppliedBySearch);
                     this._existingDefinitionExpression = this._existingDefinitionExpression.split(this._lastDefinitionExprAppliedBySearch).join("");
                     this._existingDefinitionExpression = lang.trim(this._existingDefinitionExpression);
                 }
+                this._removeOrAddParentParentheses();
             }
         },
 

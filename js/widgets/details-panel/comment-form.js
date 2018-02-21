@@ -785,10 +785,18 @@ define([
                     selectOptions.innerHTML = currentOption.name;
                     selectOptions.value = currentOption.code;
                     // if field contain default value, make that option selected
-                    if (this.item.attributes[fieldname] === currentOption.code) {
-                        // set attribute value selected in the select list
-                        domAttr.set(this.inputContent, "value", currentOption.code);
-                        domClass.add(this.inputContent.parentNode, "has-success");
+                    if (this.addComments) {
+                        if (currentField.defaultValue !== undefined && currentField.defaultValue !== null && currentField.defaultValue !== "" && currentField.defaultValue.toString() === currentOption.code.toString()) {
+                            // set attribute value selected in the select list
+                            domAttr.set(this.inputContent, "value", currentOption.code);
+                            domClass.add(this.inputContent.parentNode, "has-success");
+                        }
+                    } else {
+                        if (this.item.attributes[fieldname] === currentOption.code) {
+                            // set attribute value selected in the select list
+                            domAttr.set(this.inputContent, "value", currentOption.code);
+                            domClass.add(this.inputContent.parentNode, "has-success");
+                        }
                     }
                 }));
             } else {
@@ -1167,9 +1175,18 @@ define([
                     domClass.add(formContent, "has-success");
                     this._validateField({ 'target': this.inputContent }, currentField, true);
                 } else {
-                    this.inputContent.value = "";
+                    if ((!defaultValue) && this.addComments && currentField.defaultValue !== undefined &&
+                        currentField.defaultValue !== null && currentField.defaultValue !== "") {
+                        this.inputContent.value = currentField.defaultValue;
+                    } else {
+                        this.inputContent.value = "";
+                    }
                 }
             } else {
+                if ((!defaultValue) && this.addComments && currentField.defaultValue !== undefined &&
+                    currentField.defaultValue !== null && currentField.defaultValue !== "") {
+                    defaultValue = currentField.defaultValue;
+                }
                 //check date field value if exists
                 if (defaultValue) {
                     fieldValue = new Date(defaultValue);
