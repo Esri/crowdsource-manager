@@ -252,6 +252,11 @@ define([
                     editedFields.push(key);
                 }
 
+                // Check if layer has template, then add the Default values from template of the layer, for the fields which are not editable(not available in commentform to edit)
+                if (this.commentTable.templates && this.commentTable.templates.length > 0) {
+                    this._addValuesFromTemplate(this.commentTable.templates[0], editedFields, featureData);
+                }
+
                 if (this.addComments) {
                     primaryKeyField = this.selectedLayer.relationships[0].keyField;
                     foreignKeyField = this.commentTable.relationships[0].keyField;
@@ -1470,6 +1475,31 @@ define([
         */
         onCancelButtonClick: function (evt) {
             return evt;
+        },
+
+        /**
+        * Add fields and values to feature data to be submitted, from template
+        * @param{object} template object returned from layer info
+        * @param{array} editedFields, fields which are edited and needs to be skipped for considering their default values
+        * @param{object} featureData,Feature object to be submitted
+        * @memberOf widgets/details-panel/comment-form/comment-form
+        */
+        _addValuesFromTemplate: function (template, editedFields, featureData) {
+            var fieldAttribute;
+            // loop through all the fields in Templates and if the field has some value add that field to feature
+            for (fieldAttribute in template.prototype.attributes) {
+                if (template.prototype.attributes.hasOwnProperty(fieldAttribute)) {
+                    // skip the fields which are edited using commentform
+                    if ($.inArray(fieldAttribute, editedFields) === -1) {
+                        // check if their is valid value for the field in template and add that value in feature-data to be submitted
+                        // also add that field in edited array since same field can have default values in template for layer and template for typeIdField
+                        if (template.prototype.attributes[fieldAttribute]) {
+                            featureData.attributes[fieldAttribute] = template.prototype.attributes[fieldAttribute];
+                            editedFields.push(fieldAttribute);
+                        }
+                    }
+                }
+            }
         }
     });
 });
