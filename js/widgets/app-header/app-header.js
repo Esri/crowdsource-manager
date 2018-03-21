@@ -513,11 +513,13 @@ define([
                     this._signInWidgetObj.startup();
                 }
             }));
-            on(this.signedInUserDetailsCaretIcon, "click", lang.hitch(this, function () {
-                if ((domStyle.get(this.helpButton, "display") === "none") && (domStyle.get(this.refreshButton, "display") === "none") && (domStyle.get(this.searchButton, "display") === "none")) {
-                    domClass.add(this.signOutOptionParentContainer, "esriCTSignOutOptionErrorMode");
+            on(this.signedInUserDetailsWrapper, "click", lang.hitch(this, function () {
+                if ((domStyle.get(this.signedInUserDetailsCaretIcon, "display") !== "none")) {
+                    if ((domStyle.get(this.helpButton, "display") === "none") && (domStyle.get(this.refreshButton, "display") === "none") && (domStyle.get(this.searchButton, "display") === "none")) {
+                        domClass.add(this.signOutOptionParentContainer, "esriCTSignOutOptionErrorMode");
+                    }
+                    domClass.toggle(this.signOutOptionParentContainer, "esriCTHidden");
                 }
-                domClass.toggle(this.signOutOptionParentContainer, "esriCTHidden");
             }));
             on(this.signOutOptionParentContainer, "click", lang.hitch(this, function () {
                 var signOutParentDiv, signOutMessageDiv;
