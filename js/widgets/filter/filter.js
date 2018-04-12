@@ -1197,6 +1197,58 @@ define([
         },
 
         /**
+         * This function is used to convert single quotes to double single quotes
+         * @memberOf widgets/filter/filter
+         */
+        _addSingleQuotes: function (currentExpression) {
+            var singleQuoteValueArr, mainSplitArr, isNotNull, isNull, isNotNullReplaceStr, isNullReplaceStr;
+            isNotNull = "IS NOT NULL";
+            isNotNullReplaceStr = "IS NOT NULL NULL";
+            isNull = "IS NULL";
+            isNullReplaceStr = "IS NULL NULL";
+            currentExpression = currentExpression.replace(isNotNull, isNotNullReplaceStr);
+            currentExpression = currentExpression.replace(isNull, isNullReplaceStr);
+            mainSplitArr = currentExpression.split(/ OR | AND /);
+            singleQuoteValueArr = currentExpression.split(/ OR | LIKE N| NOT LIKE | IS NOT NULL | IS NULL | LIKE | <> | AND | = |\)|\(/);
+            singleQuoteValueArr = singleQuoteValueArr.
+                filter(function (n) { return n !== " "; }).
+                filter(function (n) { return n !== ""; }).
+                filter(function (element, index) { //ignore jslint
+                    if (singleQuoteValueArr && singleQuoteValueArr.length > 1) {
+                        return (index % 2 !== 0);
+                    } else {
+                        return true;
+                    }
+                }).
+                map(Function.prototype.call, String.prototype.trim);
+
+            array.forEach(singleQuoteValueArr, lang.hitch(this, function (singleQuoteValue, index) {
+                var searchString, changeString, result, regex;
+                regex = /'(.*)'/g;
+                result = regex.exec(singleQuoteValue);
+                if (result && result.length >= 2) {
+                    searchString = result[1];
+                    changeString = searchString.replace(/'/g, "''");
+                    currentExpression =
+                        currentExpression.replace(mainSplitArr[index],
+                            mainSplitArr[index].replace(searchString, changeString));
+                } else {
+                    if (mainSplitArr[index].includes(isNotNullReplaceStr)) {
+                        currentExpression =
+                            currentExpression.replace(mainSplitArr[index],
+                                mainSplitArr[index].replace(isNotNullReplaceStr, isNotNull));
+                    } else if (mainSplitArr[index].includes(isNullReplaceStr)) {
+                        currentExpression =
+                            currentExpression.replace(mainSplitArr[index],
+                                mainSplitArr[index].replace(isNullReplaceStr, isNull));
+                    }
+                }
+            }));
+
+            return currentExpression;
+        },
+
+        /**
         * This function will count features for the entered textbox value
         * @param{input} contains textbox node
         * @param{int} contains the index/parameter id of the input layer detail
@@ -1209,7 +1261,7 @@ define([
             deferred = new Deferred();
             query = new Query();
             queryTask = new QueryTask(this.selectedOperationalLayer.url);
-            query.where = this._currentExpression;
+            query.where = this._addSingleQuotes(lang.clone(this._currentExpression));
             queryTask.executeForCount(query, lang.hitch(this, function (results) {
                 deferred.resolve(results);
                 // if the count of features is 0,
@@ -1392,7 +1444,7 @@ define([
         * @memberOf widgets/filter/filter
         */
         _applyParameterizedExpression: function () {
-            this.selectedOperationalLayer.setDefinitionExpression(this._currentExpression);
+            this.selectedOperationalLayer.setDefinitionExpression(this._addSingleQuotes(lang.clone(this._currentExpression)));
             this.filterRefresh();
         },
 

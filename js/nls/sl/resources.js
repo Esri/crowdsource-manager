@@ -31,7 +31,7 @@ define({
     "numViews": "Število ogledov",
     "avgRating": "Ocena",
     "noWebMapInGroup": "Konfigurirana skupina je neveljavna ali s skupino elementi še niso bili deljeni",
-    "infoBtnToolTip": "Podatki o karti",
+    "infoBtnToolTip": "Informacije o karti",
     "openWebmapList": "Odpri ploščo",
     "closeWebmapList": "Zapri ploščo"
   },
@@ -52,8 +52,8 @@ define({
     "invalidDouble": "Vnesite številko",
     "requiredFields": "Navedite vrednosti za vsa obvezna polja",
     "selectLocation": "Izberite lokacijo za svoje poročilo",
-    "numericRangeHintMessage": "${openStrong}Hint:${closeStrong} Najmanjša vrednost ${minValue} in največja vrednost ${maxValue}",
-    "dateRangeHintMessage": "${openStrong}Hint:${closeStrong} Najmanjši datum ${minValue} in največji datum ${maxValue}",
+    "numericRangeHintMessage": "${openStrong}Namig:${closeStrong} Minimalna vrednost ${minValue} in maksimalna vrednost ${maxValue}",
+    "dateRangeHintMessage": "${openStrong}Namig:${closeStrong} Najmanjši datum ${minValue} in največji datum ${maxValue}",
     "errorsInApplyEdits": "Poročila ni bilo mogoče poslati",
     "attachmentSelectedMsg": "izbranih prilog",
     "attachmentUploadStatus": "${failed} od ${total} prilog ni bilo mogoče naložiti",
@@ -68,8 +68,8 @@ define({
     "unableToEditPopupMessage": "Za izvajanje tega dejanja nimate dovoljenja."
   },
   "mapViewer": {
-    "zoomInToolTip": "Približaj",
-    "zoomOutToolTip": "Oddalji"
+    "zoomInToolTip": "Povečaj",
+    "zoomOutToolTip": "Pomanjšaj"
   },
   "applicationHeader": {
     "signInOption": "Prijava",

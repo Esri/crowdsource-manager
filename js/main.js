@@ -451,6 +451,7 @@ define([
         _destroyApplicationHeaderWidget: function () {
             if (this._applicationHeader) {
                 this._applicationHeader.destroy();
+                this._applicationHeader = null;
             }
         },
 
@@ -622,9 +623,9 @@ define([
             var currentScale = this.map.getScale();
             // ignored min scale = 0, max scale = 0
             if (this._refinedOperationalLayer.clonedMinScale !== null &&
-                    this._refinedOperationalLayer.clonedMinScale !== undefined &&
-                    this._refinedOperationalLayer.clonedMaxScale !== null &&
-                    this._refinedOperationalLayer.clonedMaxScale !== undefined) {
+                this._refinedOperationalLayer.clonedMinScale !== undefined &&
+                this._refinedOperationalLayer.clonedMaxScale !== null &&
+                this._refinedOperationalLayer.clonedMaxScale !== undefined) {
                 if (this._refinedOperationalLayer.clonedMinScale === 0 && this._refinedOperationalLayer.clonedMaxScale === 0) {
                     return true;
                 }
@@ -763,7 +764,7 @@ define([
             var currentScale = this.map.getScale();
             // ignored min scale = 0, max scale = 0
             if (this._refinedOperationalLayer.clonedMinScale !== null && this._refinedOperationalLayer.clonedMinScale !== undefined &&
-                    this._refinedOperationalLayer.clonedMaxScale !== null && this._refinedOperationalLayer.clonedMaxScale !== undefined) {
+                this._refinedOperationalLayer.clonedMaxScale !== null && this._refinedOperationalLayer.clonedMaxScale !== undefined) {
                 if (this._refinedOperationalLayer.clonedMinScale === 0 && this._refinedOperationalLayer.clonedMaxScale === 0) {
                     return;
                 }

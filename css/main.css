@@ -368,6 +368,12 @@ table {
     padding: 0px 15px;
 }
 
+.esriCTSignInUserNameDetailsWrap {
+    height: 20px;
+    line-height: 20px;
+    margin-top: 15px;
+}
+
 .esriCTSignInUserNameDetails {
     cursor: pointer;
     white-space: nowrap;
@@ -375,13 +381,11 @@ table {
     text-align: right;
     color: #fff;
     max-width: 135px;
-    line-height: 50px;
     float: left;
 }
 
 .esriSignedInUserDetailsCaretIcon {
     float: left;
-    line-height: 49px;
     color: #fff;
     padding-left: 2px;
 }
