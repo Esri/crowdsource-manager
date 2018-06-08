@@ -53,7 +53,7 @@ define({
     "requiredFields": "Adjon meg értéket minden kötelező mezőben",
     "selectLocation": "Válasszon helyet a jelentés számára",
     "numericRangeHintMessage": "${openStrong}Tipp:${closeStrong} ${minValue} minimális érték és ${maxValue} maximális érték",
-    "dateRangeHintMessage": "${openStrong}Tipp:${closeStrong} ${minValue} minimális dátum és ${maxValue} maximális dátum",
+    "dateRangeHintMessage": "${openStrong}Tipp:${closeStrong} ${minValue} kezdő dátum és ${maxValue} záró dátum",
     "errorsInApplyEdits": "Nem sikerült elküldeni a jelentést",
     "attachmentSelectedMsg": "csatolmány kiválasztva",
     "attachmentUploadStatus": "${failed} csatolmányt nem sikerült feltölteni (összesen: ${total})",
