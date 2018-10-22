@@ -85,7 +85,7 @@ define({
     "valueRadioButtonLabel": "มูลค่า",
     "uniqueRadioButtonLabel": "ลักษณะเฉพาะ",
     "selectLayerToBegin": "เลือกประเภทเพื่อเริ่มงาน",
-    "layerFeatureCount": "${selectedFeatureCount} เลือก / ${featureCount} เรคคอร์ด"
+    "layerFeatureCount": "${นับข้อมูลที่เลือก} เลือก / ${นับข้อมูล} เรคคอร์ด"
   },
   "timeSlider": {
     "timeSliderLabel": "ช่วงเวลา",

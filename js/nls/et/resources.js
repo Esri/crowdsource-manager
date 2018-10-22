@@ -21,7 +21,7 @@ define({
   },
   "webMapList": {
     "owner": "Omanik",
-    "created": "Kuupäev loodud",
+    "created": "Loomise kuupäev",
     "modified": "Muutmise kuupäev",
     "description": "Kirjeldus",
     "snippet": "Kokkuvõte",
@@ -74,7 +74,7 @@ define({
   "applicationHeader": {
     "signInOption": "Logi sisse",
     "signOutOption": "Logi välja",
-    "pleaseSignInText": "Palun logi sisse"
+    "pleaseSignInText": "Palun logige sisse"
   },
   "dataviewer": {
     "noIssuesReported": "Ühtki aruannet ei ole saadaval.",
@@ -98,7 +98,7 @@ define({
     "emptyCommentMessage": "Väärtus on nõutav",
     "placeHolderText": "",
     "noCommentsAvailableText": "Kirjeid pole saadaval",
-    "remainingTextCount": "${0} tähemärki kasutamata",
+    "remainingTextCount": "${0} kasutamata tähemärki",
     "showNoText": "Ei",
     "selectAttachments": "Manused",
     "selectFileText": "Sirvi",
