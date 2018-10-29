@@ -18,7 +18,11 @@
 define({
     root: ({
         map: {
-            error: "Unable to create map"
+            error: "Unable to create map",
+            licenseError: {
+                message: "Your account is not licensed to use Configurable Apps that are not public. Please ask your organization administrator to assign you a user type that includes Essential Apps or an add-on Essential Apps license.",
+                title: "Not Licensed"
+            }
         },
         webMapList: {
             owner: "Owner", // Appears in web-map list description panel when it is set to true
