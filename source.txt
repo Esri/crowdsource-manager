@@ -1,0 +1,7 @@
+git repository crowdsource-manager, branch 
+persona-based-licensing-updates
+commit 60063e4b6421dd910af74b71133ec7095146230a
+Author: Mike Tschudi <mtschudi@esri.com>
+Date:   Wed Oct 31 09:42:21 2018 -0700
+
+    Added access check for app item
