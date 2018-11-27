@@ -17,7 +17,11 @@
 */
 define({
   "map": {
-    "error": "Võimetu koostama kaarti"
+    "error": "Võimetu koostama kaarti",
+    "licenseError": {
+      "message": "Teie kontol puudub litsents konfigureeritavate rakenduste kasutamiseks, mis ei ole avalikud. Paluge oma organisatsiooni administraatoril määrata teile kasutajatüüp, mis sisaldab olulisi rakendusi või oluliste rakenduse lisalitsentsi.",
+      "title": "Litsents puudub"
+    }
   },
   "webMapList": {
     "owner": "Omanik",
