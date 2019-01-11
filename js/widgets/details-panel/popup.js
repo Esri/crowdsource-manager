@@ -32,6 +32,7 @@ define([
     "esri/tasks/query",
     "dojo/_base/array",
     "esri/dijit/PopupTemplate",
+    "dojo/query",
     "dojo/domReady!"
 ], function (
     declare,
@@ -49,12 +50,39 @@ define([
     PopupForm,
     Query,
     array,
-    PopupTemplate
+    PopupTemplate,
+    query
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         isShowSelectedClicked: null, // to notify that show selected option is clicked
         isShowAllClicked: null, // to notify that show all option is clicked
+        _sameEditingPrivilegeForAnonymousObjArr: [
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": false,
+                "allowOthersToUpdate": false,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": true,
+                "allowOthersToDelete": false,
+                "allowOthersToUpdate": false,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": true,
+                "allowOthersToUpdate": true,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            },
+        ],
 
         /**
          * This function is called when widget is constructed
@@ -121,8 +149,8 @@ define([
          * @memberOf widgets/details-panel/popup
          */
         _createEditFormButton: function () {
-            var isNonEditableLayer, capabilities, editFeatureButton;
-            isNonEditableLayer = false;
+            var isEditableLayer, capabilities, editFeatureButton;
+            isEditableLayer = false;
             // create edit icon to edit feature
             editFeatureButton = domConstruct.create("div", {
                 "class": "esriCTEditFeatureButton esrictfonticons esrictfonticons-pencil esriCTBodyTextColor",
@@ -133,20 +161,40 @@ define([
                 if (this.selectedOperationalLayer.id === operationalLayer.id) {
                     if (operationalLayer.resourceInfo.capabilities) {
                         capabilities = operationalLayer.resourceInfo.capabilities;
-                        if (capabilities.indexOf("Create") === -1 && (capabilities.indexOf("Editing") === -1 || capabilities.indexOf("Update") === -1)) {
-                            isNonEditableLayer = true;
+                        if (capabilities.indexOf("Create") > -1 && (capabilities.indexOf("Editing") > -1 || capabilities.indexOf("Update") > -1)) {
+                            isEditableLayer = true;
                         }
                     }
                 }
             }));
             // hide the editable icon for non-editable layer
-            if (isNonEditableLayer) {
+            if (!isEditableLayer) {
                 domClass.add(editFeatureButton, "esriCTHidden");
             }
             // attach 'click event on edit button to display form
-            on(editFeatureButton, "click", lang.hitch(this, function () {
+            on(editFeatureButton, "click", lang.hitch(this, function (evt) {
+                var existingAttachmentsArr;
+                existingAttachmentsArr = this._getExistingAttachmentsArr(evt);
                 if (this.appConfig.logInDetails.canEditFeatures) {
-                    this._createPopupForm();
+                    // 1. Is editor tracking enabled?
+                    if (this.selectedOperationalLayer.hasOwnProperty("ownershipBasedAccessControlForFeatures") &&
+                        this.selectedOperationalLayer.ownershipBasedAccessControlForFeatures !== null &&
+                        this.selectedOperationalLayer.ownershipBasedAccessControlForFeatures !== "" &&
+                        this.selectedOperationalLayer.ownershipBasedAccessControlForFeatures !== undefined) { // 1. Yes
+                        // 2. Is the current user anonymous?
+                        if (this.appConfig.logInDetails.isUserSignedIn) { // 2. No
+                            this._checkCapabilityAndAllowEdit(existingAttachmentsArr);
+                        } else { // 2. Yes
+                            // 3. Do anonymous editors have the same editing privileges as named editors?
+                            if (this._doAnonymousHaveSameEditingPrivilege()) { // 3. Yes, consider as a signed in user
+                                this._checkCapabilityAndAllowEdit(existingAttachmentsArr);
+                            } else { // 3. No, Only allow them to create related records
+                                this.appUtils.showMessage(this.appConfig.i18n.geoform.invalidFeatureCreatorMessage);
+                            }
+                        }
+                    } else { // 1. No, Existing checks are fine
+                        this._createPopupForm(existingAttachmentsArr);
+                    }
                 } else {
                     this.appUtils.showMessage(this.appConfig.i18n.geoform.unableToEditPopupMessage);
                 }
@@ -154,16 +202,51 @@ define([
         },
 
         /**
+         * This function is used to check whether anonymous user has same editing privilege as a named editors
+         */
+        _doAnonymousHaveSameEditingPrivilege: function () {
+            var ownershipBasedAccessControlForFeaturesObj = this.selectedOperationalLayer.ownershipBasedAccessControlForFeatures;
+            var hasSamePrivilege;
+            hasSamePrivilege = false;
+            array.forEach(this._sameEditingPrivilegeForAnonymousObjArr, lang.hitch(this, function (sameEditingPrivilegeForAnonymousObj) {
+                if (JSON.stringify(sameEditingPrivilegeForAnonymousObj) === JSON.stringify(ownershipBasedAccessControlForFeaturesObj)) {
+                    hasSamePrivilege = true;
+                }
+            }));
+            return hasSamePrivilege;
+        },
+
+        /**
+         * This function is used to check the edit capability of the user and
+         * allow it to edit the feature
+         */
+        _checkCapabilityAndAllowEdit: function (existingAttachmentsArr) {
+            // get edit capability of the user, this works for both signed in & anonymous user
+            var userEditCapability = this.selectedOperationalLayer.getEditCapabilities({
+                feature: this.multipleFeatures[0]
+            });
+            // can user edit the feature, this works for both signed in & anonymous user
+            if (userEditCapability &&
+                userEditCapability.hasOwnProperty("canUpdate") &&
+                userEditCapability.canUpdate) {
+                this._createPopupForm(existingAttachmentsArr);
+            } else {
+                this.appUtils.showMessage(this.appConfig.i18n.geoform.invalidFeatureCreatorMessage);
+            }
+        },
+
+        /**
          * create form to update feature attributes
          * @memberOf widgets/details-panel/popup
          */
-        _createPopupForm: function () {
+        _createPopupForm: function (existingAttachmentsArr) {
             //destroy existing popup-form instance
             if (this.popupFormInstance) {
                 this.popupFormInstance.destroy();
             }
             domConstruct.empty(this.popupFormContainer);
             this.popupEditModeEnabled(true);
+
             //Create new instance of PopupForm
             this.popupFormInstance = new PopupForm({
                 config: this.appConfig,
@@ -172,14 +255,16 @@ define([
                 nls: this.appConfig.i18n,
                 selectedLayer: this.selectedOperationalLayer,
                 popupInfo: this.popupInfo,
-                selectedFeatures: this.multipleFeatures
+                selectedFeatures: this.multipleFeatures,
+                existingAttachmentsArr: existingAttachmentsArr
             }, domConstruct.create("div", {}, this.popupFormContainer));
+            this.popupFormInstance.startup();
             // attach handler on cancel button click
             this.popupFormInstance.onCancelButtonClick = lang.hitch(this, this._onFeatureUpdateCancel);
             // attach handler on save button click
             this.popupFormInstance.onPopupFormSubmitted = lang.hitch(this, function (feature) {
                 if ((!this.isShowSelectedClicked) || ((this.isShowSelectedClicked) && (this.multipleFeatures) && (this.multipleFeatures.length === 1))) {
-                    // Close the comment form after submitting new comment
+                    // Close the popup form after submitting new feature
                     this._hidePanel(this.popupFormContainer);
                     this._showPanel(this.popupInfoParentContainer);
                 }
@@ -297,13 +382,19 @@ define([
                             if (infos[i].contentType.indexOf("image") !== -1 && infos[i].contentType.match(/(\/tiff)/)) {
                                 infos[i].contentType = "application/tiff";
                             }
-                            if ((infos[i].contentType.indexOf("image") === -1) && (infos[i].contentType.indexOf("mp4") === -1)) {
+                            if (((infos[i].contentType.indexOf("image") === -1) &&
+                                    (infos[i].contentType.indexOf("mp4") === -1) &&
+                                    (!this.appConfig.enableEditingAttachments)) ||
+                                (this.appConfig.enableEditingAttachments)) {
+
                                 attachmentWrapper = domConstruct.create("div", {}, fieldContent);
 
                                 imageThumbnailContainer = domConstruct.create("div", {
                                     "class": "esriCTNonImageContainer",
                                     "alt": infos[i].url
                                 }, attachmentWrapper);
+
+                                this._setAttachmentDetails(imageThumbnailContainer, infos[i]);
 
                                 imageThumbnailContent = domConstruct.create("div", {
                                     "class": "esriCTNonImageContent"
@@ -437,6 +528,62 @@ define([
             tiffImageObject.url = url;
             tiffImageObject.name = url.substr(url.lastIndexOf('/') + 1);
             return tiffImageObject;
+        },
+
+        /**
+         * This function is used get the array of existing attachments
+         * @param {*} evt node in which attachments needs to be queried
+         */
+        _getExistingAttachmentsArr: function (evt) {
+            var existingAttachmentsArr, existingAttachments;
+            existingAttachmentsArr = [];
+            existingAttachments = query(".esriCTNonImageContainer", evt.target.parentNode);
+            array.forEach(existingAttachments, lang.hitch(this, function (existingAttachment) {
+                var existingAttachmentObj;
+                existingAttachmentObj = {};
+                existingAttachmentObj.contentType = domAttr.get(existingAttachment, "attachmentContentType");
+                existingAttachmentObj.id = domAttr.get(existingAttachment, "attachmentId");
+                existingAttachmentObj.keywords = domAttr.get(existingAttachment, "attachmentKeywords");
+                existingAttachmentObj.name = domAttr.get(existingAttachment, "attachmentName");
+                existingAttachmentObj.objectId = domAttr.get(existingAttachment, "attachmentObjectId");
+                existingAttachmentObj.parentObjectId = domAttr.get(existingAttachment, "attachmentParentObjectId");
+                existingAttachmentObj.size = domAttr.get(existingAttachment, "attachmentSize");
+                existingAttachmentObj.url = domAttr.get(existingAttachment, "attachmentUrl");
+                existingAttachmentsArr.push(existingAttachmentObj);
+            }));
+            return existingAttachmentsArr;
+        },
+
+        /**
+         * This function is used to set the attachment details as a attribute to the div
+         * @param {*} node object of div
+         * @param {*} attachment object containing details of attachment
+         */
+        _setAttachmentDetails: function (node, attachment) {
+            if (attachment.hasOwnProperty("contentType")) {
+                domAttr.set(node, "attachmentContentType", attachment.contentType);
+            }
+            if (attachment.hasOwnProperty("id")) {
+                domAttr.set(node, "attachmentId", attachment.id);
+            }
+            if (attachment.hasOwnProperty("keywords")) {
+                domAttr.set(node, "attachmentKeywords", attachment.keywords);
+            }
+            if (attachment.hasOwnProperty("name")) {
+                domAttr.set(node, "attachmentName", attachment.name);
+            }
+            if (attachment.hasOwnProperty("objectId")) {
+                domAttr.set(node, "attachmentObjectId", attachment.objectId);
+            }
+            if (attachment.hasOwnProperty("parentObjectId")) {
+                domAttr.set(node, "attachmentParentObjectId", attachment.parentObjectId);
+            }
+            if (attachment.hasOwnProperty("size")) {
+                domAttr.set(node, "attachmentSize", attachment.size);
+            }
+            if (attachment.hasOwnProperty("url")) {
+                domAttr.set(node, "attachmentUrl", attachment.url);
+            }
         }
     });
 });

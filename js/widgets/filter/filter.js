@@ -31,6 +31,7 @@ define([
     "dojo/dom",
     "dojo/query",
     "dojo/dom-geometry",
+    "dojo/keys",
     "dojo/domReady!"
 ], function (
     declare,
@@ -47,7 +48,8 @@ define([
     domStyle,
     dom,
     query,
-    domGeom
+    domGeom,
+    keys
 ) {
     return declare([_WidgetBase], {
         _filterContainer: null, // contains parent filter container
@@ -665,6 +667,7 @@ define([
             this._setDefaultTextBoxValue(definitionEditorInput, inputTextBox, index, closeTextBoxSpan);
             // attach 'blur' event of input textbox
             this._attachTextBoxBlurEvent(inputTextBox, closeTextBoxSpan, index, displayColumn);
+            this._attachTextBoxEnterEvent(inputTextBox, closeTextBoxSpan, index, displayColumn);
             this._attachCloseTextBoxSpanClickEvent(inputTextBox, closeTextBoxSpan, index, displayColumn);
             // Check whether the textbox value is empty and change close icon
             value = lang.trim(inputTextBox.value);
@@ -810,6 +813,37 @@ define([
                     this.appConfig._filterObject.inputs[index].parameters[0].prevValue = "";
                     this._setCurrentExpression();
                     this._applyParameterizedExpression();
+                }
+            }));
+        },
+
+        /**
+         * This function is used to attach the keyboard event to the filter textbox.
+         * When user press enter key filters are applied.
+         * @memberOf widgets/filter/filter
+         */
+        _attachTextBoxEnterEvent: function (inputTextBox, closeTextBoxSpan, index, displayColumn) {
+            var value;
+            on(inputTextBox, "keyup", lang.hitch(this, function (event) {
+                if (event && (event.keyCode === keys.ENTER)) {
+                    this.appUtils.showLoadingIndicator();
+                    this.appConfig._filterObject.inputs[index].parameters[0].textBoxValue = inputTextBox.value;
+                    this.appConfig._filterObject.inputs[index].parameters[0].currentValue = inputTextBox.value;
+                    value = lang.trim(inputTextBox.value);
+                    // Check whether the textbox value is empty and change close icon
+                    if (value !== "") {
+                        domClass.replace(closeTextBoxSpan, "esriCTActiveCloseSpan", "esriCTDisabledCloseSpan");
+                        // check active filter nodes
+                        this._checkFieldActiveNodes(displayColumn);
+                        this._setCurrentExpression();
+                        this._getFeatureCount(inputTextBox, index, closeTextBoxSpan, displayColumn, "textBox");
+                    } else {                        
+                        domAttr.set(inputTextBox, "value", "");
+                        domClass.replace(closeTextBoxSpan, "esriCTDisabledCloseSpan", "esriCTActiveCloseSpan");
+                        this.appConfig._filterObject.inputs[index].parameters[0].prevValue = "";
+                        this._setCurrentExpression();
+                        this._applyParameterizedExpression();
+                    }
                 }
             }));
         },
@@ -1211,8 +1245,12 @@ define([
             mainSplitArr = currentExpression.split(/ OR | AND /);
             singleQuoteValueArr = currentExpression.split(/ OR | LIKE N| NOT LIKE | IS NOT NULL | IS NULL | LIKE | <> | AND | = |\)|\(/);
             singleQuoteValueArr = singleQuoteValueArr.
-                filter(function (n) { return n !== " "; }).
-                filter(function (n) { return n !== ""; }).
+                filter(function (n) {
+                    return n !== " ";
+                }).
+                filter(function (n) {
+                    return n !== "";
+                }).
                 filter(function (element, index) { //ignore jslint
                     if (singleQuoteValueArr && singleQuoteValueArr.length > 1) {
                         return (index % 2 !== 0);

@@ -117,7 +117,8 @@ define([
                         "token": logInDetails.credential.token
                     },
                     "level": logInDetails.level,
-                    "privileges": logInDetails.privileges
+                    "privileges": logInDetails.privileges,
+                    "userId": logInDetails.credential.userId
                 };
                 this._queryGroupInfo(loggedInUser, this._boilerPlateTemplateObject.config);
             });

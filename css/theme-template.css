@@ -219,6 +219,12 @@
     color: ${ButtonTextColor} !important;
 }
 
+.esriCTAddPopupAttachmentsButton, .esriCTAddPopupAttachmentsButton:hover
+{
+    background-color: ${ButtonBackgroundColor} !important;
+    color: ${ButtonTextColor} !important;
+}
+
 .esriCTDetailsPanelWrapperContainer .nav-tabs>li.active>a {
     background-color: ${CalculatedBodyBackgroundColor} !important;
     color: ${BodyTextColor} !important;

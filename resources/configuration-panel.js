@@ -29,6 +29,7 @@
         "commentsTabText": "Comments",
         "showHelpIcon": false,
         "commentFormAttachmentSectionLabel": "Attachments",
+        "popupFormAttachmentSectionLabel": "Attachments",
         "headerTextColor": "#fff",
         "bodyBackgroundColor": "#fff",
         "bodyTextColor": "#515151",
@@ -37,7 +38,8 @@
         "defaultDetailsTab": "Info",
         "showBaseMapGallery": false,
         "showLegend": false,
-        "showPopupForNonEditableLayers": false
+        "showPopupForNonEditableLayers": false,
+        "enableEditingAttachments": false
     },
     "configurationSettings": [{
         "category": "<b>General</b>",
@@ -288,6 +290,11 @@
             "type": "string",
             "fieldName": "commentFormAttachmentSectionLabel"
         }, {
+            "label": "Header for attachment section of popup form",
+            "tooltip": "Name to display on the popup form where supporting files can be attached to the feature. This section is only available when attachments are enabled on the selected layer.",
+            "type": "string",
+            "fieldName": "popupFormAttachmentSectionLabel"
+        }, {
             "type": "paragraph",
             "value": "Indicate how related records are displayed and edited: either by using a single field, or by using the <a href=\"http://links.esri.com/ArcGISOnline/Configurepop-ups\" target=\"_blank\">popup<\/a> defined for the table layer in the map."
         }, {
@@ -320,6 +327,11 @@
                 "label": "Comments",
                 "value": "Comments"
             }]
+        }, {
+            "label": "Enable editing attachments",
+            "tooltip": "When enabled, attachment of info & comment tab could be edited",
+            "type": "boolean",
+            "fieldName": "enableEditingAttachments"
         }]
     }, {
         "category": "<b>Filters</b>",

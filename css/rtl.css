@@ -340,17 +340,26 @@
 /** Sign-in container ends **/
 
 
-/** Layer Title Container Starts **/
+/** Operational layer name, feature count and export to csv section starts **/
 
-.dj_rtl .esriCTFeatureCount {
-    padding-left: 15px;
-    float: left;
-    padding-right: 0px;
-    text-align: left;
+.dj_rtl .esriCTOperationalLayerName {
+    float: right;
 }
 
+.dj_rtl .esriCTFeatureCount {
+    float: right;
+    padding-right: 0px;
+    padding-left: 15px;
+    text-align: right;
+}
 
-/** Layer Title Container Ends **/
+.dj_rtl .esriCTExportToCSVParentContainer {
+    float: right;
+    padding-right: 0px;
+    padding-left: 15px;
+}
+
+/** Operational layer name, feature count and export to csv section ends **/
 
 
 /** basemap gallery and legend panels **/
@@ -367,3 +376,23 @@
 
 
 /** basemap gallery and legend panels **/
+
+/* Popup & Comment attachment starts */
+
+.dj_rtl .esriCTFileButtonContainer {
+    float: right;
+}
+
+.dj_rtl .esriCTAttachmentSelectedCount {
+    float: right;
+    margin-left: 0px;
+    margin-right: 10px;
+}
+
+.dj_rtl .esriCTFileAlert {
+    float: right;
+    margin-right: 0px;
+    margin-left: 10px;
+}
+
+/* Popup & Comment attachment ends */

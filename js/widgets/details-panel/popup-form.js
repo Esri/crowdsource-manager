@@ -32,7 +32,8 @@ define([
     "esri/graphic",
     "dojo/dom-style",
     "dojo/dom-geometry",
-    "dojo/text!./templates/popup-form.html"
+    "dojo/text!./templates/popup-form.html",
+    "dojo/promise/all"
 ], function (
     declare,
     _WidgetBase,
@@ -50,17 +51,49 @@ define([
     Graphic,
     domStyle,
     domGeom,
-    popupForm
+    popupForm,
+    all
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: popupForm,
-        _sortedFields: [],
+
         i18n: {},
-        item: null,
+
+        _sortedFields: [],
         _rangeHelpText: null,
         _layerHasReportedByField: false,
-        selectedLayer: null,
         _featureAttributes: {},
+        _fileAttachmentList: null, // list of files that is been attached
+        _fileInputIcon: null, // browse button to attach files
+        _fileAttachmentCounter: 1, // to display number of attachments that is been added or removed
+        _deletedAttachmentsArr: [], // to store deleted attachments
+        _unableToEditFeatureCount: 0,
+        _sameEditingPrivilegeForAnonymousObjArr: [
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": false,
+                "allowOthersToUpdate": false,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": true,
+                "allowOthersToDelete": false,
+                "allowOthersToUpdate": false,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": true,
+                "allowOthersToUpdate": true,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            },
+        ],
 
         /**
         * This function is called when widget is constructed.
@@ -84,18 +117,6 @@ define([
         */
         postCreate: function () {
             this.inherited(arguments);
-            this._featureAttributes = lang.clone(this.selectedFeatures[0].attributes);
-            if (this.selectedFeatures.length > 1) {
-                this._filterCommonAttributes();
-            }
-            this._initializePopupForm();
-            // click event for submit popup form on submit button click
-            on(this.postPopupButton, 'click', lang.hitch(this, function () {
-                this._submitPopupForm();
-            }));
-            on(this.cancelPopupButton, 'click', lang.hitch(this, function (evt) {
-                this.onCancelButtonClick(evt);
-            }));
         },
 
         /**
@@ -104,6 +125,35 @@ define([
         */
         startup: function () {
             this.inherited(arguments);
+            this._initializeData();
+            this._featureAttributes = lang.clone(this.selectedFeatures[0].attributes);
+            if (this.selectedFeatures.length > 1) {
+                this._filterCommonAttributes();
+            }
+            this._initializePopupForm();
+            // click event for submit popup form on submit button click
+            on(this.postPopupButton, 'click', lang.hitch(this, function () {
+                this.appUtils.showLoadingIndicator();
+                this._submitPopupForm();
+            }));
+            on(this.cancelPopupButton, 'click', lang.hitch(this, function (evt) {
+                this.onCancelButtonClick(evt);
+            }));
+        },
+
+        /**
+         * This function is used to re-initialize the value of global variables
+         */
+        _initializeData: function () {
+            this._sortedFields = [];
+            this._rangeHelpText = null;
+            this._layerHasReportedByField = false;
+            this._featureAttributes = {};
+            this._fileAttachmentList = null;
+            this._fileInputIcon = null;
+            this._fileAttachmentCounter = 1;
+            this._deletedAttachmentsArr = [];
+            this._unableToEditFeatureCount = 0;
         },
 
         /**
@@ -114,6 +164,15 @@ define([
             this._filterLayerFields();
             // Sort fields array by type
             this._sortedTypeFormElement();
+            // Only display attachment button & existing attachments when only 1 feature is selected
+            // Also, only execute this if this.config.enableEditingAttachments is set to true
+            if (this.selectedFeatures.length === 1 && this.config.enableEditingAttachments) {
+                // create attachment button if selected feature layer has attachments
+                this._createAttachments();
+                // add existing attachments so that user can edit it
+                this._displayExistingAttachments();
+            }
+            this.appUtils.hideLoadingIndicator();
         },
 
         /**
@@ -218,17 +277,21 @@ define([
         },
 
         /**
-        * This function is called when click event occurs on submit buttons click
-        * @memberOf widgets/details-panel/popup-form
-        */
+         * This function is called when click event occurs on submit buttons click
+         * @memberOf widgets/details-panel/popup-form
+         */
         _submitPopupForm: function () {
-            var erroneousFields = [], featureArray = [], updatedAttributes = {}, confirmationMsg, isConfirmed = true;
+            var erroneousFields = [],
+                featureArray = [],
+                updatedAttributes = {},
+                confirmationMsg, isConfirmed = true;
             erroneousFields = this._checkForFields();
             if (erroneousFields.length !== 0) {
                 // Scroll to the erroneous field node
                 $('#tabContent').animate({
                     scrollTop: erroneousFields[0].offsetTop
                 }, 1000);
+                this.appUtils.hideLoadingIndicator();
             } else {
                 //get confirmation from user if multiple features are selected to update
                 if (this.selectedFeatures.length > 1) {
@@ -241,21 +304,92 @@ define([
                 if (isConfirmed) {
                     //get update attribute values
                     updatedAttributes = this._getUpdatedAttributes();
+                    this._unableToEditFeatureCount = 0;
                     //get features to be updated on layer
                     featureArray = this._getFeaturesToBeUpdated(updatedAttributes);
-                    //Show loading indicator
-                    this.appUtils.showLoadingIndicator();
                     // Add the popup to the popup table
-                    this.selectedLayer.applyEdits(null, featureArray, null, lang.hitch(this, function () {
-                        //send last feature to the handler
-                        this.onPopupFormSubmitted(this.selectedFeatures[this.selectedFeatures.length - 1]);
-                    }), lang.hitch(this, function (err) {
-                        //Hide loading indicator
-                        this.appUtils.hideLoadingIndicator();
-                        // Show error message
-                        this.appUtils.showError(err);
-                        // Show error message in header
+                    this.selectedLayer.applyEdits(null, featureArray, null, lang.hitch(this, function (addResult, updateResult, deleteResult) { //ignore jslint
+                        // send last feature to the handler
+                        var userFormNode, updateFeatureFailed, updateFeatureSuccess, errorMessage,
+                            featureFailedErrorMessage, alertErrorMessage;
+                        updateFeatureSuccess = 0;
+                        updateFeatureFailed = 0;
+                        // calc how many features failed to update
+                        array.forEach(updateResult, lang.hitch(this, function (updateResultDetails) {
+                            if (updateResultDetails.success) {
+                                updateFeatureSuccess++;
+                            } else {
+                                updateFeatureFailed++;
+                                if (updateResultDetails.hasOwnProperty("error") &&
+                                    updateResultDetails.error.hasOwnProperty("message")) {
+                                    if (alertErrorMessage) {
+                                        alertErrorMessage += updateResultDetails.error.message;
+                                    } else {
+                                        alertErrorMessage = updateResultDetails.error.message;
+                                    }
+                                }
+                            }
+                        }));
+                        if (this._unableToEditFeatureCount > 0) {
+                            updateFeatureFailed = this._unableToEditFeatureCount;
+                        }
+                        // Display error message when feature update fails and wont proceed for attachment.
+                        if (updateFeatureFailed > 0) {
+                            // scroll on top
+                            dom.byId("tabContent").scrollTop = 0;
+                            // failed message creation
+                            featureFailedErrorMessage = string.substitute(this.config.i18n.geoform.featureUpdateStatus, {
+                                "failed": updateFeatureFailed,
+                                "total": this.selectedFeatures.length
+                            });
+                            // Message which states that features have been updated but related to particular user only.
+                            var userSpecificFeatureUpdatedMsg;
+                            if (this.selectedLayer.hasOwnProperty("ownershipBasedAccessControlForFeatures") &&
+                                this.selectedLayer.ownershipBasedAccessControlForFeatures !== null &&
+                                this.selectedLayer.ownershipBasedAccessControlForFeatures !== "" &&
+                                this.selectedLayer.ownershipBasedAccessControlForFeatures !== undefined) {
+                                if (this.config.logInDetails.isUserSignedIn) {
+                                    userSpecificFeatureUpdatedMsg = string.substitute(this.nls.geoform.userSpecificFeatureUpdateMessage, {
+                                        "username": this.config.logInDetails.userName
+                                    });
+                                } else {
+                                    userSpecificFeatureUpdatedMsg = string.substitute(this.nls.geoform.userSpecificFeatureUpdateMessage, {
+                                        "username": this.nls.geoform.anonymousUserText
+                                    });
+                                }
+                            }
+                            // message will accompany the number of feature that were/were not successfully updated as well
+                            if (userSpecificFeatureUpdatedMsg !== "" && userSpecificFeatureUpdatedMsg !== null &&
+                                userSpecificFeatureUpdatedMsg !== undefined) {
+                                errorMessage = this.i18n.geoform.errorsInApplyEdits + " " + featureFailedErrorMessage + " " + userSpecificFeatureUpdatedMsg;
+                            } else {
+                                errorMessage = this.i18n.geoform.errorsInApplyEdits + " " + featureFailedErrorMessage;
+                            }
+                            // update alertErrorMessage if blank
+                            if (alertErrorMessage === "" || alertErrorMessage === null || alertErrorMessage === undefined) {
+                                alertErrorMessage = errorMessage;
+                            }
+                            // display message on top
+                            this._showHeaderMessageDiv(errorMessage);
+                            this.appUtils.hideLoadingIndicator();
+                            // Proceed for the attachment or further execution only if all the features are updated
+                        } else if (updateFeatureSuccess > 0) {
+                            userFormNode = dom.byId("addPopupAttachmentsWrapperContainer");
+                            // if layer has attachments then add those attachments
+                            if (this.selectedLayer.hasAttachments &&
+                                ((query(".esriCTFileToSubmit", userFormNode).length > 0) ||
+                                    (this._deletedAttachmentsArr.length > 0))) {
+                                this._addOrDeleteAttachments(userFormNode, updateResult);
+                            } else {
+                                this.onPopupFormSubmitted(this.selectedFeatures[this.selectedFeatures.length - 1]);
+                            }
+                        }
+                    }), lang.hitch(this, function (error) {
+                        this._unableToEditFeatureCount = 0;
+                        dom.byId("tabContent").scrollTop = 0;
+                        this.appUtils.showError(error.message);
                         this._showHeaderMessageDiv();
+                        this.appUtils.hideLoadingIndicator();
                     }));
                 } else {
                     this.appUtils.hideLoadingIndicator();
@@ -264,9 +398,9 @@ define([
         },
 
         /**
-        * get updated attributes from the form input elements
-        * @memberOf widgets/details-panel/popup-form
-        */
+         * get updated attributes from the form input elements
+         * @memberOf widgets/details-panel/popup-form
+         */
         _getUpdatedAttributes: function () {
             var key, value, attributes = {}, datePicker;
             array.forEach(query(".popupFormQuestionare .form-control", this.enterPopupContainer), lang.hitch(this, function (currentField) {
@@ -293,26 +427,32 @@ define([
         },
 
         /**
-        * get selected features to be updated on layer
-        * @memberOf widgets/details-panel/popup-form
-        */
+         * get selected features to be updated on layer
+         * @memberOf widgets/details-panel/popup-form
+         */
         _getFeaturesToBeUpdated: function (updatedAttributes) {
-            var featureArray = [], featureData, fieldName;
+            var featureData, fieldName, featureArray;
+            featureArray = [];
             array.forEach(this.selectedFeatures, lang.hitch(this, function (feature) {
-                // Create instance of graphic
-                featureData = new Graphic();
-                // create an empty array object
-                featureData.attributes = {};
-                for (fieldName in updatedAttributes) { //ignore jslint
-                    if (updatedAttributes.hasOwnProperty(fieldName)) {
-                        featureData.attributes[fieldName] = updatedAttributes[fieldName];
+                if (this._canEditFeature(feature)) {
+                    // Create instance of graphic
+                    featureData = new Graphic();
+                    // create an empty array object
+                    featureData.attributes = {};
+                    for (fieldName in updatedAttributes) { //ignore jslint
+                        if (updatedAttributes.hasOwnProperty(fieldName)) {
+                            featureData.attributes[fieldName] = updatedAttributes[fieldName];
+                        }
                     }
+                    featureData.attributes[this.selectedLayer.objectIdField] = feature.attributes[this.selectedLayer.objectIdField];
+                    featureArray.push(featureData);
+                } else {
+                    this._unableToEditFeatureCount++;
                 }
-                featureData.attributes[this.selectedLayer.objectIdField] = feature.attributes[this.selectedLayer.objectIdField];
-                featureArray.push(featureData);
             }));
             return featureArray;
         },
+
         /**
         * This function is called when click event occurs on submit buttons click
         * to check for errors, all the fields in Popup form
@@ -361,15 +501,18 @@ define([
         },
 
         /**
-        * Display message on header of form
-        * @memberOf widgets/details-panel/popup-form
-        */
-        _showHeaderMessageDiv: function () {
+         * Display message on header of form
+         * @memberOf widgets/details-panel/popup-form
+         */
+        _showHeaderMessageDiv: function (displayErrorMessage) {
             on(this.headerMessageButton, "click", lang.hitch(this, function () {
                 if (domClass.contains(this.headerMessageDiv, "esriCTVisible")) {
                     domClass.replace(this.headerMessageDiv, "esriCTHidden", "esriCTVisible");
                 }
             }));
+            if (displayErrorMessage) {
+                this.headerMessageContent.innerHTML = displayErrorMessage;
+            }
             if (domClass.contains(this.headerMessageDiv, "esriCTHidden")) {
                 domClass.replace(this.headerMessageDiv, "esriCTVisible", "esriCTHidden");
             }
@@ -1236,6 +1379,315 @@ define([
         */
         onCancelButtonClick: function (evt) {
             return evt;
+        },
+
+        /**
+         * Create attachment button to add the attachments in popup tab
+         */
+        _createAttachments: function () {
+            var fileInput, formContent, fileChange, fileAttachmentContainer, fileContainer, popupFormAttachmentSectionLabel, userFormNode;
+            // If layer has hasAttachments true
+            if (this.selectedLayer.hasAttachments) {
+                userFormNode = dom.byId("addPopupAttachmentsWrapperContainer");
+                // Create container for hasAttachment
+                formContent = domConstruct.create("div", {
+                    "class": "form-group hasAttachment esriCTPopupFormAttachmentLabel"
+                }, userFormNode);
+                if (this.config.popupFormAttachmentSectionLabel) {
+                    if (this.config.popupFormAttachmentSectionLabel === "Attachments") {
+                        popupFormAttachmentSectionLabel = this.config.i18n.geoform.selectAttachments;
+                    } else {
+                        popupFormAttachmentSectionLabel = this.config.popupFormAttachmentSectionLabel;
+                    }
+                } else {
+                    popupFormAttachmentSectionLabel = this.config.i18n.geoform.selectAttachments;
+                }
+                // Select attachment label
+                domConstruct.create("label", {
+                    "innerHTML": popupFormAttachmentSectionLabel,
+                    "id": "popupFormAttachmentTitleLabel",
+                    "class": "esriCTPopupFormTitles"
+                }, formContent);
+                domConstruct.create("br", {}, formContent);
+                // Create div for Attachment button
+                fileContainer = domConstruct.create("div", {
+                    "class": "esriCTFileButtonContainer",
+                    "title": this.config.i18n.geoform.selectFileText
+                }, formContent);
+                this._fileInputIcon = domConstruct.create("button", {
+                    "type": "button",
+                    "innerHTML": this.config.i18n.geoform.selectFileText,
+                    "class": "btn btn-default esriCTAddPopupAttachmentsButton esriCTEllipsis"
+                }, fileContainer);
+                // Show photo selected count
+                domConstruct.create("div", {
+                    "id": "popupAttachmentSelectedCount",
+                    "class": "esriCTAttachmentSelectedCount"
+                }, formContent);
+                fileAttachmentContainer = domConstruct.create("div", {
+                    "class": "container esriCTAttachmentContainer"
+                }, formContent);
+                this._fileAttachmentList = domConstruct.create("div", {
+                    "class": "row esriCTFileAttachMenuList"
+                }, fileAttachmentContainer);
+                // Create input container for attachments
+                fileInput = domConstruct.create("input", {
+                    "type": "file",
+                    "accept": "image/*",
+                    "name": "attachment",
+                    "style": {
+                        "height": "38px",
+                        "width": "80px"
+                    },
+                    "class": "esriCTPointerCursor"
+                }, domConstruct.create("form", {
+                    "id": "popupFormAttachment" + this._fileAttachmentCounter++,
+                    "class": "esriCTHideFileInputUI"
+                }, fileContainer));
+                // domClass.add(fileInput, "esriCTPointerCursor");
+                // Handle change event for file control
+                fileChange = on(fileInput, "change", lang.hitch(this, function (evt) {
+                    fileChange.remove();
+                    this._onFileSelected(evt);
+                }));
+            }
+        },
+
+        /**
+         * Show selected file on popup form and create new fileControl so that multiple files can be selected.
+         * @param{object} evt - Event object which will be generated on file input change event.
+         */
+        _onFileSelected: function (evt) {
+            var newFormControl, fileInput, fileName, fileChange, alertHtml, target;
+            target = evt.currentTarget || evt.srcElement;
+            if (target && target.value) {
+                fileName = target.value;
+                fileName = fileName.split("\\")[fileName.split("\\").length - 1];
+            } else {
+                fileName = "";
+            }
+            //once file is selected change class so that the selected file will be added as attachment
+            domClass.replace(target.parentNode, "esriCTFileToSubmit", "esriCTHideFileInputUI");
+            domStyle.set(target.parentNode, "display", "none");
+            //Add dismiss-able alert for each file, and show file name and file size in it.
+            alertHtml = "<div id=" + target.parentNode.id + "_Close" + " class=\"esriCTFileAlert alert alert-dismissable alert-success\">";
+            alertHtml += "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">" + "X" + "</button>";
+            alertHtml += "<span>" + fileName + "</span>";
+            alertHtml += "</div>";
+            alertHtml = domConstruct.place(alertHtml, this._fileAttachmentList, "last");
+            //if file is removed then
+            //replace the class from esriCTFileToSubmit to esriCTHideFileInputUI and update the file selected count
+            $('#' + target.parentNode.id + "_Close").bind('closed.bs.alert', lang.hitch(this, function (evt) {
+                domClass.replace(dom.byId(evt.target.id.split("_")[0]), "esriCTHideFileInputUI", "esriCTFileToSubmit");
+                this._updateAttachmentCount();
+            }));
+            //once filename is shown, update file attachments count
+            this._updateAttachmentCount();
+            //Check if file input container is present
+            if ($(".hasAttachment")[0]) {
+                newFormControl = domConstruct.create("form", {
+                    "id": "popupFormAttachment" + this._fileAttachmentCounter++,
+                    "class": "esriCTHideFileInputUI"
+                }, $(".hasAttachment")[0]);
+                //create new file input control so that multiple files can be attached
+                fileInput = domConstruct.create("input", {
+                    "type": "file",
+                    "accept": "image/*",
+                    "name": "attachment",
+                    "style": {
+                        "height": dojo.coords(this._fileInputIcon).h + "px",
+                        "width": dojo.coords(this._fileInputIcon).w + "px"
+                    }
+                }, newFormControl);
+                //place the newly created file-input control after file selection icon
+                domConstruct.place(newFormControl, this._fileInputIcon, "after");
+                //handle change event for file control if file size is
+                fileChange = on(fileInput, "change", lang.hitch(this, function (evt) {
+                    fileChange.remove();
+                    this._onFileSelected(evt);
+                }));
+            }
+        },
+
+        /**
+         * This function will update attachment count based on count will show/hide message in popup form
+         */
+        _updateAttachmentCount: function () {
+            var selectedAttachmentsCount, photoSelectedDiv;
+            photoSelectedDiv = dom.byId("popupAttachmentSelectedCount");
+            if (photoSelectedDiv) {
+                selectedAttachmentsCount = query(".alert-dismissable", this._fileAttachmentList).length;
+                if (selectedAttachmentsCount > 0) {
+                    domAttr.set(photoSelectedDiv, "innerHTML", selectedAttachmentsCount + " " + this.config.i18n.geoform.attachmentSelectedMsg);
+                } else {
+                    domAttr.set(photoSelectedDiv, "innerHTML", "");
+                }
+            }
+        },
+
+        /**
+         * This function is used to display the existing attachments
+         */
+        _displayExistingAttachments: function () {
+            array.forEach(this.existingAttachmentsArr, lang.hitch(this, function (existingAttachment) {
+                this._createExistingAttachment(existingAttachment);
+                this._updateAttachmentCount();
+            }));
+        },
+
+        /**
+         * This function is used to create existing attachments
+         * @param{object} existingAttachment - existing attachment whose UI needs to be created
+         */
+        _createExistingAttachment: function (existingAttachment) {
+            var alertHtml, existingAttachmentNode;
+            alertHtml = "<div class=\"esriCTFileAlert alert alert-dismissable alert-success\">";
+            alertHtml += "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">" + "X" + "</button>";
+            alertHtml += "<span>" + existingAttachment.name + "</span>";
+            alertHtml += "</div>";
+            existingAttachmentNode = domConstruct.toDom(alertHtml);
+            domAttr.set(existingAttachmentNode.children[0], "attachmentId", existingAttachment.id);
+            this._onExistingAttachmentCloseButtonClick(existingAttachmentNode.children[0]);
+            domConstruct.place(existingAttachmentNode, this._fileAttachmentList, "last");
+        },
+
+        /**
+         * This function is used to update the attachment count when clicked on existing attachment close button
+         * @param{object} existingAttachmentCloseButton - close button to which click event needs to be attached
+         */
+        _onExistingAttachmentCloseButtonClick: function (existingAttachmentCloseButton) {
+            on(existingAttachmentCloseButton, "click", lang.hitch(this, function (evt) {
+                setTimeout(lang.hitch(this, function () {
+                    var attachmentId;
+                    attachmentId = domAttr.get(evt.target, "attachmentId");
+                    attachmentId = parseInt(attachmentId, 10);
+                    this._deletedAttachmentsArr.push(attachmentId);
+                    this._updateAttachmentCount();
+                }), 0);
+            }));
+        },
+
+        /**
+         * This function is used to add new popup or delete existing popup attachments from the layer
+         * @param {*} userFormNode container which contains list of new attachments
+         */
+        _addOrDeleteAttachments: function (userFormNode, featureDetails) {
+            var deferredObj = {};
+            var addAttachmentList = query(".esriCTFileToSubmit", userFormNode);
+            array.forEach(addAttachmentList, lang.hitch(this, function (addAttachmentDetails) {
+                deferredObj.addAttachment = this.selectedLayer.addAttachment(featureDetails[0].objectId, addAttachmentDetails);
+            }));
+            if (this._deletedAttachmentsArr.length > 0) {
+                deferredObj.deleteAttachment = this.selectedLayer.deleteAttachments(this.selectedFeatures[0].attributes[this.selectedLayer.objectIdField], this._deletedAttachmentsArr);
+            }
+            all(deferredObj).then(lang.hitch(this, function (success) {
+                var deleteAttachmentFailed, addAttachmentFailed, addAttachmentFailedMsg, deleteAttachmentFailedMsg, errorMessage;
+                deleteAttachmentFailed = 0;
+                addAttachmentFailed = 0;
+                array.forEach(success.deleteAttachment, lang.hitch(this, function (deleteAttachmentDetail) {
+                    if (!deleteAttachmentDetail.success) {
+                        deleteAttachmentFailed++;
+                    }
+                }));
+                array.forEach(success.addAttachment, lang.hitch(this, function (addAttachmentDetail) {
+                    if (!addAttachmentDetail.success) {
+                        addAttachmentFailed++;
+                    }
+                }));
+                addAttachmentFailedMsg = string.substitute(this.config.i18n.geoform.attachmentUploadStatus, {
+                    "failed": addAttachmentFailed,
+                    "total": addAttachmentList.length
+                });
+                deleteAttachmentFailedMsg = string.substitute(this.config.i18n.geoform.attachmentDeleteStatus, {
+                    "failed": deleteAttachmentFailed,
+                    "total": this._deletedAttachmentsArr.length
+                });
+                if (addAttachmentFailed > 0) {
+                    errorMessage = addAttachmentFailedMsg;
+                }
+                if (deleteAttachmentFailed > 0) {
+                    if (errorMessage) {
+                        errorMessage += "<br>" + deleteAttachmentFailedMsg;
+                    } else {
+                        errorMessage = deleteAttachmentFailedMsg;
+                    }
+                }
+                if (errorMessage) {
+                    dom.byId("tabContent").scrollTop = 0;
+                    this._showHeaderMessageDiv(errorMessage);
+                    this.appUtils.hideLoadingIndicator();
+                } else {
+                    this.onPopupFormSubmitted(this.selectedFeatures[this.selectedFeatures.length - 1]);
+                }
+            }), lang.hitch(this, function (error) {
+                dom.byId("tabContent").scrollTop = 0;
+                this.appUtils.showError(error.message);
+                this._showHeaderMessageDiv();
+                this.appUtils.hideLoadingIndicator();
+            }));
+        },
+
+        /**
+         * This function is used to check whether feature could be edited by the current user
+         * or not depending upon the ownershipBasedAccessControlForFeatures property
+         * @param {*} feature whether this could be edited by the user
+         */
+        _canEditFeature: function (feature) {
+            var canEditFeature;
+            canEditFeature = true;
+            // 1. Is editor tracking enabled?
+            if (this.selectedLayer.hasOwnProperty("ownershipBasedAccessControlForFeatures") &&
+                this.selectedLayer.ownershipBasedAccessControlForFeatures !== null &&
+                this.selectedLayer.ownershipBasedAccessControlForFeatures !== "" &&
+                this.selectedLayer.ownershipBasedAccessControlForFeatures !== undefined) { // 1. Yes
+                // 2. Is the current user anonymous?
+                if (this.config.logInDetails.isUserSignedIn) { // 2. No
+                    return this._checkCapabilityAndAllowEdit(feature);
+                } else { // 2. Yes
+                    // 3. Do anonymous editors have the same editing privileges as named editors?
+                    if (this._doAnonymousHaveSameEditingPrivilege()) { // 3. Yes, consider as a signed in user
+                        return this._checkCapabilityAndAllowEdit(feature);
+                    } else { // 3. No, Only allow them to create related records
+                        return canEditFeature;
+                    }
+                }
+            } else { // 1. No, Existing checks are fine
+                return canEditFeature;
+            }
+        },
+
+        /**
+         * This function is used to check the edit capability of the user and
+         * allow it to edit the feature
+         */
+        _checkCapabilityAndAllowEdit: function (featureDetails) {
+            // get edit capability of the user, this works for both signed in & anonymous user
+            var userEditCapability = this.selectedLayer.getEditCapabilities({
+                feature: featureDetails
+            });
+            // can user edit the feature, this works for both signed in & anonymous user
+            if (userEditCapability &&
+                userEditCapability.hasOwnProperty("canUpdate") &&
+                userEditCapability.canUpdate) {
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * This function is used to check whether anonymous user has same editing privilege as a named editors
+         * @memberOf widgets/data-viewer/data-viewer
+         */
+        _doAnonymousHaveSameEditingPrivilege: function () {
+            var ownershipBasedAccessControlForFeaturesObj = this.selectedLayer.ownershipBasedAccessControlForFeatures;
+            var hasSamePrivilege;
+            hasSamePrivilege = false;
+            array.forEach(this._sameEditingPrivilegeForAnonymousObjArr, lang.hitch(this, function (sameEditingPrivilegeForAnonymousObj) {
+                if (JSON.stringify(sameEditingPrivilegeForAnonymousObj) === JSON.stringify(ownershipBasedAccessControlForFeaturesObj)) {
+                    hasSamePrivilege = true;
+                }
+            }));
+            return hasSamePrivilege;
         }
     });
 });
