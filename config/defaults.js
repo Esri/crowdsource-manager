@@ -114,6 +114,8 @@ define({
     "showHelpIcon": false,
     // to show as a label for attachment section in comments form where attachments can be added
     "commentFormAttachmentSectionLabel": "Attachments",
+    // to show as a label for attachment section in popup form where attachments can be added
+    "popupFormAttachmentSectionLabel": "Attachments",
     // to apply org theming
     "headerTextColor": "#fff",
     "bodyBackgroundColor": "#fff",
@@ -124,5 +126,10 @@ define({
     "defaultDetailsTab": "Info", // Info, Media, Comments
     "showBaseMapGallery": false,
     "showLegend": false,
-    "showPopupForNonEditableLayers": false
+    "showPopupForNonEditableLayers": false,
+    // If this flag is true,
+    // 1. User can edit existing attachments in popup and comment form.
+    // 2. User will be able to see image types of attachment in the view popup form.
+    // If this flag is false, than no change will be applied to the application.
+    "enableEditingAttachments": false
 });

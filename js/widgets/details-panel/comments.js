@@ -72,6 +72,66 @@ define([
         _addCommentBtnClickHandle: null, // to store click handle of add comments button
         _entireCommentsArr: null, // to store comments
         _entireAttachmentsArr: null, // to store attachments
+        _sameEditingPrivilegeForAnonymousObjArr: [
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": false,
+                "allowOthersToUpdate": false,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": true,
+                "allowOthersToDelete": false,
+                "allowOthersToUpdate": false,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": true,
+                "allowOthersToUpdate": true,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            },
+        ],
+        _featuresEditorsCanSeeObjArr: [
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": true,
+                "allowOthersToUpdate": true,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": false,
+                "allowOthersToUpdate": false,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": false,
+                "allowAnonymousToDelete": false
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": true,
+                "allowOthersToUpdate": true,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": false,
+                "allowAnonymousToDelete": false
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": false,
+                "allowOthersToUpdate": false,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            }
+        ],
 
         i18n: {}, // to stores nls strings
 
@@ -165,9 +225,13 @@ define([
          */
         _displayAddCommentsButton: function () {
             if (this.selectedOperationalLayer.capabilities.indexOf("Create") > -1) {
-                domClass.remove(this.addCommentsBtnWrapperContainer, "esriCTHidden");
+                if (this.addCommentsBtnWrapperContainer) {
+                    domClass.remove(this.addCommentsBtnWrapperContainer, "esriCTHidden");
+                }
             } else {
-                domClass.add(this.addCommentsBtnWrapperContainer, "esriCTHidden");
+                if (this.addCommentsBtnWrapperContainer) {
+                    domClass.add(this.addCommentsBtnWrapperContainer, "esriCTHidden");
+                }
             }
         },
 
@@ -184,8 +248,35 @@ define([
             relatedQuery.relationshipId = this.selectedOperationalLayer.relationships[0].id;
             relatedQuery.objectIds = [currentID];
             commentsTableDefinitionExpression = this._commentsTable.getDefinitionExpression();
+            if (this._commentsTable.hasOwnProperty("ownershipBasedAccessControlForFeatures") &&
+                this._commentsTable.ownershipBasedAccessControlForFeatures !== null &&
+                this._commentsTable.ownershipBasedAccessControlForFeatures !== undefined &&
+                this._commentsTable.ownershipBasedAccessControlForFeatures !== "" &&
+                this._isFeaturesOnlyEditorCanSeeOptionSelected(this._commentsTable.ownershipBasedAccessControlForFeatures)) {
+                // when creatorField property is available
+                if (this._commentsTable.hasOwnProperty("editFieldsInfo") &&
+                    this._commentsTable.editFieldsInfo.hasOwnProperty("creatorField")) {
+                    creatorFieldName = this._commentsTable.editFieldsInfo.creatorField;
+                    if (this.appConfig.logInDetails.isUserSignedIn) {
+                        if (commentsTableDefinitionExpression !== null && commentsTableDefinitionExpression !== "" &&
+                            commentsTableDefinitionExpression !== undefined) {
+                            commentsTableDefinitionExpression = commentsTableDefinitionExpression + " AND " + creatorFieldName + "=" + "'" + this.appConfig.logInDetails.userId + "'";
+                        } else {
+                            commentsTableDefinitionExpression = creatorFieldName + "=" + "'" + this.appConfig.logInDetails.userId + "'";
+                        }
+                    } else {
+                        if (commentsTableDefinitionExpression !== null && commentsTableDefinitionExpression !== "" &&
+                            commentsTableDefinitionExpression !== undefined) {
+                            commentsTableDefinitionExpression = commentsTableDefinitionExpression + " AND " + creatorFieldName + "=" + "''";
+                        } else {
+                            commentsTableDefinitionExpression = creatorFieldName + "=" + "''";
+                        }
+                    }
+                }
+            }
             //If table has definition expression set in web map then apply it
-            if (commentsTableDefinitionExpression && commentsTableDefinitionExpression !== null && commentsTableDefinitionExpression !== "") {
+            if (commentsTableDefinitionExpression !== null && commentsTableDefinitionExpression !== undefined &&
+                commentsTableDefinitionExpression !== "") {
                 relatedQuery.definitionExpression = commentsTableDefinitionExpression;
             }
             // Query for related features and showing comments
@@ -195,7 +286,9 @@ define([
                 pThis = this;
                 this._relatedRecords = relatedFeatures;
                 commentsContainerDiv = domConstruct.create("div", {}, parentDiv);
-                commentsParentDiv = domConstruct.create("div", { "class": "esriCTCommentsParentDiv" }, commentsContainerDiv);
+                commentsParentDiv = domConstruct.create("div", {
+                    "class": "esriCTCommentsParentDiv"
+                }, commentsContainerDiv);
                 function sortComments(a, b) {
                     if (a.attributes[pThis._commentsTable.objectIdField] > b.attributes[pThis._commentsTable.objectIdField]) {
                         return -1; // order a before b
@@ -338,13 +431,31 @@ define([
          * @memberOf widgets/details-panel/comments
          */
         _createPopUpContent: function (currentFeature) {
-            var queryFeature, currentDateTime = new Date().getTime();
+            var whereClause, queryFeature, currentDateTime;
+            currentDateTime = new Date().getTime();
             queryFeature = new Query();
             queryFeature.objectIds = [parseInt(currentFeature.attributes[this.selectedOperationalLayer.objectIdField], 10)];
             queryFeature.outFields = ["*"];
-            queryFeature.where = currentDateTime + "=" + currentDateTime;
+            whereClause = currentDateTime + "=" + currentDateTime;
+            queryFeature.where = whereClause;
             this._commentsTable.setInfoTemplate(new PopupTemplate(this._commentPopupTable.popupInfo));
             return this._commentsTable.queryFeatures(queryFeature);
+        },
+
+        /**
+         * This function is used to check whether "Editors can only see their own features (requires tracking)" option
+         * is selected or not
+         * @param {*} ownershipBasedAccessControlForFeatures json that needs to be checked with predefined combination of json
+         */
+        _isFeaturesOnlyEditorCanSeeOptionSelected: function (ownershipBasedAccessControlForFeatures) {
+            var isOptionSelected;
+            isOptionSelected = false;
+            array.forEach(this._featuresEditorsCanSeeObjArr, lang.hitch(this, function (featuresEditorsCanSeeObj) {
+                if (JSON.stringify(featuresEditorsCanSeeObj) === JSON.stringify(ownershipBasedAccessControlForFeatures)) {
+                    isOptionSelected = true;
+                }
+            }));
+            return isOptionSelected;
         },
 
         /**
@@ -380,6 +491,7 @@ define([
                 for (i = 0; i < this._entireAttachmentsArr[index][1].length; i++) {
                     attachmentWrapper = domConstruct.create("div", {}, fieldContent);
                     imageThumbnailContainer = domConstruct.create("div", { "class": "esriCTNonImageContainer", "alt": this._entireAttachmentsArr[index][1][i].url }, attachmentWrapper);
+                    this._setAttachmentDetails(imageThumbnailContainer, this._entireAttachmentsArr[index][1][i]);
                     imageThumbnailContent = domConstruct.create("div", { "class": "esriCTNonImageContent" }, imageThumbnailContainer);
                     imageContainer = domConstruct.create("div", {}, imageThumbnailContent);
                     fileTypeContainer = domConstruct.create("div", { "class": "esriCTNonFileTypeContent" }, imageThumbnailContent);
@@ -394,6 +506,38 @@ define([
                 if (!isAttachmentAvailable) {
                     domClass.add(attachmentContainer, "hidden");
                 }
+            }
+        },
+
+        /**
+         * This function is used to set the attachment details as a attribute to the div
+         * @param {*} node object of div
+         * @param {*} attachment object containing details of attachment
+         */
+        _setAttachmentDetails: function (node, attachment) {
+            if (attachment.hasOwnProperty("contentType")) {
+                domAttr.set(node, "attachmentContentType", attachment.contentType);
+            }
+            if (attachment.hasOwnProperty("id")) {
+                domAttr.set(node, "attachmentId", attachment.id);
+            }
+            if (attachment.hasOwnProperty("keywords")) {
+                domAttr.set(node, "attachmentKeywords", attachment.keywords);
+            }
+            if (attachment.hasOwnProperty("name")) {
+                domAttr.set(node, "attachmentName", attachment.name);
+            }
+            if (attachment.hasOwnProperty("objectId")) {
+                domAttr.set(node, "attachmentObjectId", attachment.objectId);
+            }
+            if (attachment.hasOwnProperty("parentObjectId")) {
+                domAttr.set(node, "attachmentParentObjectId", attachment.parentObjectId);
+            }
+            if (attachment.hasOwnProperty("size")) {
+                domAttr.set(node, "attachmentSize", attachment.size);
+            }
+            if (attachment.hasOwnProperty("url")) {
+                domAttr.set(node, "attachmentUrl", attachment.url);
             }
         },
 
@@ -460,19 +604,61 @@ define([
             if (isNonEditableLayer) {
                 domClass.add(commentBtnDiv, "esriCTHidden");
             }
-            on(commentBtnDiv, "click", lang.hitch(this, function () {
+            on(commentBtnDiv, "click", lang.hitch(this, function (evt) {
                 if (this.appConfig.logInDetails.canEditFeatures) {
+                    // Fetch the existing attachments
+                    var existingAttachmentsArr;
                     this.appUtils.showLoadingIndicator();
-                    domClass.add(this.addCommentsBtnWrapperContainer, "esriCTHidden");
-                    this._createCommentForm(graphic, false);
-                    domStyle.set(this.commentsContainer, "display", "none");
-                    $('#tabContent').animate({
-                        scrollTop: 0
-                    });
+                    existingAttachmentsArr = this._getExistingAttachmentsArr(evt);
+                    // 1. Is editor tracking enabled?
+                    if (this._commentsTable.hasOwnProperty("ownershipBasedAccessControlForFeatures") &&
+                        this._commentsTable.ownershipBasedAccessControlForFeatures !== null &&
+                        this._commentsTable.ownershipBasedAccessControlForFeatures !== "" &&
+                        this._commentsTable.ownershipBasedAccessControlForFeatures !== undefined) { // 1. Yes
+                        // 2. Is the current user anonymous?
+                        if (this.appConfig.logInDetails.isUserSignedIn) { // 2. No
+                            this._checkCapabilityAndAllowEdit(existingAttachmentsArr, graphic);
+                        } else { // 2. Yes
+                            // 3. Do anonymous editors have the same editing privileges as named editors?
+                            if (this._doAnonymousHaveSameEditingPrivilege()) { // 3. Yes, consider as a signed in user
+                                this._checkCapabilityAndAllowEdit(existingAttachmentsArr, graphic);
+                            } else { // 3. No, Only allow them to create related records
+                                this.appUtils.hideLoadingIndicator();
+                                this.appUtils.showMessage(this.appConfig.i18n.geoform.invalidFeatureCreatorMessage);
+                            }
+                        }
+                    } else { // 1. No, Existing checks are fine
+                        this._initializeCommentForm(existingAttachmentsArr, graphic);
+                    }
                 } else {
+                    this.appUtils.hideLoadingIndicator();
                     this.appUtils.showMessage(this.appConfig.i18n.comment.unableToAddOrEditCommentMessage);
                 }
             }));
+        },
+
+        /**
+         * This function is used get the array of existing attachments
+         * @param {*} evt node in which attachments needs to be queried
+         */
+        _getExistingAttachmentsArr: function (evt) {
+            var existingAttachmentsArr, existingAttachments;
+            existingAttachmentsArr = [];
+            existingAttachments = query(".esriCTNonImageContainer", evt.target.parentNode);
+            array.forEach(existingAttachments, lang.hitch(this, function (existingAttachment) {
+                var existingAttachmentObj;
+                existingAttachmentObj = {};
+                existingAttachmentObj.contentType = domAttr.get(existingAttachment, "attachmentContentType");
+                existingAttachmentObj.id = domAttr.get(existingAttachment, "attachmentId");
+                existingAttachmentObj.keywords = domAttr.get(existingAttachment, "attachmentKeywords");
+                existingAttachmentObj.name = domAttr.get(existingAttachment, "attachmentName");
+                existingAttachmentObj.objectId = domAttr.get(existingAttachment, "attachmentObjectId");
+                existingAttachmentObj.parentObjectId = domAttr.get(existingAttachment, "attachmentParentObjectId");
+                existingAttachmentObj.size = domAttr.get(existingAttachment, "attachmentSize");
+                existingAttachmentObj.url = domAttr.get(existingAttachment, "attachmentUrl");
+                existingAttachmentsArr.push(existingAttachmentObj);
+            }));
+            return existingAttachmentsArr;
         },
 
         /**
@@ -496,7 +682,7 @@ define([
          * @param {object} item contains selected feature object
          * @memberOf widgets/details-panel/comments
          */
-        _createCommentForm: function (item, addComments) {
+        _createCommentForm: function (item, addComments, existingAttachmentsArr) {
             if (this._commentformInstance) {
                 this._commentformInstance.destroy();
             }
@@ -511,9 +697,10 @@ define([
                 nls: this.appConfig.i18n,
                 item: item,
                 selectedLayer: this.selectedOperationalLayer,
-                addComments: addComments
+                addComments: addComments,
+                existingAttachmentsArr: existingAttachmentsArr
             }, domConstruct.create("div", {}, dom.byId("commentformContainer")));
-
+            this._commentformInstance.startup();
             // attach cancel button click event
             this._commentformInstance.onCancelButtonClick = lang.hitch(this, function () {
                 this._showPanel(dom.byId("commentformContainer"));
@@ -656,6 +843,53 @@ define([
             var commentDiv;
             commentDiv = domConstruct.create('div', { 'class': 'comment' }, this.commentsContainer);
             new ContentPane({ 'class': 'content small-text', 'content': item.getContent() }, commentDiv).startup();
+        },
+
+        /**
+         * This function is used to initialize comment form
+         */
+        _initializeCommentForm: function (existingAttachmentsArr, graphic) {
+            domClass.add(this.addCommentsBtnWrapperContainer, "esriCTHidden");
+            this._createCommentForm(graphic, false, existingAttachmentsArr);
+            domStyle.set(this.commentsContainer, "display", "none");
+            $('#tabContent').animate({
+                scrollTop: 0
+            });
+        },
+
+        /**
+         * This function is used to check whether anonymous user has same editing privilege as a named editors
+         */
+        _doAnonymousHaveSameEditingPrivilege: function () {
+            var ownershipBasedAccessControlForFeaturesObj = this._commentsTable.ownershipBasedAccessControlForFeatures;
+            var hasSamePrivilege;
+            hasSamePrivilege = false;
+            array.forEach(this._sameEditingPrivilegeForAnonymousObjArr, lang.hitch(this, function (sameEditingPrivilegeForAnonymousObj) {
+                if (JSON.stringify(sameEditingPrivilegeForAnonymousObj) === JSON.stringify(ownershipBasedAccessControlForFeaturesObj)) {
+                    hasSamePrivilege = true;
+                }
+            }));
+            return hasSamePrivilege;
+        },
+
+        /**
+         * This function is used to check the edit capability of the user and
+         * allow it to edit the feature.
+         */
+        _checkCapabilityAndAllowEdit: function (existingAttachmentsArr, graphic) {
+            // get edit capability of the user, this works for both signed in & anonymous user
+            var userEditCapability = this._commentsTable.getEditCapabilities({
+                feature: graphic
+            });
+            // can user edit the feature, this works for both signed in & anonymous user
+            if (userEditCapability &&
+                userEditCapability.hasOwnProperty("canUpdate") &&
+                userEditCapability.canUpdate) {
+                this._initializeCommentForm(existingAttachmentsArr, graphic);
+            } else {
+                this.appUtils.hideLoadingIndicator();
+                this.appUtils.showMessage(this.appConfig.i18n.geoform.invalidFeatureCreatorMessage);
+            }
         }
     });
 });

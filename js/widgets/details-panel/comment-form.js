@@ -32,6 +32,7 @@ define([
     "esri/graphic",
     "dojo/dom-style",
     "dojo/dom-geometry",
+    "dojo/promise/all",
     "dojo/text!./templates/comment-form.html"
 ], function (
     declare,
@@ -50,20 +51,21 @@ define([
     Graphic,
     domStyle,
     domGeom,
+    all,
     commentForm
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: commentForm,
-        _sortedFields: [],
+
         i18n: {},
+
+        _sortedFields: [],
         _rangeHelpText: null,
         _layerHasReportedByField: false,
-        fileAttachmentList: null, // list of files that is been attached
+        _fileAttachmentList: null, // list of files that is been attached
         _fileInputIcon: null, // browse button to attach files
         _fileAttachmentCounter: 1, // to display number of attachments that is been added or removed
-        _totalFileAttachedCounter: 0, // to store total number of file that is been attached
-        _fileAttachedCounter: 0, // to store number of files that is been attached
-        _fileFailedCounter: 0, // to store number of files that is been failed to attached
+        _deletedAttachmentsArr: [], // to store deleted attachments
 
         /**
         * This function is called when widget is constructed.
@@ -87,6 +89,15 @@ define([
         */
         postCreate: function () {
             this.inherited(arguments);
+        },
+
+        /**
+        * This function is designed to handle processing after any DOM fragments have been actually added to the document.
+        * @memberOf widgets/details-panel/comment-form
+        */
+        startup: function () {
+            this.inherited(arguments);
+            this._initializeData();
             this._initializeCommentForm();
             // click event for submit comment form on submit button click
             on(this.postCommentButton, 'click', lang.hitch(this, function () {
@@ -100,14 +111,6 @@ define([
         },
 
         /**
-        * This function is designed to handle processing after any DOM fragments have been actually added to the document.
-        * @memberOf widgets/details-panel/comment-form
-        */
-        startup: function () {
-            this.inherited(arguments);
-        },
-
-        /**
         * This function is designed to handle creation of comment form.
         * @memberOf widgets/details-panel/comment-form
         */
@@ -117,6 +120,11 @@ define([
             this._sortedTypeFormElement();
             // create attachment button if comment table has attachments
             this._createAttachments();
+            // Only display existing attachments if this flag is set to true
+            if (this.config.enableEditingAttachments) {
+                // add existing attachments so that user can edit it
+                this._displayExistingAttachments();
+            }
             this.appUtils.hideLoadingIndicator();
         },
 
@@ -278,117 +286,129 @@ define([
             featureData.attributes = this._removeAttributeFromObject(featureData.attributes, this.selectedLayer.objectIdField);
             // Update the comment to the comment table
             this.commentTable.applyEdits([featureData], null, null, lang.hitch(this, function (addResult, updateResult, deleteResult) { //ignore jslint
-                var fileList, i, userFormNode;
-                // for update we only need updateResult parameter
+                var userFormNode;
                 if (addResult && addResult.length > 0 && addResult[0].success) {
                     userFormNode = dom.byId("addCommentAttachmentsWrapperContainer");
                     // if layer has attachments then add those attachments
-                    if (this.commentTable.hasAttachments && query(".esriCTFileToSubmit", userFormNode).length > 0) {
-                        // get all the attachments
-                        fileList = query(".esriCTFileToSubmit", userFormNode);
-                        // reset fileAttached and failed counter
-                        this._fileAttachedCounter = 0;
-                        this._fileFailedCounter = 0;
-                        // set total file attached counter
-                        this._totalFileAttachedCounter = fileList.length;
-                        for (i = 0; i < fileList.length; i++) {
-                            // handle success and error callback for add attachments
-                            this.commentTable.addAttachment(addResult[0].objectId, fileList[i],
-                                lang.hitch(this, this._onAttachmentUploadComplete),
-                                lang.hitch(this, this._onAttachmentUploadFailed));
-                        }
+                    if (this.commentTable.hasAttachments &&
+                        query(".esriCTFileToSubmit", userFormNode).length > 0) {
+                        this._addOrDeleteAttachments(userFormNode, addResult);
                     } else {
                         this.onCommentFormSubmitted(this.item);
                     }
                 } else {
-                    // Hide loading indicator
-                    this.appUtils.hideLoadingIndicator();
-                    // Show error message in header
+                    dom.byId("tabContent").scrollTop = 0;
+                    if (addResult && addResult.length > 0 &&
+                        addResult[0].hasOwnProperty("error") && addResult[0].error.hasOwnProperty("message")) {
+                        this.appUtils.showError(addResult[0].error.message);
+                    }
                     this._showHeaderMessageDiv();
+                    this.appUtils.hideLoadingIndicator();
                 }
-            }), lang.hitch(this, function (err) {
-                //Hide loading indicator
-                this.appUtils.hideLoadingIndicator();
-                // Show error message
-                this.appUtils.showError(err);
-                // Show error message in header
+            }), lang.hitch(this, function (error) {
+                dom.byId("tabContent").scrollTop = 0;
+                this.appUtils.showError(error.message);
                 this._showHeaderMessageDiv();
+                this.appUtils.hideLoadingIndicator();
             }));
         },
 
         /**
-        * This function is used to update comments
-        * @memberOf widgets/details-panel/comment-form
-        */
+         * This function is used to update comments
+         * @memberOf widgets/details-panel/comment-form
+         */
         _updateComments: function (featureData) {
             //as we are updating feature we need object Id field inside for successful updation
             featureData.attributes[this.selectedLayer.objectIdField] = this.item.attributes[this.selectedLayer.objectIdField];
             // Update the comment to the comment table
             this.commentTable.applyEdits(null, [featureData], null, lang.hitch(this, function (addResult, updateResult, deleteResult) { //ignore jslint
-                var fileList, i, userFormNode;
+                var userFormNode;
                 //for update we only need updateResult parameter
                 if (updateResult && updateResult.length > 0 && updateResult[0].success) {
                     userFormNode = dom.byId("addCommentAttachmentsWrapperContainer");
                     // if layer has attachments then add those attachments
-                    if (this.commentTable.hasAttachments && query(".esriCTFileToSubmit", userFormNode).length > 0) {
-                        // get all the attachments
-                        fileList = query(".esriCTFileToSubmit", userFormNode);
-                        // reset fileAttached and failed counter
-                        this._fileAttachedCounter = 0;
-                        this._fileFailedCounter = 0;
-                        // set total file attached counter
-                        this._totalFileAttachedCounter = fileList.length;
-                        for (i = 0; i < fileList.length; i++) {
-                            // handle success and error callback for add attachments
-                            this.commentTable.addAttachment(updateResult[0].objectId, fileList[i],
-                                lang.hitch(this, this._onAttachmentUploadComplete),
-                                lang.hitch(this, this._onAttachmentUploadFailed));
-                        }
+                    if (this.commentTable.hasAttachments &&
+                        ((query(".esriCTFileToSubmit", userFormNode).length > 0) ||
+                            (this._deletedAttachmentsArr.length > 0))) {
+                        this._addOrDeleteAttachments(userFormNode, updateResult);
                     } else {
                         this.onCommentFormSubmitted(this.item);
                     }
                 } else {
-                    //Hide loading indicator
-                    this.appUtils.hideLoadingIndicator();
-                    // Show error message in header
+                    dom.byId("tabContent").scrollTop = 0;
+                    if (updateResult && updateResult.length > 0 &&
+                        updateResult[0].hasOwnProperty("error") && updateResult[0].error.hasOwnProperty("message")) {
+                        this.appUtils.showError(updateResult[0].error.message);
+                    }
                     this._showHeaderMessageDiv();
+                    this.appUtils.hideLoadingIndicator();
                 }
-            }), lang.hitch(this, function (err) {
-                //Hide loading indicator
-                this.appUtils.hideLoadingIndicator();
-                // Show error message
-                this.appUtils.showError(err);
-                // Show error message in header
+            }), lang.hitch(this, function (error) {
+                dom.byId("tabContent").scrollTop = 0;
+                this.appUtils.showError(error.message);
                 this._showHeaderMessageDiv();
+                this.appUtils.hideLoadingIndicator();
             }));
         },
 
         /**
-        * Callback handler for attachment upload Complete event
-        * @memberOf widgets/details-panel/comment-form
-        */
-        _onAttachmentUploadComplete: function () {
-            this._fileAttachedCounter++;
-            this._updateFileAttachedCounter();
-        },
-
-        /**
-        * Callback handler for attachment upload failed event
-        * @memberOf widgets/details-panel/comment-form
-        */
-        _onAttachmentUploadFailed: function () {
-            this._fileFailedCounter++;
-            this._updateFileAttachedCounter();
-        },
-
-        /**
-        * On attachment upload
-        * @memberOf widgets/details-panel/comment-form
-        */
-        _updateFileAttachedCounter: function () {
-            if (this._totalFileAttachedCounter === (this._fileAttachedCounter + this._fileFailedCounter)) {
-                this.onCommentFormSubmitted(this.item);
+         * This function is used to add new comments or delete existing comments from the layer
+         * @param {*} userFormNode container which contains list of new attachments
+         */
+        _addOrDeleteAttachments: function (userFormNode, commentDetails) {
+            var deferredObj = {};
+            var addAttachmentList = query(".esriCTFileToSubmit", userFormNode);
+            array.forEach(addAttachmentList, lang.hitch(this, function (addAttachmentDetails) {
+                deferredObj.addAttachment = this.commentTable.addAttachment(commentDetails[0].objectId, addAttachmentDetails);
+            }));
+            if (this._deletedAttachmentsArr.length > 0) {
+                deferredObj.deleteAttachment = this.commentTable.deleteAttachments(this.item.attributes[this.commentTable.objectIdField], this._deletedAttachmentsArr);
             }
+            all(deferredObj).then(lang.hitch(this, function (success) {
+                var deleteAttachmentFailed, addAttachmentFailed, addAttachmentFailedMsg, deleteAttachmentFailedMsg, errorMessage;
+                deleteAttachmentFailed = 0;
+                addAttachmentFailed = 0;
+                array.forEach(success.deleteAttachment, lang.hitch(this, function (deleteAttachmentDetail) {
+                    if (!deleteAttachmentDetail.success) {
+                        deleteAttachmentFailed++;
+                    }
+                }));
+                array.forEach(success.addAttachment, lang.hitch(this, function (addAttachmentDetail) {
+                    if (!addAttachmentDetail.success) {
+                        addAttachmentFailed++;
+                    }
+                }));
+                addAttachmentFailedMsg = string.substitute(this.config.i18n.geoform.attachmentUploadStatus, {
+                    "failed": addAttachmentFailed,
+                    "total": addAttachmentList.length
+                });
+                deleteAttachmentFailedMsg = string.substitute(this.config.i18n.geoform.attachmentDeleteStatus, {
+                    "failed": deleteAttachmentFailed,
+                    "total": this._deletedAttachmentsArr.length
+                });
+                if (addAttachmentFailed > 0) {
+                    errorMessage = addAttachmentFailedMsg;
+                }
+                if (deleteAttachmentFailed > 0) {
+                    if (errorMessage) {
+                        errorMessage += "<br>" + deleteAttachmentFailedMsg;
+                    } else {
+                        errorMessage = deleteAttachmentFailedMsg;
+                    }
+                }
+                if (errorMessage) {
+                    dom.byId("tabContent").scrollTop = 0;
+                    this._showHeaderMessageDiv(errorMessage);
+                    this.appUtils.hideLoadingIndicator();
+                } else {
+                    this.onCommentFormSubmitted(this.item);
+                }
+            }), lang.hitch(this, function (error) {
+                dom.byId("tabContent").scrollTop = 0;
+                this.appUtils.showError(error.message);
+                this._showHeaderMessageDiv();
+                this.appUtils.hideLoadingIndicator();
+            }));
         },
 
         /**
@@ -448,12 +468,15 @@ define([
         * Display message on header of form
         * @memberOf widgets/details-panel/comment-form
         */
-        _showHeaderMessageDiv: function () {
+        _showHeaderMessageDiv: function (displayErrorMessage) {
             on(this.headerMessageButton, "click", lang.hitch(this, function () {
                 if (domClass.contains(this.headerMessageDiv, "esriCTVisible")) {
                     domClass.replace(this.headerMessageDiv, "esriCTHidden", "esriCTVisible");
                 }
             }));
+            if (displayErrorMessage) {
+                this.headerMessageContent.innerHTML = displayErrorMessage;
+            }
             if (domClass.contains(this.headerMessageDiv, "esriCTHidden")) {
                 domClass.replace(this.headerMessageDiv, "esriCTVisible", "esriCTHidden");
             }
@@ -591,7 +614,7 @@ define([
                 fileAttachmentContainer = domConstruct.create("div", {
                     "class": "container esriCTAttachmentContainer"
                 }, formContent);
-                this.fileAttachmentList = domConstruct.create("div", {
+                this._fileAttachmentList = domConstruct.create("div", {
                     "class": "row esriCTFileAttachMenuList"
                 }, fileAttachmentContainer);
                 // Create input container for attachments
@@ -623,7 +646,8 @@ define([
         * @memberOf widgets/details-panel/comment-form
         */
         _onFileSelected: function (evt) {
-            var newFormControl, fileInput, fileName, fileChange, alertHtml, target = evt.currentTarget || evt.srcElement;
+            var newFormControl, fileInput, fileName, fileChange, alertHtml, target;
+            target = evt.currentTarget || evt.srcElement;
             if (target && target.value) {
                 fileName = target.value;
                 fileName = fileName.split("\\")[fileName.split("\\").length - 1];
@@ -638,7 +662,7 @@ define([
             alertHtml += "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">" + "X" + "</button>";
             alertHtml += "<span>" + fileName + "</span>";
             alertHtml += "</div>";
-            alertHtml = domConstruct.place(alertHtml, this.fileAttachmentList, "last");
+            alertHtml = domConstruct.place(alertHtml, this._fileAttachmentList, "last");
             //if file is removed then
             //replace the class from esriCTFileToSubmit to esriCTHideFileInputUI and update the file selected count
             $('#' + target.parentNode.id + "_Close").bind('closed.bs.alert', lang.hitch(this, function (evt) {
@@ -649,7 +673,10 @@ define([
             this._updateAttachmentCount();
             //Check if file input container is present
             if ($(".hasAttachment")[0]) {
-                newFormControl = domConstruct.create("form", { "id": "commentFormAttachment" + this._fileAttachmentCounter++, "class": "esriCTHideFileInputUI" }, $(".hasAttachment")[0]);
+                newFormControl = domConstruct.create("form", {
+                    "id": "commentFormAttachment" + this._fileAttachmentCounter++,
+                    "class": "esriCTHideFileInputUI"
+                }, $(".hasAttachment")[0]);
                 //create new file input control so that multiple files can be attached
                 fileInput = domConstruct.create("input", {
                     "type": "file",
@@ -668,13 +695,14 @@ define([
         },
 
         /**
-        * This function will update attachment count based on count will show/hide message in comments form
-        * @memberOf widgets/details-panel/comment-form
-        */
+         * This function will update attachment count based on count will show/hide message in comments form
+         * @memberOf widgets/details-panel/comment-form
+         */
         _updateAttachmentCount: function () {
-            var photoSelectedDiv = dom.byId("attachmentSelectedCount"), selectedAttachmentsCount;
+            var selectedAttachmentsCount, photoSelectedDiv;
+            photoSelectedDiv = dom.byId("attachmentSelectedCount");
             if (photoSelectedDiv) {
-                selectedAttachmentsCount = query(".alert-dismissable", this.fileAttachmentList).length;
+                selectedAttachmentsCount = query(".alert-dismissable", this._fileAttachmentList).length;
                 if (selectedAttachmentsCount > 0) {
                     domAttr.set(photoSelectedDiv, "innerHTML", selectedAttachmentsCount + " " + this.config.i18n.comment.attachmentSelectedMsg);
                 } else {
@@ -1500,6 +1528,64 @@ define([
                     }
                 }
             }
+        },
+
+        /**
+         * This function is used to display the existing attachments
+         * @memberOf widgets/details-panel/comment-form
+         */
+        _displayExistingAttachments: function () {
+            array.forEach(this.existingAttachmentsArr, lang.hitch(this, function (existingAttachment) {
+                this._createExistingAttachment(existingAttachment);
+                this._updateAttachmentCount();
+            }));
+        },
+
+        /**
+         * This function is used to create existing attachments
+         * @param{object} existingAttachment - existing attachment whose UI needs to be created
+         * @memberOf widgets/details-panel/comment-form
+         */
+        _createExistingAttachment: function (existingAttachment) {
+            var alertHtml, existingAttachmentNode;
+            alertHtml = "<div class=\"esriCTFileAlert alert alert-dismissable alert-success\">";
+            alertHtml += "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">" + "X" + "</button>";
+            alertHtml += "<span>" + existingAttachment.name + "</span>";
+            alertHtml += "</div>";
+            existingAttachmentNode = domConstruct.toDom(alertHtml);
+            domAttr.set(existingAttachmentNode.children[0], "attachmentId", existingAttachment.id);
+            this._onExistingAttachmentCloseButtonClick(existingAttachmentNode.children[0]);
+            domConstruct.place(existingAttachmentNode, this._fileAttachmentList, "last");
+        },
+
+        /**
+         * This function is used to update the attachment count when clicked on existing attachment close button
+         * @param{object} existingAttachmentCloseButton - close button to which click event needs to be attached
+         * @memberOf widgets/details-panel/comment-form
+         */
+        _onExistingAttachmentCloseButtonClick: function (existingAttachmentCloseButton) {
+            on(existingAttachmentCloseButton, "click", lang.hitch(this, function (evt) {
+                setTimeout(lang.hitch(this, function () {
+                    var attachmentId;
+                    attachmentId = domAttr.get(evt.target, "attachmentId");
+                    attachmentId = parseInt(attachmentId, 10);
+                    this._deletedAttachmentsArr.push(attachmentId);
+                    this._updateAttachmentCount();
+                }), 0);
+            }));
+        },
+
+        /**
+         * This function is used to re-initialize the value of global variables
+         */
+        _initializeData: function () {
+            this._sortedFields = [];
+            this._rangeHelpText = null;
+            this._layerHasReportedByField = false;
+            this._fileAttachmentList = null;
+            this._fileInputIcon = null;
+            this._fileAttachmentCounter = 1;
+            this._deletedAttachmentsArr = [];
         }
     });
 });
