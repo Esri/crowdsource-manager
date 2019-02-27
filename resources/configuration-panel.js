@@ -252,6 +252,26 @@
     }, {
         "category": "<b>Reports</b>",
         "fields": [{
+            "type": "options",
+            "fieldName": "defaultDetailsTab",
+            "tooltip": "Selected tab will be opened by default when a report is selected",
+            "label": "Default selected tab:",
+            "options": [{
+                "label": "Info",
+                "value": "Info"
+            }, {
+                "label": "Media",
+                "value": "Media"
+            }, {
+                "label": "Comments",
+                "value": "Comments"
+            }]
+        }, {
+            "label": "Allow attachments to be removed",
+            "tooltip": "When enabled, attachments can be deleted",
+            "type": "boolean",
+            "fieldName": "enableEditingAttachments"
+        }, {
             "type": "subcategory",
             "label": "Info tab"
         }, {
@@ -312,28 +332,9 @@
                 "label": "Name of a single field to display",
                 "tooltip": "Only content from related tables that have this field will be accessible through the application."
             }]
-        }, {
-            "type": "options",
-            "fieldName": "defaultDetailsTab",
-            "tooltip": "Selected tab will be opened by default when a report is selected",
-            "label": "Default selected tab:",
-            "options": [{
-                "label": "Info",
-                "value": "Info"
-            }, {
-                "label": "Media",
-                "value": "Media"
-            }, {
-                "label": "Comments",
-                "value": "Comments"
-            }]
-        }, {
-            "label": "Enable editing attachments",
-            "tooltip": "When enabled, attachment of info & comment tab could be edited",
-            "type": "boolean",
-            "fieldName": "enableEditingAttachments"
         }]
-    }, {
+    },
+    {
         "category": "<b>Filters</b>",
         "fields": [{
             "type": "paragraph",
