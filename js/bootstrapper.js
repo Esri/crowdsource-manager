@@ -114,11 +114,11 @@ define([
                 loggedInUser = {
                     "fullName": logInDetails.fullName,
                     "credential": {
-                        "token": logInDetails.credential.token
+                        "token": logInDetails.credential.token,
+                        "userId": logInDetails.credential.userId
                     },
                     "level": logInDetails.level,
-                    "privileges": logInDetails.privileges,
-                    "userId": logInDetails.credential.userId
+                    "privileges": logInDetails.privileges
                 };
                 this._queryGroupInfo(loggedInUser, this._boilerPlateTemplateObject.config);
             });

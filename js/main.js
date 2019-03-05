@@ -175,7 +175,7 @@ define([
                         "token": this._loggedInUser.credential.token,
                         "canEditFeatures": this._checkUserPrivileges(),
                         "isUserSignedIn": true,
-                        "userId": this._loggedInUser.userId
+                        "userId": this._loggedInUser.credential.userId
                     };
                     queryParams.token = this._loggedInUser.credential.token;
                 } else {
