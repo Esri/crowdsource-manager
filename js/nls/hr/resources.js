@@ -60,7 +60,9 @@ define({
     "dateRangeHintMessage": "${openStrong}Podsjetnik:${closeStrong} minimalni datum ${minValue} i maksimalni datum ${maxValue}",
     "errorsInApplyEdits": "Nije moguće podnijeti izvješće.",
     "attachmentSelectedMsg": "odabrani privitak(-ci)",
-    "attachmentUploadStatus": "${failed} od ${total} privit(a)ka nije poslano",
+    "attachmentUploadStatus": "${failed} od ${total} privit(a)ka nije poslano.",
+    "attachmentDeleteStatus": "${failed} od ${total} privit(a)ka nije izbrisano.",
+    "featureUpdateStatus": "${failed} od ${total} geoobjek(a)ta nije ažurirano.",
     "geoLocationError": "Trenutačna lokacija nije dostupna",
     "geoLocationOutOfExtent": "Trenutačna lokacija izvan je obuhvata kartografske podloge",
     "submitButtonTooltip": "Spremi",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "Ažurirat će se ${count} geoobjek(a)t(a)",
     "attachmentHeaderText": "Privici",
     "unknownPopupAttachment": "DATOTEKA",
-    "unableToEditPopupMessage": "Nemate dopuštenje za izvođenje ove radnje."
+    "unableToEditPopupMessage": "Nemate dopuštenje za izvođenje ove radnje.",
+    "invalidFeatureCreatorMessage": "Niste ovlašteni za uređivanje ovog geoobjekta.",
+    "userSpecificFeatureUpdateMessage": "Ažurirani su samo geoobjekti koje je stvorio korisnik ${username}.",
+    "anonymousUserText": "Anonimno"
   },
   "mapViewer": {
     "zoomInToolTip": "Povećaj",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Vrijednost",
     "uniqueRadioButtonLabel": "Jedinstveno",
     "selectLayerToBegin": "Odaberite kategoriju za početak rada",
-    "layerFeatureCount": "${selectedFeatureCount} odabrano / ${featureCount} zapis/a"
+    "layerFeatureCount": "${selectedFeatureCount} odabrano / ${featureCount} zapis/a",
+    "exportToCsvSuccessMessage": "CSV datoteka uspješno je izvezena.",
+    "exportToCsvErrorMessage": "Pogreška prilikom izvoza odabranih geoobjekata u CSV datoteku. Pokušajte ponovno.",
+    "exportToCSVButtonTooltip": "Izvezi u CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Vremenski raspon",

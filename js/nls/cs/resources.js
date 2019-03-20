@@ -58,9 +58,11 @@ define({
     "selectLocation": "Vyberte umístění hlášení.",
     "numericRangeHintMessage": "${openStrong}Tip:${closeStrong} Minimální hodnota ${minValue} a maximální hodnota ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Tip:${closeStrong} Minimální datum ${minValue} a maximální datum ${maxValue}",
-    "errorsInApplyEdits": "Zprávu se nepodařilo odeslat",
+    "errorsInApplyEdits": "Zprávu se nepodařilo odeslat.",
     "attachmentSelectedMsg": "příloh vybráno",
-    "attachmentUploadStatus": "nepodařilo se nahrát ${failed} z ${total} příloh",
+    "attachmentUploadStatus": "Nepodařilo se nahrát ${failed} z ${total} příloh.",
+    "attachmentDeleteStatus": "Nepodařilo se smazat ${failed} z ${total} příloh.",
+    "featureUpdateStatus": "Nepodařilo se aktualizovat ${failed} z ${total} prvků.",
     "geoLocationError": "Současné umístění není k dispozici",
     "geoLocationOutOfExtent": "Aktuální umístění se nachází mimo rozsah podkladové mapy.",
     "submitButtonTooltip": "Uložit",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "Bude aktualizováno ${count} prvků",
     "attachmentHeaderText": "Přílohy",
     "unknownPopupAttachment": "SOUBOR",
-    "unableToEditPopupMessage": "K této akci nemáte oprávnění."
+    "unableToEditPopupMessage": "K této akci nemáte oprávnění.",
+    "invalidFeatureCreatorMessage": "Nemáte oprávnění k editaci tohoto prvku.",
+    "userSpecificFeatureUpdateMessage": "Aktualizovány byly pouze prvky vytvořené uživatelem ${username}.",
+    "anonymousUserText": "Anonymní"
   },
   "mapViewer": {
     "zoomInToolTip": "Přiblížit",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Hodnota",
     "uniqueRadioButtonLabel": "Jedinečný",
     "selectLayerToBegin": "Začněte výběrem kategorie",
-    "layerFeatureCount": "${selectedFeatureCount} vybráno / ${featureCount} záznamů"
+    "layerFeatureCount": "${selectedFeatureCount} vybráno / ${featureCount} záznamů",
+    "exportToCsvSuccessMessage": "Export souboru CSV proběhl úspěšně.",
+    "exportToCsvErrorMessage": "Při exportování vybraných prvků do souboru CSV došlo k chybě. Zkuste to prosím znovu.",
+    "exportToCSVButtonTooltip": "Exportovat do souboru CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Časový rozsah",

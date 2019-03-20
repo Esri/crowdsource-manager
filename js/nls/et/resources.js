@@ -60,7 +60,9 @@ define({
     "dateRangeHintMessage": "${openStrong}Vihje:${closeStrong} Kuupäeva alampiir ${minValue} ja kuupäeva ülempiir ${maxValue}",
     "errorsInApplyEdits": "Kommentaari ei saanud esitada.",
     "attachmentSelectedMsg": "valitud manus(ed)",
-    "attachmentUploadStatus": "${failed} manust (kokku ${total} manust) ei saanud üles laadida",
+    "attachmentUploadStatus": "${failed} manust ${total} manusest ei õnnestunud üles laadida",
+    "attachmentDeleteStatus": "${failed} manust ${total} manusest ei õnnestunud kustutada",
+    "featureUpdateStatus": "${failed} manust ${total} manusest ei õnnestunud värskendada.",
     "geoLocationError": "Praegune asukoht pole kättesaadav.",
     "geoLocationOutOfExtent": "Praegune asukoht on lubatud vahemikust väljas.",
     "submitButtonTooltip": "Salvesta",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} objekti värskendatakse",
     "attachmentHeaderText": "Manused",
     "unknownPopupAttachment": "FAIL",
-    "unableToEditPopupMessage": "Teil puudub õigus selle toimingu tegemiseks."
+    "unableToEditPopupMessage": "Teil puudub õigus selle toimingu tegemiseks.",
+    "invalidFeatureCreatorMessage": "Teil pole õigust seda objekti muuta.",
+    "userSpecificFeatureUpdateMessage": "Värskendati ainult ${username} poolt loodud objektid.",
+    "anonymousUserText": "Anonüümne"
   },
   "mapViewer": {
     "zoomInToolTip": "Suurenda",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Väärtus",
     "uniqueRadioButtonLabel": "Unikaalne",
     "selectLayerToBegin": "Alustamiseks valige kategooria",
-    "layerFeatureCount": "${selectedFeatureCount} valitud, kokku ${featureCount} kirjet"
+    "layerFeatureCount": "${selectedFeatureCount} valitud, kokku ${featureCount} kirjet",
+    "exportToCsvSuccessMessage": "CSV-fail eksporditi edukalt.",
+    "exportToCsvErrorMessage": "Tõrge CSV-faili valitud objektide eksportimisel. Palun proovige uuesti",
+    "exportToCSVButtonTooltip": "Ekspordi CSV formaati"
   },
   "timeSlider": {
     "timeSliderLabel": "Ajavahemik",

@@ -58,9 +58,11 @@ define({
     "selectLocation": "برجاء تحديد موقع التقرير",
     "numericRangeHintMessage": "${openStrong}Hint:${closeStrong} الحد الأدنى للقيمة ${minValue} والحد الأقصى للقيمة ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Hint:${closeStrong} التاريخ الأدنى ${minValue} والتاريخ الأقصى ${maxValue}",
-    "errorsInApplyEdits": "يتعذر إرسال التقرير",
+    "errorsInApplyEdits": "يتعذر إرسال التقرير.",
     "attachmentSelectedMsg": "المرفقات المحددة",
-    "attachmentUploadStatus": "فشل تحميل المرفقات ${failed} من ${total}",
+    "attachmentUploadStatus": "فشل تحميل المرفقات ${failed} من ${total}.",
+    "attachmentDeleteStatus": "فشل حذف المرفقات ${failed} من ${total}.",
+    "featureUpdateStatus": "فشل تحديث المعالم ${failed} من ${total}.",
     "geoLocationError": "الموقع الحالي غير متاح",
     "geoLocationOutOfExtent": "الموقع الحالي خارج نطاق الخريطة",
     "submitButtonTooltip": "حفظ",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "سيتم تحديث المعالم ${count}",
     "attachmentHeaderText": "مرفقات",
     "unknownPopupAttachment": "ملف",
-    "unableToEditPopupMessage": "لا يتوفر لديك إذن تنفيذ هذا الحدث."
+    "unableToEditPopupMessage": "لا يتوفر لديك إذن تنفيذ هذا الحدث.",
+    "invalidFeatureCreatorMessage": "غير مصرح لك بتعديل هذا المعلم.",
+    "userSpecificFeatureUpdateMessage": "لم يتم تحديث سوى المعالم التي تم إنشاؤها بواسطة ${username}.",
+    "anonymousUserText": "مجهول"
   },
   "mapViewer": {
     "zoomInToolTip": "التكبير",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "قيمة",
     "uniqueRadioButtonLabel": "فريد",
     "selectLayerToBegin": "تحديد فئة للبدء",
-    "layerFeatureCount": "تم تحديد ${selectedFeatureCount} / تسجيلات ${featureCount}"
+    "layerFeatureCount": "تم تحديد ${selectedFeatureCount} / تسجيلات ${featureCount}",
+    "exportToCsvSuccessMessage": "تم تصدير ملف CSV بنجاح.",
+    "exportToCsvErrorMessage": "حدث خطأ أثناء تصدير المعالم المحددة إلى ملف CSV. الرجاء إعادة المحاولة مرة أخرى.",
+    "exportToCSVButtonTooltip": "تصدير إلى CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "النطاق الزمني",

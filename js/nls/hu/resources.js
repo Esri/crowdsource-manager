@@ -58,9 +58,11 @@ define({
     "selectLocation": "Válasszon helyet a jelentés számára",
     "numericRangeHintMessage": "${openStrong}Tipp:${closeStrong} ${minValue} minimális érték és ${maxValue} maximális érték",
     "dateRangeHintMessage": "${openStrong}Tipp:${closeStrong} ${minValue} kezdő dátum és ${maxValue} záró dátum",
-    "errorsInApplyEdits": "Nem sikerült elküldeni a jelentést",
+    "errorsInApplyEdits": "Nem sikerült elküldeni a jelentést.",
     "attachmentSelectedMsg": "csatolmány kiválasztva",
-    "attachmentUploadStatus": "${failed} csatolmányt nem sikerült feltölteni (összesen: ${total})",
+    "attachmentUploadStatus": "${failed} csatolmányt nem sikerült feltölteni (összesen: ${total}).",
+    "attachmentDeleteStatus": "${failed} csatolmányt nem sikerült törölni (összesen: ${total}).",
+    "featureUpdateStatus": "${failed} vektoros elemet nem sikerült frissíteni (összesen: ${total}).",
     "geoLocationError": "Az aktuális hely nem érhető el",
     "geoLocationOutOfExtent": "Az aktuális hely az alaptérkép kiterjedésén kívül van",
     "submitButtonTooltip": "Mentés",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} vektoros elem lesz frissítve",
     "attachmentHeaderText": "Csatolmányok",
     "unknownPopupAttachment": "FÁJL",
-    "unableToEditPopupMessage": "Nincs engedélye a művelet végrehajtására."
+    "unableToEditPopupMessage": "Nincs engedélye a művelet végrehajtására.",
+    "invalidFeatureCreatorMessage": "Ön nem jogosult a vektoros elem szerkesztésére.",
+    "userSpecificFeatureUpdateMessage": "Kizárólag a(z) ${username} felhasználó által létrehozott vektoros elemek frissültek.",
+    "anonymousUserText": "Névtelen"
   },
   "mapViewer": {
     "zoomInToolTip": "Nagyítás",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Érték",
     "uniqueRadioButtonLabel": "Egyedi",
     "selectLayerToBegin": "Válasszon ki egy kategóriát a kezdéshez",
-    "layerFeatureCount": "${selectedFeatureCount} kiválasztva / ${featureCount} rekord"
+    "layerFeatureCount": "${selectedFeatureCount} kiválasztva / ${featureCount} rekord",
+    "exportToCsvSuccessMessage": "A CSV-fájl exportálása sikeres volt.",
+    "exportToCsvErrorMessage": "Hiba történt a kiválasztott vektoros elemek CSV-fájlba történő exportálása során. Próbálja meg újra.",
+    "exportToCSVButtonTooltip": "Exportálás CSV-fájlba."
   },
   "timeSlider": {
     "timeSliderLabel": "Időtartomány",

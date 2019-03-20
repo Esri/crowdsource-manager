@@ -58,9 +58,11 @@ define({
     "selectLocation": "Vælg en placering for din rapport",
     "numericRangeHintMessage": "${openStrong}Tip:${closeStrong} Minimumværdi ${minValue} og maksimumværdi ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Tip:${closeStrong} Minimumdato ${minValue} og maksimumdato ${maxValue}",
-    "errorsInApplyEdits": "Rapport kunne ikke sendes",
+    "errorsInApplyEdits": "Rapport kunne ikke sendes.",
     "attachmentSelectedMsg": "vedhæftning(er) valgt",
-    "attachmentUploadStatus": "${mislykkedes} af ${total} vedhæftning(er) kunne ikke overføres",
+    "attachmentUploadStatus": "${failed} af ${total} vedhæftning(er) kunne ikke overføres.",
+    "attachmentDeleteStatus": "${failed} af ${total} vedhæftning(er) kunne ikke slettes.",
+    "featureUpdateStatus": "${failed} af ${total} objekt(er) kunne ikke opdateres.",
     "geoLocationError": "Aktuel position er ikke tilgængelig",
     "geoLocationOutOfExtent": "Aktuel position ligger uden for baggrundskortets udstrækning",
     "submitButtonTooltip": "Gem",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} objekter vil blive opdateret",
     "attachmentHeaderText": "Vedhæftninger",
     "unknownPopupAttachment": "FIL",
-    "unableToEditPopupMessage": "Du har ikke tilladelse til at udføre denne handling."
+    "unableToEditPopupMessage": "Du har ikke tilladelse til at udføre denne handling.",
+    "invalidFeatureCreatorMessage": "Du er ikke autoriseret til redigere dette objekt.",
+    "userSpecificFeatureUpdateMessage": "Kun objekter, der er oprettet af ${username}, er blevet opdateret.",
+    "anonymousUserText": "Anonym"
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom ind",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Værdi",
     "uniqueRadioButtonLabel": "Unik",
     "selectLayerToBegin": "Vælg en kategori at starte med",
-    "layerFeatureCount": "${selectedFeatureCount} valgt / ${featureCount} poster"
+    "layerFeatureCount": "${selectedFeatureCount} valgt / ${featureCount} poster",
+    "exportToCsvSuccessMessage": "CSV-fil eksporteret uden fejl.",
+    "exportToCsvErrorMessage": "Der opstod en fejl under eksport af de valgte objekter til CSV-filen. Prøv igen.",
+    "exportToCSVButtonTooltip": "Eksportér til CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsinterval",

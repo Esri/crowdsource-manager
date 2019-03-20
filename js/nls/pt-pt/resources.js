@@ -58,9 +58,11 @@ define({
     "selectLocation": "Por favor seleccione uma localização para o seu relatório",
     "numericRangeHintMessage": "${openStrong}Pista:${closeStrong} valor Mínimo ${minValue} e valor Máximo ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Pista:${closeStrong} data Mínima ${minValue} e data Máxima ${maxValue}",
-    "errorsInApplyEdits": "O relatório não pôde ser submetido",
+    "errorsInApplyEdits": "Não foi possível enviar o relatório.",
     "attachmentSelectedMsg": "anexo(s) seleccionado(s)",
-    "attachmentUploadStatus": "${failed} do ${total} anexo(s) falhou a carregar",
+    "attachmentUploadStatus": "Não foi possível carregar ${failed} de ${total} anexo(s).",
+    "attachmentDeleteStatus": "Não foi possível eliminar ${failed} de ${total} anexo(s).",
+    "featureUpdateStatus": "Não foi possível atualizar ${failed} de ${total} elemento(s).",
     "geoLocationError": "Localização actual não disponível",
     "geoLocationOutOfExtent": "Localização actual está fora da extensão de mapa",
     "submitButtonTooltip": "Guardar",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} elementos serão atualizados",
     "attachmentHeaderText": "Anexos",
     "unknownPopupAttachment": "FICHEIRO",
-    "unableToEditPopupMessage": "Não tem permissões para executar esta ação."
+    "unableToEditPopupMessage": "Não tem permissões para executar esta ação.",
+    "invalidFeatureCreatorMessage": "Não possui autorização para editar este elemento.",
+    "userSpecificFeatureUpdateMessage": "Apenas os elementos criados por ${username} foram atualizados.",
+    "anonymousUserText": "Anónimo"
   },
   "mapViewer": {
     "zoomInToolTip": "Aumentar Zoom",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Valor",
     "uniqueRadioButtonLabel": "Único",
     "selectLayerToBegin": "Selecione uma categoria para começar",
-    "layerFeatureCount": "${selectedFeatureCount} selecionados / ${featureCount} registos"
+    "layerFeatureCount": "${selectedFeatureCount} selecionados / ${featureCount} registos",
+    "exportToCsvSuccessMessage": "Ficheiro CSV exportado com êxito.",
+    "exportToCsvErrorMessage": "Erro ao exportar os elementos selecionados para o ficheiro CSV. Tente novamente.",
+    "exportToCSVButtonTooltip": "Exportar para CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Intervalo de tempo",

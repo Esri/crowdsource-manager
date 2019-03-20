@@ -58,9 +58,11 @@ define({
     "selectLocation": "Sélectionnez l'emplacement de votre rapport",
     "numericRangeHintMessage": "${openStrong}Hint:${closeStrong} Valeur minimum ${minValue} et valeur maximum ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Hint:${closeStrong} Date minimum ${minValue} et date maximum ${maxValue}",
-    "errorsInApplyEdits": "Impossible d'envoyer le rapport",
+    "errorsInApplyEdits": "Impossible d’envoyer le rapport.",
     "attachmentSelectedMsg": "pièce(s) jointe(s) sélectionnée(s)",
-    "attachmentUploadStatus": "Echec du chargement de ${failed} sur ${total} pièce(s) jointe(s)",
+    "attachmentUploadStatus": "Échec du chargement de ${failed} sur ${total} pièce(s) jointe(s).",
+    "attachmentDeleteStatus": "Échec de la suppression de ${failed} sur ${total} pièce(s) jointe(s).",
+    "featureUpdateStatus": "Échec de la mise à jour de ${failed} sur ${total} entités(s).",
     "geoLocationError": "Localisant actuel non disponible",
     "geoLocationOutOfExtent": "L'étendue courante est en dehors de l'étendue du fond de carte",
     "submitButtonTooltip": "Enregistrer",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} entités vont être mises à jour",
     "attachmentHeaderText": "Pièces jointes",
     "unknownPopupAttachment": "FICHIER",
-    "unableToEditPopupMessage": "Vous n’êtes pas autorisé à effectuer cette action."
+    "unableToEditPopupMessage": "Vous n’êtes pas autorisé à effectuer cette action.",
+    "invalidFeatureCreatorMessage": "Vous n’êtes pas autorisé à mettre à jour cette entité.",
+    "userSpecificFeatureUpdateMessage": "Seules les entités créées par ${username} ont été mises à jour.",
+    "anonymousUserText": "Anonyme"
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom avant",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Valeur",
     "uniqueRadioButtonLabel": "Unique",
     "selectLayerToBegin": "Sélectionnez une catégorie pour commencer",
-    "layerFeatureCount": "${selectedFeatureCount} sélectionnées / ${featureCount} enregistrements"
+    "layerFeatureCount": "${selectedFeatureCount} sélectionnées / ${featureCount} enregistrements",
+    "exportToCsvSuccessMessage": "Le fichier CSV a été exporté.",
+    "exportToCsvErrorMessage": "Une erreur s’est produite lors de l’exportation des entités sélectionnées vers le fichier CSV. Réessayez ultérieurement.",
+    "exportToCSVButtonTooltip": "Exporter au format CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Période",

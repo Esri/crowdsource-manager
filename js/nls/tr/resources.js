@@ -58,9 +58,11 @@ define({
     "selectLocation": "Raporunuzun konumunu seçin",
     "numericRangeHintMessage": "${openStrong}İpucu:${closeStrong} Minimum değer ${minValue} ve maksimum değer ${maxValue}",
     "dateRangeHintMessage": "${openStrong}İpucu:${closeStrong} Minimum tarih ${minValue} ve Maksimum tarih ${maxValue}",
-    "errorsInApplyEdits": "Rapor gönderilemedi",
+    "errorsInApplyEdits": "Rapor gönderilemedi.",
     "attachmentSelectedMsg": "ek seçildi",
-    "attachmentUploadStatus": "${failed} / ${total} ek yüklenemedi",
+    "attachmentUploadStatus": "${failed} / ${total} ek yüklenemedi.",
+    "attachmentDeleteStatus": "${failed} / ${total} ek silinemedi.",
+    "featureUpdateStatus": "${failed} / ${total} ek güncellenemedi.",
     "geoLocationError": "Geçerli konum kullanılamıyor",
     "geoLocationOutOfExtent": "Geçerli konum altlık haritası yayılımı dışında",
     "submitButtonTooltip": "Kaydet",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} detay güncellenecek",
     "attachmentHeaderText": "Ekler",
     "unknownPopupAttachment": "DOSYA",
-    "unableToEditPopupMessage": "Bu işlemi yapma izniniz yok."
+    "unableToEditPopupMessage": "Bu işlemi yapma izniniz yok.",
+    "invalidFeatureCreatorMessage": "Bu detayı düzenleme yetkiniz yok.",
+    "userSpecificFeatureUpdateMessage": "Yalnızca ${username} tarafından oluşturulan detaylar güncellendi.",
+    "anonymousUserText": "Anonim"
   },
   "mapViewer": {
     "zoomInToolTip": "Büyüt",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Değer",
     "uniqueRadioButtonLabel": "Tek",
     "selectLayerToBegin": "Başlamak için bir kategori seçin",
-    "layerFeatureCount": "${selectedFeatureCount} seçili / ${featureCount} kayıt"
+    "layerFeatureCount": "${selectedFeatureCount} seçili / ${featureCount} kayıt",
+    "exportToCsvSuccessMessage": "CSV dosyası başarıyla dışarı aktarıldı.",
+    "exportToCsvErrorMessage": "Seçilen detaylar CSV dosyasına aktarılırken hata oluştu.  Yeniden deneyin.",
+    "exportToCSVButtonTooltip": "CSV'ye Aktar"
   },
   "timeSlider": {
     "timeSliderLabel": "Zaman aralığı",

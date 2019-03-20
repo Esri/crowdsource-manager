@@ -58,9 +58,11 @@ define({
     "selectLocation": "Seleccioneu la ubicació per a l'informe",
     "numericRangeHintMessage": "${openStrong}Suggeriment:${closeStrong} valor mínim ${minValue} i valor màxim ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Suggeriment:${closeStrong} data mínima ${minValue} i data màxima ${maxValue}",
-    "errorsInApplyEdits": "L'informe no s'ha pogut enviar",
+    "errorsInApplyEdits": "L'informe no s'ha pogut enviar.",
     "attachmentSelectedMsg": "fitxers adjunts seleccionats",
-    "attachmentUploadStatus": "No s'han pogut pujar ${failed} de ${total} fitxers adjunts",
+    "attachmentUploadStatus": "No s'han pogut pujar ${failed} de ${total} fitxers adjunts.",
+    "attachmentDeleteStatus": "No s'han pogut suprimir ${failed} de ${total} fitxers adjunts.",
+    "featureUpdateStatus": "No s'han pogut actualitzar ${failed} de ${total} entitats.",
     "geoLocationError": "Ubicació actual no disponible",
     "geoLocationOutOfExtent": "La ubicació actual està fora de l'extensió del mapa base",
     "submitButtonTooltip": "Desa",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} entitats s'actualitzaran",
     "attachmentHeaderText": "Fitxers adjunts",
     "unknownPopupAttachment": "FILE",
-    "unableToEditPopupMessage": "No teniu permís per fer aquesta acció."
+    "unableToEditPopupMessage": "No teniu permís per fer aquesta acció.",
+    "invalidFeatureCreatorMessage": "No teniu autorització per editar aquesta entitat.",
+    "userSpecificFeatureUpdateMessage": "Només s'han actualitzat les entitats que ha creat ${username}.",
+    "anonymousUserText": "Anònim"
   },
   "mapViewer": {
     "zoomInToolTip": "Amplia",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Valor",
     "uniqueRadioButtonLabel": "Únic",
     "selectLayerToBegin": "Seleccioneu una categoria per començar",
-    "layerFeatureCount": "${selectedFeatureCount} seleccionades/${featureCount} registres"
+    "layerFeatureCount": "${selectedFeatureCount} seleccionades/${featureCount} registres",
+    "exportToCsvSuccessMessage": "El fitxer CSV s'ha exportat correctament.",
+    "exportToCsvErrorMessage": "Error en exportar les entitats seleccionades al fitxer CSV. Torneu-ho a provar.",
+    "exportToCSVButtonTooltip": "Exporta a CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Interval de temps",

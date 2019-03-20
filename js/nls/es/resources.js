@@ -58,9 +58,11 @@ define({
     "selectLocation": "Selecciona la ubicación para el informe",
     "numericRangeHintMessage": "${openStrong}Sugerencia:${closeStrong} Valor mínimo ${minValue} y valor máximo ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Sugerencia:${closeStrong} Fecha mínima ${minValue} y fecha máxima ${maxValue}",
-    "errorsInApplyEdits": "No se pudo enviar el informe",
+    "errorsInApplyEdits": "No se pudo enviar el informe.",
     "attachmentSelectedMsg": "adjuntos seleccionados",
-    "attachmentUploadStatus": "Error al cargar ${failed} de ${total} adjuntos",
+    "attachmentUploadStatus": "Error al cargar ${failed} de ${total} adjuntos.",
+    "attachmentDeleteStatus": "Error al eliminar ${failed} de ${total} adjuntos.",
+    "featureUpdateStatus": "Error al actualizar ${failed} de ${total} adjuntos.",
     "geoLocationError": "Ubicación actual no disponible",
     "geoLocationOutOfExtent": "La ubicación actual está fuera de la extensión del mapa base",
     "submitButtonTooltip": "Guardar",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} entidades se actualizarán",
     "attachmentHeaderText": "Adjuntos",
     "unknownPopupAttachment": "ARCHIVO",
-    "unableToEditPopupMessage": "No tiene permiso para realizar esta acción."
+    "unableToEditPopupMessage": "No tiene permiso para realizar esta acción.",
+    "invalidFeatureCreatorMessage": "No tiene autorización para editar esta entidad.",
+    "userSpecificFeatureUpdateMessage": "Solamente se han actualizado las entidades creadas por ${username}.",
+    "anonymousUserText": "Anónimo"
   },
   "mapViewer": {
     "zoomInToolTip": "Acercar",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Valor",
     "uniqueRadioButtonLabel": "Única",
     "selectLayerToBegin": "Seleccione una categoría para empezar",
-    "layerFeatureCount": "${selectedFeatureCount} seleccionadas / ${featureCount} registros"
+    "layerFeatureCount": "${selectedFeatureCount} seleccionadas / ${featureCount} registros",
+    "exportToCsvSuccessMessage": "Archivo CSV exportado correctamente.",
+    "exportToCsvErrorMessage": "Error al exportar las entidades seleccionadas a un archivo CSV. Inténtelo de nuevo.",
+    "exportToCSVButtonTooltip": "Exportar a CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Rango de tiempo",

@@ -60,7 +60,9 @@ define({
     "dateRangeHintMessage": "${openStrong}Hint:${closeStrong} Tanggal minimum ${minValue} dan Tanggal maksimum ${maxValue}",
     "errorsInApplyEdits": "Laporan tidak dapat dikirimkan.",
     "attachmentSelectedMsg": "lampiran dipilih",
-    "attachmentUploadStatus": "${failed} dari ${total} lampiran gagal diunggah",
+    "attachmentUploadStatus": "${failed} dari ${total} lampiran gagal diunggah.",
+    "attachmentDeleteStatus": "${failed} dari ${total} lampiran gagal dihapus.",
+    "featureUpdateStatus": "${failed} dari ${total} fitur gagal diperbarui.",
     "geoLocationError": "Lokasi saat ini tidak tersedia",
     "geoLocationOutOfExtent": "Lokasi saat ini di luar jangkauan peta dasar",
     "submitButtonTooltip": "Simpan",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} feature akan diperbarui",
     "attachmentHeaderText": "Lampiran",
     "unknownPopupAttachment": "FILE",
-    "unableToEditPopupMessage": "Anda tidak memiliki izin untuk menjalankan tindakan ini."
+    "unableToEditPopupMessage": "Anda tidak memiliki izin untuk menjalankan tindakan ini.",
+    "invalidFeatureCreatorMessage": "Anda tidak memiliki otorisasi untuk mengedit fitur ini.",
+    "userSpecificFeatureUpdateMessage": "Hanya fitur yang dibuat oleh ${username} yang telah diperbarui.",
+    "anonymousUserText": "Anonim"
   },
   "mapViewer": {
     "zoomInToolTip": "Perbesar",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Nilai",
     "uniqueRadioButtonLabel": "Unik",
     "selectLayerToBegin": "Pilih kategori untuk mulai",
-    "layerFeatureCount": "${selectedFeatureCount} dipilih / ${featureCount} rekaman (record)"
+    "layerFeatureCount": "${selectedFeatureCount} dipilih / ${featureCount} rekaman (record)",
+    "exportToCsvSuccessMessage": "File CSV berhasil diekspor.",
+    "exportToCsvErrorMessage": "Ada kesalahan saat mengekspor fitur yang dipilih ke file CSV. Harap coba lagi.",
+    "exportToCSVButtonTooltip": "Ekspor ke CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Rentang waktu",

@@ -58,9 +58,11 @@ define({
     "selectLocation": "Izberite lokacijo za svoje poročilo",
     "numericRangeHintMessage": "${openStrong}Namig:${closeStrong} Minimalna vrednost ${minValue} in maksimalna vrednost ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Namig:${closeStrong} Najmanjši datum ${minValue} in največji datum ${maxValue}",
-    "errorsInApplyEdits": "Poročila ni bilo mogoče poslati",
+    "errorsInApplyEdits": "Poročila ni bilo mogoče poslati.",
     "attachmentSelectedMsg": "izbranih prilog",
-    "attachmentUploadStatus": "${failed} od ${total} prilog ni bilo mogoče naložiti",
+    "attachmentUploadStatus": "${failed} od ${total} prilog ni bilo mogoče naložiti.",
+    "attachmentDeleteStatus": "${failed} od ${total} prilog ni bilo mogoče izbrisati.",
+    "featureUpdateStatus": "${failed} od ${total} geoobjektov ni bilo mogoče posodobiti.",
     "geoLocationError": "Trenutna lokacija ni na voljo",
     "geoLocationOutOfExtent": "Trenutna lokacija je izven obsega temeljne karte",
     "submitButtonTooltip": "Shrani",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "Posodobljenih bo ${count} geoobjektov",
     "attachmentHeaderText": "Priloge",
     "unknownPopupAttachment": "DATOTEKA",
-    "unableToEditPopupMessage": "Za izvajanje tega dejanja nimate dovoljenja."
+    "unableToEditPopupMessage": "Za izvajanje tega dejanja nimate dovoljenja.",
+    "invalidFeatureCreatorMessage": "Niste pooblaščeni za urejanje tega geoobjekta.",
+    "userSpecificFeatureUpdateMessage": "Samo geoobjekti, ki jih je ustvaril uporabnik ${username}, so bili posodobljeni.",
+    "anonymousUserText": "Anonimno"
   },
   "mapViewer": {
     "zoomInToolTip": "Povečaj",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Vrednost",
     "uniqueRadioButtonLabel": "Enolično",
     "selectLayerToBegin": "Izberite kategorijo za začetek",
-    "layerFeatureCount": "${selectedFeatureCount} izbranih/${featureCount} zapisov"
+    "layerFeatureCount": "${selectedFeatureCount} izbranih/${featureCount} zapisov",
+    "exportToCsvSuccessMessage": "Datoteka CSV je bila uspešno izvožena.",
+    "exportToCsvErrorMessage": "Pri izvažanju izbranih geoobjektov v datoteko CSV je prišlo do napake. Poskusite znova.",
+    "exportToCSVButtonTooltip": "Izvozi v CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Časovni razpon",

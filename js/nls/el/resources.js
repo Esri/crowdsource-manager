@@ -58,9 +58,11 @@ define({
     "selectLocation": "Επιλέξτε τη θέση για την αναφορά σας",
     "numericRangeHintMessage": "${openStrong}Υπόδειξη:${closeStrong} Ελάχιστη τιμή ${minValue} και μέγιστη τιμή ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Υπόδειξη:${closeStrong} Ελάχιστη ημερομηνία ${minValue} και μέγιστη ημερομηνία ${maxValue}",
-    "errorsInApplyEdits": "Δεν ήταν δυνατή η υποβολή της αναφοράς",
+    "errorsInApplyEdits": "Δεν ήταν δυνατή η υποβολή της αναφοράς.",
     "attachmentSelectedMsg": "συνημμένα επιλέχθηκαν",
-    "attachmentUploadStatus": "Απέτυχε η μεταφόρτωση ${failed} από ${total} συνημμένων",
+    "attachmentUploadStatus": "Απέτυχε η μεταφόρτωση ${failed} συνημμένου(-ων) από ${total}.",
+    "attachmentDeleteStatus": "Απέτυχε η διαγραφή ${failed} συνημμένου(-ων) από ${total}.",
+    "featureUpdateStatus": "Απέτυχε η ενημέρωση ${failed} στοιχείου(-ων) από ${total}.",
     "geoLocationError": "Η τρέχουσα τοποθεσία δεν είναι διαθέσιμη",
     "geoLocationOutOfExtent": "Η τρέχουσα τοποθεσία είναι εκτός της έκτασης του υποβάθρου",
     "submitButtonTooltip": "Αποθήκευση",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} στοιχεία θα ενημερωθούν",
     "attachmentHeaderText": "Συνημμένα",
     "unknownPopupAttachment": "ΑΡΧΕΙΟ",
-    "unableToEditPopupMessage": "Δεν έχετε δικαίωμα να εκτελέσετε αυτή την ενέργεια."
+    "unableToEditPopupMessage": "Δεν έχετε δικαίωμα να εκτελέσετε αυτή την ενέργεια.",
+    "invalidFeatureCreatorMessage": "Δεν έχετε εξουσιοδότηση για τη επεξεργασία αυτού του στοιχείου.",
+    "userSpecificFeatureUpdateMessage": "Έχουν ενημερωθεί μόνο όσα στοιχεία δημιουργήθηκαν από τον χρήστη ${username}.",
+    "anonymousUserText": "Ανώνυμος"
   },
   "mapViewer": {
     "zoomInToolTip": "Εστίαση σε μεγαλύτερη κλίμακα",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Τιμή",
     "uniqueRadioButtonLabel": "Μοναδικό",
     "selectLayerToBegin": "Επιλέξτε μια κατηγορία για να ξεκινήσετε",
-    "layerFeatureCount": "${selectedFeatureCount} επιλεγμένα / ${featureCount} εγγραφές"
+    "layerFeatureCount": "${selectedFeatureCount} επιλεγμένα / ${featureCount} εγγραφές",
+    "exportToCsvSuccessMessage": "Η εξαγωγή του αρχείου CSV ολοκληρώθηκε με επιτυχία.",
+    "exportToCsvErrorMessage": "Σφάλμα κατά την εξαγωγή επιλεγμένων στοιχείων σε αρχείο CSV. Προσπαθήστε ξανά.",
+    "exportToCSVButtonTooltip": "Εξαγωγή σε CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Εύρος χρόνου",

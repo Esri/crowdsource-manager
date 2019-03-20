@@ -58,11 +58,11 @@ define({
     "selectLocation": "Виберіть місце розташування для вашого звіту",
     "numericRangeHintMessage": "${openStrong}Підказка:${closeStrong} мінімальне значення ${minValue} та максимальне значення ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Підказка:${closeStrong} мінімальна дата ${minValue} та максимальна дата ${maxValue}",
-    "errorsInApplyEdits": "ґ_Report could not be submitted_______________________________Ї.",
+    "errorsInApplyEdits": "Не вдалося надіслати звіт.",
     "attachmentSelectedMsg": "додаток (додатки) вибрано",
-    "attachmentUploadStatus": "ґ_${failed} of ${total} attachment(s) failed to upload____________________________Ї.",
-    "attachmentDeleteStatus": "ґ_${failed} of ${total} attachment(s) failed to delete____________________________Ї.",
-    "featureUpdateStatus": "ґ_${failed} of ${total} feature(s) failed to update__________________________Ї.",
+    "attachmentUploadStatus": "Не вдалося передати ${failed} з ${total} прикріплення (прикріплень)",
+    "attachmentDeleteStatus": "Не вдалося видалити ${failed} з ${total} прикріплення (прикріплень)",
+    "featureUpdateStatus": "Не вдалося оновити ${failed} з ${total} об'єкта (об'єктів)",
     "geoLocationError": "Поточне місце розташування недоступне",
     "geoLocationOutOfExtent": "Поточне місце розташування знаходиться поза екстентом базової карти",
     "submitButtonTooltip": "Зберегти",
@@ -72,9 +72,9 @@ define({
     "attachmentHeaderText": "Прикріплення",
     "unknownPopupAttachment": "ФАЙЛ",
     "unableToEditPopupMessage": "Ви не маєте дозволу виконувати цю дію.",
-    "invalidFeatureCreatorMessage": "ґ_You are not authorized to edit this feature_______________________Ї.",
-    "userSpecificFeatureUpdateMessage": "ґ_Only features created by ${username} have been updated_____________________________Ї.",
-    "anonymousUserText": "ґ_Anonymous___________________Ї"
+    "invalidFeatureCreatorMessage": "Ви не маєте права редагування цього об'єкту.",
+    "userSpecificFeatureUpdateMessage": "Були оновлені тільки об'єкти, створені ${username}.",
+    "anonymousUserText": "Анонімний"
   },
   "mapViewer": {
     "zoomInToolTip": "Збільшити масштаб",
@@ -95,9 +95,9 @@ define({
     "uniqueRadioButtonLabel": "Унікальне",
     "selectLayerToBegin": "Виберіть категорію для початку роботи",
     "layerFeatureCount": "${selectedFeatureCount} вибрано / ${featureCount} записів",
-    "exportToCsvSuccessMessage": "ґ_CSV file exported successfully_________________Ї.",
-    "exportToCsvErrorMessage": "ґ_Error while exporting selected features to CSV file. Please try again____________________________________Ї.",
-    "exportToCSVButtonTooltip": "ґ_Export to CSV______________Ї"
+    "exportToCsvSuccessMessage": "CSV-файл успішно експортовано.",
+    "exportToCsvErrorMessage": "Помилка під час експорту вибраних об'єктів в CSV-файл. Спробуйте знову.",
+    "exportToCSVButtonTooltip": "Експорт в CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Діапазон часу",

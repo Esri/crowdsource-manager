@@ -58,9 +58,11 @@ define({
     "selectLocation": "Wybierz lokalizację dla raportu",
     "numericRangeHintMessage": "${openStrong}Wskazówka:${closeStrong} Wartość minimalna ${minValue} i wartość maksymalna ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Wskazówka:${closeStrong} Data minimalna ${minValue} i data maksymalna ${maxValue}",
-    "errorsInApplyEdits": "Nie można przesłać raportu",
+    "errorsInApplyEdits": "Nie można przesłać raportu.",
     "attachmentSelectedMsg": "wybrany(-e/-ych) załącznik(-i/-ów)",
-    "attachmentUploadStatus": "Nie udało się przesłać ${failed} z ${total} załączników",
+    "attachmentUploadStatus": "Nie udało się przesłać ${failed} z ${total} załączników.",
+    "attachmentDeleteStatus": "Nie udało się usunąć ${failed} z ${total} załączników.",
+    "featureUpdateStatus": "Nie udało się zaktualizować ${failed} z ${total} obiektów.",
     "geoLocationError": "Bieżąca lokalizacja nie jest dostępna",
     "geoLocationOutOfExtent": "Bieżąca lokalizacja jest poza zakresem mapy bazowej",
     "submitButtonTooltip": "Zapisz",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "Liczba obiektów, które zostaną zaktualizowane: ${count}",
     "attachmentHeaderText": "Załączniki",
     "unknownPopupAttachment": "PLIK",
-    "unableToEditPopupMessage": "Nie masz uprawnień do wykonania tego działania."
+    "unableToEditPopupMessage": "Nie masz uprawnień do wykonania tego działania.",
+    "invalidFeatureCreatorMessage": "Nie masz uprawnień do edytowania tego obiektu.",
+    "userSpecificFeatureUpdateMessage": "Zaktualizowane zostały tylko obiekty utworzone przez ${username}.",
+    "anonymousUserText": "Anonimowe"
   },
   "mapViewer": {
     "zoomInToolTip": "Powiększ",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Wartość",
     "uniqueRadioButtonLabel": "Unikalne",
     "selectLayerToBegin": "Wybierz kategorię, aby rozpocząć",
-    "layerFeatureCount": "Wybrane rekordy: ${selectedFeatureCount} z ${featureCount}"
+    "layerFeatureCount": "Wybrane rekordy: ${selectedFeatureCount} z ${featureCount}",
+    "exportToCsvSuccessMessage": "Plik CSV został wyeksportowany pomyślnie.",
+    "exportToCsvErrorMessage": "Wystąpił błąd podczas eksportowania wybranych obiektów do pliku CSV. Spróbuj ponownie.",
+    "exportToCSVButtonTooltip": "Export to CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Zakres czasu",

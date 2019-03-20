@@ -58,9 +58,11 @@ define({
     "selectLocation": "कृपया अपनी रिपोर्ट के लिए स्थान चुनें",
     "numericRangeHintMessage": "${OpenStrong} संकेत: ${closeStrong} न्यूनतम संख्या ${minValue} और अधिकतम संख्या ${maxValue}",
     "dateRangeHintMessage": "${OpenStrong} संकेत: ${closeStrong} न्यूनतम संख्या ${minValue} और अधिकतम संख्या ${maxValue}",
-    "errorsInApplyEdits": "रिपोर्ट प्रस्तुत नहीं की जा सकी",
+    "errorsInApplyEdits": "रिपोर्ट प्रस्तुत नहीं की जा सकी।",
     "attachmentSelectedMsg": "चयनित अनुलग्नक",
-    "attachmentUploadStatus": "${total} अनुलग्नकों में से ${failed} अपलोड होने में विफल रहे",
+    "attachmentUploadStatus": "${total} अनुलग्नकों में से ${failed} अपलोड नहीं हो सके।",
+    "attachmentDeleteStatus": "${total} अनुलग्नकों में से ${failed} नहीं हटाए जा सके।",
+    "featureUpdateStatus": "${total} अनुलग्नकों में से ${failed} अपडेट नहीं हो सके।",
     "geoLocationError": "वर्तमान स्थान उपलब्ध नहीं है",
     "geoLocationOutOfExtent": "वर्तमान स्थान बेसमानचित्र की सीमा से बाहर है",
     "submitButtonTooltip": "सहेजें",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} विशेषताएं अद्यतन की जाएंगी",
     "attachmentHeaderText": "अनुलग्नक",
     "unknownPopupAttachment": "फ़ाइल",
-    "unableToEditPopupMessage": "आप को इस कार्य को करने की अनुमति नहीं है।"
+    "unableToEditPopupMessage": "आप को इस कार्य को करने की अनुमति नहीं है।",
+    "invalidFeatureCreatorMessage": "आप इस सुविधा को संपादित करने के लिए अधिकृत नहीं हैं।",
+    "userSpecificFeatureUpdateMessage": "केवल ${username} दवारा बनाई गई सुविधाएं अपडेट की गई।",
+    "anonymousUserText": "गुमनाम"
   },
   "mapViewer": {
     "zoomInToolTip": "ज़ूम इन",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "मान",
     "uniqueRadioButtonLabel": "अद्वितीय",
     "selectLayerToBegin": "प्रारंभ करने के लिए श्रेणी चुनें",
-    "layerFeatureCount": "${selectedFeatureCount} चयनित/ ${featureCount} रिकॉर्ड"
+    "layerFeatureCount": "${selectedFeatureCount} चयनित/ ${featureCount} रिकॉर्ड",
+    "exportToCsvSuccessMessage": "CSV फ़ाइल को सफलतापूर्वक निर्यात किया गया।",
+    "exportToCsvErrorMessage": "CSV फ़ाइल को चयनित सुविधाओं में निर्यात करते समय त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "exportToCSVButtonTooltip": "CSV में निर्यात करें"
   },
   "timeSlider": {
     "timeSliderLabel": "समय सीमा",

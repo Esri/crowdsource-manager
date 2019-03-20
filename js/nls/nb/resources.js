@@ -58,9 +58,11 @@ define({
     "selectLocation": "Velg lokasjonen for rapporten",
     "numericRangeHintMessage": "${openStrong}Hint:${closeStrong} Minimumsverdi  ${minValue} og maksimumsverdi ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Hint:${closeStrong} Laveste dato ${minValue} og høyeste dato ${maxValue}",
-    "errorsInApplyEdits": "Kan ikke sende inn rapporten",
+    "errorsInApplyEdits": "Kan ikke sende inn rapporten.",
     "attachmentSelectedMsg": "vedlegg valgt",
-    "attachmentUploadStatus": "kan ikke laste opp ${failed} av ${total} vedlegg",
+    "attachmentUploadStatus": "Kan ikke laste opp ${failed} av ${total} vedlegg.",
+    "attachmentDeleteStatus": "Kan ikke slette ${failed} av ${total} vedlegg.",
+    "featureUpdateStatus": "Kan ikke oppdatere ${failed} av ${total} vedlegg.",
     "geoLocationError": "Gjeldende plassering er ikke tilgjengelig",
     "geoLocationOutOfExtent": "Gjeldende plassering er utenfor bakgrunnskartets utstrekning",
     "submitButtonTooltip": "Lagre",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} geoobjekter blir oppdatert",
     "attachmentHeaderText": "Vedlegg",
     "unknownPopupAttachment": "FIL",
-    "unableToEditPopupMessage": "Du har ikke tillatelse til å utføre denne handlingen."
+    "unableToEditPopupMessage": "Du har ikke tillatelse til å utføre denne handlingen.",
+    "invalidFeatureCreatorMessage": "Du har ikke tillatelse til å redigere dette geoobjektet.",
+    "userSpecificFeatureUpdateMessage": "Bare geoobjekter opprettet av ${username} er blitt oppdatert.",
+    "anonymousUserText": "Anonym"
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom inn",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Verdi",
     "uniqueRadioButtonLabel": "Unike",
     "selectLayerToBegin": "Velg en kategori for å komme i gang",
-    "layerFeatureCount": "${selectedFeatureCount} valgt / ${featureCount} poster"
+    "layerFeatureCount": "${selectedFeatureCount} valgt / ${featureCount} poster",
+    "exportToCsvSuccessMessage": "CSV-filen er eksportert.",
+    "exportToCsvErrorMessage": "Feil under eksport av valgte geoobjekter til CSV-fil. Prøv på nytt.",
+    "exportToCSVButtonTooltip": "Eksporter til CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsrom",
