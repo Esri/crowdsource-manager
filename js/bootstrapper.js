@@ -114,7 +114,8 @@ define([
                 loggedInUser = {
                     "fullName": logInDetails.fullName,
                     "credential": {
-                        "token": logInDetails.credential.token
+                        "token": logInDetails.credential.token,
+                        "userId": logInDetails.credential.userId
                     },
                     "level": logInDetails.level,
                     "privileges": logInDetails.privileges

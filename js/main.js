@@ -114,6 +114,40 @@ define([
         _basemapGallery: null, // to store the object of basemap gallery widget
         _legend: null,  // to store the object of legend gallery widget
         _lastSelectedNonEditableFeature: null,
+        _featuresEditorsCanSeeObjArr: [
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": true,
+                "allowOthersToUpdate": true,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": false,
+                "allowOthersToUpdate": false,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": false,
+                "allowAnonymousToDelete": false
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": true,
+                "allowOthersToUpdate": true,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": false,
+                "allowAnonymousToDelete": false
+            },
+            ownershipBasedAccessControlForFeatures = {
+                "allowOthersToQuery": false,
+                "allowOthersToDelete": false,
+                "allowOthersToUpdate": false,
+                "allowAnonymousToQuery": true,
+                "allowAnonymousToUpdate": true,
+                "allowAnonymousToDelete": true
+            }
+        ],
 
         /**
          * This method is designed to handle processing after any
@@ -139,14 +173,18 @@ define([
                     this.appConfig.logInDetails = {
                         "userName": this._loggedInUser.fullName,
                         "token": this._loggedInUser.credential.token,
-                        "canEditFeatures": this._checkUserPrivileges()
+                        "canEditFeatures": this._checkUserPrivileges(),
+                        "isUserSignedIn": true,
+                        "userId": this._loggedInUser.credential.userId
                     };
                     queryParams.token = this._loggedInUser.credential.token;
                 } else {
                     this.appConfig.logInDetails = {
                         "userName": this.appConfig.i18n.applicationHeader.signInOption,
                         "token": "",
-                        "canEditFeatures": true
+                        "canEditFeatures": true,
+                        "isUserSignedIn": false,
+                        "userId": ""
                     };
                 }
                 // enable queryForGroupItems in templateconfig
@@ -256,6 +294,8 @@ define([
                 this._attachClickEventToDetailsPanel();
                 this._attachClickEventToApplicationHeader();
                 this._attachClickEventToOperationalLayerName();
+                this._addTooltipToExportToCSVButton();
+                this._attachClickEventToExportToCSVButton();
             } else {
                 // executes when window is resized
                 on(window, "resize", lang.hitch(this, this._onWindowResize));
@@ -368,9 +408,11 @@ define([
                 this._isManualRefreshedClicked = true;
                 this._dataViewerWidget.isShowSelectedClicked = false;
                 this._dataViewerWidget.isShowAllClicked = false;
+                this._disableExportToCSVButton();
                 this._dataViewerWidget.storeDataForManualRefresh();
             });
             this._applicationHeader.reload = lang.hitch(this, function (logInDetails) {
+                this._disableExportToCSVButton();
                 this._reloadSignedInUserDetails = logInDetails;
             });
             this._applicationHeader.destroyWidgets = lang.hitch(this, function () {
@@ -703,6 +745,12 @@ define([
                                     popupInfo = operationalLayer.popupInfo;
                                 }
                             }));
+                            if (popupInfo === "" || popupInfo === null || popupInfo === undefined) {
+                                var infoTemplate = evt.graphic.getInfoTemplate();
+                                if (infoTemplate) {
+                                    popupInfo = infoTemplate.toJson();
+                                }
+                            }
                             if (popupInfo) {
                                 if (this._lastSelectedNonEditableFeature === evt.graphic.attributes[evt.graphic._layer.objectIdField]) {
                                     this._lastSelectedNonEditableFeature = null;
@@ -864,11 +912,28 @@ define([
         },
 
         /**
+         * This function is used to check whether "Editors can only see their own features (requires tracking)" option
+         * is selected or not
+         * @param {*} ownershipBasedAccessControlForFeatures json that needs to be checked with predefined combination of json
+         */
+        _isFeaturesOnlyEditorCanSeeOptionSelected: function (ownershipBasedAccessControlForFeatures) {
+            var isOptionSelected;
+            isOptionSelected = false;
+            array.forEach(this._featuresEditorsCanSeeObjArr, lang.hitch(this, function (featuresEditorsCanSeeObj) {
+                if (JSON.stringify(featuresEditorsCanSeeObj) === JSON.stringify(ownershipBasedAccessControlForFeatures)) {
+                    isOptionSelected = true;
+                }
+            }));
+            return isOptionSelected;
+        },
+
+        /**
          * This function is used add selected operational layer in snapshot mode
          * @memberOf widgets/main/main
          */
         _addOperationalLayerInSnapShotMode: function () {
-            var opLayerInfo, staticDefinitionExpression, cloneRenderer, cloneLabelingInfo;
+            var opLayerInfo, staticDefinitionExpression, cloneRenderer, cloneLabelingInfo,
+                editorFilter, creatorFieldName, existingDefinitionExpression;
             //get selected operation layer details
             opLayerInfo = this._layerSelectionDetails.operationalLayerDetails;
             // clone renderer
@@ -889,13 +954,59 @@ define([
                 id: opLayerInfo.id,
                 outFields: ["*"]
             });
+            // definition expression - when editors can only edit option is true
+            if (opLayerInfo.layerObject.hasOwnProperty("ownershipBasedAccessControlForFeatures") &&
+                opLayerInfo.layerObject.ownershipBasedAccessControlForFeatures !== null &&
+                opLayerInfo.layerObject.ownershipBasedAccessControlForFeatures !== undefined &&
+                opLayerInfo.layerObject.ownershipBasedAccessControlForFeatures !== "" &&
+                this._isFeaturesOnlyEditorCanSeeOptionSelected(opLayerInfo.layerObject.ownershipBasedAccessControlForFeatures)) {
+                // when creatorField property is available
+                if (opLayerInfo.layerObject.hasOwnProperty("editFieldsInfo") &&
+                    opLayerInfo.layerObject.editFieldsInfo.hasOwnProperty("creatorField")) {
+                    creatorFieldName = opLayerInfo.layerObject.editFieldsInfo.creatorField;
+                    // only features created by signed in user will be displayed by applying this definition expression
+                    if (this.appConfig.logInDetails.isUserSignedIn) {
+                        editorFilter = creatorFieldName + "=" + "'" + this.appConfig.logInDetails.userId + "'";
+                    } else {
+                        // only features created by anonymous user will be displayed by applying this definition expression
+                        editorFilter = creatorFieldName + "=" + "''";
+                    }
+                }
+
+            }
             if (this.appConfig.enableFilter || !opLayerInfo.definitionEditor) {
                 //set definition expression configured in webmap
                 if (opLayerInfo.layerDefinition && opLayerInfo.layerDefinition.definitionExpression) {
-                    this._refinedOperationalLayer.setDefinitionExpression(opLayerInfo.layerDefinition.definitionExpression);
+                    existingDefinitionExpression = opLayerInfo.layerDefinition.definitionExpression;
+                    if (existingDefinitionExpression) {
+                        if (editorFilter) {
+                            existingDefinitionExpression = existingDefinitionExpression + "AND" + editorFilter;
+                        }
+                    } else {
+                        if (editorFilter) {
+                            existingDefinitionExpression = editorFilter;
+                        }
+                    }
+                    this._refinedOperationalLayer.setDefinitionExpression(existingDefinitionExpression);
+                } else {
+                    if (editorFilter) {
+                        existingDefinitionExpression = editorFilter;
+                    }
+                    this._refinedOperationalLayer.setDefinitionExpression(existingDefinitionExpression);
                 }
             } else {
                 staticDefinitionExpression = this._extractStaticExpression(opLayerInfo);
+                // if static expression available
+                if (staticDefinitionExpression) {
+                    // if editor expression also available
+                    if (editorFilter) {
+                        staticDefinitionExpression = staticDefinitionExpression + "AND" + editorFilter;
+                    }
+                } else {
+                    if (editorFilter) {
+                        staticDefinitionExpression = editorFilter;
+                    }
+                }
                 this._refinedOperationalLayer.setDefinitionExpression(staticDefinitionExpression);
             }
             this._refinedOperationalLayer.setRenderer(cloneRenderer);
@@ -1989,7 +2100,42 @@ define([
             var nodeClass;
             nodeClass = ".esriCTOnScreen" + panel;
             domClass.add(query(nodeClass)[0], "esriCTHidden");
-        }
+        },
         /* End of section for basemap gallery and legend */
+
+        /**
+         * This function is used to set tooltip to export to csv button
+         */
+        _addTooltipToExportToCSVButton: function () {
+            var exportButton = dom.byId("exportToCSVMainButton");
+            domAttr.set(exportButton, "title", this.appConfig.i18n.dataviewer.exportToCSVButtonTooltip);
+        },
+
+        /**
+         * This function is used to attach click event to export to csv button
+         */
+        _attachClickEventToExportToCSVButton: function () {
+            var exportButton = dom.byId("exportToCSVMainButton");
+            on(exportButton, "click", lang.hitch(this, function () {
+                if (!(domClass.contains(exportButton, "esriCTExportToCSVIconDisabled"))) {
+                    this._exportSelectedFeaturesToCSV();
+                }
+            }));
+        },
+
+        /**
+         * This function is used to call the export function of data-viewer widget that will be exporting the data to CSV
+         */
+        _exportSelectedFeaturesToCSV: function() {
+            this._dataViewerWidget.exportSelectedFeaturesToCSV();
+        },
+
+        /**
+         * This function is used to disable export to csv button
+         */
+        _disableExportToCSVButton: function () {
+            var exportButton = dom.byId("exportToCSVMainButton");
+            domClass.add(exportButton, "esriCTExportToCSVIconDisabled");
+        }
     });
 });

@@ -58,9 +58,11 @@ define({
     "selectLocation": "보고서의 위치를 선택하세요.",
     "numericRangeHintMessage": "${openStrong}힌트:${closeStrong} 최소값 ${minValue} 및 최대값 ${maxValue}",
     "dateRangeHintMessage": "${openStrong}힌트:${closeStrong} 최소 날짜 ${minValue} 및 최대 날짜 ${maxValue}",
-    "errorsInApplyEdits": "보고서를 제출할 수 없음",
+    "errorsInApplyEdits": "보고서를 제출할 수 없습니다.",
     "attachmentSelectedMsg": "첨부 파일이 선택됨",
-    "attachmentUploadStatus": "${total}개 중 ${failed}개 첨부 파일 업로드 실패",
+    "attachmentUploadStatus": "${total}개 중 ${failed}개 첨부 파일 업로드에 실패했습니다.",
+    "attachmentDeleteStatus": "${total}개 중 ${failed}개 첨부 파일 삭제에 실패했습니다.",
+    "featureUpdateStatus": "${total}개 중 ${failed}개 피처 업데이트에 실패했습니다.",
     "geoLocationError": "현재 위치를 사용할 수 없음",
     "geoLocationOutOfExtent": "현재 위치가 베이스맵 범위를 벗어남",
     "submitButtonTooltip": "저장",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} 피처가 업데이트됨",
     "attachmentHeaderText": "첨부 파일",
     "unknownPopupAttachment": "파일",
-    "unableToEditPopupMessage": "이 작업을 수행할 권한이 없습니다."
+    "unableToEditPopupMessage": "이 작업을 수행할 권한이 없습니다.",
+    "invalidFeatureCreatorMessage": "이 피처를 편집할 수 있는 권한이 없습니다.",
+    "userSpecificFeatureUpdateMessage": "${username}이(가) 생성한 피처만 업데이트되었습니다.",
+    "anonymousUserText": "익명"
   },
   "mapViewer": {
     "zoomInToolTip": "확대",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "값",
     "uniqueRadioButtonLabel": "고유값",
     "selectLayerToBegin": "시작하려면 범주 선택",
-    "layerFeatureCount": "${featureCount}개 레코드 중 ${selectedFeatureCount}개 선택됨"
+    "layerFeatureCount": "${featureCount}개 레코드 중 ${selectedFeatureCount}개 선택됨",
+    "exportToCsvSuccessMessage": "CSV 파일을 정상적으로 내보냈습니다.",
+    "exportToCsvErrorMessage": "선택한 피처를 CSV 파일로 내보내는 중 오류가 발생했습니다. 다시 시도하세요.",
+    "exportToCSVButtonTooltip": "CSV로 내보내기"
   },
   "timeSlider": {
     "timeSliderLabel": "시간 범위",

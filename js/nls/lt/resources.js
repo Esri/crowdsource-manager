@@ -58,9 +58,11 @@ define({
     "selectLocation": "Nurodykite ataskaitos vietą",
     "numericRangeHintMessage": "${openStrong}Užuomina:${closeStrong} minimali vertė ${minValue} ir maksimali vertė ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Užuomina:${closeStrong} minimali data ${minValue} ir maksimali data ${maxValue}",
-    "errorsInApplyEdits": "Komentaro pateikti nepavyko",
+    "errorsInApplyEdits": "Ataskaitos pateikti nepavyko.",
     "attachmentSelectedMsg": "pasirinktas (-i) priedas (-ai)",
-    "attachmentUploadStatus": "Nepavyko įkelti ${failed} iš ${total} priedo (-ų)",
+    "attachmentUploadStatus": "Nepavyko įkelti ${failed} iš ${total} priedo (-ų).",
+    "attachmentDeleteStatus": "Nepavyko ištrinti ${failed} iš ${total} priedo (-ų).",
+    "featureUpdateStatus": "Nepavyko atnaujinti ${failed} iš ${total} elemento (-ų).",
     "geoLocationError": "Informacijos apie esamą vietą nėra",
     "geoLocationOutOfExtent": "Dabartinė vieta yra už pagrindo žemėlapio ribų",
     "submitButtonTooltip": "Įrašyti",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "Bus atnaujinta elementų: ${count}",
     "attachmentHeaderText": "Priedai",
     "unknownPopupAttachment": "FAILAS",
-    "unableToEditPopupMessage": "Neturite leidimo atlikti šį veiksmą."
+    "unableToEditPopupMessage": "Neturite leidimo atlikti šį veiksmą.",
+    "invalidFeatureCreatorMessage": "Neturite įgaliojimų redaguoti šio elemento.",
+    "userSpecificFeatureUpdateMessage": "Atnaujinti tik vartotojo ${username} sukurti elementai.",
+    "anonymousUserText": "Anonimas"
   },
   "mapViewer": {
     "zoomInToolTip": "Artinti",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Reikšmė",
     "uniqueRadioButtonLabel": "Unikalios",
     "selectLayerToBegin": "Jei norite pradėti, pasirinkite kategoriją",
-    "layerFeatureCount": "Pažymėtų įrašų: ${selectedFeatureCount} / Iš viso įrašų: ${featureCount}"
+    "layerFeatureCount": "Pažymėtų įrašų: ${selectedFeatureCount} / Iš viso įrašų: ${featureCount}",
+    "exportToCsvSuccessMessage": "CSV failas sėkmingai eksportuotas.",
+    "exportToCsvErrorMessage": "Eksportuojant pasirinktus elementus į CSV failą įvyko klaida. Pabandykite dar kartą.",
+    "exportToCSVButtonTooltip": "Eksportuoti į CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Laiko intervalas",

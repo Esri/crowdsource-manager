@@ -345,7 +345,9 @@ define([
             if (dom.byId("detailsPanelWrapperContainer")) {
                 domClass.remove(dom.byId("detailsPanelWrapperContainer"), "esriCTHideTabList");
             }
-            this.tabList.style.display = "";
+            if (this.tabList) {
+                this.tabList.style.display = "";
+            }
         },
 
         /**

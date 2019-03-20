@@ -58,9 +58,11 @@ define({
     "selectLocation": "Selezionare la posizione del report",
     "numericRangeHintMessage": "${openStrong}Suggerimento:${closeStrong} valore minimo ${minValue} e valore massimo ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Suggerimento:${closeStrong} data minima ${minValue} e data massima ${maxValue}",
-    "errorsInApplyEdits": "Impossibile inviare il rapporto",
+    "errorsInApplyEdits": "Impossibile inviare il rapporto.",
     "attachmentSelectedMsg": "allegato/i selezionato/i",
-    "attachmentUploadStatus": "Impossibile caricare ${failed} di ${total} allegati",
+    "attachmentUploadStatus": "Impossibile caricare ${failed} di ${total} allegati.",
+    "attachmentDeleteStatus": "Impossibile eliminare ${failed} di ${total} allegati.",
+    "featureUpdateStatus": "Impossibile aggiornare ${failed} di ${total} allegati.",
     "geoLocationError": "Posizione corrente non disponibile",
     "geoLocationOutOfExtent": "Posizione corrente esterna all'estensione della mappa di base",
     "submitButtonTooltip": "Salva",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} feature verranno aggiornate",
     "attachmentHeaderText": "Allegati",
     "unknownPopupAttachment": "FILE",
-    "unableToEditPopupMessage": "Non si è autorizzati a completare questa azione."
+    "unableToEditPopupMessage": "Non si è autorizzati a completare questa azione.",
+    "invalidFeatureCreatorMessage": "Non si è autorizzati a modificare questa feature.",
+    "userSpecificFeatureUpdateMessage": "Sono state aggiornate solo le feature create da ${username}.",
+    "anonymousUserText": "Anonimo"
   },
   "mapViewer": {
     "zoomInToolTip": "Zoom avanti",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Valore",
     "uniqueRadioButtonLabel": "Unico",
     "selectLayerToBegin": "Selezionare una categoria per iniziare",
-    "layerFeatureCount": "${selectedFeatureCount} selezionato/ ${featureCount} record"
+    "layerFeatureCount": "${selectedFeatureCount} selezionato/ ${featureCount} record",
+    "exportToCsvSuccessMessage": "File CSV esportato correttamente.",
+    "exportToCsvErrorMessage": "Errore durante l'esportazione delle feature selezionate nel file CSV. Riprovare.",
+    "exportToCSVButtonTooltip": "Esporta in CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Intervallo temporale",

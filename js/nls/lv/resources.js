@@ -58,9 +58,11 @@ define({
     "selectLocation": "Lūdzu atlasiet vietu savam ziņojumam",
     "numericRangeHintMessage": "${openStrong}Padoms.${closeStrong} Minimālā vērtība ${minValue} un maksimālā vērtība ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Padoms.${closeStrong} Minimālais datums ${minValue} un maksimālais datums ${maxValue}",
-    "errorsInApplyEdits": "Neizdevās iesniegt ziņojumu",
+    "errorsInApplyEdits": "Neizdevās iesniegt pārskatu.",
     "attachmentSelectedMsg": "atlasītais(-ie) pielikums(-i)",
-    "attachmentUploadStatus": "${failed} no ${total} pielikuma(-iem) neizdevās augšupielādēt",
+    "attachmentUploadStatus": "${failed} no ${total} pielikumiem neizdevās augšupielādēt.",
+    "attachmentDeleteStatus": "${failed} no ${total} pielikumiem neizdevās izdzēst.",
+    "featureUpdateStatus": "${failed} no ${total} elementiem neizdevās atjaunināt.",
     "geoLocationError": "Pašreizējā vieta nav pieejama",
     "geoLocationOutOfExtent": "Pašreizējā vieta ir ārpus pamatkartes pārklājuma",
     "submitButtonTooltip": "Saglabāt",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} elementi tiks atjaunināti",
     "attachmentHeaderText": "Piesaistes",
     "unknownPopupAttachment": "FAILS",
-    "unableToEditPopupMessage": "Jums nav atļaujas izpildīt šo darbību."
+    "unableToEditPopupMessage": "Jums nav atļaujas izpildīt šo darbību.",
+    "invalidFeatureCreatorMessage": "Jūs neesat pilnvaroti rediģēt šo elementu.",
+    "userSpecificFeatureUpdateMessage": "Ir atjaunināti tikai ${username} izveidotie elementi.",
+    "anonymousUserText": "Anonīms"
   },
   "mapViewer": {
     "zoomInToolTip": "Pietuvināt",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Lielums",
     "uniqueRadioButtonLabel": "Unikāls",
     "selectLayerToBegin": "Lai sāktu darbu, atlasiet kategoriju",
-    "layerFeatureCount": "${selectedFeatureCount} atlasīts / ${featureCount} ieraksti"
+    "layerFeatureCount": "${selectedFeatureCount} atlasīts / ${featureCount} ieraksti",
+    "exportToCsvSuccessMessage": "CSV fails eksportēts veiksmīgi.",
+    "exportToCsvErrorMessage": "Eksportējot izvēlētos elementus uz CSV failu, radās kļūda. Lūdzu, mēģiniet vēlreiz.",
+    "exportToCSVButtonTooltip": "Eksportēt uz CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Laika diapazons",

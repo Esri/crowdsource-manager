@@ -47,6 +47,7 @@ define([
     "esri/geometry/Extent",
     "dojo/string",
     "dojo/dom",
+    "application/csv-utils",
     "dojo/domReady!"
 ], function (
     declare,
@@ -79,7 +80,8 @@ define([
     domGeom,
     Extent,
     string,
-    dom
+    dom,
+    CSVUtils
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
@@ -1279,6 +1281,12 @@ define([
                     showDetailsPanelDataObj = {};
                     showDetailsPanelDataObj.singleFeature = featureSet;
                     showDetailsPanelDataObj.multipleFeature = this._selectRowGraphicsLayer.graphics;
+                    var selectedFeaturesArr = this._getSelectedFeatures();
+                    if (selectedFeaturesArr.length === 0) {
+                        this._disableExportToCSVButton();
+                    } else {
+                        this._enableExportToCSVButton();
+                    }
                     this.showDetailsPanel(showDetailsPanelDataObj);
                     if (this.isShowSelectedClicked) {
                         this.createDataViewerUI(false);
@@ -1293,10 +1301,10 @@ define([
         },
 
         /**
-        * This function is used to highlight feature.
-        * @param{object} objectId of feature that needs to be high-lighted
-        * @memberOf widgets/data-viewer/data-viewer
-        */
+         * This function is used to highlight feature.
+         * @param{object} objectId of feature that needs to be high-lighted
+         * @memberOf widgets/data-viewer/data-viewer
+         */
         _highLightFeatureOnRowClick: function (objectId, evt) {
             var featureQuery, featureLayer, ctrlFlag = false, selectFlag, definitionExpression;
             featureQuery = new Query();
@@ -1352,11 +1360,19 @@ define([
                     //open details panel with feature information
                     var showDetailsPanelDataObj = {};
                     showDetailsPanelDataObj.singleFeature = featureSet;
-                    showDetailsPanelDataObj.multipleFeature = this._getSelectedFeatures();
+                    var selectedFeaturesArr = this._getSelectedFeatures();
+                    showDetailsPanelDataObj.multipleFeature = selectedFeaturesArr;
                     this.showDetailsPanel(showDetailsPanelDataObj);
                     this._deleteRowFromTable(evt);
+                    if (selectedFeaturesArr.length === 0) {
+                        this._disableExportToCSVButton();
+                    } else {
+                        this._enableExportToCSVButton();
+                    }
                     this.appUtils.hideLoadingIndicator();
-                }), lang.hitch(this, function () { this.appUtils.hideLoadingIndicator(); }));
+                }), lang.hitch(this, function () {
+                this.appUtils.hideLoadingIndicator();
+            }));
         },
 
         /**
@@ -1736,6 +1752,78 @@ define([
             this.clearSelection();
             this._deselectTableRows();
             this._selectRowGraphicsLayer.add(this._getHighLightSymbol(graphic, false));
+        },
+
+        /**
+         * This function is used to export selected features to CSV file
+         * @memberOf widgets/data-viewer/data-viewer
+         */
+        exportSelectedFeaturesToCSV: function () {
+            var selectedFeatures = this._getSelectedFeatures();
+            if (selectedFeatures && selectedFeatures.length > 0) {
+                var csvFileName = this.selectedOperationalLayerTitle;
+                var definition = selectedFeatures[0].getLayer();
+                var options = {
+                    "outFields": this._getOutFields(),
+                    "formatNumber": true,
+                    "formatDate": true,
+                    "formatCodedValue": true,
+                    "popupInfo": this.popupInfo
+                };
+                CSVUtils.exportCSVByGraphics(csvFileName, definition, selectedFeatures, options).then(lang.hitch(this, function (content) {
+                    if ((content === "") ||
+                        (Array.isArray(content) && content.length === 0)) {
+                        this.appUtils.showMessage(this.appConfig.i18n.dataviewer.exportToCsvErrorMessage);
+                    } else {
+                        this.appUtils.showMessage(this.appConfig.i18n.dataviewer.exportToCsvSuccessMessage);
+                    }
+                }), lang.hitch(this, function () {
+                    this.appUtils.showMessage(this.appConfig.i18n.dataviewer.exportToCsvErrorMessage);
+                }));
+            }
+        },
+
+        /**
+         * This function is used to get the column that needs to be displayed in the CSV file
+         */
+        _getOutFields: function () {
+            var outFieldArr;
+            outFieldArr = [];
+            array.forEach(this._displayColumn, lang.hitch(this, function (displayColumn) {
+                if (!(displayColumn.hasOwnProperty("name"))) {
+                    displayColumn.name = displayColumn.fieldName;
+                }
+                if (!(displayColumn.hasOwnProperty("alias"))) {
+                    displayColumn.alias = displayColumn.label;
+                }
+                if (this.selectedOperationalLayer.objectIdField === displayColumn.fieldName) {
+                    array.forEach(this.popupInfo.fieldInfos, lang.hitch(this, function (fieldInfo) {
+                        if ((fieldInfo.fieldName === displayColumn.fieldName) &&
+                            fieldInfo.visible) {
+                            outFieldArr.push(displayColumn);
+                        }
+                    }));
+                } else {
+                    outFieldArr.push(displayColumn);
+                }
+            }));
+            return outFieldArr;
+        },
+
+        /**
+         * This function is used to enable export to csv button
+         */
+        _enableExportToCSVButton: function () {
+            var exportButton = dom.byId("exportToCSVMainButton");
+            domClass.remove(exportButton, "esriCTExportToCSVIconDisabled");
+        },
+
+        /**
+         * This function is used to disable export to csv button
+         */
+        _disableExportToCSVButton: function () {
+            var exportButton = dom.byId("exportToCSVMainButton");
+            domClass.add(exportButton, "esriCTExportToCSVIconDisabled");
         }
     });
 });

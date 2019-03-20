@@ -58,9 +58,11 @@ define({
     "selectLocation": "请为您的报告选择位置",
     "numericRangeHintMessage": "${openStrong}提示:${closeStrong} 最小值 ${minValue} 和最大值 ${maxValue}",
     "dateRangeHintMessage": "${openStrong}提示:${closeStrong} 最小日期 ${minValue} 和最大日期 ${maxValue}",
-    "errorsInApplyEdits": "无法提交报告",
+    "errorsInApplyEdits": "无法提交报告。",
     "attachmentSelectedMsg": "附件已选定",
-    "attachmentUploadStatus": "${failed} 个附件(共有 ${total} 个)上传失败",
+    "attachmentUploadStatus": "${failed} 个附件(共有 ${total} 个)上传失败。",
+    "attachmentDeleteStatus": "${failed} 个附件(共有 ${total} 个)删除失败。",
+    "featureUpdateStatus": "${failed} 个要素(共有 ${total} 个)上传失败。",
     "geoLocationError": "当前位置不可用",
     "geoLocationOutOfExtent": "当前位置不在底图范围之内",
     "submitButtonTooltip": "保存",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "将更新 ${count} 个要素",
     "attachmentHeaderText": "附件",
     "unknownPopupAttachment": "文件",
-    "unableToEditPopupMessage": "您无权执行此操作。"
+    "unableToEditPopupMessage": "您无权执行此操作。",
+    "invalidFeatureCreatorMessage": "您无权编辑此要素。",
+    "userSpecificFeatureUpdateMessage": "仅更新了由 ${username} 创建的要素。",
+    "anonymousUserText": "匿名"
   },
   "mapViewer": {
     "zoomInToolTip": "放大",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "值",
     "uniqueRadioButtonLabel": "唯一",
     "selectLayerToBegin": "选择类别以开始操作",
-    "layerFeatureCount": "${selectedFeatureCount}个已选择/${featureCount}条记录"
+    "layerFeatureCount": "${selectedFeatureCount}个已选择/${featureCount}条记录",
+    "exportToCsvSuccessMessage": "CSV 文件已成功导出。",
+    "exportToCsvErrorMessage": "将选定要素导出到 CSV 文件时出错。 请重试。",
+    "exportToCSVButtonTooltip": "导出为 CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "时间范围",

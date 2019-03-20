@@ -58,9 +58,11 @@ define({
     "selectLocation": "レポート対象の位置を選択してください",
     "numericRangeHintMessage": "${openStrong}ヒント:${closeStrong} 最小値 ${minValue} および最大値 ${maxValue}",
     "dateRangeHintMessage": "${openStrong}ヒント:${closeStrong} 最小日付 ${minValue} および最大日付 ${maxValue}",
-    "errorsInApplyEdits": "レポートを送信できませんでした",
+    "errorsInApplyEdits": "レポートを送信できませんでした。",
     "attachmentSelectedMsg": "添付ファイルが選択されています",
-    "attachmentUploadStatus": "${total} 件のうち、${failed} 件の添付ファイルをアップロードできませんでした",
+    "attachmentUploadStatus": "${total} 件のうち、${failed} 件の添付ファイルをアップロードできませんでした。",
+    "attachmentDeleteStatus": "${total} 件のうち、${failed} 件の添付ファイルを削除できませんでした。",
+    "featureUpdateStatus": "${total} 件のうち、${failed} 件のフィーチャを更新できませんでした。",
     "geoLocationError": "現在の位置は利用できません",
     "geoLocationOutOfExtent": "現在の位置はベースマップの範囲外です",
     "submitButtonTooltip": "保存",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} フィーチャが更新されます",
     "attachmentHeaderText": "添付ファイル",
     "unknownPopupAttachment": "ファイル",
-    "unableToEditPopupMessage": "この操作を実行する権限がありません。"
+    "unableToEditPopupMessage": "この操作を実行する権限がありません。",
+    "invalidFeatureCreatorMessage": "このフィーチャを編集する権限がありません。",
+    "userSpecificFeatureUpdateMessage": "${username} が作成したフィーチャのみが更新されました。",
+    "anonymousUserText": "匿名"
   },
   "mapViewer": {
     "zoomInToolTip": "拡大",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "値",
     "uniqueRadioButtonLabel": "個別値",
     "selectLayerToBegin": "開始するカテゴリを選択",
-    "layerFeatureCount": "${selectedFeatureCount}/${featureCount} レコードが選択されました"
+    "layerFeatureCount": "${selectedFeatureCount}/${featureCount} レコードが選択されました",
+    "exportToCsvSuccessMessage": "CSV ファイルは正常にエクスポートされました。",
+    "exportToCsvErrorMessage": "選択したフィーチャを CSV ファイルにエクスポート中にエラーが発生しました。 もう一度お試しください。",
+    "exportToCSVButtonTooltip": "CSV にエクスポート"
   },
   "timeSlider": {
     "timeSliderLabel": "時間範囲",

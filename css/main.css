@@ -425,8 +425,8 @@ table {
 .esriCTOperationalLayerNameContainer {
     width: 100%;
     height: 35px;
-    float: left;
     text-align: center;
+    clear: both;
 }
 
 .esriCTOperationalLayerName {
@@ -438,14 +438,14 @@ table {
     text-indent: 45px;
     font-size: 15px;
     font-weight: bold;
-    width: calc(100% - 250px);
-    display: inline-block;
+    width: calc(100% - 281px);
+    float: left;
 }
 
 .esriCTFeatureCount {
     line-height: 35px;
     padding-right: 15px;
-    float: right;
+    float: left;
     width: 250px;
     white-space: nowrap;
     overflow: hidden;
@@ -1583,12 +1583,22 @@ input.esriCTRadioButton {
     color: #fff !important;
 }
 
+.esriCTAddPopupAttachmentsButton:hover, .esriCTAddPopupAttachmentsButton {
+    color: #fff !important;
+}
+
 .esriCTCommentsFormAttachmentLabel {
     position: relative;
     width: 100%;
 }
 
 .esriCTCommentFormTitles {
+    margin: 5px 0 5px 0;
+    font-size: 18px;
+    font-weight: bold !important;
+}
+
+.esriCTPopupFormTitles {
     margin: 5px 0 5px 0;
     font-size: 18px;
     font-weight: bold !important;
@@ -1639,6 +1649,10 @@ input.esriCTRadioButton {
 }
 
 .esriCTAddCommentAttachmentsWrapperContainer {
+    padding: 0px 10px 0px 10px;
+}
+
+.esriCTAddPopupAttachmentsWrapperContainer {
     padding: 0px 10px 0px 10px;
 }
 
@@ -2198,6 +2212,34 @@ input.esriCTRadioButton {
 
 .esriBasemapGalleryLabelContainer {
     height: 2.9em;
+}
+
+.esriCTExportToCSVParentContainer {
+    width: 31px;
+    float: left;
+    height: 35px;
+    padding-right: 15px;
+    padding-top: 8px;
+}
+
+.esriCTExportToCSVIconEnabled {
+    background-image: url(../images/export-to-csv-enabled.png);
+    height: 16px;
+    width: 16px;
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.esriCTExportToCSVIconDisabled {
+    background-image: url(../images/export-to-csv-disabled.png);
+    height: 16px;
+    width: 16px;
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: default;
 }
 
 

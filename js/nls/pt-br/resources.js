@@ -58,9 +58,11 @@ define({
     "selectLocation": "Selecione o local para seu relatório",
     "numericRangeHintMessage": "${openStrong}Sugestão:${closeStrong} Valor mínimo ${minValue} e Valor máximo ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Sugestão:${closeStrong} Data mínima ${minValue} e Data máxima ${maxValue}",
-    "errorsInApplyEdits": "Não foi possível enviar o relatório",
+    "errorsInApplyEdits": "Não foi possível enviar o relatório.",
     "attachmentSelectedMsg": "anexos selecionados",
-    "attachmentUploadStatus": "Falha ao carregar ${failed} de ${total} anexos",
+    "attachmentUploadStatus": "Falha ao carregar ${failed} de ${total} anexos.",
+    "attachmentDeleteStatus": "Falha ao excluir ${failed} de ${total} anexos.",
+    "featureUpdateStatus": "Falha ao atualizar ${failed} de ${total} anexos.",
     "geoLocationError": "O local atual não está disponível",
     "geoLocationOutOfExtent": "O local atual está fora da extensão do mapa base",
     "submitButtonTooltip": "Salvar",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} feições serão atualizadas",
     "attachmentHeaderText": "Anexos",
     "unknownPopupAttachment": "ARQUIVO",
-    "unableToEditPopupMessage": "Você não tem permissão para executar esta ação."
+    "unableToEditPopupMessage": "Você não tem permissão para executar esta ação.",
+    "invalidFeatureCreatorMessage": "Você não está autorizado para editar esta feição.",
+    "userSpecificFeatureUpdateMessage": "Somente feições criadas pelo ${username} foram atualizadas.",
+    "anonymousUserText": "Anônimo"
   },
   "mapViewer": {
     "zoomInToolTip": "Mais Zoom",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Valor",
     "uniqueRadioButtonLabel": "Único",
     "selectLayerToBegin": "Selecione uma categoria para iniciar",
-    "layerFeatureCount": "${selectedFeatureCount} selecionado / ${featureCount} registros"
+    "layerFeatureCount": "${selectedFeatureCount} selecionado / ${featureCount} registros",
+    "exportToCsvSuccessMessage": "Arquivo CSV exportado com sucesso.",
+    "exportToCsvErrorMessage": "Erro ao exportar feições selecionadas para arquivo CSV. Tente novamente.",
+    "exportToCSVButtonTooltip": "Exportar para CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Intervalo de tempo",

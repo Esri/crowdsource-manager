@@ -58,9 +58,11 @@ define({
     "selectLocation": "Välj platsen för din rapport",
     "numericRangeHintMessage": "${openStrong}Tips:${closeStrong} lägsta värde ${minValue} och maximalt värde ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Tips:${closeStrong} minsta datum ${minValue} och största datum ${maxValue}",
-    "errorsInApplyEdits": "Det gick inte att skicka rapporten",
+    "errorsInApplyEdits": "Det gick inte att skicka rapporten.",
     "attachmentSelectedMsg": "bilagor markerade",
-    "attachmentUploadStatus": "${failed} av ${total} bilagor kunde inte överföras",
+    "attachmentUploadStatus": "${failed} av ${total} bilagor kunde inte överföras.",
+    "attachmentDeleteStatus": "${failed} av ${total} bilagor kunde inte tas bort.",
+    "featureUpdateStatus": "${failed} av ${total} geoobjekt kunde inte uppdateras.",
     "geoLocationError": "Aktuell plats finns inte tillgänglig",
     "geoLocationOutOfExtent": "Aktuell plats är utanför baskartans utbredning",
     "submitButtonTooltip": "Spara",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} geoobjekt uppdateras",
     "attachmentHeaderText": "Bilagor",
     "unknownPopupAttachment": "ARKIV",
-    "unableToEditPopupMessage": "Du har inte behörighet att utföra den här åtgärden."
+    "unableToEditPopupMessage": "Du har inte behörighet att utföra den här åtgärden.",
+    "invalidFeatureCreatorMessage": "Du är inte behörig att redigera det här geoobjektet.",
+    "userSpecificFeatureUpdateMessage": "Endast geoobjekt som har skapats av ${username} har uppdaterats.",
+    "anonymousUserText": "Anonymt"
   },
   "mapViewer": {
     "zoomInToolTip": "Zooma in",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Värde",
     "uniqueRadioButtonLabel": "Unik",
     "selectLayerToBegin": "Välj en kategori för att komma igång",
-    "layerFeatureCount": "${selectedFeatureCount} valda / ${featureCount} poster"
+    "layerFeatureCount": "${selectedFeatureCount} valda / ${featureCount} poster",
+    "exportToCsvSuccessMessage": "CSV-filen har exporterats.",
+    "exportToCsvErrorMessage": "Ett fel uppstod vid export av valda geoobjekt till CSV-filen. Försök igen.",
+    "exportToCSVButtonTooltip": "Export to CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsintervall",

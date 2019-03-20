@@ -58,9 +58,11 @@ define({
     "selectLocation": "Выберите местоположение для отчета",
     "numericRangeHintMessage": "${openStrong}Подсказка:${closeStrong} Минимальное значение ${minValue} и максимальное значение ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Hint:${closeStrong} Минимальная дата ${minValue} и Максимальная дата ${maxValue}",
-    "errorsInApplyEdits": "Невозможно добавить отчет.",
+    "errorsInApplyEdits": "Невозможно передать отчет.",
     "attachmentSelectedMsg": "выбранные вложения",
-    "attachmentUploadStatus": "${failed} из ${total} вложений не удалось выгрузить.",
+    "attachmentUploadStatus": "Не удалось выгрузить вложений: ${failed} из всего: ${total}.",
+    "attachmentDeleteStatus": "Не удалось удалить вложений: ${failed} из всего: ${total}.",
+    "featureUpdateStatus": "Не удалось удалить вложений: ${failed} из всего: ${total}.",
     "geoLocationError": "Текущее местоположение недоступно",
     "geoLocationOutOfExtent": "Текущее местоположение вне экстента базовой карты",
     "submitButtonTooltip": "Сохранить",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} объектов будет обновлено",
     "attachmentHeaderText": "Вложения",
     "unknownPopupAttachment": "ФАЙЛ",
-    "unableToEditPopupMessage": "У вас нет прав для выполнения этого действия."
+    "unableToEditPopupMessage": "У вас нет прав для выполнения этого действия.",
+    "invalidFeatureCreatorMessage": "Вы не авторизованы для редактирования этого объекта.",
+    "userSpecificFeatureUpdateMessage": "Можно обновлять только объекты, созданные ${username}.",
+    "anonymousUserText": "Анонимный пользователь"
   },
   "mapViewer": {
     "zoomInToolTip": "Приблизить",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Значение",
     "uniqueRadioButtonLabel": "Уникальное",
     "selectLayerToBegin": "Для начала работы выберите категорию",
-    "layerFeatureCount": "${selectedFeatureCount} выбрано / ${featureCount} записей"
+    "layerFeatureCount": "${selectedFeatureCount} выбрано / ${featureCount} записей",
+    "exportToCsvSuccessMessage": "Файл CSV экспортирован успешно.",
+    "exportToCsvErrorMessage": "Ошибка при экспорте выбранных объектов в файл CSV. Повторите попытку еще раз.",
+    "exportToCSVButtonTooltip": "Экспорт в CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Временной диапазон",

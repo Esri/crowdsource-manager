@@ -58,9 +58,11 @@ define({
     "selectLocation": "Selectaţi locaţia pentru raport",
     "numericRangeHintMessage": "${openStrong}Sugestie:${closeStrong} Valoarea minimă ${minValue} şi valoarea maximă ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Sugestie:${closeStrong} Data minimă ${minValue} şi Data maximă ${maxValue}",
-    "errorsInApplyEdits": "Raportul nu a putut fi transmis",
+    "errorsInApplyEdits": "Raportul nu a putut fi transmis.",
     "attachmentSelectedMsg": "ataşări selectate",
-    "attachmentUploadStatus": "${failed} din ${total} ataşări nu au fost încărcate",
+    "attachmentUploadStatus": "${failed} din ${total} ataşări nu au fost încărcate.",
+    "attachmentDeleteStatus": "${failed} din ${total} ataşări nu au fost șterse.",
+    "featureUpdateStatus": "${failed} din ${total} obiecte spaţiale nu au fost actualizate.",
     "geoLocationError": "Locaţia curentă nu este disponibilă",
     "geoLocationOutOfExtent": "Locaţia curentă se află în afara extinderii hărţii fundal",
     "submitButtonTooltip": "Salvare",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} obiecte spaţiale vor fi actualizate",
     "attachmentHeaderText": "Ataşări",
     "unknownPopupAttachment": "FIŞIER",
-    "unableToEditPopupMessage": "Nu aveţi permisiunea pentru a efectua această acţiune."
+    "unableToEditPopupMessage": "Nu aveţi permisiunea pentru a efectua această acţiune.",
+    "invalidFeatureCreatorMessage": "Nu sunteţi autorizat să editați acest obiect spaţial.",
+    "userSpecificFeatureUpdateMessage": "Doar obiectele spațial create de ${username} au fost actualizate.",
+    "anonymousUserText": "Anonim"
   },
   "mapViewer": {
     "zoomInToolTip": "Mărire",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Valoare",
     "uniqueRadioButtonLabel": "Unic",
     "selectLayerToBegin": "Selectaţi o categorie pentru a începe",
-    "layerFeatureCount": "${selectedFeatureCount} selectat / ${featureCount} înregistrări"
+    "layerFeatureCount": "${selectedFeatureCount} selectat / ${featureCount} înregistrări",
+    "exportToCsvSuccessMessage": "Fișierul CSV exportat cu succes.",
+    "exportToCsvErrorMessage": "Eroare la exportarea obiectelor spaţiale selectate în fișierul CSV. Încercați din nou.",
+    "exportToCSVButtonTooltip": "Export în CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Interval de timp",

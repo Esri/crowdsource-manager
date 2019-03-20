@@ -58,9 +58,11 @@ define({
     "selectLocation": "בחר מיקום לדוח",
     "numericRangeHintMessage": "${openStrong}רמז:${closeStrong} ערך מינימלי ${minValue} וערך מקסימלי ${maxValue}",
     "dateRangeHintMessage": "${openStrong}רמז:${closeStrong} תאריך מינימלי ${minValue} ותאריך מקסימלי ${maxValue}",
-    "errorsInApplyEdits": "לא ניתן לשלוח דוח",
+    "errorsInApplyEdits": "לא ניתן לשלוח דוח.",
     "attachmentSelectedMsg": "קבצים מצורפים נבחרו",
-    "attachmentUploadStatus": "נכשלה ההעלאה של ${failed} מתוך ${total} קבצים מצורפים",
+    "attachmentUploadStatus": "נכשלה ההעלאה של ${failed} מתוך ${total} קבצים מצורפים.",
+    "attachmentDeleteStatus": "נכשלה המחיקה של ${failed} מתוך ${total} קבצים מצורפים.",
+    "featureUpdateStatus": "נכשל העדכון של ${failed} מתוך ${total} ישויות.",
     "geoLocationError": "מיקום נוכחי לא זמין",
     "geoLocationOutOfExtent": "המיקום נוכחי נמצא מחוץ לגבולות מפת הבסיס",
     "submitButtonTooltip": "שמירה",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} תכונות יעודכנו",
     "attachmentHeaderText": "קבצים מקושרים",
     "unknownPopupAttachment": "קובץ",
-    "unableToEditPopupMessage": "אין לך הרשאה לבצע את הפעולה הזו."
+    "unableToEditPopupMessage": "אין לך הרשאה לבצע את הפעולה הזו.",
+    "invalidFeatureCreatorMessage": "אינך מורשה לערוך ישות זו.",
+    "userSpecificFeatureUpdateMessage": "רק ישויות שנוצרו על ידי ${username} עודכנו.",
+    "anonymousUserText": "אנונימי"
   },
   "mapViewer": {
     "zoomInToolTip": "התמקד פנימה",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "ערך",
     "uniqueRadioButtonLabel": "יחודי",
     "selectLayerToBegin": "בחר קטגוריה כדי להתחיל",
-    "layerFeatureCount": "נבחרו ${selectedFeatureCount} / ${featureCount} רשומות"
+    "layerFeatureCount": "נבחרו ${selectedFeatureCount} / ${featureCount} רשומות",
+    "exportToCsvSuccessMessage": "יצוא של קובץ CSV בוצע בהצלחה.",
+    "exportToCsvErrorMessage": "שגיאה בעת ייצוא הישויות שנבחרו לקובץ CSV. נסה שוב.",
+    "exportToCSVButtonTooltip": "ייצוא ל- CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "טווח זמן",

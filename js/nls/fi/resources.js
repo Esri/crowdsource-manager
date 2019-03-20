@@ -58,9 +58,11 @@ define({
     "selectLocation": "Valitse raportin sijainti",
     "numericRangeHintMessage": "${openStrong}Vihje:${closeStrong} Vähimmäisarvo ${minValue} ja enimmäisarvo ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Vihje:${closeStrong} aikaisin ${minValue} ja myöhäisin päivämäärä ${maxValue}",
-    "errorsInApplyEdits": "Raportin lähetys ei onnistunut",
+    "errorsInApplyEdits": "Raportin lähetys ei onnistunut.",
     "attachmentSelectedMsg": "liite(ttä) on valittu",
-    "attachmentUploadStatus": "${failed}/${total} liitteen lataus epäonnistui",
+    "attachmentUploadStatus": "${failed}/${total} liitteen lataus epäonnistui.",
+    "attachmentDeleteStatus": "${failed}/${total} liitteen poisto epäonnistui.",
+    "featureUpdateStatus": "${failed}/${total} kohteen päivitys epäonnistui.",
     "geoLocationError": "Nykyinen sijainti ei ole käytettävissä",
     "geoLocationOutOfExtent": "Nykyinen sijainti ei ole taustakartan rajoissa",
     "submitButtonTooltip": "Tallenna",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} kohdetta päivitetään",
     "attachmentHeaderText": "Liitteet",
     "unknownPopupAttachment": "TIEDOSTO",
-    "unableToEditPopupMessage": "Sinulla ei ole oikeuksia tämän toiminnon toteuttamiseen."
+    "unableToEditPopupMessage": "Sinulla ei ole oikeuksia tämän toiminnon toteuttamiseen.",
+    "invalidFeatureCreatorMessage": "Sinulla ei ole tämän kohteen muokkausoikeuksia.",
+    "userSpecificFeatureUpdateMessage": "Vain käyttäjän ${username} luomat kohteet on päivitetty.",
+    "anonymousUserText": "Anonyymi"
   },
   "mapViewer": {
     "zoomInToolTip": "Lähennä",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Arvo",
     "uniqueRadioButtonLabel": "Yksilöllinen",
     "selectLayerToBegin": "Aloita valitsemalla luokka",
-    "layerFeatureCount": "${selectedFeatureCount} valittu / ${featureCount} tietuetta"
+    "layerFeatureCount": "${selectedFeatureCount} valittu / ${featureCount} tietuetta",
+    "exportToCsvSuccessMessage": "CSV-tiedoston vienti onnistui.",
+    "exportToCsvErrorMessage": "Virhe vietäessä valittuja kohteita CSV-tiedostoon. Yritä uudelleen.",
+    "exportToCSVButtonTooltip": "Vie CSV-tiedostoon"
   },
   "timeSlider": {
     "timeSliderLabel": "Aikaväli",

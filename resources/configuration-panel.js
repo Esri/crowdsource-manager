@@ -29,6 +29,7 @@
         "commentsTabText": "Comments",
         "showHelpIcon": false,
         "commentFormAttachmentSectionLabel": "Attachments",
+        "popupFormAttachmentSectionLabel": "Attachments",
         "headerTextColor": "#fff",
         "bodyBackgroundColor": "#fff",
         "bodyTextColor": "#515151",
@@ -37,7 +38,8 @@
         "defaultDetailsTab": "Info",
         "showBaseMapGallery": false,
         "showLegend": false,
-        "showPopupForNonEditableLayers": false
+        "showPopupForNonEditableLayers": false,
+        "enableEditingAttachments": false
     },
     "configurationSettings": [{
         "category": "<b>General</b>",
@@ -250,6 +252,26 @@
     }, {
         "category": "<b>Reports</b>",
         "fields": [{
+            "type": "options",
+            "fieldName": "defaultDetailsTab",
+            "tooltip": "Selected tab will be opened by default when a report is selected",
+            "label": "Default selected tab:",
+            "options": [{
+                "label": "Info",
+                "value": "Info"
+            }, {
+                "label": "Media",
+                "value": "Media"
+            }, {
+                "label": "Comments",
+                "value": "Comments"
+            }]
+        }, {
+            "label": "Allow attachments to be removed",
+            "tooltip": "When enabled, attachments can be deleted",
+            "type": "boolean",
+            "fieldName": "enableEditingAttachments"
+        }, {
             "type": "subcategory",
             "label": "Info tab"
         }, {
@@ -288,6 +310,11 @@
             "type": "string",
             "fieldName": "commentFormAttachmentSectionLabel"
         }, {
+            "label": "Header for attachment section of popup form",
+            "tooltip": "Name to display on the popup form where supporting files can be attached to the feature. This section is only available when attachments are enabled on the selected layer.",
+            "type": "string",
+            "fieldName": "popupFormAttachmentSectionLabel"
+        }, {
             "type": "paragraph",
             "value": "Indicate how related records are displayed and edited: either by using a single field, or by using the <a href=\"http://links.esri.com/ArcGISOnline/Configurepop-ups\" target=\"_blank\">popup<\/a> defined for the table layer in the map."
         }, {
@@ -305,23 +332,9 @@
                 "label": "Name of a single field to display",
                 "tooltip": "Only content from related tables that have this field will be accessible through the application."
             }]
-        }, {
-            "type": "options",
-            "fieldName": "defaultDetailsTab",
-            "tooltip": "Selected tab will be opened by default when a report is selected",
-            "label": "Default selected tab:",
-            "options": [{
-                "label": "Info",
-                "value": "Info"
-            }, {
-                "label": "Media",
-                "value": "Media"
-            }, {
-                "label": "Comments",
-                "value": "Comments"
-            }]
         }]
-    }, {
+    },
+    {
         "category": "<b>Filters</b>",
         "fields": [{
             "type": "paragraph",

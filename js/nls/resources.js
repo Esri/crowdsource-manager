@@ -59,9 +59,11 @@ define({
             selectLocation: "Please select the location for your report", // Shown when user submits the geoform without selecting location on the map
             numericRangeHintMessage: "${openStrong}Hint:${closeStrong} Minimum value ${minValue} and maximum value ${maxValue}", // Shown as a pop over above the fields with numeric values, indicating the minimum and maximum range
             dateRangeHintMessage: "${openStrong}Hint:${closeStrong} Minimum date ${minValue} and Maximum date ${maxValue}", // Shown as a pop over above the fields with date values, indicating the minimum and maximum date range
-            errorsInApplyEdits: "Report could not be submitted", // Shown when there is an error in any of the services while submitting the geoform
+            errorsInApplyEdits: "Report could not be submitted.", // Shown when there is an error in any of the services while submitting the geoform
             attachmentSelectedMsg: "attachment(s) selected", // Shown besides the select file button indicating the number of files attached
-            attachmentUploadStatus: "${failed} of ${total} attachment(s) failed to upload", // Shown when there is error while uploading the attachment, while submitting the geoform
+            attachmentUploadStatus: "${failed} of ${total} attachment(s) failed to upload.", // Shown when there is error while uploading the attachment, while submitting the geoform
+            attachmentDeleteStatus: "${failed} of ${total} attachment(s) failed to delete.", // Shown when there is error while deleting the attachments, while updating the feature/comment
+            featureUpdateStatus: "${failed} of ${total} feature(s) failed to update.", // Shown when there is error while updating the features
             geoLocationError: "Current location not available", // Shown when the browser returns an error instead of the current geographical position
             geoLocationOutOfExtent: "Current location is out of basemap extent", // Shown when the current geographical position is out of the basemap extent
             submitButtonTooltip: "Save", // Command button to open the geoform
@@ -70,7 +72,10 @@ define({
             updateFeaturesConfirmationMsg: "${count} features will be updated", //confirmation message to be displayed before updating the features
             attachmentHeaderText: "Attachments", //attachment header Text
             unknownPopupAttachment: "FILE", // displayed for attached file having unknown extension
-            unableToEditPopupMessage: "You do not have permission to perform this action." // to display message when unauthorized user tries to edit the popup info
+            unableToEditPopupMessage: "You do not have permission to perform this action.", // to display message when unauthorized user tries to edit the popup info
+            invalidFeatureCreatorMessage: "You are not authorized to edit this feature.", // Displayed when "editors can only edit" option is true and user cannot edit the feature
+            userSpecificFeatureUpdateMessage: "Only features created by ${username} have been updated.",
+            anonymousUserText: "Anonymous"
         },
         mapViewer: {
             zoomInToolTip: "Zoom in", // Display tool-tip on command button to zoom in map
@@ -90,7 +95,10 @@ define({
             valueRadioButtonLabel: "Value", // Appears as a label for 'Value' radio button in filter container
             uniqueRadioButtonLabel: "Unique", // Appears as a label for 'Unique' radio button in filter container
             selectLayerToBegin: "Select a category to get started", // for showing default message on application load
-            layerFeatureCount: "${selectedFeatureCount} selected / ${featureCount} records" // Appears beside operational layer name to display count of total & selected feature
+            layerFeatureCount: "${selectedFeatureCount} selected / ${featureCount} records", // Appears beside operational layer name to display count of total & selected feature
+            exportToCsvSuccessMessage: "CSV file exported successfully.", // Displayed when export to csv is completed
+            exportToCsvErrorMessage: "Error while exporting selected features to CSV file. Please try again.", // Displayed when error occurs while exporting data to csv
+            exportToCSVButtonTooltip: "Export to CSV" // Displayed as a tooltip for export to CSV button
         },
         timeSlider: {
             timeSliderLabel: "Time range", // Appears beside time slider widget
@@ -185,6 +193,7 @@ define({
     "sv": 1,
     "th": 1,
     "tr": 1,
+    "uk": 1,
     "vi": 1,
     "zh-cn": 1,
     "zh-hk": 1,

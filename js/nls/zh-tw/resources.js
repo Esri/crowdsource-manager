@@ -58,9 +58,11 @@ define({
     "selectLocation": "請為您的報告選擇位置",
     "numericRangeHintMessage": "${openStrong}提示:${closeStrong} 最小值 ${minValue} 和最大值 ${maxValue}",
     "dateRangeHintMessage": "${openStrong}提示:${closeStrong} 最小日期 ${minValue} 和最大日期 ${maxValue}",
-    "errorsInApplyEdits": "無法提交報告",
+    "errorsInApplyEdits": "無法提交報告。",
     "attachmentSelectedMsg": "已選定附件",
-    "attachmentUploadStatus": "${failed} 個附件（共有 ${total} 個）上傳失敗",
+    "attachmentUploadStatus": "無法上傳 ${failed} 個附件，總計 ${total} 個。",
+    "attachmentDeleteStatus": "無法刪除 ${failed} 個附件，總計 ${total} 個。",
+    "featureUpdateStatus": "無法更新 ${failed} 個圖徵，總計 ${total} 個。",
     "geoLocationError": "目前位置不可用",
     "geoLocationOutOfExtent": "目前位置不在底圖範圍之內",
     "submitButtonTooltip": "儲存",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "將更新 ${count} 個圖徵",
     "attachmentHeaderText": "附件",
     "unknownPopupAttachment": "檔案",
-    "unableToEditPopupMessage": "您沒有執行此動作的權限。"
+    "unableToEditPopupMessage": "您沒有執行此動作的權限。",
+    "invalidFeatureCreatorMessage": "您沒有編輯此圖徵的授權。",
+    "userSpecificFeatureUpdateMessage": "只有 ${username} 建立的圖徵已儲存。",
+    "anonymousUserText": "匿名"
   },
   "mapViewer": {
     "zoomInToolTip": "放大",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "數值",
     "uniqueRadioButtonLabel": "唯一",
     "selectLayerToBegin": "選擇類別以開始使用",
-    "layerFeatureCount": "已選擇 ${selectedFeatureCount} / ${featureCount} 筆記錄"
+    "layerFeatureCount": "已選擇 ${selectedFeatureCount} / ${featureCount} 筆記錄",
+    "exportToCsvSuccessMessage": "已成功匯出 CSV 檔案。",
+    "exportToCsvErrorMessage": "將選擇的圖徵匯出到 CSV 檔案時發生錯誤。 請再試一次。",
+    "exportToCSVButtonTooltip": "匯出至 CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "時間範圍",

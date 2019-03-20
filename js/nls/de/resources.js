@@ -58,9 +58,11 @@ define({
     "selectLocation": "Wählen Sie den Speicherort für Ihren Bericht aus",
     "numericRangeHintMessage": "${openStrong}Hinweis:${closeStrong} Minimalwert ${minValue} und Maximalwert ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Hinweis:${closeStrong} minimales Datum ${minValue} und maximales Datum ${maxValue}",
-    "errorsInApplyEdits": "Bericht konnte nicht gesendet werden",
+    "errorsInApplyEdits": "Bericht konnte nicht gesendet werden.",
     "attachmentSelectedMsg": "Anlage(n) ausgewählt",
-    "attachmentUploadStatus": "${failed} von ${total} Anlage(n) konnte(n) nicht hochgeladen werden",
+    "attachmentUploadStatus": "${failed} von ${total} Anlage(n) konnte(n) nicht hochgeladen werden.",
+    "attachmentDeleteStatus": "${failed} von ${total} Anlage(n) konnte(n) nicht gelöscht werden.",
+    "featureUpdateStatus": "${failed} von ${total} Anlage(n) konnte(n) nicht aktualisiert werden.",
     "geoLocationError": "Aktuelle Position ist nicht verfügbar",
     "geoLocationOutOfExtent": "Aktuelle Position befindet sich außerhalb der Grundkartenausdehnung",
     "submitButtonTooltip": "Speichern",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} Features werden aktualisiert",
     "attachmentHeaderText": "Anlagen",
     "unknownPopupAttachment": "DATEI",
-    "unableToEditPopupMessage": "Sie sind nicht berechtigt, diese Aktion auszuführen."
+    "unableToEditPopupMessage": "Sie sind nicht berechtigt, diese Aktion auszuführen.",
+    "invalidFeatureCreatorMessage": "Sie sind nicht zur Bearbeitung dieses Features autorisiert.",
+    "userSpecificFeatureUpdateMessage": "Nur Features, die von ${username} erstellt wurden, wurden aktualisiert.",
+    "anonymousUserText": "Anonym"
   },
   "mapViewer": {
     "zoomInToolTip": "Vergrößern",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Wert",
     "uniqueRadioButtonLabel": "Eindeutig",
     "selectLayerToBegin": "Zum Einstieg eine Kategorie auswählen",
-    "layerFeatureCount": "${selectedFeatureCount} ausgewählt / ${featureCount} Datensätze"
+    "layerFeatureCount": "${selectedFeatureCount} ausgewählt / ${featureCount} Datensätze",
+    "exportToCsvSuccessMessage": "CSV-Datei wurde erfolgreich exportiert.",
+    "exportToCsvErrorMessage": "Fehler beim Exportieren der ausgewählten Features in CSV-Datei. Versuchen Sie es erneut.",
+    "exportToCSVButtonTooltip": "In CSV exportieren"
   },
   "timeSlider": {
     "timeSliderLabel": "Zeitbereich",

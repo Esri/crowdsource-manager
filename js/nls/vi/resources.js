@@ -58,9 +58,11 @@ define({
     "selectLocation": "Vui lòng chọn vị trí cho báo cáo của bạn",
     "numericRangeHintMessage": "${openStrong}Gợi ý:${closeStrong} Giá trị tối thiểu ${minValue} và giá trị tối đa ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Gợi ý:${closeStrong} Ngày tối thiểu ${minValue} và Ngày tối đa ${maxValue}",
-    "errorsInApplyEdits": "Không thể gửi báo cáo",
+    "errorsInApplyEdits": "Không thể gửi báo cáo.",
     "attachmentSelectedMsg": "(các) tệp đính kèm được chọn",
-    "attachmentUploadStatus": "Không thể tải lên ${failed} trên ${total} tệp đính kèm",
+    "attachmentUploadStatus": "Không thể tải lên ${failed} trên ${total} tệp đính kèm.",
+    "attachmentDeleteStatus": "Không thể xóa ${failed} trên ${total} tệp đính kèm.",
+    "featureUpdateStatus": "Không thể cập nhật ${failed} trên ${total} đối tượng.",
     "geoLocationError": "Vị trí hiện tại không khả dụng",
     "geoLocationOutOfExtent": "Vị trí hiện tại ngoài phạm vi bản đồ nền",
     "submitButtonTooltip": "Lưu",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} đối tượng sẽ được cập nhật",
     "attachmentHeaderText": "Tệp đính kèm",
     "unknownPopupAttachment": "TỆP",
-    "unableToEditPopupMessage": "Bạn không có quyền thực hiện thao tác này."
+    "unableToEditPopupMessage": "Bạn không có quyền thực hiện thao tác này.",
+    "invalidFeatureCreatorMessage": "Bạn không được phép chỉnh sửa đối tượng này.",
+    "userSpecificFeatureUpdateMessage": "Chỉ các đối tượng do ${username} tạo ra được cập nhật.",
+    "anonymousUserText": "Ẩn danh"
   },
   "mapViewer": {
     "zoomInToolTip": "Thu nhỏ",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Giá trị",
     "uniqueRadioButtonLabel": "Duy nhất",
     "selectLayerToBegin": "Chọn một danh mục để bắt đầu",
-    "layerFeatureCount": "${selectedFeatureCount} được chọn / ${featureCount} hồ sơ"
+    "layerFeatureCount": "${selectedFeatureCount} được chọn / ${featureCount} hồ sơ",
+    "exportToCsvSuccessMessage": "Xuất tệp CSV thành công.",
+    "exportToCsvErrorMessage": "Lỗi xảy ra khi xuất các đối tượng đã chọn sang tệp CSV. Vui lòng thử lại.",
+    "exportToCSVButtonTooltip": "Xuất ra CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Khoảng thời gian",

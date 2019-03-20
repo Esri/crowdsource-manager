@@ -58,9 +58,11 @@ define({
     "selectLocation": "โปรดเลือกสถานที่สำหรับรายงานของคุณ",
     "numericRangeHintMessage": "${openStrong}แนะนำ:${closeStrong} ค่าต่ำสุด${minValue} และค่าสูงสุด${maxValue}",
     "dateRangeHintMessage": "${openStrong}แนะนำ:${closeStrong} วันต่ำสุด${minValue} และวันศูงสุด${maxValue}",
-    "errorsInApplyEdits": "รายงานไม่สามารถส่งได้",
+    "errorsInApplyEdits": "ไม่สามารถส่งรายงานได้",
     "attachmentSelectedMsg": "เลือกไฟล์แนบ",
-    "attachmentUploadStatus": "${failed} จาก ${total} ไฟล์แนบที่ไม่สามารถอัพโหลดได้",
+    "attachmentUploadStatus": "ล้มเหลวในการอัปโหลดไฟล์แนบ ${failed} จาก ${total} ไฟล์",
+    "attachmentDeleteStatus": "ล้มเหลวในการลบไฟล์แนบ ${failed} จาก ${total} ไฟล์",
+    "featureUpdateStatus": "ล้มเหลวในการอัปเดต ${failed} จาก ${total} ฟีเจอร์",
     "geoLocationError": "ไม่พร้อมใช้ตำแหน่งปัจจุบัน",
     "geoLocationOutOfExtent": "ตำแหน่งปัจจุบันอยู่นอกขอบเขตของแผนที่ฐาน",
     "submitButtonTooltip": "บันทึก",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} ฟีเจอร์จะถูกอัพเดท",
     "attachmentHeaderText": "แนบ",
     "unknownPopupAttachment": "ไฟล์",
-    "unableToEditPopupMessage": "คุณไม่ได้รับอนุญาตให้ดำเนินการนี้"
+    "unableToEditPopupMessage": "คุณไม่ได้รับอนุญาตให้ดำเนินการนี้",
+    "invalidFeatureCreatorMessage": "คุณไม่ได้รับอนุญาตให้แก้ไขฟีเจอร์นี้",
+    "userSpecificFeatureUpdateMessage": "เฉพาะฟีเจอร์ที่สร้างโดย ${username} เท่านั้น ที่ได้รับการอัปเดต",
+    "anonymousUserText": "ไม่ระบุชื่อ"
   },
   "mapViewer": {
     "zoomInToolTip": "ขยายภาพ",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "มูลค่า",
     "uniqueRadioButtonLabel": "ลักษณะเฉพาะ",
     "selectLayerToBegin": "เลือกประเภทเพื่อเริ่มงาน",
-    "layerFeatureCount": "${selectedFeatureCount} เลือก / ${featureCount} เรคคอร์ด"
+    "layerFeatureCount": "${selectedFeatureCount} เลือก / ${featureCount} เรคคอร์ด",
+    "exportToCsvSuccessMessage": "ส่งออกไฟล์ CSV เรียบร้อยแล้ว",
+    "exportToCsvErrorMessage": "เกิดข้อผิดพลาดขณะส่งออกฟีเจอร์ที่เลือกไปยังไฟล์ CSV โปรดลองอีกครั้ง",
+    "exportToCSVButtonTooltip": "บันทึกเป็นไฟล์ CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "ช่วงเวลา",

@@ -58,9 +58,11 @@ define({
     "selectLocation": "Selecteer de locatie voor uw rapport",
     "numericRangeHintMessage": "${openStrong}Tip:${closeStrong} Minimumwaarde ${minValue} en maximumwaarde ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Tip:${closeStrong} Minimumdatum ${minValue} en maximumdatum ${maxValue}",
-    "errorsInApplyEdits": "Rapport kon niet worden ingediend",
+    "errorsInApplyEdits": "Rapport kon niet worden ingediend.",
     "attachmentSelectedMsg": "bijlage(n) geselecteerd",
-    "attachmentUploadStatus": "${failed} van ${total} bijlage(n) is niet geupload",
+    "attachmentUploadStatus": "${failed} van ${total} bijlage(n) niet geüpload.",
+    "attachmentDeleteStatus": "${failed} van ${total} bijlage(n) niet verwijderd.",
+    "featureUpdateStatus": "${failed} van ${total} object(en) niet bijgewerkt.",
     "geoLocationError": "Huidige locatie niet beschikbaar",
     "geoLocationOutOfExtent": "Huidige locatie ligt buiten het basiskaartbereik",
     "submitButtonTooltip": "Opslaan",
@@ -69,7 +71,10 @@ define({
     "updateFeaturesConfirmationMsg": "${count} objecten worden bijgewerkt",
     "attachmentHeaderText": "Bijlagen",
     "unknownPopupAttachment": "BESTAND",
-    "unableToEditPopupMessage": "U hebt geen toestemming om deze actie uit te voeren."
+    "unableToEditPopupMessage": "U hebt geen toestemming om deze actie uit te voeren.",
+    "invalidFeatureCreatorMessage": "U bent niet gemachtigd om dit object te bewerken.",
+    "userSpecificFeatureUpdateMessage": "Alleen de objecten die zijn gecreëerd door ${username} zijn bijgewerkt.",
+    "anonymousUserText": "Anoniem"
   },
   "mapViewer": {
     "zoomInToolTip": "Inzoomen",
@@ -89,7 +94,10 @@ define({
     "valueRadioButtonLabel": "Waarde",
     "uniqueRadioButtonLabel": "Uniek",
     "selectLayerToBegin": "Selecteer een categorie om te starten",
-    "layerFeatureCount": "${selectedFeatureCount} geselecteerd / ${featureCount} items"
+    "layerFeatureCount": "${selectedFeatureCount} geselecteerd / ${featureCount} items",
+    "exportToCsvSuccessMessage": "CSV-bestand met succes geëxporteerd.",
+    "exportToCsvErrorMessage": "Fout bij het exporteren van de geselecteerde objecten naar CSV-bestand. Probeer het opnieuw.",
+    "exportToCSVButtonTooltip": "Exporteren naar CSV"
   },
   "timeSlider": {
     "timeSliderLabel": "Tijdsbereik",
