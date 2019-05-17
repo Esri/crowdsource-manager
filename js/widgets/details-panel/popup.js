@@ -161,7 +161,13 @@ define([
                 if (this.selectedOperationalLayer.id === operationalLayer.id) {
                     if (operationalLayer.resourceInfo.capabilities) {
                         capabilities = operationalLayer.resourceInfo.capabilities;
-                        if (capabilities.indexOf("Create") > -1 && (capabilities.indexOf("Editing") > -1 || capabilities.indexOf("Update") > -1)) {
+                        // 1. Add, update, and delete features ->
+                        // "Create,Delete,Query,Update,Editing" -> show edit icon
+                        // 2. Add and update features -> "Create,Query,Update,Editing" -> show edit icon
+                        // 3. Add features -> "Create,Query,Editing" -> hide edit icon
+                        // 4. Update features -> "Query,Update,Editing" -> show edit icon
+                        // 5. Update attributes only -> "Query,Update,Editing" -> show edit icon
+                        if ((capabilities.indexOf("Editing") > -1) && (capabilities.indexOf("Update") > -1)) {
                             isEditableLayer = true;
                         }
                     }

@@ -587,8 +587,8 @@ define([
          * @memberOf widgets/details-panel/comments
          */
         _createCommentButton: function (parentDiv, graphic) {
-            var commentBtnDiv, capabilities, isNonEditableLayer;
-            isNonEditableLayer = false;
+            var commentBtnDiv, capabilities, isEditableLayer;
+            isEditableLayer = false;
             commentBtnDiv = domConstruct.create("div", {
                 "class": "esriCTCommentButton esrictfonticons esrictfonticons-pencil esriCTBodyTextColor",
                 "title": this.appConfig.i18n.detailsPanel.editContentText
@@ -596,12 +596,12 @@ define([
             // check if the layer is non-editable
             if (this.selectedOperationalLayer.capabilities) {
                 capabilities = this.selectedOperationalLayer.capabilities;
-                if (capabilities.indexOf("Create") === -1 && (capabilities.indexOf("Editing") === -1 || capabilities.indexOf("Update") === -1)) {
-                    isNonEditableLayer = true;
+                if ((capabilities.indexOf("Editing") > -1) && (capabilities.indexOf("Update") > -1)) {
+                    isEditableLayer = true;
                 }
             }
             // hide the editable icon for non-editable layer
-            if (isNonEditableLayer) {
+            if (!isEditableLayer) {
                 domClass.add(commentBtnDiv, "esriCTHidden");
             }
             on(commentBtnDiv, "click", lang.hitch(this, function (evt) {
