@@ -31,7 +31,7 @@ define({
     "snippet": "Kopsavilkums",
     "licenseInfo": "Piekļuves un izmantošanas ierobežojumi",
     "accessInformation": "Kredīti",
-    "tags": "Tagi",
+    "tags": "Atlēgas vārdi",
     "numViews": "Skatījumu skaits",
     "avgRating": "Vērtējums",
     "noWebMapInGroup": "Konfigurētā grupa nav derīga vai ar šo grupu vēl nav kopīgots neviens elements",

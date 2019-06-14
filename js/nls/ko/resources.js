@@ -88,8 +88,8 @@ define({
   "dataviewer": {
     "noIssuesReported": "보고서를 사용할 수 없음",
     "noFeatureGeometry": "피처를 표시할 수 없음",
-    "ascendingFlagTitle": "오름 차순으로 정렬",
-    "descendingFlagTitle": "내림 차순으로 정렬",
+    "ascendingFlagTitle": "오름차순으로 정렬",
+    "descendingFlagTitle": "내림차순으로 정렬",
     "filterLabel": "필터",
     "valueRadioButtonLabel": "값",
     "uniqueRadioButtonLabel": "고유값",

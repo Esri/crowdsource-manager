@@ -32,7 +32,7 @@ define({
     "licenseInfo": "Zugriffs- und Nutzungsbeschränkungen",
     "accessInformation": "Quellennachweise",
     "tags": "Tags",
-    "numViews": "Anzahl der Ansichten",
+    "numViews": "Anzahl der Aufrufe",
     "avgRating": "Bewertung",
     "noWebMapInGroup": "Die konfigurierte Gruppe ist ungültig oder es wurden noch keine Elemente für diese Gruppe freigegeben",
     "infoBtnToolTip": "Karteninformationen",
