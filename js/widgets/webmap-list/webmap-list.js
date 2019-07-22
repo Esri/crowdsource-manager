@@ -136,7 +136,11 @@ define([
                 itemInfo = results[i];
                 // Set the itemInfo config option. This can be used when calling createMap instead of the webmap id
                 if (itemInfo.type === "Web Map") {
-                    requestArray.push(this._createMap(itemInfo.id, "webMapListMapDiv"));
+                    var mapID = "tesMap_" + Date.now();
+                    var div = domConstruct.create("div", {
+                        "id": mapID
+                    }, "webMapListMapDiv");
+                    requestArray.push(this._createMap(itemInfo.id, mapID));
                 }
             }
             dl = new DeferredList(requestArray);
@@ -168,9 +172,6 @@ define([
          * @memberOf widgets/webmap-list/webmap-list
          */
         _createMap: function (webMapID, mapDivID, isBaseMapLoaded, isUrl) {
-            if (this.map) {
-                this.map.destroy();
-            }
             domConstruct.empty(mapDivID);
             var webMapInstance = BootstrapMap.createWebMap(webMapID, mapDivID, {
                 ignorePopups: false,
@@ -262,7 +263,10 @@ define([
                     }
                     //If their are any auto refreshed layer on the map browser will send request for those layers although that layer may not be selected on main map.
                     //destroy the map instance once all the operation is completed.
-                    response[i][1].map.destroy();
+                    if (!this.mapsToBeDestroyed) {
+                        this.mapsToBeDestroyed = [];
+                    }
+                    this.mapsToBeDestroyed.push(response[i][1].map);
                 }
             }
         },

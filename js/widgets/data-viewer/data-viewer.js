@@ -449,6 +449,7 @@ define([
                 this._highlightFeatureInShowAllMode();
             } else {
                 this._highlightUpdatedFeature();
+                this.webMapListDestroyMaps();
             }
         },
 
@@ -1298,6 +1299,10 @@ define([
             }), lang.hitch(this, function () {
                 this.appUtils.hideLoadingIndicator();
             }));
+        },
+
+        webMapListDestroyMaps: function () {
+            return;
         },
 
         /**
