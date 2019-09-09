@@ -1237,6 +1237,14 @@ define([
             this._dataViewerWidget.showAllClicked = lang.hitch(this, function () {
                 this._showAllRecords();
             });
+            this._dataViewerWidget.webMapListDestroyMaps = lang.hitch(this, function () {
+                if (this._webMapListWidget.mapsToBeDestroyed.length > 0) {
+                    for (var i = this._webMapListWidget.mapsToBeDestroyed.length - 1; i >= 0; i--) {
+                        this._webMapListWidget.mapsToBeDestroyed[i].destroy();
+                    }
+                    this._webMapListWidget.mapsToBeDestroyed.length = 0;
+                }
+            });
             // to show all the records
             this._dataViewerWidget.showSelectedClicked = lang.hitch(this, function () {
                 if (this._timeSliderWidget) {

@@ -56,8 +56,8 @@ define({
     "invalidDouble": "Zadejte číslo.",
     "requiredFields": "Zadejte hodnoty do všech vyžadovaných polí.",
     "selectLocation": "Vyberte umístění hlášení.",
-    "numericRangeHintMessage": "${openStrong}Tip:${closeStrong} Minimální hodnota ${minValue} a maximální hodnota ${maxValue}",
-    "dateRangeHintMessage": "${openStrong}Tip:${closeStrong} Minimální datum ${minValue} a maximální datum ${maxValue}",
+    "numericRangeHintMessage": "${openStrong}Nápověda:${closeStrong} Minimální hodnota ${minValue} a maximální hodnota ${maxValue}",
+    "dateRangeHintMessage": "${openStrong}Nápověda:${closeStrong} Minimální datum ${minValue} a maximální datum ${maxValue}",
     "errorsInApplyEdits": "Zprávu se nepodařilo odeslat.",
     "attachmentSelectedMsg": "příloh vybráno",
     "attachmentUploadStatus": "Nepodařilo se nahrát ${failed} z ${total} příloh.",
@@ -143,7 +143,7 @@ define({
     "distinctQueryFailed": "Pro toto pole nebyly nalezeny žádné jedinečné hodnoty.",
     "andText": "a",
     "filterInEditModeAlert": "Při editaci nejsou filtry k dispozici.",
-    "dropdownSelectOption": "Vybrat (Select)",
+    "dropdownSelectOption": "Vybrat",
     "filterInShowSelectedEditModeAlert": "V režimu „Zobrazit vybrané“ nejsou filtry k dispozici."
   },
   "detailsPanel": {
