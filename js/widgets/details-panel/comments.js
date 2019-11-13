@@ -434,7 +434,7 @@ define([
             var whereClause, queryFeature, currentDateTime;
             currentDateTime = new Date().getTime();
             queryFeature = new Query();
-            queryFeature.objectIds = [parseInt(currentFeature.attributes[this.selectedOperationalLayer.objectIdField], 10)];
+            queryFeature.objectIds = [parseInt(currentFeature.attributes[this._commentsTable.objectIdField], 10)];
             queryFeature.outFields = ["*"];
             whereClause = currentDateTime + "=" + currentDateTime;
             queryFeature.where = whereClause;

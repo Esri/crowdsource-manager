@@ -2,11 +2,11 @@
 
 @font-face {
   font-family: "esrictfonticons";
-  src:url("fonts/esrictfonticons.eot");
-  src:url("fonts/esrictfonticons.eot?#iefix") format("embedded-opentype"),
-    url("fonts/esrictfonticons.woff") format("woff"),
-    url("fonts/esrictfonticons.ttf") format("truetype"),
-    url("fonts/esrictfonticons.svg#esrictfonticons") format("svg");
+  src:url("./fonts/esrictfonticons.eot");
+  src:url("./fonts/esrictfonticons.eot?#iefix") format("embedded-opentype"),
+    url("./fonts/esrictfonticons.woff") format("woff"),
+    url("./fonts/esrictfonticons.ttf") format("truetype"),
+    url("./fonts/esrictfonticons.svg#esrictfonticons") format("svg");
   font-weight: normal;
   font-style: normal;
 
