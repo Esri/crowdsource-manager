@@ -583,6 +583,11 @@ define([
                     this._initialLoad = true;
                     $(".esriCTSignOutOption").addClass("esriCTHidden");
                     this._resetUpperAndLowerContainer();
+                    //If layer is hosted on portal
+                    //Check wether the layer's access is public|private|org
+                    if (details.operationalLayerDetails.itemId) {
+                        ApplicationUtils.getLayerSharingProperty(details.operationalLayerDetails.itemId, this.appConfig);
+                    }
                     // Reset last updated feature array
                     this.updatedFeature = null;
                     // Reset filter state object for a new layer
@@ -1013,6 +1018,10 @@ define([
             //set popupInfo template configured in webmap
             if (opLayerInfo.popupInfo) {
                 this._refinedOperationalLayer.setInfoTemplate(new PopupTemplate(opLayerInfo.popupInfo));
+            }
+            //set item id
+            if (opLayerInfo.itemId) {
+                this._refinedOperationalLayer.itemId = opLayerInfo.itemId;
             }
             //set layer opacity configured in webmap
             this._refinedOperationalLayer.setOpacity(opLayerInfo.opacity);

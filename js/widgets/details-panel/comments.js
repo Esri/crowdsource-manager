@@ -605,7 +605,16 @@ define([
                 domClass.add(commentBtnDiv, "esriCTHidden");
             }
             on(commentBtnDiv, "click", lang.hitch(this, function (evt) {
-                if (this.appConfig.logInDetails.canEditFeatures) {
+                //If item id exist, check for the access property
+                //If access is public, then allow all the users to perform the edits
+                //If access is not public, then check user privileges
+                if (!this.selectedOperationalLayer.itemId || (this.selectedOperationalLayer.itemId &&
+                    this.appUtils.layerAccessInfoObj.hasOwnProperty(this.selectedOperationalLayer.itemId) &&
+                    this.appUtils.layerAccessInfoObj[this.selectedOperationalLayer.itemId] === "public")) {
+                    //If all the criteria's are passed
+                    //Check if user has editing rights on layer level
+                    this._checkCapabilityAndAllowEdit(existingAttachmentsArr, graphic);
+                } else if (this.appConfig.logInDetails.canEditFeatures) {
                     // Fetch the existing attachments
                     var existingAttachmentsArr;
                     this.appUtils.showLoadingIndicator();
@@ -763,7 +772,15 @@ define([
             if (this.addCommentsBtnWrapperContainer) {
                 this._addCommentBtnClickHandle = on(this.addCommentsBtnWrapperContainer, "click",
                     lang.hitch(this, function () {
-                        if (this.appConfig.logInDetails.canEditFeatures) {
+                        //If item id exist, check for the access property
+                        //If access is public, then allow all the users to perform the edits
+                        //If access is not public, then check user privileges
+                        if (!this.selectedOperationalLayer.itemId || (this.selectedOperationalLayer.itemId &&
+                            this.appUtils.layerAccessInfoObj.hasOwnProperty(this.selectedOperationalLayer.itemId) &&
+                            this.appUtils.layerAccessInfoObj[this.selectedOperationalLayer.itemId] === "public")) {
+                            this.appUtils.showLoadingIndicator();
+                            this._openAddCommentsForm();
+                        } else if (this.appConfig.logInDetails.canEditFeatures) {
                             this.appUtils.showLoadingIndicator();
                             this._openAddCommentsForm();
                         } else {
