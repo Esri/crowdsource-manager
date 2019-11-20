@@ -25,8 +25,6 @@ define([
     "dojo/dom",
     "dojo/_base/Color",
     "dojo/colors",
-    "dojo/_base/lang",
-    "esri/request",
     "dojox/color"
 ], function (
     domClass,
@@ -38,12 +36,9 @@ define([
     dom,
     Color,
     Colors,
-    lang,
-    esriRequest,
     dojoxColor
 ) {
     return {
-        layerAccessInfoObj : {},
 
         /**
          * This function is used to show loading indicator.
@@ -357,25 +352,6 @@ define([
             domConstruct.create("div", {
                 title: this.config.i18n.main.legendText
             }, parentNode);
-        },
-
-        /**
-        * This function is used to get the sharing properties of layer which are added as item in AGOL
-        * @memberOf utils/utils
-        */
-        getLayerSharingProperty: function (itemId, appConfig) {
-            //Get layer's sharing property
-            esriRequest({
-                url: appConfig.sharinghost + "/sharing/rest/content/items/" + itemId,
-                content: {
-                    f: 'json'
-                },
-                handleAs: 'json',
-                callbackPrams: 'callback'
-            }).then(lang.hitch(this, function (itemInfo) {
-                //Maintain the object to store the sharing properties of layers
-                this.layerAccessInfoObj[itemId] = itemInfo.access;
-            }));
         }
     };
 });
