@@ -181,7 +181,16 @@ define([
             on(editFeatureButton, "click", lang.hitch(this, function (evt) {
                 var existingAttachmentsArr;
                 existingAttachmentsArr = this._getExistingAttachmentsArr(evt);
-                if (this.appConfig.logInDetails.canEditFeatures) {
+                //If item id exist, check for the access property
+                //If access is public, then allow all the users to perform the edits
+                //If access is not public, then check user privileges
+                if (!this.selectedOperationalLayer.itemId || (this.selectedOperationalLayer.itemId &&
+                    this.appUtils.layerAccessInfoObj.hasOwnProperty(this.selectedOperationalLayer.itemId) &&
+                    this.appUtils.layerAccessInfoObj[this.selectedOperationalLayer.itemId] === "public")) {
+                    //If all the criteria's are passed
+                    //Check if user has editing rights on layer level
+                    this._checkCapabilityAndAllowEdit(existingAttachmentsArr);
+                } else if (this.appConfig.logInDetails.canEditFeatures) {
                     // 1. Is editor tracking enabled?
                     if (this.selectedOperationalLayer.hasOwnProperty("ownershipBasedAccessControlForFeatures") &&
                         this.selectedOperationalLayer.ownershipBasedAccessControlForFeatures !== null &&

@@ -171,7 +171,15 @@ define([
          * @param{string} map container ID
          * @memberOf widgets/webmap-list/webmap-list
          */
-        _createMap: function (webMapID, mapDivID, isBaseMapLoaded, isUrl) {
+        _createMap: function (webMapID, mapDivID, isBaseMapLoaded, isUrl, destroyMap) {
+            if (destroyMap) {
+                array.forEach(this.mapsToBeDestroyed, lang.hitch(this, function (mapInstance) {
+                    mapInstance.destroy();
+                }));
+                if (this.map) {
+                    this.map.destroy();
+                }
+            }
             domConstruct.empty(mapDivID);
             var webMapInstance = BootstrapMap.createWebMap(webMapID, mapDivID, {
                 ignorePopups: false,
@@ -580,7 +588,7 @@ define([
                     this.setDefaultHeightOfContainers();
                     this._selectWebMapItem(webMapId);
                     operationalLayerId = domAttr.get(node, "operationalLayerID");
-                    this._createMap(webMapId, this.mapDivID).then(lang.hitch(this, function (evt) {
+                    this._createMap(webMapId, this.mapDivID, null, null, true).then(lang.hitch(this, function (evt) {
                         var obj;
                         this.lastSelectedWebMapExtent = evt.map.extent;
                         obj = {
