@@ -114,6 +114,10 @@ define([
         _basemapGallery: null, // to store the object of basemap gallery widget
         _legend: null,  // to store the object of legend gallery widget
         _lastSelectedNonEditableFeature: null,
+        clearSelectionButtonClickedHandle: null,
+        selectAllButtonClickedHandle: null,
+        showAllButtonClickedHandle: null,
+        exportToCSVButtonClickHandle: null,
         _featuresEditorsCanSeeObjArr: [
             ownershipBasedAccessControlForFeatures = {
                 "allowOthersToQuery": false,
@@ -469,6 +473,18 @@ define([
             this._destroyMapPanelWidget();
             this._destroyBasemapGalleryWidget();
             this._destroyLegendWidget();
+            if (this.showAllButtonClickedHandle) {
+                this.showAllButtonClickedHandle.remove();
+            }
+            if (this.selectAllButtonClickedHandle) {
+                this.selectAllButtonClickedHandle.remove();
+            }
+            if (this.clearSelectionButtonClickedHandle) {
+                this.clearSelectionButtonClickedHandle.remove();
+            }
+            if (this.exportToCSVButtonClickHandle) {
+                this.exportToCSVButtonClickHandle.remove();
+            }
         },
 
         /**
@@ -2176,7 +2192,7 @@ define([
          */
         _attachClickEventToExportToCSVButton: function () {
             var exportButton = dom.byId("exportToCSVMainButton");
-            on(exportButton, "click", lang.hitch(this, function () {
+            this.exportToCSVButtonClickHandle = on(exportButton, "click", lang.hitch(this, function () {
                 if (!(domClass.contains(exportButton, "esriCTExportToCSVIconDisabled"))) {
                     this._exportSelectedFeaturesToCSV();
                 }
@@ -2218,7 +2234,7 @@ define([
             var showAllButton = dom.byId("showAllMainButton");
             var selectAllButton = dom.byId("selectAllMainButton");
             var clearSelectionButton = dom.byId("clearSelectionMainButton");
-            on(showAllButton, "click", lang.hitch(this, function () {
+            this.showAllButtonClickedHandle = on(showAllButton, "click", lang.hitch(this, function () {
                 if (!domClass.contains(showAllButton, "esriCTShowSelectedIconDisabled")) {
                     if (domClass.contains(showAllButton, "esriCTShowSelectedIconEnabled")) {
                         this._dataViewerWidget.isShowSelectedClicked = true;
@@ -2244,12 +2260,12 @@ define([
                     }
                 }
             }));
-            on(selectAllButton, "click", lang.hitch(this, function () {
+            this.selectAllButtonClickedHandle = on(selectAllButton, "click", lang.hitch(this, function () {
                 if (!(domClass.contains(selectAllButton, "esriCTSelectAllIconDisabled"))) {
                     this._dataViewerWidget.selectAllRowsClicked();
                 }
             }));
-            on(clearSelectionButton, "click", lang.hitch(this, function () {
+            this.clearSelectionButtonClickedHandle = on(clearSelectionButton, "click", lang.hitch(this, function () {
                 if (!(domClass.contains(clearSelectionButton, "esriCTClearSelectionIconDisabled"))) {
                     this._dataViewerWidget.clearAllRowsSelection();
                     this._disableExportToCSVButton();
