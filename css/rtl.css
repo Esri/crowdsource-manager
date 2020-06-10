@@ -356,7 +356,10 @@
 .dj_rtl .esriCTExportToCSVParentContainer {
     float: right;
     padding-right: 0px;
-    padding-left: 15px;
+}
+
+.dj_rtl .esriCTShowSelectedIconDisabled, .dj_rtl .esriCTShowSelectedIconEnabled, .dj_rtl .esriCTShowAllIcon {
+    margin-left: 10px;
 }
 
 /** Operational layer name, feature count and export to csv section ends **/

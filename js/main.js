@@ -296,6 +296,8 @@ define([
                 this._attachClickEventToOperationalLayerName();
                 this._addTooltipToExportToCSVButton();
                 this._attachClickEventToExportToCSVButton();
+                this._addTooltipToActionButtons();
+                this._attachClickEventToActionButtons();
             } else {
                 // executes when window is resized
                 on(window, "resize", lang.hitch(this, this._onWindowResize));
@@ -409,6 +411,7 @@ define([
                 this._dataViewerWidget.isShowSelectedClicked = false;
                 this._dataViewerWidget.isShowAllClicked = false;
                 this._disableExportToCSVButton();
+                this.disableClearSelectionIcon();
                 this._dataViewerWidget.storeDataForManualRefresh();
             });
             this._applicationHeader.reload = lang.hitch(this, function (logInDetails) {
@@ -439,6 +442,9 @@ define([
             });
             this._applicationHeader.refreshSelectedLayer = lang.hitch(this, function () {
                 this._refreshOperationalLayer();
+            });
+            this._applicationHeader.selectAllRowsClicked = lang.hitch(this, function () {
+                this._dataViewerWidget.selectAllRowsClicked();
             });
         },
 
@@ -578,11 +584,13 @@ define([
                 setTimeout(lang.hitch(this, function () {
                     ApplicationUtils.showLoadingIndicator();
                     ApplicationUtils.hideOverlayContainer();
-                    this._applicationHeader.disableSelectionOptionsIcon();
                     this._reorderLayers = true;
                     this._initialLoad = true;
                     $(".esriCTSignOutOption").addClass("esriCTHidden");
                     this._resetUpperAndLowerContainer();
+                    this._disableExportToCSVButton();
+                    this.disableClearSelectionIcon();
+                    this.disableSelectionOptionsIcon();
                     //If layer is hosted on portal
                     //Check wether the layer's access is public|private|org
                     if (details.operationalLayerDetails.itemId) {
@@ -1211,6 +1219,27 @@ define([
                 // create details panel
                 this._createDetailsPanel(showDetailsPanelDataObj, null);
             });
+
+            this._dataViewerWidget.resetDetailsPanel = lang.hitch(this, function () {
+                this._toggleNoFeatureFoundDiv(true);
+            });
+
+            this._dataViewerWidget.enableClearSelectionButton = lang.hitch(this, function () {
+                this.enableClearSelectionIcon();
+            });
+
+            this._dataViewerWidget.disableClearSelectionButton = lang.hitch(this, function () {
+                this.disableClearSelectionIcon();
+            });
+
+            this._dataViewerWidget.enableSelectAllButton = lang.hitch(this, function () {
+                this.enableSelectAllButton();
+            });
+
+            this._dataViewerWidget.disableSelectAllButton = lang.hitch(this, function () {
+                this.disableSelectAllButton();
+            });
+
             this._dataViewerWidget.attachEventToGraphicsLayer = lang.hitch(this, function (graphicsLayer) {
                 // to select graphics on click of activated feature
                 this._selectRowGraphicsClickHandle = on(graphicsLayer, "click", lang.hitch(this, function () {
@@ -1236,11 +1265,19 @@ define([
             });
             // to enable selection option icon
             this._dataViewerWidget.enableSelectionOptionsIcon = lang.hitch(this, function () {
-                this._applicationHeader.enableSelectionOptionsIcon();
+                this.enableSelectionOptionsIcon();
             });
             // to disable selection option icon
             this._dataViewerWidget.disableSelectionOptionsIcon = lang.hitch(this, function () {
-                this._applicationHeader.disableSelectionOptionsIcon();
+                this.disableSelectionOptionsIcon();
+            });
+            // to enable selection option icon
+            this._dataViewerWidget.enableClearSelectionIcon = lang.hitch(this, function () {
+                this.enableClearSelectionIcon();
+            });
+            // to disable selection option icon
+            this._dataViewerWidget.disableClearSelectionIcon = lang.hitch(this, function () {
+                this.disableClearSelectionIcon();
             });
             // to show all the records
             this._dataViewerWidget.showAllClicked = lang.hitch(this, function () {
@@ -1650,6 +1687,7 @@ define([
                 // Refresh selected layer to get updated features
                 this._isShowSelectedClicked = isShowSelectedClicked;
                 this._refreshOperationalLayer();
+                this.enableSelectAllButton();
             });
 
             this._detailsPanelWidget.onMultipleFeatureEditCancel = lang.hitch(this, function (feature) {
@@ -1668,6 +1706,11 @@ define([
                     featureLength = 1;
                     if (this._dataViewerWidget) {
                         this._dataViewerWidget.isEditMode = false;
+                    }
+                    //If edit mode is disabled and data viewer has at least one feature selected
+                    //enable select all button
+                    if (this._dataViewerWidget && this._dataViewerWidget._getSelectedFeatures().length > 0) {
+                        this.enableSelectAllButton();
                     }
                 }
                 if (((this._timeSliderWidget) && (!this._dataViewerWidget)) || ((this._timeSliderWidget) && (this._dataViewerWidget) && (!this._dataViewerWidget.isShowSelectedClicked))) {
@@ -2153,6 +2196,145 @@ define([
         _disableExportToCSVButton: function () {
             var exportButton = dom.byId("exportToCSVMainButton");
             domClass.add(exportButton, "esriCTExportToCSVIconDisabled");
+        },
+
+
+        /**
+         * This function is used to add tooltip to all the action buttons
+         */
+        _addTooltipToActionButtons: function () {
+            var showAllButton = dom.byId("showAllMainButton");
+            var selectAllButton = dom.byId("selectAllMainButton");
+            var clearSelectionButton = dom.byId("clearSelectionMainButton");
+            domAttr.set(showAllButton, "title", this.appConfig.i18n.dataviewer.showSelectedButtonTooltip);
+            domAttr.set(selectAllButton, "title", this.appConfig.i18n.dataviewer.selectAllButtonTooltip);
+            domAttr.set(clearSelectionButton, "title", this.appConfig.i18n.dataviewer.clearSelectionButtonTooltip);
+        },
+
+        /**
+         * This function is used bind click events to all the action buttons
+         */
+        _attachClickEventToActionButtons: function () {
+            var showAllButton = dom.byId("showAllMainButton");
+            var selectAllButton = dom.byId("selectAllMainButton");
+            var clearSelectionButton = dom.byId("clearSelectionMainButton");
+            on(showAllButton, "click", lang.hitch(this, function () {
+                if (!domClass.contains(showAllButton, "esriCTShowSelectedIconDisabled")) {
+                    if (domClass.contains(showAllButton, "esriCTShowSelectedIconEnabled")) {
+                        this._dataViewerWidget.isShowSelectedClicked = true;
+                        this._dataViewerWidget.isShowAllClicked = false;
+                        this._detailsPanelWidget.showSelectedClicked();
+                        if (this._timeSliderWidget) {
+                            this._timeSliderWidget.handleTimeSliderVisibility(2);
+                        }
+                        this._applicationHeader.disableSearchIcon();
+                        this._dataViewerWidget.createDataViewerUI(false);
+                        this.disableSelectAllButton();
+                        domClass.replace(showAllButton, "esriCTShowAllIcon", "esriCTShowSelectedIconEnabled");
+                        domAttr.set(showAllButton, "title", this.appConfig.i18n.dataviewer.showAllButtonTooltip);
+                    } else {
+                        this._showAllRecords();
+                        domClass.replace(showAllButton, "esriCTShowSelectedIconEnabled", "esriCTShowAllIcon");
+                        domAttr.set(showAllButton, "title", this.appConfig.i18n.dataviewer.showSelectedButtonTooltip);
+                        //If all the rows in data viewer are selected
+                        //disable select all button
+                        if (this._isAllRowsSelected()) {
+                            this.disableSelectAllButton();
+                        }
+                    }
+                }
+            }));
+            on(selectAllButton, "click", lang.hitch(this, function () {
+                if (!(domClass.contains(selectAllButton, "esriCTSelectAllIconDisabled"))) {
+                    this._dataViewerWidget.selectAllRowsClicked();
+                }
+            }));
+            on(clearSelectionButton, "click", lang.hitch(this, function () {
+                if (!(domClass.contains(clearSelectionButton, "esriCTClearSelectionIconDisabled"))) {
+                    this._dataViewerWidget.clearAllRowsSelection();
+                    this._disableExportToCSVButton();
+                    this.disableClearSelectionIcon();
+                    this.enableSelectAllButton();
+                    //If show selected screen is shown and clear selection is clicked
+                    //clear all currently displayed records
+                    if (domClass.contains(showAllButton, "esriCTShowAllIcon")) {
+                        this._dataViewerWidget.createDataViewerUI(false);
+                    }
+                    //Change the edit mode value to false
+                    //This is required for filter panel to work as expected
+                    //and for other parts of the app too
+                    if (this._detailsPanelWidget) {
+                        this._detailsPanelWidget.popupEditModeEnabled(false);
+                    }
+                    if (this._dataViewerWidget) {
+                        this._dataViewerWidget.isEditMode = false;
+                    }
+                }
+            }));
+        },
+
+        /**
+         * This function checks wether all the rows are selected in data viewer
+         */
+        _isAllRowsSelected: function () {
+            var allRowsSelected
+            if (this.map && this._dataViewerWidget) {
+                dataViewerGraphicsLayer = this.map.getLayer("selectedRowGraphicsLayer");
+                //If all the rows are selected then disable select all button
+                //subtracting 2 from table rows as two rows are for headers
+                if (dataViewerGraphicsLayer.graphics.length === this._dataViewerWidget._table.rows.length - 2) {
+                    allRowsSelected = true;
+                }
+            }
+            return allRowsSelected;
+        },
+
+        /**
+         * This function is used to enable selection option icon
+         */
+        enableSelectionOptionsIcon: function () {
+            var showAllButton = dom.byId("showAllMainButton");
+            domClass.replace(showAllButton, "esriCTShowSelectedIconEnabled", "esriCTShowSelectedIconDisabled");
+        },
+
+        /**
+         * This function is used to disable selection option icon
+         */
+        disableSelectionOptionsIcon: function () {
+            var showAllButton = dom.byId("showAllMainButton");
+            domClass.replace(showAllButton, "esriCTShowSelectedIconDisabled", "esriCTShowSelectedIconEnabled");
+        },
+
+        /**
+         * This function is used to enable clear selection option icon
+         */
+        enableClearSelectionIcon: function () {
+            var clearSelectionButton = dom.byId("clearSelectionMainButton");
+            domClass.replace(clearSelectionButton, "esriCTClearSelectionIconEnabled", "esriCTClearSelectionIconDisabled");
+        },
+
+        /**
+         * This function is used to disable clear selection option icon
+         */
+        disableClearSelectionIcon: function () {
+            var clearSelectionButton = dom.byId("clearSelectionMainButton");
+            domClass.replace(clearSelectionButton, "esriCTClearSelectionIconDisabled", "esriCTClearSelectionIconEnabled");
+        },
+
+        /**
+         * This function is used to enable select all button
+         */
+        enableSelectAllButton: function () {
+            var selectAllButton = dom.byId("selectAllMainButton");
+            domClass.replace(selectAllButton, "esriCTSelectAllIcon", "esriCTSelectAllIconDisabled");
+        },
+
+        /**
+         * This function is used to disable select all button
+         */
+        disableSelectAllButton: function () {
+            var selectAllButton = dom.byId("selectAllMainButton");
+            domClass.replace(selectAllButton, "esriCTSelectAllIconDisabled", "esriCTSelectAllIcon");
         }
     });
 });
