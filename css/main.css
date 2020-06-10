@@ -168,12 +168,12 @@ html, body {
     opacity: 0.8;
 }
 
-.app-loading .loading-indicator, .app-error .loading-indicator {
+.app-loading .loading-indicator, .data-viewer-loading .loading-indicator, .app-error .loading-indicator {
     /** Show this class when loading or error **/
     display: block;
 }
 
-.app-loading .loading-indicator {
+.data-viewer-loading .loading-indicator, .app-loading .loading-indicator {
     /** Loading image **/
     background-position: center center;
     background-image: url(../images/loading.gif);
@@ -438,7 +438,7 @@ table {
     text-indent: 45px;
     font-size: 15px;
     font-weight: bold;
-    width: calc(100% - 281px);
+    width: calc(100% - 400px);
     float: left;
 }
 
@@ -446,7 +446,7 @@ table {
     line-height: 35px;
     padding-right: 15px;
     float: left;
-    width: 250px;
+    width: 245px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -458,6 +458,14 @@ table {
 
 
 /** Data viewer container starts **/
+
+.esriCTDisableDataViewerTextSelection { 
+    -webkit-user-select: none; 
+    -webkit-touch-callout: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none;    
+} 
 
 .esriCTNoDataDataViewerPanelContainer {
     text-align: center;
@@ -2094,23 +2102,6 @@ input.esriCTRadioButton {
 /** Sign out container ends **/
 
 
-/** Selection options container starts **/
-
-.esriCTSelectionOptionsContainer {
-    background-color: white;
-    position: absolute;
-    top: 49px;
-    z-index: 894;
-}
-
-.esriCTSelectionOptionItems {
-    padding: 5px;
-}
-
-
-/** Selection options container ends **/
-
-
 /** Basemap gallery section starts **/
 
 .esriCTFloatLeft {
@@ -2215,31 +2206,107 @@ input.esriCTRadioButton {
 }
 
 .esriCTExportToCSVParentContainer {
-    width: 31px;
+    width: 145px;
     float: left;
     height: 35px;
-    padding-right: 15px;
-    padding-top: 8px;
+    padding-top: 5px;
+    display: flex;
 }
 
 .esriCTExportToCSVIconEnabled {
     background-image: url(../images/export-to-csv-enabled.png);
-    height: 16px;
-    width: 16px;
-    background-size: 16px 16px;
+    height: 21px;
+    width: 25px;
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.esriCTExportToCSVIconDisabled {
+    background-image: url(../images/export-to-csv-disabled.png);
+    height: 21px;
+    width: 25px;
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: default;
+    margin-left: 10px;
+}
+
+.esriCTShowSelectedIconDisabled {
+    background-image: url(../images/show-selected-disabled.png);
+    height: 25px;
+    width: 25px;
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: default;
+}
+
+.esriCTShowSelectedIconEnabled {
+    background-image: url(../images/show-selected-enabled.png);
+    height: 25px;
+    width: 25px;
+    background-size: 25px 25px;
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
 }
 
-.esriCTExportToCSVIconDisabled {
-    background-image: url(../images/export-to-csv-disabled.png);
-    height: 16px;
-    width: 16px;
-    background-size: 16px 16px;
+.esriCTShowAllIcon {
+    background-image: url(../images/show-all-enabled.png);
+    height: 24px;
+    width: 25px;
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.esriCTSelectAllIcon {
+    background-image: url(../images/select-all-enabled.png);
+    height: 21px;
+    width: 25px;
+    background-size: 23px 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.esriCTSelectAllIconDisabled {
+    background-image: url(../images/select-all-disabled.png);
+    height: 21px;
+    width: 25px;
+    background-size: 23px 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.esriCTClearSelectionIconEnabled {
+    background-image: url(../images/clear-selection-enabled.png);
+    height: 21px;
+    width: 25px;
+    background-size: 23px 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.esriCTClearSelectionIconDisabled {
+    background-image: url(../images/clear-selection-disabled.png);
+    height: 21px;
+    width: 25px;
+    background-size: 23px 25px;
     background-repeat: no-repeat;
     background-position: center;
     cursor: default;
+    margin-left: 10px;
 }
 
 

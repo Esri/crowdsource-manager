@@ -120,13 +120,16 @@ define([
             mediaArray = [];
             array.forEach(this.popupInfo.mediaInfos, lang.hitch(this, function (mediaInfo) {
                 // if media type is image which consist of a source URL
-                if (mediaInfo.type === "image" && mediaInfo.value.sourceURL !== "") {
+                //source URL should be a valid field
+                if (mediaInfo.type === "image" && mediaInfo.value.sourceURL !== "" &&
+                    this.multipleFeatures[0].attributes[mediaInfo.value.sourceURL.replace(/[{}]/g, "")]) {
                     mediaArray.push(mediaInfo);
                 }
                 // if media type is a chart which have valid numeric data
                 if (mediaInfo.type !== "image") {
                     array.some(mediaInfo.value.fields, lang.hitch(this, function (field) {
-                        if (this.multipleFeatures[0].attributes[field] || this.multipleFeatures[0].attributes[field] === 0) {
+                        //Check if field exist in the attributes
+                        if (this.multipleFeatures[0].attributes.hasOwnProperty(field)) {
                             return mediaArray.push(mediaInfo);
                         }
                     }));
