@@ -2275,6 +2275,7 @@ define([
                     //clear all currently displayed records
                     if (domClass.contains(showAllButton, "esriCTShowAllIcon")) {
                         this._dataViewerWidget.createDataViewerUI(false);
+                        showAllButton.click();
                     }
                     //Change the edit mode value to false
                     //This is required for filter panel to work as expected
