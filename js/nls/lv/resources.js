@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} atlasīts / ${featureCount} ieraksti",
     "exportToCsvSuccessMessage": "CSV fails eksportēts veiksmīgi.",
     "exportToCsvErrorMessage": "Eksportējot izvēlētos elementus uz CSV failu, radās kļūda. Lūdzu, mēģiniet vēlreiz.",
-    "exportToCSVButtonTooltip": "Eksportēt uz CSV"
+    "exportToCSVButtonTooltip": "Eksportēt uz CSV",
+    "showAllButtonTooltip": "Rādīt visus",
+    "showSelectedButtonTooltip": "Rādīt izvēlētos",
+    "selectAllButtonTooltip": "Izvēlieties visu",
+    "clearSelectionButtonTooltip": "Notīrīt izvēlēto"
   },
   "timeSlider": {
     "timeSliderLabel": "Laika diapazons",

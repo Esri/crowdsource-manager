@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} seçili / ${featureCount} kayıt",
     "exportToCsvSuccessMessage": "CSV dosyası başarıyla dışarı aktarıldı.",
     "exportToCsvErrorMessage": "Seçilen detaylar CSV dosyasına aktarılırken hata oluştu.  Yeniden deneyin.",
-    "exportToCSVButtonTooltip": "CSV'ye Aktar"
+    "exportToCSVButtonTooltip": "CSV'ye Aktar",
+    "showAllButtonTooltip": "Tümünü Göster",
+    "showSelectedButtonTooltip": "Seçileni Göster",
+    "selectAllButtonTooltip": "Tümünü Seç",
+    "clearSelectionButtonTooltip": "Seçimi Temizle"
   },
   "timeSlider": {
     "timeSliderLabel": "Zaman aralığı",

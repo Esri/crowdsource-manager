@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} seleccionades/${featureCount} registres",
     "exportToCsvSuccessMessage": "El fitxer CSV s'ha exportat correctament.",
     "exportToCsvErrorMessage": "Error en exportar les entitats seleccionades al fitxer CSV. Torneu-ho a provar.",
-    "exportToCSVButtonTooltip": "Exporta a CSV"
+    "exportToCSVButtonTooltip": "Exporta a CSV",
+    "showAllButtonTooltip": "Mostra-ho tot",
+    "showSelectedButtonTooltip": "Mostra els seleccionats",
+    "selectAllButtonTooltip": "Selecciona-ho tot",
+    "clearSelectionButtonTooltip": "Esborra la selecció"
   },
   "timeSlider": {
     "timeSliderLabel": "Interval de temps",

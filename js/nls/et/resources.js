@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} valitud, kokku ${featureCount} kirjet",
     "exportToCsvSuccessMessage": "CSV-fail eksporditi edukalt.",
     "exportToCsvErrorMessage": "Tõrge CSV-faili valitud objektide eksportimisel. Palun proovige uuesti",
-    "exportToCSVButtonTooltip": "Ekspordi CSV formaati"
+    "exportToCSVButtonTooltip": "Ekspordi CSV formaati",
+    "showAllButtonTooltip": "Kuva kõik",
+    "showSelectedButtonTooltip": "Kuva valitud",
+    "selectAllButtonTooltip": "Vali kõik",
+    "clearSelectionButtonTooltip": "Tühista valik"
   },
   "timeSlider": {
     "timeSliderLabel": "Ajavahemik",

@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "تم تحديد ${selectedFeatureCount} / تسجيلات ${featureCount}",
     "exportToCsvSuccessMessage": "تم تصدير ملف CSV بنجاح.",
     "exportToCsvErrorMessage": "حدث خطأ أثناء تصدير المعالم المحددة إلى ملف CSV. الرجاء إعادة المحاولة مرة أخرى.",
-    "exportToCSVButtonTooltip": "تصدير إلى CSV"
+    "exportToCSVButtonTooltip": "تصدير إلى CSV",
+    "showAllButtonTooltip": "إظهار الكل",
+    "showSelectedButtonTooltip": "إظهار سجلات المعالم المحددة",
+    "selectAllButtonTooltip": "تحديد الكل",
+    "clearSelectionButtonTooltip": "مسح التحديد"
   },
   "timeSlider": {
     "timeSliderLabel": "النطاق الزمني",

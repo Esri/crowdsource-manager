@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} valgt / ${featureCount} poster",
     "exportToCsvSuccessMessage": "CSV-filen er eksportert.",
     "exportToCsvErrorMessage": "Feil under eksport av valgte geoobjekter til CSV-fil. Prøv på nytt.",
-    "exportToCSVButtonTooltip": "Eksporter til CSV"
+    "exportToCSVButtonTooltip": "Eksporter til CSV",
+    "showAllButtonTooltip": "Vis alle",
+    "showSelectedButtonTooltip": "Vis valgte",
+    "selectAllButtonTooltip": "Merk alle",
+    "clearSelectionButtonTooltip": "Fjern utvalg"
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsrom",

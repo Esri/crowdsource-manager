@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} ausgewählt / ${featureCount} Datensätze",
     "exportToCsvSuccessMessage": "CSV-Datei wurde erfolgreich exportiert.",
     "exportToCsvErrorMessage": "Fehler beim Exportieren der ausgewählten Features in CSV-Datei. Versuchen Sie es erneut.",
-    "exportToCSVButtonTooltip": "In CSV exportieren"
+    "exportToCSVButtonTooltip": "In CSV exportieren",
+    "showAllButtonTooltip": "Alle anzeigen",
+    "showSelectedButtonTooltip": "Ausgewählte anzeigen",
+    "selectAllButtonTooltip": "Alle auswählen",
+    "clearSelectionButtonTooltip": "Auswahl aufheben"
   },
   "timeSlider": {
     "timeSliderLabel": "Zeitbereich",

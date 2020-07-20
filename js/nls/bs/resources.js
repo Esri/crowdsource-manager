@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} odabrano / ${featureCount} zapis/a",
     "exportToCsvSuccessMessage": "CSV datoteka uspješno je izvezena.",
     "exportToCsvErrorMessage": "Pogreška prilikom izvoza odabranih geoobjekata u CSV datoteku. Pokušajte ponovno.",
-    "exportToCSVButtonTooltip": "Izvezi u CSV"
+    "exportToCSVButtonTooltip": "Izvezi u CSV",
+    "showAllButtonTooltip": "Prikaži sve",
+    "showSelectedButtonTooltip": "Prikaži odabrano",
+    "selectAllButtonTooltip": "Odaberi sve",
+    "clearSelectionButtonTooltip": "Očisti odabir"
   },
   "timeSlider": {
     "timeSliderLabel": "Vremenski raspon",

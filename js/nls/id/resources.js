@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} dipilih / ${featureCount} rekaman (record)",
     "exportToCsvSuccessMessage": "File CSV berhasil diekspor.",
     "exportToCsvErrorMessage": "Ada kesalahan saat mengekspor fitur yang dipilih ke file CSV. Harap coba lagi.",
-    "exportToCSVButtonTooltip": "Ekspor ke CSV"
+    "exportToCSVButtonTooltip": "Ekspor ke CSV",
+    "showAllButtonTooltip": "Tampilkan Semua",
+    "showSelectedButtonTooltip": "Tampilkan yang Dipilih",
+    "selectAllButtonTooltip": "Pilih Semua",
+    "clearSelectionButtonTooltip": "Hapus Pilihan"
   },
   "timeSlider": {
     "timeSliderLabel": "Rentang waktu",

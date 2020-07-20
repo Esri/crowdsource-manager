@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} выбрано / ${featureCount} записей",
     "exportToCsvSuccessMessage": "Файл CSV экспортирован успешно.",
     "exportToCsvErrorMessage": "Ошибка при экспорте выбранных объектов в файл CSV. Повторите попытку еще раз.",
-    "exportToCSVButtonTooltip": "Экспорт в CSV"
+    "exportToCSVButtonTooltip": "Экспорт в CSV",
+    "showAllButtonTooltip": "Показать все",
+    "showSelectedButtonTooltip": "Показать выбранные",
+    "selectAllButtonTooltip": "Выбрать все",
+    "clearSelectionButtonTooltip": "Очистить выборку"
   },
   "timeSlider": {
     "timeSliderLabel": "Временной диапазон",

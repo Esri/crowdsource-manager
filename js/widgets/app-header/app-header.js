@@ -31,7 +31,6 @@ define([
     "widgets/manual-refresh/manual-refresh",
     "widgets/sign-in/sign-in",
     "widgets/help/help",
-    "widgets/selection-options/selection-options",
     "dojo/dom-class"
 ], function (
     declare,
@@ -48,7 +47,6 @@ define([
     ManualRefresh,
     SignIn,
     Help,
-    SelectionOptions,
     domClass
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -59,7 +57,6 @@ define([
         _isMultipleRecordsSelected: false, // to check how many records are selected in data viewer/ map panel
         _signInWidgetObj: null, // to store object of sign in widget
         isSearchActive: false,
-        _selectionOptionsWidgetObj: null, // to store object of selection options widget
 
         /**
          * This function is called when widget is constructed
@@ -101,7 +98,6 @@ define([
                 this._initializeManualRefreshWidget();
                 this._initializeSignInWidget();
                 this._initializeHelpWidget();
-                this._initializeSelectionOptionsWidget();
                 this._setToolTip();
             }));
         },
@@ -167,7 +163,6 @@ define([
             domAttr.set(this.searchButton, "title", this.appConfig.i18n.search.searchIconTooltip);
             domAttr.set(this.refreshButton, "title", this.appConfig.i18n.manualRefresh.manualRefreshIconTooltip);
             domAttr.set(this.helpButton, "title", this.appConfig.i18n.help.helpIconTooltip);
-            domAttr.set(this.selectionOptionsButton, "title", this.appConfig.i18n.selectionOptions.selectionOptionsIconTooltip);
         },
 
         /**
@@ -240,7 +235,7 @@ define([
          * @memberOf widgets/app-header/app-header
          */
         _setWidthOfApplicationNameContainer: function () {
-            var applicationIconWidth, searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth, applicationNameContainerWidth, signInSeparatorWidth, signedInUserDetailsContainerWidth, selectOptionContainerWidth;
+            var applicationIconWidth, searchIconWidth, manualRefreshIconWidth, helpIconWidth, applicationHeaderContainerWidth, headerIconsWidth, applicationNameContainerWidth, signInSeparatorWidth, signedInUserDetailsContainerWidth;
             applicationHeaderContainerWidth = $(this.applicationHeaderContainer).outerWidth(true);
             applicationHeaderContainerWidth = parseFloat(applicationHeaderContainerWidth);
             applicationIconWidth = $(this.applicationHeaderIconContainer).outerWidth(true);
@@ -255,9 +250,7 @@ define([
             signedInUserDetailsContainerWidth = parseFloat(signedInUserDetailsContainerWidth);
             signInSeparatorWidth = $(this.signInSeparator).outerWidth(true);
             signInSeparatorWidth = parseFloat(signInSeparatorWidth);
-            selectOptionContainerWidth = $(this.selectionOptionsButton).outerWidth(true);
-            selectOptionContainerWidth = parseFloat(selectOptionContainerWidth);
-            headerIconsWidth = applicationIconWidth + searchIconWidth + manualRefreshIconWidth + helpIconWidth + signedInUserDetailsContainerWidth + signInSeparatorWidth + selectOptionContainerWidth;
+            headerIconsWidth = applicationIconWidth + searchIconWidth + manualRefreshIconWidth + helpIconWidth + signedInUserDetailsContainerWidth + signInSeparatorWidth;
             applicationNameContainerWidth = applicationHeaderContainerWidth - headerIconsWidth;
             applicationNameContainerWidth = applicationNameContainerWidth - 30;
             domStyle.set(this.applicationNameContainer, "width", applicationNameContainerWidth + "px");
@@ -308,54 +301,12 @@ define([
         },
 
         /**
-         * This function is used to create selection option widget
-         * @memberOf widgets/app-header/app-header
-         */
-        _initializeSelectionOptionsWidget: function () {
-            var selectionOptionsParameters;
-            this._destroySelectionOptionsWidget();
-            selectionOptionsParameters = {
-                "appConfig": this.appConfig,
-                "appUtils": this.appUtils
-            };
-            // Initialize selection options widget
-            this._selectionOptionsWidgetObj = new SelectionOptions(selectionOptionsParameters, domConstruct.create("div", {}, this.selectionOptionsContainer));
-            // On click of selection options icon, open list of options
-            on(this.selectionOptionsButton, "click", lang.hitch(this, function () {
-                if (domClass.contains(this.selectionOptionsButton, "esriCTSelectionOptionsContainerEnabled")) {
-                    this.hideWebMapList();
-                    if (this._selectionOptionsWidgetObj) {
-                        this._selectionOptionsWidgetObj.startup();
-                    }
-                }
-            }));
-
-            this._selectionOptionsWidgetObj.showAllClicked = lang.hitch(this, function () {
-                this.showAllClicked();
-            });
-
-            this._selectionOptionsWidgetObj.showSelectedClicked = lang.hitch(this, function () {
-                this.showSelectedClicked();
-            });
-        },
-
-        /**
          * This function is used to destroy help widget
          * @memberOf widgets/app-header/app-header
          */
         _destroyHelpWidget: function () {
             if (this._helpWidgetObj) {
                 this._helpWidgetObj.destroy();
-            }
-        },
-
-        /**
-         * This function is used to destroy selection options widget
-         * @memberOf widgets/app-header/app-header
-         */
-        _destroySelectionOptionsWidget: function () {
-            if (this._selectionOptionsWidgetObj) {
-                this._selectionOptionsWidgetObj.destroy();
             }
         },
 
@@ -553,41 +504,6 @@ define([
          */
         onSearchApplied: function (lastSearchedString) {
             return lastSearchedString;
-        },
-
-        /**
-         * This function is used to enable selection option icon
-         * @memberOf widgets/app-header/app-header
-         */
-        enableSelectionOptionsIcon: function () {
-            domClass.replace(this.selectionOptionsButton, "esriCTSelectionOptionsContainerEnabled", "esriCTSelectionOptionsContainerDisabled");
-            domClass.replace(this.selectionOptionsButton, "esriCTPointerCursor", "esriCTDefaultCursor");
-        },
-
-        /**
-         * This function is used to disable selection option icon
-         * @memberOf widgets/app-header/app-header
-         */
-        disableSelectionOptionsIcon: function () {
-            domClass.replace(this.selectionOptionsButton, "esriCTSelectionOptionsContainerDisabled", "esriCTSelectionOptionsContainerEnabled");
-            domClass.replace(this.selectionOptionsButton, "esriCTDefaultCursor", "esriCTPointerCursor");
-            this._selectionOptionsWidgetObj.hideSelectionOptionsList();
-        },
-
-        /**
-         * This function is used to notify that show all is clicked
-         * @memberOf widgets/app-header/app-header
-         */
-        showAllClicked: function () {
-            return;
-        },
-
-        /**
-         * This function is used to notify that show selected is clicked
-         * @memberOf widgets/app-header/app-header
-         */
-        showSelectedClicked: function () {
-            return;
         },
 
         /**

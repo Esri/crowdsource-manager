@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "נבחרו ${selectedFeatureCount} / ${featureCount} רשומות",
     "exportToCsvSuccessMessage": "יצוא של קובץ CSV בוצע בהצלחה.",
     "exportToCsvErrorMessage": "שגיאה בעת ייצוא הישויות שנבחרו לקובץ CSV. נסה שוב.",
-    "exportToCSVButtonTooltip": "ייצוא ל- CSV"
+    "exportToCSVButtonTooltip": "ייצוא ל- CSV",
+    "showAllButtonTooltip": "הצג הכל",
+    "showSelectedButtonTooltip": "הצג פריטים שנבחרו",
+    "selectAllButtonTooltip": "בחר הכל",
+    "clearSelectionButtonTooltip": "נקה בחירה"
   },
   "timeSlider": {
     "timeSliderLabel": "טווח זמן",

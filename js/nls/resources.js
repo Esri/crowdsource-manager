@@ -98,7 +98,11 @@ define({
             layerFeatureCount: "${selectedFeatureCount} selected / ${featureCount} records", // Appears beside operational layer name to display count of total & selected feature
             exportToCsvSuccessMessage: "CSV file exported successfully.", // Displayed when export to csv is completed
             exportToCsvErrorMessage: "Error while exporting selected features to CSV file. Please try again.", // Displayed when error occurs while exporting data to csv
-            exportToCSVButtonTooltip: "Export to CSV" // Displayed as a tooltip for export to CSV button
+            exportToCSVButtonTooltip: "Export to CSV", // Displayed as a tooltip for export to CSV button
+            showAllButtonTooltip: "Show All",
+            showSelectedButtonTooltip: "Show Selected",
+            selectAllButtonTooltip: "Select All",
+            clearSelectionButtonTooltip: "Clear Selection"
         },
         timeSlider: {
             timeSliderLabel: "Time range", // Appears beside time slider widget

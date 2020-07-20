@@ -106,6 +106,10 @@ define([
         _selectedRowIndex: null, // to store index of row that is selected
         _isRowRemovedAfterMapClick: null, // to track whether row is removed after map click
         isNonEditableFeature: false,
+        firstClickedIndex: null, // to store the index of first row clicked with shift key
+        lastClickedIndex: null, // to store the index of last row clicked with shift key
+        shiftButtonClicked: false, // to get the status of shift button
+        selectAllRowsButtonClicked: false, // to get the status of select all button
 
         /**
         * This function is called when widget is constructed
@@ -250,6 +254,7 @@ define([
                 this._updateSelectedAndTotalRecordCounts();
                 if (this._selectRowGraphicsLayer.graphics.length > 0) {
                     this.enableSelectionOptionsIcon();
+                    this.enableClearSelectionIcon();
                 }
             }));
             // Update record count on de-selection of feature
@@ -257,6 +262,7 @@ define([
                 this._updateSelectedAndTotalRecordCounts();
                 if ((this._selectRowGraphicsLayer.graphics.length === 0)) {
                     this.disableSelectionOptionsIcon();
+                    this.disableClearSelectionIcon();
                     if (this.isShowSelectedClicked) {
                         this.showAllClicked();
                     }
@@ -271,6 +277,42 @@ define([
                     this._graphicLayerRemoveHandle.resume();
                 }
             }));
+        },
+
+        /**
+        * This function is used to select all the rows in the data table
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        selectAllRowsClicked: function () {
+            domClass.add(document.body, "data-viewer-loading");
+            this.selectAllRowsButtonClicked = true;
+            var allRows = $("tr[OBJID]", this._table).not('.esriCTRowHighlighted'), atLeaseOneFeatureSelected = false;
+            array.forEach(allRows, lang.hitch(this, function (rowToSelect, index) {
+                atLeaseOneFeatureSelected = true;
+                rowToSelect.click();
+            }));
+            if (!atLeaseOneFeatureSelected) {
+                domClass.remove(document.body, "data-viewer-loading");
+            }
+        },
+
+        /**
+        * This function is used to clear selection of all the rows in the data table
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        clearAllRowsSelection: function () {
+            this._deselectTableRows();
+            this._selectRowGraphicsLayer.clear();
+            this.resetDetailsPanel();
+        },
+
+
+        /**
+        * This function is used to pass the message to reset the details panel to intended dijit
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        resetDetailsPanel: function () {
+            return;
         },
 
         /**
@@ -302,6 +344,22 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         disableSelectionOptionsIcon: function () {
+            return;
+        },
+
+        /**
+        * This function is used to enable clear selection option icon
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        enableClearSelectionIcon: function () {
+            return;
+        },
+
+        /**
+        * This function is used to disable clear selection option icon
+        * @memberOf widgets/data-viewer/data-viewer
+        */
+        disableClearSelectionIcon: function () {
             return;
         },
 
@@ -529,6 +587,9 @@ define([
                     // looping through the entire feature data array to create td of records for each columns
                     for (j = 0; j < entireFeatureDataArr[i].length; j++) {
                         domAttr.set(tr, "OBJID", entireFeatureDataArr[i][objectIdIndex]);
+                        //Add index attribute to each table row
+                        //This will be required for selecting multiple rows and shift + click functionality
+                        domAttr.set(tr, "index", i);
                         // if objectId field flag visible not true on pop up and this column is of object id fields
                         // then hide this column
                         if ((j === objectIdIndex) && (!this._displayColumn[j].showObjectIdField)) {
@@ -548,6 +609,9 @@ define([
                     }
                     this._onRowClick(tr);
                 }
+                this.enableSelectAllButton();
+            } else {
+                this.disableSelectAllButton();
             }
             this.dataViewerContainer.appendChild(this._table);
             this.appUtils.hideLoadingIndicator();
@@ -724,7 +788,7 @@ define([
         _createDataViewerHeaderPanel: function () {
             var columnHeader, thead, tr, i, theadClass, thTitleContainer, column, filterIcon, caretAndFilterIconContainer, sortingIconDiv, ascendingIconDiv, descendingIconDiv;
             domConstruct.empty(this.dataViewerContainer);
-            this._table = domConstruct.create("table", { "class": "table table-striped table-bordered", "cellspacing": "0", "cellpadding": "0" }, this.dataViewerContainer);
+            this._table = domConstruct.create("table", { "class": "esriCTDisableDataViewerTextSelection table table-striped table-bordered", "cellspacing": "0", "cellpadding": "0" }, this.dataViewerContainer);
             thead = domConstruct.create("thead", {}, this._table);
             tr = domConstruct.create("tr", {}, thead);
             // if length of feature array is greater than 0 then
@@ -1086,6 +1150,15 @@ define([
         _onRowClick: function (tr) {
             // Click event binded on table rows for feature selection
             on(tr, "click", lang.hitch(this, function (evt) {
+                //If shift key is pressed, proceed with shift+click functionality
+                if (evt.shiftKey && this.firstClickedIndex === null && this.lastClickedIndex === null) {
+                    this._shiftKeyPressed(evt);
+                } else {
+                    //In case of normal click, reset the all the variables related to shift functionality
+                    if (!this.shiftButtonClicked) {
+                        this.firstClickedIndex = this.lastClickedIndex = null;
+                    }
+                }
                 this.appUtils.showLoadingIndicator();
                 if (this.isNonEditableFeature) {
                     // detects that feature of non-editable layer is clicked.
@@ -1098,12 +1171,53 @@ define([
                 this._selectedRowIndex = evt.currentTarget.rowIndex;
                 // if show selected is not clicked
                 // if show selected is clicked & ctrl key is clicked
-                if ((!this.isShowSelectedClicked) || ((this.isShowSelectedClicked) && (evt.ctrlKey))) {
+                if ((!this.isShowSelectedClicked) || ((this.isShowSelectedClicked) && (evt.ctrlKey)) ||
+                    this.selectAllRowsButtonClicked || this.shiftButtonClicked) {
                     this._highLightFeatureOnRowClick(this._featureObjectID, evt);
                 } else {
                     this.appUtils.hideLoadingIndicator();
                 }
             }));
+
+        },
+
+        _shiftKeyPressed: function (evt) {
+            var swapValues;
+            //Check if shift+click has already occurred with the variable values
+            //Add values to first and last shift click variables
+            //For Shift+click to be executed, only one row should be selected before used clicks using shift
+            var selectedRow = query(".esriCTRowHighlighted", this._table);
+            if (selectedRow && selectedRow.length === 1) {
+                this.firstClickedIndex = parseInt(domAttr.get(selectedRow[0], "index"), 10);
+            }
+            if (this.firstClickedIndex !== null && this.firstClickedIndex >= 0) {
+                this.lastClickedIndex = parseInt(domAttr.get(evt.currentTarget, "index"), 10);
+            }
+            //If first and last click values are not null, it means shift+click has occurred
+            if (this.firstClickedIndex !== null && this.lastClickedIndex !== null) {
+                //If first click value is greater than last click
+                //swap the values, this will help in selecting rows sequentially
+                if (this.firstClickedIndex > this.lastClickedIndex) {
+                    swapValues = this.firstClickedIndex;
+                    this.firstClickedIndex = this.lastClickedIndex;
+                    this.lastClickedIndex = swapValues;
+                }
+                //Show the loading indicator
+                domClass.add(document.body, "data-viewer-loading");
+                //Raise the shift key flag
+                this.shiftButtonClicked = true;
+                //Select all the rows in between first and last click variable
+                //Exclude first and last rows as they are already selected
+                for (var i = this.firstClickedIndex; i <= this.lastClickedIndex; i++) {
+                    if (i !== this.firstClickedIndex && i !== this.lastClickedIndex) {
+                        rowToSelect = $("tr[index=" + "'" + i + "'" + "]");
+                        if (rowToSelect.length > 0 && !domClass.contains(rowToSelect[0], "esriCTRowHighlighted")) {
+                            rowToSelect.click();
+                        }
+                    }
+
+                }
+            }
         },
 
         /**
@@ -1285,8 +1399,10 @@ define([
                     var selectedFeaturesArr = this._getSelectedFeatures();
                     if (selectedFeaturesArr.length === 0) {
                         this._disableExportToCSVButton();
+                        this.disableClearSelectionButton();
                     } else {
                         this._enableExportToCSVButton();
+                        this.enableClearSelectionButton();
                     }
                     this.showDetailsPanel(showDetailsPanelDataObj);
                     if (this.isShowSelectedClicked) {
@@ -1334,10 +1450,14 @@ define([
                     this._getSelectedLayerOnTop();
                     // if ctrl key is pressed for multiple feature selection
                     // then set ctrlFlag to true else keep it as false
-                    if (!evt.ctrlKey) {
-                        this.clearSelection();
-                    } else {
+                    if (this.selectAllRowsButtonClicked || this.shiftButtonClicked) {
                         ctrlFlag = true;
+                    } else {
+                        if (!evt.ctrlKey) {
+                            this.clearSelection();
+                        } else {
+                            ctrlFlag = true;
+                        }
                     }
                     selectFlag = this._selectRowOnFeatureClick(objectId, false, ctrlFlag);
                     if (featureSet.features && featureSet.features.length > 0) {
@@ -1371,8 +1491,36 @@ define([
                     this._deleteRowFromTable(evt);
                     if (selectedFeaturesArr.length === 0) {
                         this._disableExportToCSVButton();
+                        this.disableClearSelectionIcon();
                     } else {
                         this._enableExportToCSVButton();
+                        this.enableClearSelectionIcon();
+                    }
+                    //If select all button is clicked and the last feature is being selected
+                    //change the flag value to false and hide the loading indicator
+                    //Toggle the select all button accordingly
+                    //subtracting 2 from table rows as two rows are for headers
+                    if ((this.selectAllRowsButtonClicked &&
+                        (this._table.rows.length - 2 === selectedFeaturesArr.length))) {
+                        this.selectAllRowsButtonClicked = false;
+                        domClass.remove(document.body, "data-viewer-loading");
+                        this.disableSelectAllButton();
+                    } else {
+                        this.enableSelectAllButton();
+                    }
+                    //If shift button is clicked and the last feature is being selected
+                    //change the flag value to false 
+                    //reset the variable related to shift click functionality
+                    //hide the loading indicator
+                    if (this.shiftButtonClicked &&
+                        ((this.lastClickedIndex - this.firstClickedIndex) + 1) === selectedFeaturesArr.length) {
+                        this.shiftButtonClicked = false;
+                        this.firstClickedIndex = this.lastClickedIndex = null;
+                        domClass.remove(document.body, "data-viewer-loading");
+                    }
+                    //If all the table rows are selected disable the select all button
+                    if (this._table.rows.length - 2 === selectedFeaturesArr.length) {
+                        this.disableSelectAllButton();
                     }
                     this.appUtils.hideLoadingIndicator();
                 }), lang.hitch(this, function () {
@@ -1829,6 +1977,23 @@ define([
         _disableExportToCSVButton: function () {
             var exportButton = dom.byId("exportToCSVMainButton");
             domClass.add(exportButton, "esriCTExportToCSVIconDisabled");
+        },
+
+
+        enableClearSelectionButton: function () {
+            return;
+        },
+
+        disableClearSelectionButton: function () {
+            return;
+        },
+
+        enableSelectAllButton: function () {
+            return;
+        },
+
+        disableSelectAllButton: function () {
+            return;
         }
     });
 });

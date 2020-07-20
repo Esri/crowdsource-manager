@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} vybráno / ${featureCount} záznamů",
     "exportToCsvSuccessMessage": "Export souboru CSV proběhl úspěšně.",
     "exportToCsvErrorMessage": "Při exportování vybraných prvků do souboru CSV došlo k chybě. Zkuste to prosím znovu.",
-    "exportToCSVButtonTooltip": "Exportovat do souboru CSV"
+    "exportToCSVButtonTooltip": "Exportovat do souboru CSV",
+    "showAllButtonTooltip": "Zobrazit vše",
+    "showSelectedButtonTooltip": "Zobrazit vybrané",
+    "selectAllButtonTooltip": "Vybrat vše",
+    "clearSelectionButtonTooltip": "Zrušit výběr"
   },
   "timeSlider": {
     "timeSliderLabel": "Časový rozsah",

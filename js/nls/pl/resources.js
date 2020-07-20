@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "Wybrane rekordy: ${selectedFeatureCount} z ${featureCount}",
     "exportToCsvSuccessMessage": "Plik CSV został wyeksportowany pomyślnie.",
     "exportToCsvErrorMessage": "Wystąpił błąd podczas eksportowania wybranych obiektów do pliku CSV. Spróbuj ponownie.",
-    "exportToCSVButtonTooltip": "Export to CSV"
+    "exportToCSVButtonTooltip": "Export to CSV",
+    "showAllButtonTooltip": "Pokaż wszystko",
+    "showSelectedButtonTooltip": "Pokaż wybrane",
+    "selectAllButtonTooltip": "Zaznacz wszystkie",
+    "clearSelectionButtonTooltip": "Wyczyść pole wyboru"
   },
   "timeSlider": {
     "timeSliderLabel": "Zakres czasu",

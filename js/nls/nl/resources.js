@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} geselecteerd / ${featureCount} items",
     "exportToCsvSuccessMessage": "CSV-bestand met succes geëxporteerd.",
     "exportToCsvErrorMessage": "Fout bij het exporteren van de geselecteerde objecten naar CSV-bestand. Probeer het opnieuw.",
-    "exportToCSVButtonTooltip": "Exporteren naar CSV"
+    "exportToCSVButtonTooltip": "Exporteren naar CSV",
+    "showAllButtonTooltip": "Show All",
+    "showSelectedButtonTooltip": "Geef geselecteerde weer",
+    "selectAllButtonTooltip": "Alles selecteren",
+    "clearSelectionButtonTooltip": "Selectie wissen"
   },
   "timeSlider": {
     "timeSliderLabel": "Tijdsbereik",
