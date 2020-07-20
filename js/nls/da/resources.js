@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} valgt / ${featureCount} poster",
     "exportToCsvSuccessMessage": "CSV-fil eksporteret uden fejl.",
     "exportToCsvErrorMessage": "Der opstod en fejl under eksport af de valgte objekter til CSV-filen. Prøv igen.",
-    "exportToCSVButtonTooltip": "Eksportér til CSV"
+    "exportToCSVButtonTooltip": "Eksportér til CSV",
+    "showAllButtonTooltip": "Show All",
+    "showSelectedButtonTooltip": "Vis valgte",
+    "selectAllButtonTooltip": "Vælg alle",
+    "clearSelectionButtonTooltip": "Ryd markering"
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsinterval",

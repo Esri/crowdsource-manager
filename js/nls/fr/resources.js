@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} sélectionnées / ${featureCount} enregistrements",
     "exportToCsvSuccessMessage": "Le fichier CSV a été exporté.",
     "exportToCsvErrorMessage": "Une erreur s’est produite lors de l’exportation des entités sélectionnées vers le fichier CSV. Réessayez ultérieurement.",
-    "exportToCSVButtonTooltip": "Exporter au format CSV"
+    "exportToCSVButtonTooltip": "Exporter au format CSV",
+    "showAllButtonTooltip": "Afficher tout",
+    "showSelectedButtonTooltip": "Afficher la sélection",
+    "selectAllButtonTooltip": "Sélectionner tout",
+    "clearSelectionButtonTooltip": "Effacer la sélection"
   },
   "timeSlider": {
     "timeSliderLabel": "Période",

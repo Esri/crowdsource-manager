@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} επιλεγμένα / ${featureCount} εγγραφές",
     "exportToCsvSuccessMessage": "Η εξαγωγή του αρχείου CSV ολοκληρώθηκε με επιτυχία.",
     "exportToCsvErrorMessage": "Σφάλμα κατά την εξαγωγή επιλεγμένων στοιχείων σε αρχείο CSV. Προσπαθήστε ξανά.",
-    "exportToCSVButtonTooltip": "Εξαγωγή σε CSV"
+    "exportToCSVButtonTooltip": "Εξαγωγή σε CSV",
+    "showAllButtonTooltip": "Εμφάνιση όλων",
+    "showSelectedButtonTooltip": "Εμφάνιση επιλεγμένων",
+    "selectAllButtonTooltip": "Επιλογή όλων",
+    "clearSelectionButtonTooltip": "Απαλοιφή επιλογής"
   },
   "timeSlider": {
     "timeSliderLabel": "Εύρος χρόνου",

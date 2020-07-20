@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} valda / ${featureCount} poster",
     "exportToCsvSuccessMessage": "CSV-filen har exporterats.",
     "exportToCsvErrorMessage": "Ett fel uppstod vid export av valda geoobjekt till CSV-filen. Försök igen.",
-    "exportToCSVButtonTooltip": "Export to CSV"
+    "exportToCSVButtonTooltip": "Export to CSV",
+    "showAllButtonTooltip": "Visa alla",
+    "showSelectedButtonTooltip": "Visa valda",
+    "selectAllButtonTooltip": "Markera alla",
+    "clearSelectionButtonTooltip": "Rensa val"
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsintervall",

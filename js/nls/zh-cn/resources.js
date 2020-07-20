@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount}个已选择/${featureCount}条记录",
     "exportToCsvSuccessMessage": "CSV 文件已成功导出。",
     "exportToCsvErrorMessage": "将选定要素导出到 CSV 文件时出错。 请重试。",
-    "exportToCSVButtonTooltip": "导出为 CSV"
+    "exportToCSVButtonTooltip": "导出为 CSV",
+    "showAllButtonTooltip": "显示全部",
+    "showSelectedButtonTooltip": "显示所选",
+    "selectAllButtonTooltip": "全选",
+    "clearSelectionButtonTooltip": "清除所选内容"
   },
   "timeSlider": {
     "timeSliderLabel": "时间范围",

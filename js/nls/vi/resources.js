@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} được chọn / ${featureCount} hồ sơ",
     "exportToCsvSuccessMessage": "Xuất tệp CSV thành công.",
     "exportToCsvErrorMessage": "Lỗi xảy ra khi xuất các đối tượng đã chọn sang tệp CSV. Vui lòng thử lại.",
-    "exportToCSVButtonTooltip": "Xuất ra CSV"
+    "exportToCSVButtonTooltip": "Xuất ra CSV",
+    "showAllButtonTooltip": "Hiển thị tất cả",
+    "showSelectedButtonTooltip": "Hiện Mục được Chọn",
+    "selectAllButtonTooltip": "Chọn Tất cả",
+    "clearSelectionButtonTooltip": "Xóa lựa chọn"
   },
   "timeSlider": {
     "timeSliderLabel": "Khoảng thời gian",

@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} kiválasztva / ${featureCount} rekord",
     "exportToCsvSuccessMessage": "A CSV-fájl exportálása sikeres volt.",
     "exportToCsvErrorMessage": "Hiba történt a kiválasztott vektoros elemek CSV-fájlba történő exportálása során. Próbálja meg újra.",
-    "exportToCSVButtonTooltip": "Exportálás CSV-fájlba."
+    "exportToCSVButtonTooltip": "Exportálás CSV-fájlba.",
+    "showAllButtonTooltip": "Összes megjelenítése",
+    "showSelectedButtonTooltip": "Kiválasztott elemek megjelenítése",
+    "selectAllButtonTooltip": "Összes kijelölése",
+    "clearSelectionButtonTooltip": "Kiválasztás megszüntetése"
   },
   "timeSlider": {
     "timeSliderLabel": "Időtartomány",

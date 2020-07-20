@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} selectat / ${featureCount} înregistrări",
     "exportToCsvSuccessMessage": "Fișierul CSV exportat cu succes.",
     "exportToCsvErrorMessage": "Eroare la exportarea obiectelor spaţiale selectate în fișierul CSV. Încercați din nou.",
-    "exportToCSVButtonTooltip": "Export în CSV"
+    "exportToCSVButtonTooltip": "Export în CSV",
+    "showAllButtonTooltip": "Afișare toate+",
+    "showSelectedButtonTooltip": "Afişare obiecte selectate",
+    "selectAllButtonTooltip": "Selectare toate",
+    "clearSelectionButtonTooltip": "Golire selecţie"
   },
   "timeSlider": {
     "timeSliderLabel": "Interval de timp",

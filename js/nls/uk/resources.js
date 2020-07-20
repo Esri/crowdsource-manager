@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} вибрано / ${featureCount} записів",
     "exportToCsvSuccessMessage": "CSV-файл успішно експортовано.",
     "exportToCsvErrorMessage": "Помилка під час експорту вибраних об'єктів в CSV-файл. Спробуйте знову.",
-    "exportToCSVButtonTooltip": "Експорт в CSV"
+    "exportToCSVButtonTooltip": "Експорт в CSV",
+    "showAllButtonTooltip": "Показати всі",
+    "showSelectedButtonTooltip": "Показати вибрані",
+    "selectAllButtonTooltip": "Вибрати всі",
+    "clearSelectionButtonTooltip": "Очистити вибір"
   },
   "timeSlider": {
     "timeSliderLabel": "Діапазон часу",

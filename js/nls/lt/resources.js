@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "Pažymėtų įrašų: ${selectedFeatureCount} / Iš viso įrašų: ${featureCount}",
     "exportToCsvSuccessMessage": "CSV failas sėkmingai eksportuotas.",
     "exportToCsvErrorMessage": "Eksportuojant pasirinktus elementus į CSV failą įvyko klaida. Pabandykite dar kartą.",
-    "exportToCSVButtonTooltip": "Eksportuoti į CSV"
+    "exportToCSVButtonTooltip": "Eksportuoti į CSV",
+    "showAllButtonTooltip": "Rodyti visus",
+    "showSelectedButtonTooltip": "Rodyti pažymėtus",
+    "selectAllButtonTooltip": "Žymėti viską",
+    "clearSelectionButtonTooltip": "Valyti išranką"
   },
   "timeSlider": {
     "timeSliderLabel": "Laiko intervalas",

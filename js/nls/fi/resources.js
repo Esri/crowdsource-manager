@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} valittu / ${featureCount} tietuetta",
     "exportToCsvSuccessMessage": "CSV-tiedoston vienti onnistui.",
     "exportToCsvErrorMessage": "Virhe vietäessä valittuja kohteita CSV-tiedostoon. Yritä uudelleen.",
-    "exportToCSVButtonTooltip": "Vie CSV-tiedostoon"
+    "exportToCSVButtonTooltip": "Vie CSV-tiedostoon",
+    "showAllButtonTooltip": "Näytä kaikki",
+    "showSelectedButtonTooltip": "Näytä valitut kohteet",
+    "selectAllButtonTooltip": "Valitse kaikki",
+    "clearSelectionButtonTooltip": "Tyhjennä valinta"
   },
   "timeSlider": {
     "timeSliderLabel": "Aikaväli",

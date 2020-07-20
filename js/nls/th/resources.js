@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount} เลือก / ${featureCount} เรคคอร์ด",
     "exportToCsvSuccessMessage": "ส่งออกไฟล์ CSV เรียบร้อยแล้ว",
     "exportToCsvErrorMessage": "เกิดข้อผิดพลาดขณะส่งออกฟีเจอร์ที่เลือกไปยังไฟล์ CSV โปรดลองอีกครั้ง",
-    "exportToCSVButtonTooltip": "บันทึกเป็นไฟล์ CSV"
+    "exportToCSVButtonTooltip": "บันทึกเป็นไฟล์ CSV",
+    "showAllButtonTooltip": "แสดงทั้งหมด",
+    "showSelectedButtonTooltip": "แสดงที่เลือก",
+    "selectAllButtonTooltip": "เลือกทั้งหมด",
+    "clearSelectionButtonTooltip": "ยกเลิกบริเวณที่เลือก"
   },
   "timeSlider": {
     "timeSliderLabel": "ช่วงเวลา",

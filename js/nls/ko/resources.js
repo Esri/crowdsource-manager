@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${featureCount}개 레코드 중 ${selectedFeatureCount}개 선택됨",
     "exportToCsvSuccessMessage": "CSV 파일을 정상적으로 내보냈습니다.",
     "exportToCsvErrorMessage": "선택한 피처를 CSV 파일로 내보내는 중 오류가 발생했습니다. 다시 시도하세요.",
-    "exportToCSVButtonTooltip": "CSV로 내보내기"
+    "exportToCSVButtonTooltip": "CSV로 내보내기",
+    "showAllButtonTooltip": "모두 보기",
+    "showSelectedButtonTooltip": "선택한 항목 보기",
+    "selectAllButtonTooltip": "모두 선택",
+    "clearSelectionButtonTooltip": "선택 해제"
   },
   "timeSlider": {
     "timeSliderLabel": "시간 범위",

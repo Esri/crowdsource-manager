@@ -97,7 +97,11 @@ define({
     "layerFeatureCount": "${selectedFeatureCount}/${featureCount} レコードが選択されました",
     "exportToCsvSuccessMessage": "CSV ファイルは正常にエクスポートされました。",
     "exportToCsvErrorMessage": "選択したフィーチャを CSV ファイルにエクスポート中にエラーが発生しました。 もう一度お試しください。",
-    "exportToCSVButtonTooltip": "CSV にエクスポート"
+    "exportToCSVButtonTooltip": "CSV にエクスポート",
+    "showAllButtonTooltip": "すべて表示",
+    "showSelectedButtonTooltip": "選択レイヤーの表示",
+    "selectAllButtonTooltip": "すべて選択",
+    "clearSelectionButtonTooltip": "選択の解除"
   },
   "timeSlider": {
     "timeSliderLabel": "時間範囲",
