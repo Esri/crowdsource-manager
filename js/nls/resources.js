@@ -102,7 +102,8 @@ define({
             showAllButtonTooltip: "Show All",
             showSelectedButtonTooltip: "Show Selected",
             selectAllButtonTooltip: "Select All",
-            clearSelectionButtonTooltip: "Clear Selection"
+            clearSelectionButtonTooltip: "Clear Selection",
+            invalidFeatureMessage: "Unable to select ${invalidFeatureCount} invalid feature(s)."
         },
         timeSlider: {
             timeSliderLabel: "Time range", // Appears beside time slider widget

@@ -308,7 +308,16 @@ define([
                     //get features to be updated on layer
                     featureArray = this._getFeaturesToBeUpdated(updatedAttributes);
                     // Add the popup to the popup table
-                    this.selectedLayer.applyEdits(null, featureArray, null, lang.hitch(this, function (addResult, updateResult, deleteResult) { //ignore jslint
+                    // chunks method
+                    // After implementing #291 ticket, when user select all the records, considering there are 4000 records
+                    // if user changes the value in popup and tries to update it, apply edits operation gets fail
+                    // because there any many records and hence chunks method is implemented where records are updated in chunks
+                    var deferredArr = this._createApplyEditsChunks(featureArray);
+                    all(deferredArr).then(lang.hitch(this, function (results) {
+                        var updateResult = [];
+                        array.forEach(results, lang.hitch(this, function (result) {
+                            updateResult = updateResult.concat(result[1]);
+                        }));
                         // send last feature to the handler
                         var userFormNode, updateFeatureFailed, updateFeatureSuccess, errorMessage,
                             featureFailedErrorMessage, alertErrorMessage;
@@ -1688,6 +1697,17 @@ define([
                 }
             }));
             return hasSamePrivilege;
+        },
+        _createApplyEditsChunks: function (featureArray) {
+            var deferredArr = [];
+            var chunk = 25;
+            var iteration = Math.ceil(featureArray.length / chunk);
+            var arr = new Array(iteration);
+            array.forEach(arr, lang.hitch(this, function () {
+                var features = featureArray.splice(0, chunk);
+                deferredArr.push(this.selectedLayer.applyEdits(null, features, null).promise);
+            }));
+            return deferredArr;
         }
     });
 });

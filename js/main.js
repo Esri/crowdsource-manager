@@ -431,6 +431,10 @@ define([
             this._applicationHeader.onSearchApplied = lang.hitch(this, function (lastSearchedString) {
                 this.appConfig._filterObject.lastSearchedString = lastSearchedString;
             });
+            //Update the last search string to EMPTY on click of clear text button
+            this._applicationHeader.onSearchClear = lang.hitch(this, function () {
+                this.appConfig._filterObject.lastSearchedString = "";
+            });
             this._applicationHeader.showAllClicked = lang.hitch(this, function () {
                 this._showAllRecords();
             });
@@ -659,7 +663,7 @@ define([
                         this._hideContainerOfTimeSlider();
                     }
                     this.map.addLayer(this._refinedOperationalLayer, this._existingLayerIndex);
-                    this._checkFeatureScaleAndMaxRecordCount();
+                    this._checkFeatureScaleAndMaxRecordCount(true);
                     this._handleMapControls();
                 }), 10);
             });
@@ -1429,9 +1433,9 @@ define([
          * This function is used to check the scale and max record count of feature layer
          * @memberOf widgets/main/main
          */
-        _checkFeatureScaleAndMaxRecordCount: function () {
+        _checkFeatureScaleAndMaxRecordCount: function (isOnLoad) {
             this._getAllFeaturesID().then(lang.hitch(this, function (featureIDs) {
-                if (this._refinedOperationalLayer.isExplicitlyFeaturesAdded || featureIDs.length > this._refinedOperationalLayer.maxRecordCount || !this._isLayerVisible()) {
+                if ((isOnLoad && !this._isLayerVisible()) || (!isOnLoad && (!this._isLayerVisible() || this._refinedOperationalLayer.isExplicitlyFeaturesAdded || featureIDs.length > this._refinedOperationalLayer.maxRecordCount))) {
                     this._getFeatureByChunks(featureIDs).then(lang.hitch(this, function (entireFeatureArr) {
                         this._refinedOperationalLayer.clear();
                         array.forEach(entireFeatureArr, lang.hitch(this, function (graphic) {
@@ -1681,7 +1685,7 @@ define([
 
         _refreshOperationalLayer: function () {
             if (this._refinedOperationalLayer.isExplicitlyFeaturesAdded) {
-                this._checkFeatureScaleAndMaxRecordCount();
+                this._checkFeatureScaleAndMaxRecordCount(false);
             } else {
                 this._refinedOperationalLayer.refresh();
             }
@@ -2237,6 +2241,8 @@ define([
             this.showAllButtonClickedHandle = on(showAllButton, "click", lang.hitch(this, function () {
                 if (!domClass.contains(showAllButton, "esriCTShowSelectedIconDisabled")) {
                     if (domClass.contains(showAllButton, "esriCTShowSelectedIconEnabled")) {
+                        ApplicationUtils.showLoadingIndicator();
+                        setTimeout(lang.hitch(this, function () {
                         this._dataViewerWidget.isShowSelectedClicked = true;
                         this._dataViewerWidget.isShowAllClicked = false;
                         this._detailsPanelWidget.showSelectedClicked();
@@ -2248,7 +2254,11 @@ define([
                         this.disableSelectAllButton();
                         domClass.replace(showAllButton, "esriCTShowAllIcon", "esriCTShowSelectedIconEnabled");
                         domAttr.set(showAllButton, "title", this.appConfig.i18n.dataviewer.showAllButtonTooltip);
+                            ApplicationUtils.hideLoadingIndicator();
+                        }), 250);
                     } else {
+                        ApplicationUtils.showLoadingIndicator();
+                        setTimeout(lang.hitch(this, function () {
                         this._showAllRecords();
                         domClass.replace(showAllButton, "esriCTShowSelectedIconEnabled", "esriCTShowAllIcon");
                         domAttr.set(showAllButton, "title", this.appConfig.i18n.dataviewer.showSelectedButtonTooltip);
@@ -2257,6 +2267,8 @@ define([
                         if (this._isAllRowsSelected()) {
                             this.disableSelectAllButton();
                         }
+                            ApplicationUtils.hideLoadingIndicator();
+                        }), 250);
                     }
                 }
             }));
@@ -2267,6 +2279,8 @@ define([
             }));
             this.clearSelectionButtonClickedHandle = on(clearSelectionButton, "click", lang.hitch(this, function () {
                 if (!(domClass.contains(clearSelectionButton, "esriCTClearSelectionIconDisabled"))) {
+                    ApplicationUtils.showLoadingIndicator();
+                    setTimeout(lang.hitch(this, function () {
                     this._dataViewerWidget.clearAllRowsSelection();
                     this._disableExportToCSVButton();
                     this.disableClearSelectionIcon();
@@ -2286,6 +2300,8 @@ define([
                     if (this._dataViewerWidget) {
                         this._dataViewerWidget.isEditMode = false;
                     }
+                        ApplicationUtils.hideLoadingIndicator();
+                    }), 250);
                 }
             }));
         },
