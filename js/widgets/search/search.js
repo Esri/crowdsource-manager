@@ -95,9 +95,6 @@ define([
         * @memberOf widgets/search/search
         */
         _attachSearchWidgetEvents: function () {
-            on(this.searchRecords, "click", lang.hitch(this, function () {
-                this.searchFeatureRecords(true);
-            }));
             on(this.searchBox, "keyup", lang.hitch(this, function (event) {
                 if (event.keyCode === 13) {
                     this.searchFeatureRecords(true);
@@ -115,7 +112,6 @@ define([
             if (!this._searchedFromSearchWidget) {
                 domClass.add(this.searchOptions, "esriCTHidden");
             }
-            $(".esriCTNoResults").addClass("esriCTHidden");
             // If the value/search string exists then search it
             if ((lang.trim(this.searchBox.value) !== "") && (!domClass.contains(this.searchBox, "esriCTPlaceholder"))) {
                 this.appUtils.showLoadingIndicator();
@@ -153,7 +149,6 @@ define([
             if (this._searchedFieldValue) {
                 this._newDefinitionExpression = this._getNewDefinitionExpression();
             } else {
-                $(".esriCTNoResults").addClass("esriCTHidden");
                 this._newDefinitionExpression = this._existingDefinitionExpression;
             }
             this._resetDefinitionExpression();
@@ -180,7 +175,6 @@ define([
                         }));
                     }
                     this.selectedOperationalLayer.setDefinitionExpression(this._newDefinitionExpression);
-                    this._removeNoResultFoundMessage();
                     this.refreshSelectedLayer();
                 } else {
                     this.searchBox.value = "";
@@ -195,7 +189,6 @@ define([
             }), lang.hitch(this, function () {
                 // if any error occur while querying the current expression
                 this.selectedOperationalLayer.setDefinitionExpression(this._existingDefinitionExpression);
-                this._removeNoResultFoundMessage();
             }));
         },
 
@@ -204,16 +197,7 @@ define([
         * @memberOf widgets/search/search
         */
         _displayNoResultFoundMessage: function () {
-            this.noResultsFound.innerHTML = this.appConfig.i18n.search.noResultFoundText;
-            $(".esriCTNoResults").removeClass("esriCTHidden");
-        },
-
-        /**
-        * This function is used to remove no result found message
-        * @memberOf widgets/search/search
-        */
-        _removeNoResultFoundMessage: function () {
-            $(".esriCTNoResults").addClass("esriCTHidden");
+            this.appUtils.showMessage(this.appConfig.i18n.search.noResultFoundText);
         },
 
         /**
@@ -280,8 +264,6 @@ define([
                     this.appUtils.showLoadingIndicator();
                     this._newDefinitionExpression = this._existingDefinitionExpression;
                     this.searchBox.value = "";
-                    this._removeNoResultFoundMessage();
-                    this._toggleOptions();
                     this.selectedOperationalLayer.setDefinitionExpression(this._existingDefinitionExpression);
                     this.refreshSelectedLayer();
                 } else {
@@ -291,6 +273,7 @@ define([
                     }
                     this.appUtils.hideLoadingIndicator();
                 }
+                this.onSearchClear();
             }));
         },
 
@@ -335,8 +318,8 @@ define([
         * @memberOf widgets/search/search
         */
         enableSearchIcon: function () {
-            domClass.replace(this.searchButton, "esriCTSearchIconContainer", "esriCTSearchIconContainerDisabled");
-            domClass.replace(this.searchButton, "esriCTPointerCursor", "esriCTDefaultCursor");
+            domClass.remove(this.searchOptions, "esriCTHidden");
+            domClass.remove(this.searchButton, "esriCTHidden");
         },
 
         /**
@@ -344,10 +327,9 @@ define([
         * @memberOf widgets/search/search
         */
         disableSearchIcon: function () {
-            domClass.replace(this.searchButton, "esriCTSearchIconContainerDisabled", "esriCTSearchIconContainer");
-            domClass.replace(this.searchButton, "esriCTDefaultCursor", "esriCTPointerCursor");
-            // also hide search options
+            //Hide search options
             domClass.add(this.searchOptions, "esriCTHidden");
+            domClass.add(this.searchButton, "esriCTHidden");
         },
 
         /**
@@ -429,6 +411,14 @@ define([
         */
         onSearchApplied: function () {
             return this._lastDefinitionExprAppliedBySearch;
+        },
+
+        /** 
+        * This function is used to return last searched string
+        * @memberOf widgets/search/search
+        */
+        onSearchClear: function () {
+            return;
         },
 
         /**

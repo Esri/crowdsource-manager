@@ -313,6 +313,12 @@ table {
     font-size: 16px;
 }
 
+.esriCTSearchButtonContainer {
+    margin-top: 14px;
+    float: right;
+    display: table;
+    height: 100%;
+}
 .esriCTSearchIconContainerDisabled {
     float: right;
     font-size: 16px;
@@ -1985,7 +1991,6 @@ input.esriCTRadioButton {
 }
 
 .esriCTOptionsSearchMode {
-    padding: 5px;
     right: 25px;
     cursor: default;
 }
@@ -2019,23 +2024,6 @@ input.esriCTRadioButton {
     border-right: 1px solid #DFDFDF;
     border-bottom: 1px solid #DFDFDF;
     cursor: pointer;
-}
-
-.esriCTSearchButton {
-    height: 24px;
-    width: 24px;
-    margin-right: 2px;
-    display: inline-block;
-    margin-left: 5px;
-    font-size: 16px;
-    color: #cccccc;
-    padding-top: 4px;
-    padding-left: 3px;
-    top: 0px !important;
-}
-
-.esriCTNoResults {
-    color: #555;
 }
 
 .esriCTSearchContainer {
