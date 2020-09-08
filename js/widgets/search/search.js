@@ -216,14 +216,14 @@ define([
                             definitionExpression = this._existingDefinitionExpression;
                             if (layerObject.field.exactMatch) {
                                 // For exact match case
-                                searchDefinitionExpression = " AND " + "UPPER(" + layerObject.field.name + ")" + " = '" + lang.trim(this._searchedFieldValue).toUpperCase() + "'";
+                                searchDefinitionExpression = "UPPER(" + layerObject.field.name + ")" + " = '" + lang.trim(this._searchedFieldValue).toUpperCase() + "'";
                                 this._lastDefinitionExprAppliedBySearch = searchDefinitionExpression;
-                                definitionExpression += searchDefinitionExpression;
+                                definitionExpression = definitionExpression + " AND " + searchDefinitionExpression;
                             } else {
                                 // For contains case
-                                searchDefinitionExpression = " AND " + "UPPER(" + layerObject.field.name + ")" + " LIKE '%" + lang.trim(this._searchedFieldValue).toUpperCase() + "%'";
+                                searchDefinitionExpression = "UPPER(" + layerObject.field.name + ")" + " LIKE '%" + lang.trim(this._searchedFieldValue).toUpperCase() + "%'";
                                 this._lastDefinitionExprAppliedBySearch = searchDefinitionExpression;
-                                definitionExpression += searchDefinitionExpression;
+                                definitionExpression = definitionExpression + " AND " + searchDefinitionExpression;
                             }
                         } else {
                             if (layerObject.field.exactMatch) {
@@ -367,6 +367,14 @@ define([
                 if (this._lastDefinitionExprAppliedBySearch) {
                     this._lastDefinitionExprAppliedBySearch = lang.trim(this._lastDefinitionExprAppliedBySearch);
                     this._existingDefinitionExpression = this._existingDefinitionExpression.split(this._lastDefinitionExprAppliedBySearch).join("");
+                    var lastIndex = this._existingDefinitionExpression.lastIndexOf("AND");
+                    if (lastIndex > -1) {
+                        var splitArr = this._existingDefinitionExpression.split("AND", lastIndex);
+                        //If the expression contains AND in the end remove it an use the first part of expression
+                        if (splitArr && splitArr.length > 1 && splitArr[1].trim() === "") {
+                            this._existingDefinitionExpression = splitArr[0];
+                        }
+                    }
                     this._existingDefinitionExpression = lang.trim(this._existingDefinitionExpression);
                 }
                 this._removeOrAddParentParentheses();
