@@ -1410,7 +1410,12 @@ define([
                 this._currentExpression = (outerSplitterNewArray[0] && outerSplitterNewArray[0] !== "") ? outerSplitterNewArray[0] : "1=1";
             }
             if (this.appConfig._filterObject.lastSearchedString) {
-                this._currentExpression = this._currentExpression + this.appConfig._filterObject.lastSearchedString;
+                 //If valid current expression is found add it to the existing expression
+                if (this._currentExpression) {
+                    this._currentExpression = this._currentExpression + " AND " + this.appConfig._filterObject.lastSearchedString;
+                } else {
+                    this._currentExpression = this.appConfig._filterObject.lastSearchedString;
+                }
             }
         },
 
