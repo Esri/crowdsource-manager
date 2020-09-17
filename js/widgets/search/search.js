@@ -367,6 +367,7 @@ define([
                 if (this._lastDefinitionExprAppliedBySearch) {
                     this._lastDefinitionExprAppliedBySearch = lang.trim(this._lastDefinitionExprAppliedBySearch);
                     this._existingDefinitionExpression = this._existingDefinitionExpression.split(this._lastDefinitionExprAppliedBySearch).join("");
+                    //Check last index of "AND", if it is present at the last then remove it as it will corrupt the query string
                     var lastIndex = this._existingDefinitionExpression.lastIndexOf("AND");
                     if (lastIndex > -1) {
                         var splitArr = this._existingDefinitionExpression.split("AND", lastIndex);
