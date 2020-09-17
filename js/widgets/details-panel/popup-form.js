@@ -1698,6 +1698,14 @@ define([
             }));
             return hasSamePrivilege;
         },
+
+        /**
+         * This functions is written while implementing github ticket #291
+         * https://github.com/Esri/crowdsource-manager/issues/291
+         * After implementing #291 ticket, when user select all the records, considering there are 4000 records
+         * if user changes the value in popup and tries to update it, apply edits operation gets fail
+         * because there any many records and hence chunks method is implemented where records are updated in chunks
+         */
         _createApplyEditsChunks: function (featureArray) {
             var deferredArr = [];
             var chunk = 25;

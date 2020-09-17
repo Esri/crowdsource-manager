@@ -1868,7 +1868,11 @@ define([
                 wkid: graphic.geometry.spatialReference.wkid
             }));
             if (graphic.geometry.paths && graphic.geometry.paths.length > 0) {
-                polyline.addPath(graphic.geometry.paths[0]);
+                //Loop through all the paths nad highlight the feature geometry
+                //This will make sure multipart features are selected as expected
+                array.forEach(graphic.geometry.paths, lang.hitch(this, function (currentPath) {
+                    polyline.addPath(currentPath);
+                }));
             }
             graphics = new Graphic(polyline, symbol, graphic.attributes);
             return graphics;
