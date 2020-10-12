@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Εμφάνιση όλων",
     "showSelectedButtonTooltip": "Εμφάνιση επιλεγμένων",
     "selectAllButtonTooltip": "Επιλογή όλων",
-    "clearSelectionButtonTooltip": "Απαλοιφή επιλογής"
+    "clearSelectionButtonTooltip": "Απαλοιφή επιλογής",
+    "invalidFeatureMessage": "Δεν είναι δυνατή η επιλογή ${invalidFeatureCount} μη έγκυρου(-ων) στοιχείου(-ων)."
   },
   "timeSlider": {
     "timeSliderLabel": "Εύρος χρόνου",

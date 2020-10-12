@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Pokaż wszystko",
     "showSelectedButtonTooltip": "Pokaż wybrane",
     "selectAllButtonTooltip": "Zaznacz wszystkie",
-    "clearSelectionButtonTooltip": "Wyczyść pole wyboru"
+    "clearSelectionButtonTooltip": "Wyczyść pole wyboru",
+    "invalidFeatureMessage": "Nie można wybrać następującej liczby nieprawidłowych obiektów: ${invalidFeatureCount}."
   },
   "timeSlider": {
     "timeSliderLabel": "Zakres czasu",

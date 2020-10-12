@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Mostra-ho tot",
     "showSelectedButtonTooltip": "Mostra els seleccionats",
     "selectAllButtonTooltip": "Selecciona-ho tot",
-    "clearSelectionButtonTooltip": "Esborra la selecció"
+    "clearSelectionButtonTooltip": "Esborra la selecció",
+    "invalidFeatureMessage": "No es poden seleccionar ${invalidFeatureCount} entitats no vàlides."
   },
   "timeSlider": {
     "timeSliderLabel": "Interval de temps",

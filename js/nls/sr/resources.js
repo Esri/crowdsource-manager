@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Pokaži sve",
     "showSelectedButtonTooltip": "Pokaži izabrano",
     "selectAllButtonTooltip": "Selektuj sve",
-    "clearSelectionButtonTooltip": "Izbriši izbor"
+    "clearSelectionButtonTooltip": "Izbriši izbor",
+    "invalidFeatureMessage": "Nije moguće izabrati ${invalidFeatureCount} nevažeću funkciju(e)."
   },
   "timeSlider": {
     "timeSliderLabel": "Vremenski opseg",

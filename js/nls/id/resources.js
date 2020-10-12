@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Tampilkan Semua",
     "showSelectedButtonTooltip": "Tampilkan yang Dipilih",
     "selectAllButtonTooltip": "Pilih Semua",
-    "clearSelectionButtonTooltip": "Hapus Pilihan"
+    "clearSelectionButtonTooltip": "Hapus Pilihan",
+    "invalidFeatureMessage": "Tidak dapat memilih ${invalidFeatureCount} fitur yang tidak valid."
   },
   "timeSlider": {
     "timeSliderLabel": "Rentang waktu",

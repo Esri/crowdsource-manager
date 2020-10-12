@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Afișare toate+",
     "showSelectedButtonTooltip": "Afişare obiecte selectate",
     "selectAllButtonTooltip": "Selectare toate",
-    "clearSelectionButtonTooltip": "Golire selecţie"
+    "clearSelectionButtonTooltip": "Golire selecţie",
+    "invalidFeatureMessage": "Nu se pot selecta ${invalidFeatureCount} obiecte spațiale nevalabile."
   },
   "timeSlider": {
     "timeSliderLabel": "Interval de timp",

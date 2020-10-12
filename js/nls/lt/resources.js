@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Rodyti visus",
     "showSelectedButtonTooltip": "Rodyti pažymėtus",
     "selectAllButtonTooltip": "Žymėti viską",
-    "clearSelectionButtonTooltip": "Valyti išranką"
+    "clearSelectionButtonTooltip": "Valyti išranką",
+    "invalidFeatureMessage": "Nepavyko pasirinkti ${invalidFeatureCount} netinkamų elementų."
   },
   "timeSlider": {
     "timeSliderLabel": "Laiko intervalas",

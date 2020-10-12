@@ -52,8 +52,8 @@ define({
     "noFieldsConfiguredMessage": "Les champs de couche ne sont pas configurés pour capturer les données",
     "invalidSmallNumber": "Entrez un entier",
     "invalidNumber": "Entrez un entier",
-    "invalidFloat": "Please enter a number",
-    "invalidDouble": "Please enter a number",
+    "invalidFloat": "Entrez un nombre",
+    "invalidDouble": "Entrez un nombre",
     "requiredFields": "Indiquez des valeurs pour tous les champs requis",
     "selectLocation": "Sélectionnez l'emplacement de votre rapport",
     "numericRangeHintMessage": "${openStrong}Hint:${closeStrong} Valeur minimum ${minValue} et valeur maximum ${maxValue}",
@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Afficher tout",
     "showSelectedButtonTooltip": "Afficher la sélection",
     "selectAllButtonTooltip": "Sélectionner tout",
-    "clearSelectionButtonTooltip": "Effacer la sélection"
+    "clearSelectionButtonTooltip": "Effacer la sélection",
+    "invalidFeatureMessage": "Impossible de sélectionner ${invalidFeatureCount} entité(s) non valide(s)."
   },
   "timeSlider": {
     "timeSliderLabel": "Période",

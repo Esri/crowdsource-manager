@@ -321,23 +321,16 @@ define([
                 "appUtils": this.appUtils
             };
             // Initialize search widget
-            this._searchWidgetObj = new Search(searchParameters, domConstruct.create("div", {}, this.searchContainer));
-            // On click of search icon, open search panel
-            on(this.searchButton, "click", lang.hitch(this, function () {
-                if (domClass.contains(this.searchButton, "esriCTSearchIconContainer")) {
-                    this.hideWebMapList();
+            this._searchWidgetObj = new Search(searchParameters, domConstruct.create("div", {}, this.searchButton));
                     if (this._searchWidgetObj) {
                         this._searchWidgetObj.startup();
                     }
-                } else {
-                    if (this._isMultipleRecordsSelected) {
-                        this.appUtils.showMessage(this.appConfig.i18n.search.searchInEditModeAlert);
-                    }
-                }
-            }));
 
             this._searchWidgetObj.onSearchApplied = lang.hitch(this, function (lastSearchedString) {
                 this.onSearchApplied(lastSearchedString);
+            });
+            this._searchWidgetObj.onSearchClear = lang.hitch(this, function () {
+                this.onSearchClear();
             });
 
             this._searchWidgetObj.refreshSelectedLayer = lang.hitch(this, function () {
@@ -426,18 +419,17 @@ define([
         _handleSearchIconVisibility: function (featureLength) {
             if (this.isSearchActive) {
                 if (featureLength > 1) {
-                    domClass.add(this.searchButton, "esriCTSearchIconContainerDisabled");
-                    domClass.remove(this.searchButton, "esriCTSearchIconContainer");
                     this._isMultipleRecordsSelected = true;
                     if (!domClass.contains(this._searchWidgetObj.searchOptions, "esriCTHidden")) {
                         domClass.add(this._searchWidgetObj.searchOptions, "esriCTHidden");
                     }
                 } else {
-                    domClass.remove(this.searchButton, "esriCTSearchIconContainerDisabled");
-                    domClass.add(this.searchButton, "esriCTSearchIconContainer");
+                    domClass.remove(this.searchButton, "esriCTHidden");
+                    domClass.remove(this._searchWidgetObj.searchOptions, "esriCTHidden");
                     this._isMultipleRecordsSelected = false;
                 }
             }
+            this._setWidthOfApplicationNameContainer();
         },
 
         /**
@@ -504,6 +496,14 @@ define([
          */
         onSearchApplied: function (lastSearchedString) {
             return lastSearchedString;
+        },
+
+        /**
+        * This method is used to return last searched string from search
+        * @memberOf widgets/app-header/app-header
+        */
+        onSearchClear: function () {
+            return;
         },
 
         /**

@@ -1410,7 +1410,18 @@ define([
                 this._currentExpression = (outerSplitterNewArray[0] && outerSplitterNewArray[0] !== "") ? outerSplitterNewArray[0] : "1=1";
             }
             if (this.appConfig._filterObject.lastSearchedString) {
-                this._currentExpression = this._currentExpression + this.appConfig._filterObject.lastSearchedString;
+                //this._currentExpression = this._currentExpression + this.appConfig._filterObject.lastSearchedString;
+                /**
+                 * Solved - https://github.com/Esri/crowdsource-manager/issues/293#issuecomment-682984778
+                 * AND was missing due to which main expression was not getting split and causing console error
+                 */
+                 //If valid current expression is found add it to the existing expression
+                 //otherwise use the last expression
+                if (this._currentExpression) {
+                    this._currentExpression = this._currentExpression + " AND " + this.appConfig._filterObject.lastSearchedString;
+                } else {
+                    this._currentExpression = this.appConfig._filterObject.lastSearchedString;
+                }
             }
         },
 

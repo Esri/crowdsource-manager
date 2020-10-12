@@ -43,7 +43,7 @@ define({
     "enterInformation": "Details",
     "selectAttachments": "Anlagen",
     "selectFileText": "Durchsuchen",
-    "enterLocation": "Speicherort",
+    "enterLocation": "Position",
     "reportItButton": "Senden",
     "cancelButton": "Abbrechen",
     "requiredField": "(erforderlich)",
@@ -55,7 +55,7 @@ define({
     "invalidFloat": "Geben Sie eine Zahl ein",
     "invalidDouble": "Geben Sie eine Zahl ein",
     "requiredFields": "Geben Sie Werte für alle erforderlichen Felder ein",
-    "selectLocation": "Wählen Sie den Speicherort für Ihren Bericht aus",
+    "selectLocation": "Wählen Sie die Position für Ihren Bericht aus",
     "numericRangeHintMessage": "${openStrong}Hinweis:${closeStrong} Minimalwert ${minValue} und Maximalwert ${maxValue}",
     "dateRangeHintMessage": "${openStrong}Hinweis:${closeStrong} minimales Datum ${minValue} und maximales Datum ${maxValue}",
     "errorsInApplyEdits": "Bericht konnte nicht gesendet werden.",
@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Alle anzeigen",
     "showSelectedButtonTooltip": "Ausgewählte anzeigen",
     "selectAllButtonTooltip": "Alle auswählen",
-    "clearSelectionButtonTooltip": "Auswahl aufheben"
+    "clearSelectionButtonTooltip": "Auswahl aufheben",
+    "invalidFeatureMessage": "${invalidFeatureCount} ungültige(s) Feature(s) nicht auswählbar."
   },
   "timeSlider": {
     "timeSliderLabel": "Zeitbereich",

@@ -95,9 +95,6 @@ define([
         * @memberOf widgets/search/search
         */
         _attachSearchWidgetEvents: function () {
-            on(this.searchRecords, "click", lang.hitch(this, function () {
-                this.searchFeatureRecords(true);
-            }));
             on(this.searchBox, "keyup", lang.hitch(this, function (event) {
                 if (event.keyCode === 13) {
                     this.searchFeatureRecords(true);
@@ -115,7 +112,6 @@ define([
             if (!this._searchedFromSearchWidget) {
                 domClass.add(this.searchOptions, "esriCTHidden");
             }
-            $(".esriCTNoResults").addClass("esriCTHidden");
             // If the value/search string exists then search it
             if ((lang.trim(this.searchBox.value) !== "") && (!domClass.contains(this.searchBox, "esriCTPlaceholder"))) {
                 this.appUtils.showLoadingIndicator();
@@ -153,7 +149,6 @@ define([
             if (this._searchedFieldValue) {
                 this._newDefinitionExpression = this._getNewDefinitionExpression();
             } else {
-                $(".esriCTNoResults").addClass("esriCTHidden");
                 this._newDefinitionExpression = this._existingDefinitionExpression;
             }
             this._resetDefinitionExpression();
@@ -180,7 +175,6 @@ define([
                         }));
                     }
                     this.selectedOperationalLayer.setDefinitionExpression(this._newDefinitionExpression);
-                    this._removeNoResultFoundMessage();
                     this.refreshSelectedLayer();
                 } else {
                     this.searchBox.value = "";
@@ -195,7 +189,6 @@ define([
             }), lang.hitch(this, function () {
                 // if any error occur while querying the current expression
                 this.selectedOperationalLayer.setDefinitionExpression(this._existingDefinitionExpression);
-                this._removeNoResultFoundMessage();
             }));
         },
 
@@ -204,16 +197,7 @@ define([
         * @memberOf widgets/search/search
         */
         _displayNoResultFoundMessage: function () {
-            this.noResultsFound.innerHTML = this.appConfig.i18n.search.noResultFoundText;
-            $(".esriCTNoResults").removeClass("esriCTHidden");
-        },
-
-        /**
-        * This function is used to remove no result found message
-        * @memberOf widgets/search/search
-        */
-        _removeNoResultFoundMessage: function () {
-            $(".esriCTNoResults").addClass("esriCTHidden");
+            this.appUtils.showMessage(this.appConfig.i18n.search.noResultFoundText);
         },
 
         /**
@@ -232,14 +216,14 @@ define([
                             definitionExpression = this._existingDefinitionExpression;
                             if (layerObject.field.exactMatch) {
                                 // For exact match case
-                                searchDefinitionExpression = " AND " + "UPPER(" + layerObject.field.name + ")" + " = '" + lang.trim(this._searchedFieldValue).toUpperCase() + "'";
+                                searchDefinitionExpression = "UPPER(" + layerObject.field.name + ")" + " = '" + lang.trim(this._searchedFieldValue).toUpperCase() + "'";
                                 this._lastDefinitionExprAppliedBySearch = searchDefinitionExpression;
-                                definitionExpression += searchDefinitionExpression;
+                                definitionExpression = definitionExpression + " AND " + searchDefinitionExpression;
                             } else {
                                 // For contains case
-                                searchDefinitionExpression = " AND " + "UPPER(" + layerObject.field.name + ")" + " LIKE '%" + lang.trim(this._searchedFieldValue).toUpperCase() + "%'";
+                                searchDefinitionExpression = "UPPER(" + layerObject.field.name + ")" + " LIKE '%" + lang.trim(this._searchedFieldValue).toUpperCase() + "%'";
                                 this._lastDefinitionExprAppliedBySearch = searchDefinitionExpression;
-                                definitionExpression += searchDefinitionExpression;
+                                definitionExpression = definitionExpression + " AND " + searchDefinitionExpression;
                             }
                         } else {
                             if (layerObject.field.exactMatch) {
@@ -280,8 +264,6 @@ define([
                     this.appUtils.showLoadingIndicator();
                     this._newDefinitionExpression = this._existingDefinitionExpression;
                     this.searchBox.value = "";
-                    this._removeNoResultFoundMessage();
-                    this._toggleOptions();
                     this.selectedOperationalLayer.setDefinitionExpression(this._existingDefinitionExpression);
                     this.refreshSelectedLayer();
                 } else {
@@ -291,6 +273,7 @@ define([
                     }
                     this.appUtils.hideLoadingIndicator();
                 }
+                this.onSearchClear();
             }));
         },
 
@@ -335,8 +318,8 @@ define([
         * @memberOf widgets/search/search
         */
         enableSearchIcon: function () {
-            domClass.replace(this.searchButton, "esriCTSearchIconContainer", "esriCTSearchIconContainerDisabled");
-            domClass.replace(this.searchButton, "esriCTPointerCursor", "esriCTDefaultCursor");
+            domClass.remove(this.searchOptions, "esriCTHidden");
+            domClass.remove(this.searchButton, "esriCTHidden");
         },
 
         /**
@@ -344,10 +327,9 @@ define([
         * @memberOf widgets/search/search
         */
         disableSearchIcon: function () {
-            domClass.replace(this.searchButton, "esriCTSearchIconContainerDisabled", "esriCTSearchIconContainer");
-            domClass.replace(this.searchButton, "esriCTDefaultCursor", "esriCTPointerCursor");
-            // also hide search options
+            //Hide search options
             domClass.add(this.searchOptions, "esriCTHidden");
+            domClass.add(this.searchButton, "esriCTHidden");
         },
 
         /**
@@ -385,6 +367,15 @@ define([
                 if (this._lastDefinitionExprAppliedBySearch) {
                     this._lastDefinitionExprAppliedBySearch = lang.trim(this._lastDefinitionExprAppliedBySearch);
                     this._existingDefinitionExpression = this._existingDefinitionExpression.split(this._lastDefinitionExprAppliedBySearch).join("");
+                    //Check last index of "AND", if it is present at the last then remove it as it will corrupt the query string
+                    var lastIndex = this._existingDefinitionExpression.lastIndexOf("AND");
+                    if (lastIndex > -1) {
+                        var splitArr = this._existingDefinitionExpression.split("AND", lastIndex);
+                        //If the expression contains AND in the end remove it an use the first part of expression
+                        if (splitArr && splitArr.length > 1 && splitArr[1].trim() === "") {
+                            this._existingDefinitionExpression = splitArr[0];
+                        }
+                    }
                     this._existingDefinitionExpression = lang.trim(this._existingDefinitionExpression);
                 }
                 this._removeOrAddParentParentheses();
@@ -429,6 +420,14 @@ define([
         */
         onSearchApplied: function () {
             return this._lastDefinitionExprAppliedBySearch;
+        },
+
+        /** 
+        * This function is used to return last searched string
+        * @memberOf widgets/search/search
+        */
+        onSearchClear: function () {
+            return;
         },
 
         /**

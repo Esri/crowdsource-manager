@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Показать все",
     "showSelectedButtonTooltip": "Показать выбранные",
     "selectAllButtonTooltip": "Выбрать все",
-    "clearSelectionButtonTooltip": "Очистить выборку"
+    "clearSelectionButtonTooltip": "Очистить выборку",
+    "invalidFeatureMessage": "Не удалось выбрать ${invalidFeatureCount} некорректных объектов."
   },
   "timeSlider": {
     "timeSliderLabel": "Временной диапазон",

@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Összes megjelenítése",
     "showSelectedButtonTooltip": "Kiválasztott elemek megjelenítése",
     "selectAllButtonTooltip": "Összes kijelölése",
-    "clearSelectionButtonTooltip": "Kiválasztás megszüntetése"
+    "clearSelectionButtonTooltip": "Kiválasztás megszüntetése",
+    "invalidFeatureMessage": "Nem sikerült kiválasztani ${invalidFeatureCount} érvénytelen vektoros elemet."
   },
   "timeSlider": {
     "timeSliderLabel": "Időtartomány",

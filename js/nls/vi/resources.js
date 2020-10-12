@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Hiển thị tất cả",
     "showSelectedButtonTooltip": "Hiện Mục được Chọn",
     "selectAllButtonTooltip": "Chọn Tất cả",
-    "clearSelectionButtonTooltip": "Xóa lựa chọn"
+    "clearSelectionButtonTooltip": "Xóa lựa chọn",
+    "invalidFeatureMessage": "Không thể chọn ${invalidFeatureCount} (các) đối tượng không hợp lệ."
   },
   "timeSlider": {
     "timeSliderLabel": "Khoảng thời gian",

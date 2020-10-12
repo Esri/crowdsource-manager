@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Zobrazit vše",
     "showSelectedButtonTooltip": "Zobrazit vybrané",
     "selectAllButtonTooltip": "Vybrat vše",
-    "clearSelectionButtonTooltip": "Zrušit výběr"
+    "clearSelectionButtonTooltip": "Zrušit výběr",
+    "invalidFeatureMessage": "Není možné vybrat ${invalidFeatureCount} neplatné prvky."
   },
   "timeSlider": {
     "timeSliderLabel": "Časový rozsah",

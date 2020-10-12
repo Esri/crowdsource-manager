@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Visa alla",
     "showSelectedButtonTooltip": "Visa valda",
     "selectAllButtonTooltip": "Markera alla",
-    "clearSelectionButtonTooltip": "Rensa val"
+    "clearSelectionButtonTooltip": "Rensa val",
+    "invalidFeatureMessage": "Det gick inte att välja ${invalidFeatureCount} ogiltigt/ogiltiga geoobjekt."
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsintervall",

@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "إظهار الكل",
     "showSelectedButtonTooltip": "إظهار سجلات المعالم المحددة",
     "selectAllButtonTooltip": "تحديد الكل",
-    "clearSelectionButtonTooltip": "مسح التحديد"
+    "clearSelectionButtonTooltip": "مسح التحديد",
+    "invalidFeatureMessage": "يتعذر تحديد معلم (معالم) ${invalidFeatureCount} غير صالح."
   },
   "timeSlider": {
     "timeSliderLabel": "النطاق الزمني",
