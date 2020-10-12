@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Tümünü Göster",
     "showSelectedButtonTooltip": "Seçileni Göster",
     "selectAllButtonTooltip": "Tümünü Seç",
-    "clearSelectionButtonTooltip": "Seçimi Temizle"
+    "clearSelectionButtonTooltip": "Seçimi Temizle",
+    "invalidFeatureMessage": "Geçersiz detay(lar) ${invalidFeatureCount} seçilemiyor."
   },
   "timeSlider": {
     "timeSliderLabel": "Zaman aralığı",

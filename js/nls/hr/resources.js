@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Prikaži sve",
     "showSelectedButtonTooltip": "Prikaži odabrano",
     "selectAllButtonTooltip": "Odaberi sve",
-    "clearSelectionButtonTooltip": "Očisti odabir"
+    "clearSelectionButtonTooltip": "Očisti odabir",
+    "invalidFeatureMessage": "Nije moguće odabrati ${invalidFeatureCount} neispravan/ne geoobjekt/e."
   },
   "timeSlider": {
     "timeSliderLabel": "Vremenski raspon",

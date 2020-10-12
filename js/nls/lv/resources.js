@@ -43,7 +43,7 @@ define({
     "enterInformation": "Detaļas",
     "selectAttachments": "Pielikumi",
     "selectFileText": "Pārlūkot",
-    "enterLocation": "Izvietojums",
+    "enterLocation": "Novietojums",
     "reportItButton": "Iesniegt",
     "cancelButton": "Atcelt",
     "requiredField": "(nepieciešams)",
@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Rādīt visus",
     "showSelectedButtonTooltip": "Rādīt izvēlētos",
     "selectAllButtonTooltip": "Izvēlieties visu",
-    "clearSelectionButtonTooltip": "Notīrīt izvēlēto"
+    "clearSelectionButtonTooltip": "Notīrīt izvēlēto",
+    "invalidFeatureMessage": "Neizdevās atlasīt šādu skaitu nederīgu elementu: ${invalidFeatureCount}."
   },
   "timeSlider": {
     "timeSliderLabel": "Laika diapazons",

@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "すべて表示",
     "showSelectedButtonTooltip": "選択レイヤーの表示",
     "selectAllButtonTooltip": "すべて選択",
-    "clearSelectionButtonTooltip": "選択の解除"
+    "clearSelectionButtonTooltip": "選択の解除",
+    "invalidFeatureMessage": "無効なフィーチャ ${invalidFeatureCount} 個を選択できません。"
   },
   "timeSlider": {
     "timeSliderLabel": "時間範囲",

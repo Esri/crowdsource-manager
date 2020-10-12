@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Mostra tutto",
     "showSelectedButtonTooltip": "Mostra selezionate",
     "selectAllButtonTooltip": "Seleziona tutto",
-    "clearSelectionButtonTooltip": "Cancella selezione"
+    "clearSelectionButtonTooltip": "Cancella selezione",
+    "invalidFeatureMessage": "Impossibile selezionare ${invalidFeatureCount} funzione/i non valida/e."
   },
   "timeSlider": {
     "timeSliderLabel": "Intervallo temporale",

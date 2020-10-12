@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "显示全部",
     "showSelectedButtonTooltip": "显示所选",
     "selectAllButtonTooltip": "全选",
-    "clearSelectionButtonTooltip": "清除所选内容"
+    "clearSelectionButtonTooltip": "清除所选内容",
+    "invalidFeatureMessage": "无法选择 ${invalidFeatureCount} 个无效要素。"
   },
   "timeSlider": {
     "timeSliderLabel": "时间范围",

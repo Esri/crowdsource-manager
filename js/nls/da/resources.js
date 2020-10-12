@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Show All",
     "showSelectedButtonTooltip": "Vis valgte",
     "selectAllButtonTooltip": "Vælg alle",
-    "clearSelectionButtonTooltip": "Ryd markering"
+    "clearSelectionButtonTooltip": "Ryd markering",
+    "invalidFeatureMessage": "Kan ikke markere ${invalidFeatureCount} ugyldige objekter."
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsinterval",

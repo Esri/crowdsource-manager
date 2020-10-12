@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Kuva kõik",
     "showSelectedButtonTooltip": "Kuva valitud",
     "selectAllButtonTooltip": "Vali kõik",
-    "clearSelectionButtonTooltip": "Tühista valik"
+    "clearSelectionButtonTooltip": "Tühista valik",
+    "invalidFeatureMessage": "Võimetu valima ${invalidFeatureCount} kehtetu objekti (kehtetuid objekte)."
   },
   "timeSlider": {
     "timeSliderLabel": "Ajavahemik",

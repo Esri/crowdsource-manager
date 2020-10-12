@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Mostrar Tudo",
     "showSelectedButtonTooltip": "Exibir Selecionados",
     "selectAllButtonTooltip": "Selecionar Tudo",
-    "clearSelectionButtonTooltip": "Limpar Seleção"
+    "clearSelectionButtonTooltip": "Limpar Seleção",
+    "invalidFeatureMessage": "Não é possível selecionar ${invalidFeatureCount} elemento(s) inválido(s)."
   },
   "timeSlider": {
     "timeSliderLabel": "Intervalo de tempo",

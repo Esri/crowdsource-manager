@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Näytä kaikki",
     "showSelectedButtonTooltip": "Näytä valitut kohteet",
     "selectAllButtonTooltip": "Valitse kaikki",
-    "clearSelectionButtonTooltip": "Tyhjennä valinta"
+    "clearSelectionButtonTooltip": "Tyhjennä valinta",
+    "invalidFeatureMessage": "${invalidFeatureCount} virheellisen kohteen valinta ei onnistu."
   },
   "timeSlider": {
     "timeSliderLabel": "Aikaväli",

@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "הצג הכל",
     "showSelectedButtonTooltip": "הצג פריטים שנבחרו",
     "selectAllButtonTooltip": "בחר הכל",
-    "clearSelectionButtonTooltip": "נקה בחירה"
+    "clearSelectionButtonTooltip": "נקה בחירה",
+    "invalidFeatureMessage": "לא ניתן לבחור ${invalidFeatureCount} ישויות לא תקפות."
   },
   "timeSlider": {
     "timeSliderLabel": "טווח זמן",

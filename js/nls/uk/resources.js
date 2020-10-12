@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Показати всі",
     "showSelectedButtonTooltip": "Показати вибрані",
     "selectAllButtonTooltip": "Вибрати всі",
-    "clearSelectionButtonTooltip": "Очистити вибір"
+    "clearSelectionButtonTooltip": "Очистити вибір",
+    "invalidFeatureMessage": "Не вдалося вибрати ${invalidFeatureCount} недійсну функцію(-ї)."
   },
   "timeSlider": {
     "timeSliderLabel": "Діапазон часу",

@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Mostrar todo",
     "showSelectedButtonTooltip": "Mostrar seleccionado",
     "selectAllButtonTooltip": "Seleccionar todo",
-    "clearSelectionButtonTooltip": "Borrar selección"
+    "clearSelectionButtonTooltip": "Borrar selección",
+    "invalidFeatureMessage": "No se pueden seleccionar ${invalidFeatureCount} entidades no válidas."
   },
   "timeSlider": {
     "timeSliderLabel": "Rango de tiempo",

@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "모두 보기",
     "showSelectedButtonTooltip": "선택한 항목 보기",
     "selectAllButtonTooltip": "모두 선택",
-    "clearSelectionButtonTooltip": "선택 해제"
+    "clearSelectionButtonTooltip": "선택 해제",
+    "invalidFeatureMessage": "${invalidFeatureCount}개의 유효하지 않은 피처를 선택할 수 없습니다."
   },
   "timeSlider": {
     "timeSliderLabel": "시간 범위",

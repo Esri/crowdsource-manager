@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Show All",
     "showSelectedButtonTooltip": "Geef geselecteerde weer",
     "selectAllButtonTooltip": "Alles selecteren",
-    "clearSelectionButtonTooltip": "Selectie wissen"
+    "clearSelectionButtonTooltip": "Selectie wissen",
+    "invalidFeatureMessage": "Kan geen ${invalidFeatureCount} ongeldig(e) object(en) selecteren."
   },
   "timeSlider": {
     "timeSliderLabel": "Tijdsbereik",

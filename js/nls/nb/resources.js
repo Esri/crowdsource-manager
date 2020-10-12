@@ -101,7 +101,8 @@ define({
     "showAllButtonTooltip": "Vis alle",
     "showSelectedButtonTooltip": "Vis valgte",
     "selectAllButtonTooltip": "Merk alle",
-    "clearSelectionButtonTooltip": "Fjern utvalg"
+    "clearSelectionButtonTooltip": "Fjern utvalg",
+    "invalidFeatureMessage": "Kan ikke velge ${invalidFeatureCount} ugyldig(e) geoobjekt(er)."
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsrom",
