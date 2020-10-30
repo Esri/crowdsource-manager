@@ -225,12 +225,12 @@
     color: ${ButtonTextColor} !important;
 }
 
-.esriCTDetailsPanelWrapperContainer .nav-tabs>li.active>a {
+.esriCTDetailsPanelWrapperContainer .nav-tabs>li.nav-item>a.nav-link .active {
     background-color: ${CalculatedBodyBackgroundColor} !important;
     color: ${BodyTextColor} !important;
 }
 
-.esriCTDetailsPanelWrapperContainer .nav-tabs.nav-justified>.active>a {
+.esriCTDetailsPanelWrapperContainer .nav-tabs.nav-justified>.nav-item>a.nav-link .active  {
     border-bottom-color: ${CalculatedBodyBackgroundColor} !important;
 }
 

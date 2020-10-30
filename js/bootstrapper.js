@@ -58,6 +58,13 @@ define([
             this._boilerPlateTemplateObject.startup().then(lang.hitch(this, function (config) {
                 //create the portal instance and initiate the identity manager
                 this.portal = new esriPortal.Portal(config.sharinghost);
+                //If application is loaded in RTL mode, change styles of required nodes
+                link = document.getElementById("bootstrapRtl");
+                if (config.i18n.direction === "rtl") {
+                    link.href = "./js/vendor/bootstrap-rtl/bootstrap-rtl.min.css";
+                } else {
+                    link.parentNode.removeChild(link);
+                }
                 this.portal.on("load", lang.hitch(this, function () {
                     var signedIn;
                     signedIn = IdentityManager.checkSignInStatus(config.sharinghost + "/sharing");

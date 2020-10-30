@@ -22,6 +22,7 @@ define([
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/_base/lang",
+    "dojo/dom-attr",
     "dojo/dom-class",
     "dojo/on",
     "dojo/has",
@@ -36,6 +37,7 @@ define([
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
     lang,
+    domAttr,
     domClass,
     on,
     has,
@@ -78,6 +80,7 @@ define([
                     this._removePlaceHolderText();
                 }
             }));
+            this._setToolTip();
         },
 
         /**
@@ -88,6 +91,15 @@ define([
             this.inherited(arguments);
             this.clearSearchText();
             this._attachSearchWidgetEvents();
+        },
+
+        /**
+         * This function is used to set tooltip for search icon
+         * @memberOf widgets/search/search
+         */
+        _setToolTip: function () {
+            domAttr.set(this.searchBox, "title", this.appConfig.i18n.search.searchIconTooltip);
+            domAttr.set(this.clearTextContent, "title", this.appConfig.i18n.search.clearSearchIconTooltip);
         },
 
         /**

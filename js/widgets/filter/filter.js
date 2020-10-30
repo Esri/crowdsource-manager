@@ -186,7 +186,7 @@ define([
                     }, baseFilterOptionDiv);
                     // 'select' html tag is creating to show distinct values of the current field
                     selectOption = domConstruct.create("select", {
-                        "class": "esriCTSelectOption"
+                        "class": "esriCTSelectOption custom-select"
                     }, selectOptionDiv);
                     // create close icon for dropdown
                     closeDropDownSpan = domConstruct.create("span", {

@@ -102,8 +102,7 @@ define({
             showAllButtonTooltip: "Show All",
             showSelectedButtonTooltip: "Show Selected",
             selectAllButtonTooltip: "Select All",
-            clearSelectionButtonTooltip: "Clear Selection",
-            invalidFeatureMessage: "Unable to select ${invalidFeatureCount} invalid feature(s)."
+            clearSelectionButtonTooltip: "Clear Selection"
         },
         timeSlider: {
             timeSliderLabel: "Time range", // Appears beside time slider widget
@@ -134,6 +133,7 @@ define({
         },
         search: {
             searchIconTooltip: "Search this layer", // Displayed on hover of search icon
+            clearSearchIconTooltip: "Clear the search", // Displayed on hover of clear icon
             noResultFoundText: "No results found", // Displayed when no results are found after search
             searchInEditModeAlert: "Search unavailable while editing" // Displayed when no results are found after search
         },
