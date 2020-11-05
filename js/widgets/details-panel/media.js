@@ -178,12 +178,12 @@ define([
                     }
                     // add to carousel only if it is an image type
                     if (infos[i].contentType && infos[i].contentType.indexOf("image") > -1) {
-                        $('<div class="item"><img onclick="window.open(this.src)" src="' + infos[i].url + '"></div>').appendTo('.carousel-inner');
+                        $('<div class="carousel-item"><img onclick="window.open(this.src)" src="' + infos[i].url + '"></div>').appendTo('.carousel-inner');
                         this._totalSlides++;
                     }
                     // add to carousel only if it is an mp4 attachment
                     if (infos[i].contentType && infos[i].contentType.toLowerCase().indexOf("video/mp4") > -1) {
-                        $('<div class="item"><video src="' + infos[i].url + '" height="auto" width="430" controls><source src="' + infos[i].url + '" type="' + infos[i].contentType + '" poster="' + infos[i].url + '"></video></div>').appendTo('.carousel-inner');
+                        $('<div class="carousel-item"><video src="' + infos[i].url + '" height="auto" width="430" controls><source src="' + infos[i].url + '" type="' + infos[i].contentType + '" poster="' + infos[i].url + '"></video></div>').appendTo('.carousel-inner');
                         this._totalSlides++;
                     }
                 }
@@ -194,12 +194,12 @@ define([
 
             if (this._totalSlides) {
                 this.showMediaTab();
-                $('.item').first().addClass('active');
+                $('.carousel-item').first().addClass('active');
                 $('#carousel-widget').carousel({
                     interval: false,    // to stop auto display animation
                     wrap: false         // to stop circular rotation in carousel
                 }).on('slid.bs.carousel', lang.hitch(this, function () {
-                    var currentIndex = $('#carousel-widget .carousel-inner .item.active').index();
+                    var currentIndex = $('#carousel-widget .carousel-inner .carousel-item.active').index();
                     this._enableDisableArrow(currentIndex, this._totalSlides);
                 }));
                 this._enableDisableArrow(0, this._totalSlides);
@@ -309,7 +309,7 @@ define([
         _addChartsToCarousel: function (slideCount) {
             var chartContainer, popupContentPane, totalSlideCount = slideCount;
             if (this._chartInfo && this._chartInfo.length > 0) {
-                $('<div class="item"><div id="esriCTChartContainer"></div></div>').appendTo('.carousel-inner');
+                $('<div class="carousel-item"><div id="esriCTChartContainer"></div></div>').appendTo('.carousel-inner');
                 chartContainer = dom.byId("esriCTChartContainer");
                 popupContentPane = new ContentPane({}, chartContainer);
                 popupContentPane.startup();
@@ -343,7 +343,7 @@ define([
         _attachNextPrevEvents: function (slideCount) {
             on(this.slidePrev, "click", lang.hitch(this, function (evt) {
                 var imageNode, currentIndex;
-                currentIndex = $('#carousel-widget .carousel-inner .item.active').index();
+                currentIndex = $('#carousel-widget .carousel-inner .carousel-item.active').index();
                 this._setWidthOfChartContainer();
                 this._resizeMediaChart(currentIndex, slideCount);
                 if (parseInt(currentIndex, 10) === slideCount - 1 && this._chartIndex !== 0) {
@@ -366,7 +366,7 @@ define([
             }));
             on(this.slideNext, "click", lang.hitch(this, function (evt) {
                 var imageNode, currentIndex;
-                currentIndex = $('#carousel-widget .carousel-inner .item.active').index();
+                currentIndex = $('#carousel-widget .carousel-inner .carousel-item.active').index();
                 this._setWidthOfChartContainer();
                 this._resizeMediaChart(currentIndex, slideCount);
                 if (parseInt(currentIndex, 10) === slideCount - 1 && this._chartIndex !== this._chartInfo.length - 1) {
@@ -397,7 +397,7 @@ define([
             if (has("ie") === 9) { // only IE9
                 setTimeout(lang.hitch(this, function () {
                     var currentActiveMedia, currentActiveMediaChild, currentActiveMediaChildClone;
-                    currentActiveMedia = $('#carousel-widget .carousel-inner .item.active');
+                    currentActiveMedia = $('#carousel-widget .carousel-inner .carousel-item.active');
                     if (currentActiveMedia[0] && currentActiveMedia[0].children[0]) {
                         currentActiveMediaChild = currentActiveMedia[0].children[0];
                         if (currentActiveMediaChild.tagName.toLowerCase() === "video") {
@@ -462,8 +462,8 @@ define([
         */
         _enableDisableArrow: function (currentIndex, slideCount) {
             var lastSlideIndex = slideCount - 1,
-                mediaLeftArrow = $('.carousel-control.mediaLeft').first(),
-                mediaRightArrow = $('.carousel-control.mediaRight').first();
+                mediaLeftArrow = $('.carousel-control-prev.mediaLeft').first(),
+                mediaRightArrow = $('.carousel-control-next.mediaRight').first();
             if (mediaLeftArrow) {
                 mediaLeftArrow.removeClass('disableLeftArrow');
             }
@@ -572,13 +572,13 @@ define([
             currentSlideCount = slideCount;
             if (this._hyperlinkImageAttachment.length > 0) {
                 for (i = 0; i < this._hyperlinkImageAttachment.length; i++) {
-                    $('<div class="item"><img onclick="window.open(this.src)" src="' + this._hyperlinkImageAttachment[i] + '"></div>').appendTo('.carousel-inner');
+                    $('<div class="carousel-item"><img onclick="window.open(this.src)" src="' + this._hyperlinkImageAttachment[i] + '"></div>').appendTo('.carousel-inner');
                     currentSlideCount++;
                 }
             }
             if (this._hyperlinkVideoAttachment.length > 0) {
                 for (i = 0; i < this._hyperlinkVideoAttachment.length; i++) {
-                    $('<div class="item"><video src="' + this._hyperlinkVideoAttachment[i] + '"height="auto" width="430" controls><source src="' + this._hyperlinkVideoAttachment[i] + '" type="video/' + this._getVideoFormat(this._hyperlinkVideoAttachment[i]) + '" poster="' + this._hyperlinkVideoAttachment[i] + '"></video></div>').appendTo('.carousel-inner');
+                    $('<div class="carousel-item"><video src="' + this._hyperlinkVideoAttachment[i] + '"height="auto" width="430" controls><source src="' + this._hyperlinkVideoAttachment[i] + '" type="video/' + this._getVideoFormat(this._hyperlinkVideoAttachment[i]) + '" poster="' + this._hyperlinkVideoAttachment[i] + '"></video></div>').appendTo('.carousel-inner');
                     currentSlideCount++;
                 }
             }

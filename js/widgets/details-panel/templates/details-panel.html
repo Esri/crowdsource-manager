@@ -1,14 +1,14 @@
 ﻿<div class="esriCTFullHeightWidth">
     <div data-dojo-attach-point="esriCTDetailsPanelTabContainer" class="esriCTDetailsPanelTabContainer">
-        <ul class="nav nav-tabs nav-justified" data-dojo-attach-point="tabList" style="display: none;">
-            <li id="popupTab" class="active">
-                <a class="esriCTTabAnchor" data-toggle="pill" href="#popupTabPanel">${appConfig.popupTabText}</a>
+        <ul class="nav nav-tabs nav-justified" role="tablist" data-dojo-attach-point="tabList" style="display: none;">
+            <li id="popupTab" class="nav-item" role="presentation">
+                <a class="nav-link active" id="esriCTTabAnchor" data-toggle="tab" role="tab" href="#popupTabPanel">${appConfig.popupTabText}</a>
             </li>
-            <li id="mediaTab" style="display: none;">
-                <a class="esriCTTabAnchor" data-toggle="pill" href="#mediaTabPanel">${appConfig.mediaTabText}</a>
+            <li id="mediaTab" class="nav-item" role="presentation">
+                <a class="nav-link" id="esriCTTabAnchor" data-toggle="tab" role="tab" href="#mediaTabPanel">${appConfig.mediaTabText}</a>
             </li>
-            <li id="commentsTab" style="display: none;">
-                <a class="esriCTTabAnchor2" data-toggle="pill" href="#commentsTabPanel">
+            <li id="commentsTab" class="nav-item" role="presentation">
+                <a class="nav-link" id="esriCTTabAnchor" data-toggle="tab" role="tab" href="#commentsTabPanel">
                     <div class="esriCTCommentTabTextContainer">
                         <div class="esriCTCommentsBadgeContainer">${appConfig.commentsTabText}</div>
                         <div id="commentsTotalCount" class="esriCTCommentsTotalCount"></div>
@@ -17,7 +17,7 @@
             </li>
         </ul>
         <div class="tab-content" id="tabContent">
-            <div id="popupTabPanel" class="tab-pane fade active in esriCTPopupWrapperContainer">
+            <div id="popupTabPanel" class="tab-pane fade show active esriCTPopupWrapperContainer">
                 <div id="popupWrapperContainer">
                 </div>
             </div>

@@ -160,7 +160,6 @@ define([
          * @memberOf widgets/app-header/app-header
          */
         _setToolTip: function () {
-            domAttr.set(this.searchButton, "title", this.appConfig.i18n.search.searchIconTooltip);
             domAttr.set(this.refreshButton, "title", this.appConfig.i18n.manualRefresh.manualRefreshIconTooltip);
             domAttr.set(this.helpButton, "title", this.appConfig.i18n.help.helpIconTooltip);
         },

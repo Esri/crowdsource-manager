@@ -302,16 +302,13 @@ define([
                 }));
 
                 // #291: highlight feature on map
-                var invalidFeatureCount = 0;
                 array.forEach(this._features, lang.hitch(this, function (feature) {
                     if (feature.hasOwnProperty('geometry')) {
                         if (feature.geometry !== '' && feature.geometry !== null && feature.geometry !== undefined) {
                             this._selectRowGraphicsLayer.add(this._getHighLightSymbol(feature));
                         }
                     } else {
-                        var invalidRow = $("tr[OBJID=" + feature.attributes[this.selectedOperationalLayer.objectIdField] + "]", this._table);
-                        domClass.remove(invalidRow[0], "esriCTRowHighlighted");
-                        invalidFeatureCount++;
+                        this._selectRowGraphicsLayer.add(feature);
                     }
                 }));
 
@@ -344,13 +341,7 @@ define([
                     this.enableClearSelectionIcon();
                 }
 
-                // #291: Display error message if there are any graphics without geometry while select all
-                if (invalidFeatureCount > 0) {
-                    var errMsg = string.substitute(this.appConfig.i18n.dataviewer.invalidFeatureMessage, {
-                        invalidFeatureCount: invalidFeatureCount
-                    });
-                    this.appUtils.showMessage(errMsg);
-                }
+                
 
                 // #291: hide the loading indicator
                 domClass.remove(document.body, "data-viewer-loading");
@@ -1284,9 +1275,8 @@ define([
                 //Raise the shift key flag
                 this.shiftButtonClicked = true;
                 //Select all the rows in between first and last click variable
-                //Exclude first and last rows as they are already selected
-                var invalidFeatureCount = 0;
-                for (var i = this.firstClickedIndex; i <= this.lastClickedIndex; i++) {
+                //Exclude first and last rows as they are already selected 
+                for (var i= this.firstClickedIndex; i <= this.lastClickedIndex; i++) {
                     rowToSelect = $("tr[index=" + "'" + i + "'" + "]");
                     if (rowToSelect.length > 0 && !domClass.contains(rowToSelect[0], "esriCTRowHighlighted")) {
 
@@ -1302,9 +1292,8 @@ define([
                                         this._selectRowGraphicsLayer.add(this._getHighLightSymbol(feature));
                                     }
                                 } else {
-                                    var invalidRow = $("tr[OBJID=" + feature.attributes[this.selectedOperationalLayer.objectIdField] + "]", this._table);
-                                    domClass.remove(invalidRow[0], "esriCTRowHighlighted");
-                                    invalidFeatureCount++;
+                                    this._selectRowGraphicsLayer.add(feature);
+                                    this.appUtils.showMessage(this.appConfig.i18n.dataviewer.noFeatureGeometry);
                                 }
                             }
                         }));
@@ -1333,14 +1322,7 @@ define([
                 this._enableExportToCSVButton();
                 this.enableClearSelectionIcon();
             }
-
-            // #291: Display error message if there are any graphics without geometry while select all
-            if (invalidFeatureCount > 0) {
-                var errMsg = string.substitute(this.appConfig.i18n.dataviewer.invalidFeatureMessage, {
-                    invalidFeatureCount: invalidFeatureCount
-                });
-                this.appUtils.showMessage(errMsg);
-            }
+            
         },
 
         /**
