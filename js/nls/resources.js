@@ -139,7 +139,8 @@ define({
         },
         manualRefresh: {
             manualRefreshIconTooltip: "Refresh", // Displayed on hover of manual refresh icon
-            confirmManualRefreshText: "All selections and unsaved changes will be discarded" // Appears when user wants to do manual refresh
+            confirmManualRefreshText: "All selections and unsaved changes will be discarded", // Appears when user wants to do manual refresh
+            confirmHardRefreshText: "All filters, selections and unsaved changes will be discarded" // Appears when user wants to do hard refresh
         },
         help: {
             helpIconTooltip: "Help" // Displayed on hover of manual refresh icon

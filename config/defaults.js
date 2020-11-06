@@ -131,5 +131,9 @@ define({
     // 1. User can edit existing attachments in popup and comment form.
     // 2. User will be able to see image types of attachment in the view popup form.
     // If this flag is false, than no change will be applied to the application.
-    "enableEditingAttachments": false
+    "enableEditingAttachments": false,
+    //If true, the current filters and selection will be cleared for the selected layer
+    "enableHardReset": false,
+    //If true, application will honor the refresh interval set on the web map level
+    "enableAutoRefresh": false
 });

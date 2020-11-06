@@ -565,6 +565,10 @@ define([
                 this._highlightUpdatedFeature();
                 this.webMapListDestroyMaps();
             }
+            //emit the data viewer load event
+            setTimeout(lang.hitch(this, function () {
+                this.onDataViewerLoaded();
+            }), 1000);
         },
 
         /**
@@ -2071,6 +2075,22 @@ define([
             domClass.add(exportButton, "esriCTExportToCSVIconDisabled");
         },
 
+        /**
+        * This function is used to select the feature after auto refresh
+        */
+        selectFeatureInDataViewer: function (prevSelectedFeatureOID) {
+            var rowToSelect = $("tr[OBJID=" + "'" + prevSelectedFeatureOID + "'" + "]");
+            //If row is found then select the row
+            //this will select the feature on the map too
+            if (rowToSelect && rowToSelect.length > 0) {
+                rowToSelect.click();
+                //Scroll to selected feature in data viewer
+                scrollTopValue = rowToSelect.offset().top - 150;
+                $('.esriCTDataViewerContainer').animate({
+                    scrollTop: $('.esriCTDataViewerContainer').scrollTop() + scrollTopValue
+                }, 400);
+            }
+        },
 
         enableClearSelectionButton: function () {
             return;
@@ -2085,6 +2105,10 @@ define([
         },
 
         disableSelectAllButton: function () {
+            return;
+        },
+
+        onDataViewerLoaded: function () {
             return;
         }
     });

@@ -75,6 +75,7 @@ define([
         lastSelectedWebMapExtent: null, // to store last extent of web-map that was selected
         lastSelectedWebMapItemInfo: null, // to store item info of web-map that was last selected
         selectedLayerId: null, // to store id of selected layer
+        _currentOperationalLayerDetails: null, //to store the current selected layer
 
         /**
          * This function is called when widget is constructed.
@@ -398,6 +399,9 @@ define([
                     "operationalLayerDetails": this._filteredWebMapResponseArr[0][1].itemInfo.itemData.operationalLayers[operationalLayersLength - 1],
                     "itemInfo": this._filteredWebMapResponseArr[0][1].itemInfo
                 };
+                //Store the current selected layer, this will be used keep the track of current selected layer while
+                //doing the further processing in the application
+                this._currentOperationalLayerDetails = obj;
                 if (operationalLayersLength === 1) {
                     // by default select first webmap in list
                     this._selectWebMapItem(this._filteredWebMapResponseArr[0][1].itemInfo.item.id);
@@ -597,6 +601,9 @@ define([
                             "operationalLayerDetails": operationalLayerDetails,
                             "itemInfo": evt.itemInfo
                         };
+                        //Store the current selected layer, this will be used keep the track of current selected layer while
+                        //doing the further processing in the application
+                        this._currentOperationalLayerDetails = obj;
                         this._displaySelectedOperationalLayer(obj);
                     }));
                 } else {
@@ -670,6 +677,9 @@ define([
                             "operationalLayerDetails": operationalLayerDetails,
                             "itemInfo": response.itemInfo
                         };
+                        //Store the current selected layer, this will be used keep the track of current selected layer while
+                        //doing the further processing in the application
+                        this._currentOperationalLayerDetails = obj;
                         this._displaySelectedOperationalLayer(obj);
                     }));
                 } else {
@@ -679,6 +689,9 @@ define([
                         "operationalLayerDetails": operationalLayerDetails,
                         "itemInfo": this.lastSelectedWebMapItemInfo
                     };
+                    //Store the current selected layer, this will be used keep the track of current selected layer while
+                    //doing the further processing in the application
+                    this._currentOperationalLayerDetails = obj;
                     this._displaySelectedOperationalLayer(obj);
                     if (this.changeExtentOnLayerChange) {
                         this.map.setExtent(this.lastSelectedWebMapExtent);
