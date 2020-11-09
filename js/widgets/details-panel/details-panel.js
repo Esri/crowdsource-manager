@@ -58,7 +58,7 @@ define([
         i18n: {}, // to store nls object
         isShowSelectedClicked: null, // to notify that show all option is clicked
         isShowAllClicked: null, // to notify that show all option is clicked
-
+        isCommentsFormOpen: false, //to notify wether the comments form is open
         /**
          * This function is called when widget is constructed
          * @param{object} parameters of widget
@@ -263,6 +263,10 @@ define([
                     $('.nav-tabs a[href="#' + "commentsTabPanel" + '"]').tab('show');
                 }
                 this._displayTabList();
+            });
+
+            this._commentsWidgetObj.isFormOpen = lang.hitch(this, function (isOpen) {
+                this.isCommentsFormOpen = isOpen;
             });
         },
 

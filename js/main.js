@@ -454,6 +454,13 @@ define([
             this._applicationHeader.selectAllRowsClicked = lang.hitch(this, function () {
                 this._dataViewerWidget.selectAllRowsClicked();
             });
+            //If manual refresh button is clicked and hard reset flag is set to true
+            //select the current selected layer, this will load the layer again by resetting
+            //the current selection, filters and honoring web map level filters 
+            this._applicationHeader.onApplicationHardReset = lang.hitch(this, function () {
+                this._webMapListWidget._displaySelectedOperationalLayer(
+                    this._webMapListWidget._currentOperationalLayerDetails);
+            });
         },
 
         /**
@@ -987,6 +994,12 @@ define([
                 id: opLayerInfo.id,
                 outFields: ["*"]
             });
+            //Set refresh interval to the layer, this will make sure
+            //layer refreshes after specified time interval 
+            if (this.appConfig.enableAutoRefresh) {
+                this._refinedOperationalLayer.setRefreshInterval(
+                    opLayerInfo.layerObject.refreshInterval);
+            }
             // definition expression - when editors can only edit option is true
             if (opLayerInfo.layerObject.hasOwnProperty("ownershipBasedAccessControlForFeatures") &&
                 opLayerInfo.layerObject.ownershipBasedAccessControlForFeatures !== null &&
@@ -1318,6 +1331,12 @@ define([
                 }
                 this._detailsPanelWidget.showSelectedClicked();
             });
+            // to get notified when data viewer is loaded
+            this._dataViewerWidget.onDataViewerLoaded = lang.hitch(this, function () {
+                if (this.isAutoRefresh && this.prevSelectedFeatureOID) {
+                    this._dataViewerWidget.selectFeatureInDataViewer(this.prevSelectedFeatureOID);
+                }
+            });
         },
 
         /**
@@ -1572,7 +1591,43 @@ define([
          */
         _createFeatureLayerHandle: function () {
             if (this._refinedOperationalLayer) {
+                //remove the existing refresh handle
+                if (this._refreshHandle) {
+                    this._refreshHandle.remove();
+                }
                 this._dataViewerFeatureLayerUpdateEndHandle = on(this._refinedOperationalLayer, "update-end", lang.hitch(this, this._onFeatureLayerUpdateEnd));
+                //Bind the refresh event for a layer
+                if (this.appConfig.enableAutoRefresh) {
+                    this._refreshHandle = on(this._refinedOperationalLayer, "refresh-tick",
+                        lang.hitch(this, function () {
+                            this._autoRefreshApp();
+                        }));
+                }
+            }
+        },
+
+        /**
+         * This function is auto refreshes application
+         * @memberOf widgets/main/main
+         */
+        _autoRefreshApp: function () {
+            //Refresh the application only if it is not in edit mode
+            // and the comments form is not open
+            if (!this._dataViewerWidget.isEditMode &&
+                !this._detailsPanelWidget.isCommentsFormOpen) {
+                this.isAutoRefresh = true;
+                var selectedFeatures = this._dataViewerWidget._getSelectedFeatures();
+                //If a single feature was selected before app refresh
+                //keep the selected feature object id and reselect
+                //the feature once app refreshes 
+                if (selectedFeatures.length === 1) {
+                    this.prevSelectedFeatureOID =
+                        selectedFeatures[0].attributes[this._refinedOperationalLayer.objectIdField];
+                } else {
+                    this.prevSelectedFeatureOID = null;
+                }
+                //After getting all the desired data, refresh the application
+                this._applicationHeader.refreshApplication();
             }
         },
 

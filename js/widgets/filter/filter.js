@@ -1737,8 +1737,28 @@ define([
         * @memberOf widgets/filter/filter
         */
         _attachBlurEvents: function (index, firstInputBox, secondInputBox, closeTextBoxSpan, displayColumn) {
-            on(firstInputBox, "blur", lang.hitch(this, function () {
-                if ((firstInputBox.value !== "" && secondInputBox.value !== "") || (firstInputBox.value === "" && secondInputBox.value === "")) {
+            on(firstInputBox, "keypress", lang.hitch(this, function (event) {
+                        // set textbox values to empty
+                if (event && (event.keyCode === keys.ENTER)) {
+                    secondInputBox.focus();
+                    }
+            }));
+                    // check header icon on the basis of changes in the filter
+            on(secondInputBox, "blur", lang.hitch(this, function (event) {
+                this._onSecondInputBoxKeyPress(firstInputBox, secondInputBox, index,
+                    displayColumn, closeTextBoxSpan);
+            }));
+            on(secondInputBox, "keypress", lang.hitch(this, function (event) {
+                if (event && (event.keyCode === keys.ENTER)) {
+                    this._onSecondInputBoxKeyPress(firstInputBox, secondInputBox, index,
+                        displayColumn, closeTextBoxSpan);
+                }
+            }));
+        },
+        _onSecondInputBoxKeyPress: function (firstInputBox, secondInputBox, index,
+            displayColumn, closeTextBoxSpan) {
+            if ((firstInputBox.value !== "" && secondInputBox.value !== "") ||
+                (firstInputBox.value === "" && secondInputBox.value === "")) {
                     this.appUtils.showLoadingIndicator();
                     if (firstInputBox.value === "" && secondInputBox.value === "") {
                         // set textbox values to empty
@@ -1748,23 +1768,9 @@ define([
                     }
                     // check header icon on the basis of changes in the filter
                     this._onEditFilterOptionChangeIcon(index, displayColumn);
-                    this._queryForRangeValue(index, firstInputBox, secondInputBox, closeTextBoxSpan, displayColumn);
+                this._queryForRangeValue(index, firstInputBox, secondInputBox,
+                    closeTextBoxSpan, displayColumn);
                 }
-            }));
-            on(secondInputBox, "blur", lang.hitch(this, function () {
-                if ((firstInputBox.value !== "" && secondInputBox.value !== "") || (firstInputBox.value === "" && secondInputBox.value === "")) {
-                    this.appUtils.showLoadingIndicator();
-                    if (firstInputBox.value === "" && secondInputBox.value === "") {
-                        // set textbox values to empty
-                        this._resetTextBoxes(firstInputBox, secondInputBox, index);
-                        this._setCurrentExpression();
-                        this._applyParameterizedExpression();
-                    }
-                    // check header icon on the basis of changes in the filter
-                    this._onEditFilterOptionChangeIcon(index, displayColumn);
-                    this._queryForRangeValue(index, firstInputBox, secondInputBox, closeTextBoxSpan, displayColumn);
-                }
-            }));
         },
 
         /**
@@ -1844,6 +1850,7 @@ define([
                     this._setPrevValues(firstInputBox, secondInputBox, index, closeTextBoxSpan);
                     this.appUtils.showMessage(this.appConfig.i18n.filter.noFeatureFoundText);
                     this.appUtils.hideLoadingIndicator();
+                    $(".esriCTFilterParentContainer").css("display", "none");
                 }
             }), lang.hitch(this, function () {
                 deferred.resolve();
