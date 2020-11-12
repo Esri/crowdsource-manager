@@ -1613,21 +1613,28 @@ define([
         _autoRefreshApp: function () {
             //Refresh the application only if it is not in edit mode
             // and the comments form is not open
-            if (!this._dataViewerWidget.isEditMode &&
-                !this._detailsPanelWidget.isCommentsFormOpen) {
-                this.isAutoRefresh = true;
-                var selectedFeatures = this._dataViewerWidget._getSelectedFeatures();
-                //If a single feature was selected before app refresh
-                //keep the selected feature object id and reselect
-                //the feature once app refreshes 
-                if (selectedFeatures.length === 1) {
-                    this.prevSelectedFeatureOID =
-                        selectedFeatures[0].attributes[this._refinedOperationalLayer.objectIdField];
-                } else {
-                    this.prevSelectedFeatureOID = null;
-                }
-                //After getting all the desired data, refresh the application
-                this._applicationHeader.refreshApplication();
+            if (this._dataViewerWidget.isEditMode ||
+                (this._detailsPanelWidget && this._detailsPanelWidget.isCommentsFormOpen)) {
+                    return;
+            }
+            this.isAutoRefresh = true;
+            var selectedFeatures = this._dataViewerWidget._getSelectedFeatures();
+            //If a single feature was selected before app refresh
+            //keep the selected feature object id and reselect
+            //the feature once app refreshes
+            if (selectedFeatures.length === 1) {
+                this.prevSelectedFeatureOID =
+                    selectedFeatures[0].attributes[this._refinedOperationalLayer.objectIdField];
+            } else {
+                this.prevSelectedFeatureOID = null;
+            }
+            //After getting all the desired data, refresh the application
+            this._applicationHeader.refreshApplication();
+            //update the button state if data viewer was in show selected mode
+            var showAllButton = dom.byId("showAllMainButton");
+            if (selectedFeatures.length > 0 && domClass.contains(showAllButton, "esriCTShowAllIcon")) {
+                domClass.replace(showAllButton, "esriCTShowSelectedIconEnabled", "esriCTShowAllIcon");
+                domAttr.set(showAllButton, "title", this.appConfig.i18n.dataviewer.showSelectedButtonTooltip);
             }
         },
 

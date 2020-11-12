@@ -135,5 +135,5 @@ define({
     //If true, the current filters and selection will be cleared for the selected layer
     "enableHardReset": false,
     //If true, application will honor the refresh interval set on the web map level
-    "enableAutoRefresh": false
+    "enableAutoRefresh": true
 });
