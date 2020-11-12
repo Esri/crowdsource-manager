@@ -40,8 +40,7 @@
         "showLegend": false,
         "showPopupForNonEditableLayers": false,
         "enableEditingAttachments": false,
-        "enableHardReset": false,
-        "enableAutoRefresh": false
+        "enableHardReset": false
     },
     "configurationSettings": [{
         "category": "<b>General</b>",
@@ -165,11 +164,6 @@
             "tooltip": "Enable to clear the filters and selection",
             "type": "boolean",
             "fieldName": "enableHardReset"
-        }, {
-            "label": "Auto refresh the application with specific time interval",
-            "tooltip": "Enable to refresh the application",
-            "type": "boolean",
-            "fieldName": "enableAutoRefresh"
         }, {
             "type": "subcategory",
             "label": "Zoom level"
