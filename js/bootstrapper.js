@@ -20,24 +20,32 @@ define([
     "config/template-config",
     "application/template",
     "application/main",
+    "application/utils/utils",
     "dojo/_base/lang",
     "dojo/on",
     "esri/arcgis/Portal",
     "esri/IdentityManager",
     "dojo/dom",
+    "dojo/html",
+    "dojo/dom-construct",
     "dojo/dom-class",
+    "widgets/help/help",
     "dojo/query"
 ], function (
     declare,
     templateConfig,
     Template,
     Main,
+    AppUtils,
     lang,
     on,
     esriPortal,
     IdentityManager,
     dom,
+    html,
+    domConstruct,
     domClass,
+    Help,
     query
 ) {
     return declare(null, {
@@ -64,6 +72,12 @@ define([
                     link.href = "./js/vendor/bootstrap-rtl/bootstrap-rtl.min.css";
                 } else {
                     link.parentNode.removeChild(link);
+                }
+                //If application is running in IE show warning message
+                if (this._isIE()) {
+                    setTimeout(lang.hitch(this, function () {
+                        this._showWarningMessage(config);
+                    }), 500);
                 }
                 this.portal.on("load", lang.hitch(this, function () {
                     var signedIn;
@@ -156,6 +170,60 @@ define([
             domClass.add(query(".loading-indicator")[0], "esriCTWhiteBackGround");
             node = dom.byId("loading_message");
             node.innerHTML = errorMessage;
+        },
+
+        /**
+         * Show message in modal dialog
+         * @memberOf js/bootstrapper
+         */
+        _showWarningMessage: function (config) {
+            var warningDOM, warningMessageModal, message, logoWrapper;
+            // Initialize help widget
+            warningDOM = domConstruct.create("div", {
+                "class": "esriCTSupportedBrowsersImage"
+            });
+            //show the message as per AGOL/Portal hosted app
+            if (this._isAGOLHosted()) {
+                message = AppUtils.parseWarningMessage(config.i18n.map.warningMessageAGOL);
+            } else {
+                message = AppUtils.parseWarningMessage(config.i18n.map.warningMessageEnterprise);
+            }
+            //Create DOM for showing text and browser icons
+            textContent = domConstruct.create("div", {
+                innerHTML: message
+            }, warningDOM);
+            //Add DOM for browser icon
+            logoWrapper = domConstruct.create("div", {}, warningDOM);
+            html.set(logoWrapper, AppUtils.getBrowserSupportLogoTemplate(), {
+                parseContent: true
+            });
+
+            warningMessageModal = new Help({
+                "appConfig": {
+                    "helpDialogTitle": config.i18n.map.warningMessageTitle,
+                    "helpDialogContent": warningDOM.innerHTML
+                }
+            });
+            warningMessageModal.startup();
+        },
+
+        /**
+         * This function is used to check if app is hosted on AGOL or portal
+         * @memberOf js/bootstrapper
+         */
+        _isAGOLHosted: function () {
+            return window.location.hostname.indexOf('arcgis.com') > -1;
+        },
+
+        /**
+         * This function is used to check if app is running in IE browser
+         * @memberOf js/bootstrapper
+         */
+        _isIE: function () {
+            ua = navigator.userAgent;
+            /* MSIE used to detect old browsers and Trident used to newer ones*/
+            var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+            return is_ie;
         }
     });
 });
