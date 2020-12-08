@@ -242,7 +242,7 @@ define([
               this.appConfig.appResponse.item.access == "public" &&
               this.appConfig.appResponse.item.contentOrigin &&
               this.appConfig.appResponse.item.contentOrigin != "self"){
-                var redirectUrl = "https://www.arcgis.com/apps/CrowdsourceManager/index.html?appId=" + this.appConfig.appResponse.item.id;
+                var redirectUrl = "https://www.arcgis.com/apps/CrowdsourceManager/index.html?appid=" + this.appConfig.appResponse.item.id;
                 window.location.replace("../shared/origin/index.html?appUrl=" + redirectUrl);
             }
         },
