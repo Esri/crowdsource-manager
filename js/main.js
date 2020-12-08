@@ -205,6 +205,7 @@ define([
                         queryParams.sortOrder = this.appConfig.groupInfo.results[0].sortOrder;
                     }
                 }
+                this._checkSelfContent();
                 // pass the newly constructed queryparams from groupinfo.
                 // if query params not available in groupinfo or group is private
                 // items will be sorted according to modified date.
@@ -229,7 +230,22 @@ define([
                 ApplicationUtils.showError(this.appConfig.i18n.config.configNotDefined);
             }
         },
-
+        /**
+        * Check that the requested item is from the same org, otherwise redirect to error page
+        * @memberOf main
+        */
+        _checkSelfContent: function () {
+            if (this.appConfig.appResponse && 
+              !this._loggedInUser &&
+              window.location.hostname.indexOf('arcgis.com') > -1 &&
+              this.appConfig.appResponse.item &&
+              this.appConfig.appResponse.item.access == "public" &&
+              this.appConfig.appResponse.item.contentOrigin &&
+              this.appConfig.appResponse.item.contentOrigin != "self"){
+                var redirectUrl = "https://www.arcgis.com/apps/CrowdsourceManager/index.html?appId=" + this.appConfig.appResponse.item.id;
+                window.location.replace("../shared/origin/index.html?appUrl=" + redirectUrl);
+            }
+        },
         /**
          * This function is used to load group items
          * @param{object} parameter used to query group items
