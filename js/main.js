@@ -237,7 +237,7 @@ define([
         _checkSelfContent: function () {
             if (this.appConfig.appResponse && 
               !this._loggedInUser &&
-              this._boilerPlateTemplate.templateConfig.esriEnvironment &&
+              window.location.hostname.indexOf('arcgis.com') > -1 &&
               this.appConfig.appResponse.item &&
               this.appConfig.appResponse.item.access == "public" &&
               this.appConfig.appResponse.item.contentOrigin &&
