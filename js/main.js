@@ -230,7 +230,10 @@ define([
                 ApplicationUtils.showError(this.appConfig.i18n.config.configNotDefined);
             }
         },
-
+        /**
+        * Check that the requested item is from the same org, otherwise redirect to error page
+        * @memberOf main
+        */
         _checkSelfContent: function () {
             if (this.appConfig.appResponse && 
               !this._loggedInUser &&
