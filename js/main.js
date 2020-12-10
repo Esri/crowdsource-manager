@@ -235,9 +235,11 @@ define([
         * @memberOf main
         */
         _checkSelfContent: function () {
+            var withinFrame = window.location !== window.parent.location;
             if (this.appConfig.appResponse && 
               !this._loggedInUser &&
               window.location.hostname.indexOf('arcgis.com') > -1 &&
+              !withinFrame &&
               this.appConfig.appResponse.item &&
               this.appConfig.appResponse.item.access == "public" &&
               this.appConfig.appResponse.item.contentOrigin &&
