@@ -205,6 +205,7 @@ define([
                         queryParams.sortOrder = this.appConfig.groupInfo.results[0].sortOrder;
                     }
                 }
+                this._checkSelfContent();
                 // pass the newly constructed queryparams from groupinfo.
                 // if query params not available in groupinfo or group is private
                 // items will be sorted according to modified date.
@@ -229,7 +230,24 @@ define([
                 ApplicationUtils.showError(this.appConfig.i18n.config.configNotDefined);
             }
         },
-
+        /**
+        * Check that the requested item is from the same org, otherwise redirect to error page
+        * @memberOf main
+        */
+        _checkSelfContent: function () {
+            var withinFrame = window.location !== window.parent.location;
+            if (this.appConfig.appResponse && 
+              !this._loggedInUser &&
+              window.location.hostname.indexOf('arcgis.com') > -1 &&
+              !withinFrame &&
+              this.appConfig.appResponse.item &&
+              this.appConfig.appResponse.item.access == "public" &&
+              this.appConfig.appResponse.item.contentOrigin &&
+              this.appConfig.appResponse.item.contentOrigin != "self"){
+                var redirectUrl = "https://www.arcgis.com/apps/CrowdsourceManager/index.html?appid=" + this.appConfig.appResponse.item.id;
+                window.location.replace("../shared/origin/index.html?appUrl=" + redirectUrl);
+            }
+        },
         /**
          * This function is used to load group items
          * @param{object} parameter used to query group items
@@ -453,6 +471,13 @@ define([
             });
             this._applicationHeader.selectAllRowsClicked = lang.hitch(this, function () {
                 this._dataViewerWidget.selectAllRowsClicked();
+            });
+            //If manual refresh button is clicked and hard reset flag is set to true
+            //select the current selected layer, this will load the layer again by resetting
+            //the current selection, filters and honoring web map level filters 
+            this._applicationHeader.onApplicationHardReset = lang.hitch(this, function () {
+                this._webMapListWidget._displaySelectedOperationalLayer(
+                    this._webMapListWidget._currentOperationalLayerDetails);
             });
         },
 
@@ -987,6 +1012,12 @@ define([
                 id: opLayerInfo.id,
                 outFields: ["*"]
             });
+            //Set refresh interval to the layer, this will make sure
+            //layer refreshes after specified time interval 
+            if (this.appConfig.enableAutoRefresh) {
+                this._refinedOperationalLayer.setRefreshInterval(
+                    opLayerInfo.layerObject.refreshInterval);
+            }
             // definition expression - when editors can only edit option is true
             if (opLayerInfo.layerObject.hasOwnProperty("ownershipBasedAccessControlForFeatures") &&
                 opLayerInfo.layerObject.ownershipBasedAccessControlForFeatures !== null &&
@@ -1318,6 +1349,12 @@ define([
                 }
                 this._detailsPanelWidget.showSelectedClicked();
             });
+            // to get notified when data viewer is loaded
+            this._dataViewerWidget.onDataViewerLoaded = lang.hitch(this, function () {
+                if (this.isAutoRefresh && this.prevSelectedFeatureOID) {
+                    this._dataViewerWidget.selectFeatureInDataViewer(this.prevSelectedFeatureOID);
+                }
+            });
         },
 
         /**
@@ -1572,7 +1609,50 @@ define([
          */
         _createFeatureLayerHandle: function () {
             if (this._refinedOperationalLayer) {
+                //remove the existing refresh handle
+                if (this._refreshHandle) {
+                    this._refreshHandle.remove();
+                }
                 this._dataViewerFeatureLayerUpdateEndHandle = on(this._refinedOperationalLayer, "update-end", lang.hitch(this, this._onFeatureLayerUpdateEnd));
+                //Bind the refresh event for a layer
+                if (this.appConfig.enableAutoRefresh) {
+                    this._refreshHandle = on(this._refinedOperationalLayer, "refresh-tick",
+                        lang.hitch(this, function () {
+                            this._autoRefreshApp();
+                        }));
+                }
+            }
+        },
+
+        /**
+         * This function is auto refreshes application
+         * @memberOf widgets/main/main
+         */
+        _autoRefreshApp: function () {
+            //Refresh the application only if it is not in edit mode
+            // and the comments form is not open
+            if (this._dataViewerWidget.isEditMode ||
+                (this._detailsPanelWidget && this._detailsPanelWidget.isCommentsFormOpen)) {
+                    return;
+            }
+            this.isAutoRefresh = true;
+            var selectedFeatures = this._dataViewerWidget._getSelectedFeatures();
+            //If a single feature was selected before app refresh
+            //keep the selected feature object id and reselect
+            //the feature once app refreshes
+            if (selectedFeatures.length === 1) {
+                this.prevSelectedFeatureOID =
+                    selectedFeatures[0].attributes[this._refinedOperationalLayer.objectIdField];
+            } else {
+                this.prevSelectedFeatureOID = null;
+            }
+            //After getting all the desired data, refresh the application
+            this._applicationHeader.refreshApplication();
+            //update the button state if data viewer was in show selected mode
+            var showAllButton = dom.byId("showAllMainButton");
+            if (selectedFeatures.length > 0 && domClass.contains(showAllButton, "esriCTShowAllIcon")) {
+                domClass.replace(showAllButton, "esriCTShowSelectedIconEnabled", "esriCTShowAllIcon");
+                domAttr.set(showAllButton, "title", this.appConfig.i18n.dataviewer.showSelectedButtonTooltip);
             }
         },
 

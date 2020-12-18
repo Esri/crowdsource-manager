@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "귀하의 계정에는 공개 상태가 아닌 구성 설정 앱을 사용할 수 있는 라이선스가 없습니다. 필수 앱 또는 애드온 필수 앱 라이선스가 포함된 사용자 유형을 업무 지시하려면 기관 관리자에게 문의하세요.",
       "title": "라이선스가 없음"
-    }
+    },
+    "warningMessageTitle": "제한된 브라우저 지원",
+    "warningMessageAGOL": "사용 중인 브라우저는 더 이상 지원되지 않습니다. 이 브라우저에서는 이 응용프로그램의 일부가 최적으로 작동하지 않거나 전혀 작동하지 않을 수 있습니다. 향후에 이 브라우저에 대한 지원이 중단됩니다.</br></br>최신 버전의 <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link>, <edge-link>Microsoft Edge</edge-link>를 사용하세요.</br></br>브라우저 지원에 대한 자세한 내용은 문서를 참조하세요. <feedback-link>GeoNet(Esri 커뮤니티)</feedback-link>을 통해 피드백을 제공하세요.",
+    "warningMessageEnterprise": "사용 중인 브라우저는 더 이상 지원되지 않습니다. 이 브라우저에서는 이 응용프로그램의 일부가 최적으로 작동하지 않거나 전혀 작동하지 않을 수 있습니다.</br></br>최신 버전의 <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link>, <edge-link>Microsoft Edge</edge-link>를 사용하세요."
   },
   "webMapList": {
     "owner": "소유자",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "모두 보기",
     "showSelectedButtonTooltip": "선택한 항목 보기",
     "selectAllButtonTooltip": "모두 선택",
-    "clearSelectionButtonTooltip": "선택 해제",
-    "invalidFeatureMessage": "${invalidFeatureCount}개의 유효하지 않은 피처를 선택할 수 없습니다."
+    "clearSelectionButtonTooltip": "선택 해제"
   },
   "timeSlider": {
     "timeSliderLabel": "시간 범위",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "이 레이어 검색",
+    "clearSearchIconTooltip": "검색 지우기",
     "noResultFoundText": "결과를 찾을 수 없음",
     "searchInEditModeAlert": "편집 중에 검색을 사용할 수 없음"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "새로 고침",
-    "confirmManualRefreshText": "모든 선택 내역과 저장하지 않은 변경 내용이 취소됩니다."
+    "confirmManualRefreshText": "모든 선택 내역과 저장하지 않은 변경 내용이 취소됩니다.",
+    "confirmHardRefreshText": "모든 필터, 선택 항목과 저장하지 않은 변경 내용이 취소됩니다."
   },
   "help": {
     "helpIconTooltip": "도움말"

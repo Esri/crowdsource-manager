@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "El vostre compte no té llicència per utilitzar aplicacions configurables que no siguin públiques. Demaneu a l'administrador de l'organització que us assigni un tipus d'usuari que inclogui les aplicacions bàsiques o una llicència d'aplicacions bàsiques de complement.",
       "title": "Sense llicència"
-    }
+    },
+    "warningMessageTitle": "Suport limitat per al navegador",
+    "warningMessageAGOL": "Esteu utilitzant un navegador que està obsolet. És possible que algunes parts d'aquesta aplicació no funcionin de manera òptima o que no funcionin en aquest navegador. Aquest navegador deixarà de ser compatible.</br></br>Utilitzeu les versions més recents del <chrome-link>Google Chrome</chrome-link>, el <firefox-link>Mozilla Firefox</firefox-link>, l'<safari-link>Apple Safari</safari-link> o el <edge-link>Microsoft Edge</edge-link>.</br></br>Per obtenir més informació sobre la compatibilitat amb els navegadors, consulteu la nostra documentació. Valoreu-nos a través de <feedback-link>GeoNet, la Comunitat d’Esri</feedback-link>.",
+    "warningMessageEnterprise": "Esteu utilitzant un navegador que ja no és compatible. És possible que algunes parts d'aquesta aplicació no funcionin de manera òptima o que no funcionin en aquest navegador.</br></br>Utilitzeu les versions més recents del <chrome-link>Google Chrome</chrome-link>, el <firefox-link>Mozilla Firefox</firefox-link>, l'<safari-link>Apple Safari</safari-link> o el <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Propietari",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Mostra-ho tot",
     "showSelectedButtonTooltip": "Mostra els seleccionats",
     "selectAllButtonTooltip": "Selecciona-ho tot",
-    "clearSelectionButtonTooltip": "Esborra la selecció",
-    "invalidFeatureMessage": "No es poden seleccionar ${invalidFeatureCount} entitats no vàlides."
+    "clearSelectionButtonTooltip": "Esborra la selecció"
   },
   "timeSlider": {
     "timeSliderLabel": "Interval de temps",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Cerca en aquesta capa",
+    "clearSearchIconTooltip": "Esborra la cerca",
     "noResultFoundText": "No s'ha trobat cap resultat",
     "searchInEditModeAlert": "La cerca no està disponible durant l'edició"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Actualitza",
-    "confirmManualRefreshText": "Es descartaran totes les seleccions i els canvis sense desar"
+    "confirmManualRefreshText": "Es descartaran totes les seleccions i els canvis sense desar",
+    "confirmHardRefreshText": "Es descartaran tots els filtres, totes les seleccions i tots els canvis sense desar"
   },
   "help": {
     "helpIconTooltip": "Ajuda"

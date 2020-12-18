@@ -715,6 +715,7 @@ define([
                 this._showPanel(dom.byId("commentformContainer"));
                 this._displayAddCommentsButton();
                 this.isCommentFormOpen = false;
+                this.isFormOpen(false);
                 domStyle.set(this.commentsContainer, "display", "block");
                 //Scroll to top position when clicked cancel need ID to use scrollTop
                 dom.byId("tabContent").scrollTop = 0;
@@ -725,6 +726,7 @@ define([
                 this._showPanel(dom.byId("commentformContainer"));
                 this._displayAddCommentsButton();
                 this.isCommentFormOpen = false;
+                this.isFormOpen(false);
                 //update comment list
                 domConstruct.empty(this.commentsContainer);
                 domStyle.set(this.commentsContainer, "display", "block");
@@ -735,8 +737,10 @@ define([
             //If Comment form is close, update the comment form open flag
             if (domClass.contains(dom.byId("commentformContainer"), "esriCTHidden")) {
                 this.isCommentFormOpen = false;
+                this.isFormOpen(false);
             } else {
                 this.isCommentFormOpen = true;
+                this.isFormOpen(true);
             }
         },
 

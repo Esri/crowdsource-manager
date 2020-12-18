@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Ihr Konto ist nicht für die Verwendung von nicht öffentlichen konfigurierbaren Apps lizenziert. Bitten Sie den Administrator der Organisation, Ihnen einen Benutzertyp mit Essential Apps oder eine Add-On-Lizenz für Essential Apps zuzuweisen.",
       "title": "Nicht lizenziert"
-    }
+    },
+    "warningMessageTitle": "Eingeschränkte Browser-Unterstützung",
+    "warningMessageAGOL": "Sie verwenden einen Browser, der nicht mehr unterstützt wird. Teile dieser Anwendung funktionieren in diesem Browser möglicherweise nicht optimal oder überhaupt nicht. Die Unterstützung dieses Browsers wird zukünftig eingestellt.</br></br>Verwenden Sie die neueste Version von <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> oder <edge-link>Microsoft Edge</edge-link>.</br></br>Weitere Informationen zur Browser-Unterstützung finden Sie in unserer Dokumentation. Teilen Sie uns Ihr Feedback über die <feedback-link>Esri Community auf GeoNet</feedback-link> mit.",
+    "warningMessageEnterprise": "Sie verwenden einen Browser, der nicht mehr unterstützt wird. Teile dieser Anwendung funktionieren in diesem Browser möglicherweise nicht optimal oder überhaupt nicht.</br></br>Verwenden Sie die neueste Version von <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> oder <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Besitzer",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Alle anzeigen",
     "showSelectedButtonTooltip": "Ausgewählte anzeigen",
     "selectAllButtonTooltip": "Alle auswählen",
-    "clearSelectionButtonTooltip": "Auswahl aufheben",
-    "invalidFeatureMessage": "${invalidFeatureCount} ungültige(s) Feature(s) nicht auswählbar."
+    "clearSelectionButtonTooltip": "Auswahl aufheben"
   },
   "timeSlider": {
     "timeSliderLabel": "Zeitbereich",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Diesen Layer durchsuchen",
+    "clearSearchIconTooltip": "Suche löschen",
     "noResultFoundText": "Keine Ergebnisse gefunden",
     "searchInEditModeAlert": "Suchfunktion ist während der Bearbeitung nicht verfügbar"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Aktualisieren",
-    "confirmManualRefreshText": "Gesamte Auswahl und nicht gespeicherte Änderungen werden verworfen"
+    "confirmManualRefreshText": "Gesamte Auswahl und nicht gespeicherte Änderungen werden verworfen",
+    "confirmHardRefreshText": "Alle Filter, Auswahlen und nicht gespeicherten Änderungen werden verworfen."
   },
   "help": {
     "helpIconTooltip": "Hilfe"

@@ -68,9 +68,13 @@ define([
          * This function is used to do manual refresh
          * @memberOf widgets/manual-refresh/manual-refresh
          */
-        _manualRefreshApplication: function () {
+        _manualRefreshApplication: function (isAutoRefresh) {
             var searchEnabledIcon, confirmValue;
-            confirmValue = confirm(this.appConfig.i18n.manualRefresh.confirmManualRefreshText);
+            if (isAutoRefresh) {
+                confirmValue = isAutoRefresh;
+            } else {
+                confirmValue = confirm(this.appConfig.i18n.manualRefresh.confirmManualRefreshText);
+            }
             if (confirmValue) {
                 this.appUtils.showLoadingIndicator();
                 this.confirmedManualRefresh();

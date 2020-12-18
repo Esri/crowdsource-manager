@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Ο λογαριασμός σας δεν διαθέτει άδεια χρήσης για Παραμετροποιήσιμες Εφαρμογές που δεν είναι δημόσιες. Ζητήστε από τον διαχειριστή του οργανισμού σας να σας εκχωρήσει τύπο χρήστη που να περιλαμβάνει Βασικές Εφαρμογές ή πρόσθετη άδεια χρήσης για Βασικές Εφαρμογές.",
       "title": "Χωρίς άδεια χρήσης"
-    }
+    },
+    "warningMessageTitle": "Περιορισμένη υποστήριξη προγράμματος περιήγησης",
+    "warningMessageAGOL": "Χρησιμοποιείτε ένα πρόγραμμα περιήγησης που είναι υπό απόσυρση. Ορισμένα τμήματα της εφαρμογής αυτής ενδέχεται να μη λειτουργούν με τον ιδανικό τρόπο ή να μη λειτουργούν καθόλου στο εν λόγω πρόγραμμα περιήγησης. Η υποστήριξη για το συγκεκριμένο πρόγραμμα περιήγησης θα διακοπεί στο μέλλον.</br></br>Χρησιμοποιήστε την πιο πρόσφατη έκδοση του <chrome-link>Google Chrome</chrome-link>, του <firefox-link>Mozilla Firefox</firefox-link>, του <safari-link>Apple Safari</safari-link> ή του <edge-link>Microsoft Edge</edge-link>.</br></br>Για περισσότερες πληροφορίες όσον αφορά την υποστήριξη προγραμμάτων περιήγησης, ανατρέξτε στην τεκμηρίωσή μας. Πείτε μας τα σχόλιά σας μέσω του <feedback-link>GeoNet, της κοινότητας της Esri</feedback-link>.",
+    "warningMessageEnterprise": "Χρησιμοποιείτε κάποιο πρόγραμμα περιήγησης που δεν υποστηρίζεται πλέον. Ορισμένα τμήματα της εφαρμογής αυτής ενδέχεται να μη λειτουργούν με τον ιδανικό τρόπο ή να μη λειτουργούν καθόλου στο εν λόγω πρόγραμμα περιήγησης.</br></br>Χρησιμοποιήστε την πιο πρόσφατη έκδοση του <chrome-link>Google Chrome</chrome-link>, του <firefox-link>Mozilla Firefox</firefox-link>, του <safari-link>Apple Safari</safari-link> ή του <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Κάτοχος",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Εμφάνιση όλων",
     "showSelectedButtonTooltip": "Εμφάνιση επιλεγμένων",
     "selectAllButtonTooltip": "Επιλογή όλων",
-    "clearSelectionButtonTooltip": "Απαλοιφή επιλογής",
-    "invalidFeatureMessage": "Δεν είναι δυνατή η επιλογή ${invalidFeatureCount} μη έγκυρου(-ων) στοιχείου(-ων)."
+    "clearSelectionButtonTooltip": "Απαλοιφή επιλογής"
   },
   "timeSlider": {
     "timeSliderLabel": "Εύρος χρόνου",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Αναζήτηση σε αυτό το θεματικό επίπεδο",
+    "clearSearchIconTooltip": "Eκκαθάριση της αναζήτησης",
     "noResultFoundText": "Δεν βρέθηκαν αποτελέσματα",
     "searchInEditModeAlert": "Η αναζήτηση δεν είναι διαθέσιμη κατά την επεξεργασία"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Ανανέωση",
-    "confirmManualRefreshText": "Όλες οι επιλογές και οι μη αποθηκευμένες αλλαγές θα απορριφθούν"
+    "confirmManualRefreshText": "Όλες οι επιλογές και οι μη αποθηκευμένες αλλαγές θα απορριφθούν",
+    "confirmHardRefreshText": "Όλα τα φίλτρα, οι επιλογές και οι μη αποθηκευμένες αλλαγές θα απορριφθούν"
   },
   "help": {
     "helpIconTooltip": "Βοήθεια"

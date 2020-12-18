@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "حسابك غير مرخص لاستخدام التطبيقات القابلة للتكوين غير العامة. رجاءً اطلب من مسئولي المؤسسة تعيينك كنوع مستخدم يتضمن التطبيقات الأساسية أو ترخيص التطبيقات الأساسية المضافة.",
       "title": "غير مرخص"
-    }
+    },
+    "warningMessageTitle": "دعم مستعرض محدود",
+    "warningMessageAGOL": "أنت تستخدم متصفحًا تم إيقافه. بعض أجزاء هذا التطبيق قد لا تعمل على النحو الأمثل أو لا تعمل على الإطلاق في هذا المتصفح. سيتوقف دعم هذا المتصفح في المستقبل، </br></br>يُرجى استخدام أحدث إصدارات <chrome-link>Google Chrome</chrome-link> أو <firefox-link>Mozilla Firefox</firefox-link> أو <safari-link>Apple Safari</safari-link> أو <edge-link>Microsoft Edge</edge-link>. </br></br>لمزيد من المعلومات حول دعم المتصفح، راجع الوثائق الخاصة بنا. قدم ملاحظاتك من خلال <feedback-link>GeoNet، مجتمع Esri</feedback-link>.",
+    "warningMessageEnterprise": "المتصفح الذي تستخدمه لم يعد مدعومًا. قد لا تعمل بعض أجزاء هذا التطبيق على النحو الأمثل أو لا تعمل على الإطلاق في هذا المتصفح. </br></br>يُرجى استخدام أحدث إصدارات <chrome-link>Google Chrome</chrome-link> أو <firefox-link>Mozilla Firefox</firefox-link> أو <safari-link>Apple Safari</safari-link> أو <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "المالك",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "إظهار الكل",
     "showSelectedButtonTooltip": "إظهار سجلات المعالم المحددة",
     "selectAllButtonTooltip": "تحديد الكل",
-    "clearSelectionButtonTooltip": "مسح التحديد",
-    "invalidFeatureMessage": "يتعذر تحديد معلم (معالم) ${invalidFeatureCount} غير صالح."
+    "clearSelectionButtonTooltip": "مسح التحديد"
   },
   "timeSlider": {
     "timeSliderLabel": "النطاق الزمني",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "البحث عن هذه الطبقة",
+    "clearSearchIconTooltip": "مسح البحث",
     "noResultFoundText": "لم يتم العثور على أية نتائج",
     "searchInEditModeAlert": "لا يتوفر البحث أثناء التحرير"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "تحديث",
-    "confirmManualRefreshText": "سيتم تجاهل جميع عمليات التحديد والتغييرات غير المحفوظة"
+    "confirmManualRefreshText": "سيتم تجاهل جميع عمليات التحديد والتغييرات غير المحفوظة",
+    "confirmHardRefreshText": "سيتم تجاهل جميع عمليات التصفية والتحديد والتغييرات غير المحفوظة"
   },
   "help": {
     "helpIconTooltip": "مساعدة"

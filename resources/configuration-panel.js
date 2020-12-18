@@ -39,7 +39,8 @@
         "showBaseMapGallery": false,
         "showLegend": false,
         "showPopupForNonEditableLayers": false,
-        "enableEditingAttachments": false
+        "enableEditingAttachments": false,
+        "enableHardReset": false
     },
     "configurationSettings": [{
         "category": "<b>General</b>",
@@ -158,6 +159,11 @@
             "tooltip": "Enable to show popup for non-editable layers",
             "type": "boolean",
             "fieldName": "showPopupForNonEditableLayers"
+        }, {
+            "label": "Clear filters and selection with refresh",
+            "tooltip": "Enable to clear the filters and selection",
+            "type": "boolean",
+            "fieldName": "enableHardReset"
         }, {
             "type": "subcategory",
             "label": "Zoom level"

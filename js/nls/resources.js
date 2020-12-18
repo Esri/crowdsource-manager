@@ -22,7 +22,10 @@ define({
             licenseError: {
                 message: "Your account is not licensed to use Configurable Apps that are not public. Please ask your organization administrator to assign you a user type that includes Essential Apps or an add-on Essential Apps license.",
                 title: "Not Licensed"
-            }
+            },
+            warningMessageTitle: "Limited browser support",
+            warningMessageAGOL: "You are using a browser that is deprecated. Some parts of this application may not work optimally or at all in this browser. Support for this browser will be discontinued in the future.</br></br>Please use the latest versions of <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link>, or <edge-link>Microsoft Edge</edge-link>.</br></br>For more information on browser support, see our documentation. Provide your feedback through <feedback-link>GeoNet, the Esri Community</feedback-link>.",
+            warningMessageEnterprise: "You are using a browser that is no longer supported. Some parts of this application may not work optimally or at all in this browser.</br></br>Please use the latest versions of <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link>, or <edge-link>Microsoft Edge</edge-link>."
         },
         webMapList: {
             owner: "Owner", // Appears in web-map list description panel when it is set to true
@@ -102,8 +105,7 @@ define({
             showAllButtonTooltip: "Show All",
             showSelectedButtonTooltip: "Show Selected",
             selectAllButtonTooltip: "Select All",
-            clearSelectionButtonTooltip: "Clear Selection",
-            invalidFeatureMessage: "Unable to select ${invalidFeatureCount} invalid feature(s)."
+            clearSelectionButtonTooltip: "Clear Selection"
         },
         timeSlider: {
             timeSliderLabel: "Time range", // Appears beside time slider widget
@@ -134,12 +136,14 @@ define({
         },
         search: {
             searchIconTooltip: "Search this layer", // Displayed on hover of search icon
+            clearSearchIconTooltip: "Clear the search", // Displayed on hover of clear icon
             noResultFoundText: "No results found", // Displayed when no results are found after search
             searchInEditModeAlert: "Search unavailable while editing" // Displayed when no results are found after search
         },
         manualRefresh: {
             manualRefreshIconTooltip: "Refresh", // Displayed on hover of manual refresh icon
-            confirmManualRefreshText: "All selections and unsaved changes will be discarded" // Appears when user wants to do manual refresh
+            confirmManualRefreshText: "All selections and unsaved changes will be discarded", // Appears when user wants to do manual refresh
+            confirmHardRefreshText: "All filters, selections and unsaved changes will be discarded" // Appears when user wants to do hard refresh
         },
         help: {
             helpIconTooltip: "Help" // Displayed on hover of manual refresh icon
@@ -193,6 +197,7 @@ define({
     "ro": 1,
     "ru": 1,
     "sl": 1,
+    "sk": 1,
     "sr": 1,
     "sv": 1,
     "th": 1,

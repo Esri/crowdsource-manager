@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "החשבון שלך אינו מורשה להשתמש באפליקציות הניתנות להגדרה שאינן ציבוריות. בקש ממנהל המערכת בארגון שלך להקצות לך סוג משתמש שכולל את Essential Apps או רישיון הרחבה ל-Essential Apps.",
       "title": "ללא רישיון"
-    }
+    },
+    "warningMessageTitle": "תמיכה מוגבלת בדפדפן",
+    "warningMessageAGOL": "אתה משתמש בדפדפן שכבר יצא משימוש. ייתכן שכמה מחלקי האפליקציה הזו לא יעבדו בצורה אופטימלית או בכלל בדפדפן הזה. בעתיד לא תהיה יותר תמיכה בדפדפן הזה.</br></br>השתמש בגרסה העדכנית ביותר של <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> או <edge-link>Microsoft Edge</edge-link>.</br></br>למידע נוסף על תמיכה בדפדפן, ראה את התיעוד שלנו. הוסף משוב דרך <feedback-link>GeoNet, קהילת Esri</feedback-link>.",
+    "warningMessageEnterprise": "אתה משתמש בדפדפן שאינו נתמך. ייתכן שכמה מחלקי האפליקציה הזו לא יעבדו בצורה אופטימלית או בכלל בדפדפן הזה.</br></br>השתמש בגרסה העדכנית ביותר של <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> או <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "יוצר",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "הצג הכל",
     "showSelectedButtonTooltip": "הצג פריטים שנבחרו",
     "selectAllButtonTooltip": "בחר הכל",
-    "clearSelectionButtonTooltip": "נקה בחירה",
-    "invalidFeatureMessage": "לא ניתן לבחור ${invalidFeatureCount} ישויות לא תקפות."
+    "clearSelectionButtonTooltip": "נקה בחירה"
   },
   "timeSlider": {
     "timeSliderLabel": "טווח זמן",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "חפש בשכבה זו",
+    "clearSearchIconTooltip": "נקה את החיפוש",
     "noResultFoundText": "לא נמצאו תוצאות",
     "searchInEditModeAlert": "חיפוש אינו זמין בעת עריכה"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "רענן",
-    "confirmManualRefreshText": "כל הבחירות והשינויים שלא נשמרו יבוטלו"
+    "confirmManualRefreshText": "כל הבחירות והשינויים שלא נשמרו יבוטלו",
+    "confirmHardRefreshText": "כל המסננים, הבחירות והשינויים שלא נשמרו יבוטלו"
   },
   "help": {
     "helpIconTooltip": "עזרה"

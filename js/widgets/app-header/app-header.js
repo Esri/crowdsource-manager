@@ -160,7 +160,6 @@ define([
          * @memberOf widgets/app-header/app-header
          */
         _setToolTip: function () {
-            domAttr.set(this.searchButton, "title", this.appConfig.i18n.search.searchIconTooltip);
             domAttr.set(this.refreshButton, "title", this.appConfig.i18n.manualRefresh.manualRefreshIconTooltip);
             domAttr.set(this.helpButton, "title", this.appConfig.i18n.help.helpIconTooltip);
         },
@@ -351,7 +350,7 @@ define([
          * @memberOf widgets/app-header/app-header
          */
         _initializeManualRefreshWidget: function () {
-            var refreshParameters;
+            var refreshParameters, confirmValue;
             refreshParameters = {
                 "appConfig": this.appConfig,
                 "appUtils": this.appUtils
@@ -360,9 +359,19 @@ define([
             this._manualRefreshWidgetObj = new ManualRefresh(refreshParameters);
             // On click of manual refresh icon, proceed with manual refresh functionality
             on(this.refreshButton, "click", lang.hitch(this, function () {
-                if (domClass.contains(this.refreshButton, "esriCTManualRefreshIconContainer")) {
-                    this.hideWebMapList();
-                    this._manualRefreshWidgetObj.startup();
+                //If hard reset flag is true, then reset filters and current selection
+                if (this.appConfig.enableHardReset) {
+                    confirmValue = confirm(
+                        this.appConfig.i18n.manualRefresh.confirmHardRefreshText);
+                    if (confirmValue) {
+                        this.appUtils.showLoadingIndicator();
+                        this.onApplicationHardReset();
+                    }
+                } else {
+                    if (domClass.contains(this.refreshButton, "esriCTManualRefreshIconContainer")) {
+                        this.hideWebMapList();
+                        this._manualRefreshWidgetObj.startup();
+                    }
                 }
             }));
             this._manualRefreshWidgetObj.confirmedManualRefresh = lang.hitch(this, function () {
@@ -410,6 +419,14 @@ define([
          */
         confirmedManualRefresh: function () {
             return;
+        },
+
+        /**
+         * This function is used to initiate the auto refresh functionality
+         * @memberOf widgets/app-header/app-header
+         */
+        refreshApplication: function () {
+            this._manualRefreshWidgetObj._manualRefreshApplication(true);
         },
 
         /**
@@ -490,6 +507,14 @@ define([
             return;
         },
 
+        /**
+         * This method is used to reset the selection, filters 
+         * @memberOf widgets/app-header/app-header
+         */
+        onApplicationHardReset: function () {
+            return;
+        },
+        
         /**
          * This method is return last searched string from search
          * @memberOf widgets/app-header/app-header

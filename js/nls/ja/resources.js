@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "パブリックでないテンプレートを使用するためのライセンスがアカウントに付与されていません。 組織の管理者に Essential Apps またはアドオン Essential Apps ライセンスを含むユーザー タイプを割り当てるよう依頼してください。",
       "title": "ライセンスがありません。"
-    }
+    },
+    "warningMessageTitle": "ブラウザーのサポートは制限されています",
+    "warningMessageAGOL": "非推奨のブラウザーを使用しています。 このアプリケーションの一部は、このブラウザーで最適に動作しないか、全く動作しない可能性があります。 今後、このブラウザーのサポートは終了します。</br></br>最新バージョンの <chrome-link>Google Chrome</chrome-link>、<firefox-link>Mozilla Firefox</firefox-link>、<safari-link>Apple Safari</safari-link>、または <edge-link>Microsoft Edge</edge-link> を使用してください。</br></br>ブラウザー サポートの詳細については、Esri のドキュメントをご参照ください。 <feedback-link>Esri コミュニティの GeoNet</feedback-link> からフィードバックをお寄せください。",
+    "warningMessageEnterprise": "サポートされていないブラウザーを使用しています。 このアプリケーションの一部は、このブラウザーで最適に動作しないか、全く動作しない可能性があります。</br></br>最新バージョンの <chrome-link>Google Chrome</chrome-link>、<firefox-link>Mozilla Firefox</firefox-link>、<safari-link>Apple Safari</safari-link>、または <edge-link>Microsoft Edge</edge-link> を使用してください。"
   },
   "webMapList": {
     "owner": "所有者",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "すべて表示",
     "showSelectedButtonTooltip": "選択レイヤーの表示",
     "selectAllButtonTooltip": "すべて選択",
-    "clearSelectionButtonTooltip": "選択の解除",
-    "invalidFeatureMessage": "無効なフィーチャ ${invalidFeatureCount} 個を選択できません。"
+    "clearSelectionButtonTooltip": "選択の解除"
   },
   "timeSlider": {
     "timeSliderLabel": "時間範囲",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "このレイヤーを検索",
+    "clearSearchIconTooltip": "検索のクリア",
     "noResultFoundText": "結果が見つかりませんでした",
     "searchInEditModeAlert": "編集中は検索を使用できません"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "更新",
-    "confirmManualRefreshText": "すべての選択セットおよび保存されていない変更は破棄されます"
+    "confirmManualRefreshText": "すべての選択セットおよび保存されていない変更は破棄されます",
+    "confirmHardRefreshText": "すべてフィルター、選択セット、および保存されていない変更は破棄されます"
   },
   "help": {
     "helpIconTooltip": "ヘルプ"

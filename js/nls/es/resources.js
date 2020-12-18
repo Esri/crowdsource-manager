@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Su cuenta no tiene licencia para utilizar aplicaciones configurables que no son públicas. Pídale al administrador de su organización que le asigne un tipo de usuario que incluya aplicaciones esenciales o una licencia complementaria de aplicaciones esenciales.",
       "title": "Sin licencia"
-    }
+    },
+    "warningMessageTitle": "Compatibilidad limitada de navegadores",
+    "warningMessageAGOL": "Está usando un navegador que es obsoleto. Es posible que algunas partes de esta aplicación no funcionen de forma óptima, o no funcionen en absoluto, en este navegador. La compatibilidad para este navegador se interrumpirá en el futuro.</br></br>Utilice las últimas versiones de <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> o <edge-link>Microsoft Edge</edge-link>.</br></br>Para obtener más información sobre la compatibilidad de navegadores, consulte nuestra documentación. Proporcione sus comentarios a través de <feedback-link>GeoNet, la comunidad de Esri</feedback-link>.",
+    "warningMessageEnterprise": "Está usando un navegador que ya no es compatible. Es posible que algunas partes de esta aplicación no funcionen de forma óptima, o no funcionen en absoluto, en este navegador.</br></br>Utilice las últimas versiones de <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> o <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Propietario",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Mostrar todo",
     "showSelectedButtonTooltip": "Mostrar seleccionado",
     "selectAllButtonTooltip": "Seleccionar todo",
-    "clearSelectionButtonTooltip": "Borrar selección",
-    "invalidFeatureMessage": "No se pueden seleccionar ${invalidFeatureCount} entidades no válidas."
+    "clearSelectionButtonTooltip": "Borrar selección"
   },
   "timeSlider": {
     "timeSliderLabel": "Rango de tiempo",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Buscar en esta capa",
+    "clearSearchIconTooltip": "Borrar búsqueda",
     "noResultFoundText": "Ningún resultado encontrado",
     "searchInEditModeAlert": "La búsqueda no está disponible durante la edición"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Actualizar",
-    "confirmManualRefreshText": "Se descartarán todas las seleccione y cambios sin guardar"
+    "confirmManualRefreshText": "Se descartarán todas las seleccione y cambios sin guardar",
+    "confirmHardRefreshText": "Se descartarán todos los filtros, todas las selecciones y todos los cambios sin guardar"
   },
   "help": {
     "helpIconTooltip": "Ayuda"

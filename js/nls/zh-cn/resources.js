@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "您的帐户无权使用非公共的可配置应用程序。 请联系您的组织管理员为您分配包含基本应用程序或附加基本应用程序许可的用户类型。",
       "title": "未经许可"
-    }
+    },
+    "warningMessageTitle": "有限的浏览器支持",
+    "warningMessageAGOL": "您正在使用已弃用的浏览器。 此应用程序的某些部分可能无法在此浏览器中以最佳状态运行或完全无法运行。 将来将不再支持该浏览器。</br></br>请使用最新版本的 <chrome-link>Google Chrome</chrome-link>、<firefox-link>Mozilla Firefox</firefox-link>、<safari-link>Apple Safari</safari-link> 或 <edge-link>Microsoft Edge</edge-link>。</br></br>有关浏览器支持的详细信息，请参阅我们的文档。 请通过 <feedback-link>Esri 社区 GeoNet</feedback-link> 提供您的反馈。",
+    "warningMessageEnterprise": "您正在使用不受支持的浏览器。 此应用程序的某些部分可能无法在该浏览器中以最佳状态运行或根本无法运行。</br></br>请使用最新版本的 <chrome-link>Google Chrome</chrome-link>、<firefox-link>Mozilla Firefox</firefox-link>、<safari-link>Apple Safari</safari-link> 或 <edge-link>Microsoft Edge</edge-link>。"
   },
   "webMapList": {
     "owner": "所有者",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "显示全部",
     "showSelectedButtonTooltip": "显示所选",
     "selectAllButtonTooltip": "全选",
-    "clearSelectionButtonTooltip": "清除所选内容",
-    "invalidFeatureMessage": "无法选择 ${invalidFeatureCount} 个无效要素。"
+    "clearSelectionButtonTooltip": "清除所选内容"
   },
   "timeSlider": {
     "timeSliderLabel": "时间范围",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "搜索此图层",
+    "clearSearchIconTooltip": "清除搜索",
     "noResultFoundText": "未找到任何结果",
     "searchInEditModeAlert": "编辑期间搜索功能不可用"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "刷新",
-    "confirmManualRefreshText": "将放弃所有选择和未保存的更改"
+    "confirmManualRefreshText": "将放弃所有选择和未保存的更改",
+    "confirmHardRefreshText": "将放弃所有过滤器、选择和未保存的更改"
   },
   "help": {
     "helpIconTooltip": "帮助"

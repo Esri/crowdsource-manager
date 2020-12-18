@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "L’account non dispone della licenza per l’uso di app configurabili non pubbliche. È necessario richiedere all’amministratore dell'organizzazione l’assegnazione di un tipo di utente che includa le app essenziali o una licenza aggiuntiva per le app essenziali.",
       "title": "Non Licenziato"
-    }
+    },
+    "warningMessageTitle": "Supporto browser limitato",
+    "warningMessageAGOL": "Si sta utilizzando un browser deprecato. Alcune parti di questa applicazione potrebbero funzionare in modo non ottimale o non funzionare affatto in questo browser. Il supporto a questo browser sarà sospeso in futuro.</br></br>Per favore, utilizzare le ultime versioni di <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link>, o <edge-link>Microsoft Edge</edge-link>.</br></br>Per maggiori informazioni sul supporto al browser, vedere la nostra documentazione. Fornire un feedback tramite <feedback-link>GeoNet, la community Esri</feedback-link>.",
+    "warningMessageEnterprise": "Si sta utilizzando un browser non più supportato. Alcune parti di questa applicazione potrebbero funzionare in modo non ottimale o non funzionare affatto in questo browser.</br></br>Per favore, utilizzare le ultime versioni di <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link>, o <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Proprietario",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Mostra tutto",
     "showSelectedButtonTooltip": "Mostra selezionate",
     "selectAllButtonTooltip": "Seleziona tutto",
-    "clearSelectionButtonTooltip": "Cancella selezione",
-    "invalidFeatureMessage": "Impossibile selezionare ${invalidFeatureCount} funzione/i non valida/e."
+    "clearSelectionButtonTooltip": "Cancella selezione"
   },
   "timeSlider": {
     "timeSliderLabel": "Intervallo temporale",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Cerca nel layer",
+    "clearSearchIconTooltip": "Cancellare la ricerca",
     "noResultFoundText": "Nessun risultato trovato",
     "searchInEditModeAlert": "Ricerca non disponibile durante la modifica"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Aggiorna",
-    "confirmManualRefreshText": "Tutte le selezioni e le modifiche non salvate verranno ignorate"
+    "confirmManualRefreshText": "Tutte le selezioni e le modifiche non salvate verranno ignorate",
+    "confirmHardRefreshText": "Tutti i filtri, le selezioni e le modifiche non salvate verranno ignorate"
   },
   "help": {
     "helpIconTooltip": "Guida"

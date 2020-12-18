@@ -432,7 +432,7 @@ define([
                 // to check for errors in form before submitting.
                 if ((query(".form-control", currentField)[0])) {
                     // condition to check if the entered values are erroneous.
-                    if (domClass.contains(currentField, "has-error") && query("select", currentField).length === 0) {
+                    if (domClass.contains(currentField, "is-invalid") && query("select", currentField).length === 0) {
                         erroneousFields.push(currentField);
                     }
                     // condition to check if mandatory fields are kept empty.
@@ -514,7 +514,7 @@ define([
                 domConstruct.place(formContent, referenceNode, "after");
                 domClass.add(formContent, "fade");
                 setTimeout(function () {
-                    domClass.add(formContent, "in");
+                    domClass.add(formContent, "show");
                 }, 100);
             }
             // If fields are not null able set to mandatory fields
@@ -772,7 +772,7 @@ define([
                         $(inputRangeDateGroupContainer).data("DateTimePicker").date(fieldValue);
                     } else {
                         this.inputContent.value = "";
-                        domClass.remove(this.inputContent.parentNode.parentNode, "has-success");
+                        domClass.remove(this.inputContent.parentNode.parentNode.lastChild, "is-valid");
                     }
                     if (currentField.domain.minValue && currentField.domain.maxValue) {
                         // Assign value to the range help text
@@ -803,7 +803,7 @@ define([
             // If present check for fieldType value and accordingly populate the control
             // create controls for select
             this.inputContent = domConstruct.create("select", {
-                className: "form-control selectDomain",
+                className: "form-control custom-select",
                 "id": fieldname
             }, formContent);
             selectOptions = domConstruct.create("option", {}, this.inputContent);
@@ -822,13 +822,13 @@ define([
                         if (currentField.defaultValue !== undefined && currentField.defaultValue !== null && currentField.defaultValue !== "" && currentField.defaultValue.toString() === currentOption.code.toString()) {
                             // set attribute value selected in the select list
                             domAttr.set(this.inputContent, "value", currentOption.code);
-                            domClass.add(this.inputContent.parentNode, "has-success");
+                            domClass.add(this.inputContent.parentNode.lastChild, "is-valid");
                         }
                     } else {
                         if (this.item.attributes[fieldname] === currentOption.code) {
                             // set attribute value selected in the select list
                             domAttr.set(this.inputContent, "value", currentOption.code);
-                            domClass.add(this.inputContent.parentNode, "has-success");
+                            domClass.add(this.inputContent.parentNode.lastChild, "is-valid");
                         }
                     }
                 }));
@@ -841,7 +841,7 @@ define([
                     // if field contain default value, make that option selected
                     if (this.item.attributes[fieldname] === currentOption.id) {
                         domAttr.set(this.inputContent, "value", currentOption.id);
-                        domClass.add(this.inputContent.parentNode, "has-success");
+                        domClass.add(this.inputContent.parentNode.lastChild, "is-valid");
                     }
                 }));
                 // function call to take appropriate actions on selection of a subtype
@@ -863,17 +863,17 @@ define([
                 if (currentField.typeField) {
                     this._validateTypeFields(evt, currentField);
                 }
-                // To apply has-success class on selection of a valid option
-                // else remove has-success class
+                // To apply is-valid class on selection of a valid option
+                // else remove is-valid class
                 if (evt.target.value !== "") {
                     var targetNode = evt.currentTarget || evt.srcElement;
                     if (query(".errorMessage", targetNode.parentNode).length !== 0) {
                         domConstruct.destroy(query(".errorMessage", targetNode.parentNode)[0]);
-                        domClass.remove(evt.target.parentNode, "has-error");
+                        domClass.remove(evt.target.parentNode.lastChild, "is-invalid");
                     }
-                    domClass.add($(evt.target.parentNode)[0], "has-success");
+                    domClass.add($(evt.target.parentNode.lastChild)[0], "is-valid");
                 } else {
-                    domClass.remove($(evt.target.parentNode)[0], "has-success");
+                    domClass.remove($(evt.target.parentNode.lastChild)[0], "is-valid");
                 }
             }));
         },
@@ -1069,7 +1069,7 @@ define([
                 closeStrong: "</strong>"
             });
             if (this.inputContent.value) {
-                domClass.add(this.inputContent.parentNode.parentNode, "has-success");
+                domClass.add(this.inputContent, "is-valid");
             }
             // return value
             return rangeHelpText;
@@ -1086,16 +1086,16 @@ define([
             on(this.inputContent, "keyup", function () {
                 // replace classes on key up event
                 if (this.value === "") {
-                    domClass.remove(this.parentNode.parentNode, "has-success");
+                    domClass.remove(this.parentNode.parentNode.childNodes[1].childNodes[2], "is-valid");
                 } else {
-                    domClass.add(this.parentNode.parentNode, "has-success");
+                    domClass.add(this.parentNode.parentNode.childNodes[1].childNodes[2], "is-valid");
                 }
             });
             // Touch Spinner event
             on(inputcontentSpinner, "touchspin.on.startspin", lang.hitch(this, function (evt) {
                 inputcontentSpinner.trigger("touchspin.updatesettings", {});
                 var targetNode = evt.currentTarget || evt.srcElement;
-                domClass.add(targetNode.parentNode.parentNode, "has-success");
+                domClass.add(targetNode.parentNode.parentNode.childNodes[1].childNodes[2], "is-valid");
             }));
             // if not nullable field
             if (!currentField.nullable) {
@@ -1205,7 +1205,7 @@ define([
                 // domAttr.set(this.inputContent, "value", defaultValue);
                 if (defaultValue || defaultValue === 0) {
                     domAttr.set(this.inputContent, "value", defaultValue);
-                    domClass.add(formContent, "has-success");
+                    domClass.add(formContent.lastChild, "is-valid");
                     this._validateField({ 'target': this.inputContent }, currentField, true);
                 } else {
                     if ((!defaultValue) && this.addComments && currentField.defaultValue !== undefined &&
@@ -1356,18 +1356,18 @@ define([
                 domConstruct.destroy(query(".errorMessage", node)[0]);
             }
             if (!error || (inputValue.length === 0 && !domClass.contains(node, "mandatory"))) {
-                domClass.add(node, "has-success");
-                domClass.remove(node, "has-error");
+                domClass.add(node.lastChild, "is-valid");
+                domClass.remove(node.lastChild, "is-invalid");
             } else {
                 // On Error show error massage
                 // Change the class of node
                 this._showErrorMessageDiv(error, node.children[0]);
-                domClass.add(node, "has-error");
-                domClass.remove(node, "has-success");
+                domClass.add(node.lastChild, "is-invalid");
+                domClass.remove(node.lastChild, "is-valid");
             }
             if (iskeyPress && inputValue.length === 0 && !domClass.contains(node, "mandatory")) {
-                domClass.remove(node, "has-error");
-                domClass.remove(node, "has-success");
+                domClass.remove(node.lastChild, "is-invalid");
+                domClass.remove(node.lastChild, "is-valid");
             }
         },
 
@@ -1452,27 +1452,27 @@ define([
                 if (query(".errorMessage", query(evt.target).parents(".commentFormQuestionare")[0])[0]) {
                     domConstruct.destroy(query(".errorMessage", query(evt.target).parents(".commentFormQuestionare")[0])[0]);
                 }
-                domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-error");
-                domClass.add(query(evt.target).parents(".commentFormQuestionare")[0], "has-success");
+                domClass.remove(evt.target.lastChild, "is-invalid");
+                domClass.add(evt.target.lastChild, "is-valid");
                 if (query("input", this)[0].value === "") {
-                    domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-success");
-                    domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-error");
+                    domClass.remove(evt.target.lastChild, "is-valid");
+                    domClass.remove(evt.target.lastChild, "is-invalid");
                 }
             }).on('dp.error', function (evt) {
                 // on error
                 evt.target.value = '';
-                domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-success");
-                domClass.add(query(evt.target).parents(".commentFormQuestionare")[0], "has-error");
+                domClass.remove(evt.target.lastChild, "is-valid");
+                domClass.add(evt.target.lastChild, "is-invalid");
             }).on("dp.hide", function (evt) {
                 // on Datetime picker hide event
                 if (query("input", this)[0].value === "") {
-                    domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-success");
-                    domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-error");
+                    domClass.remove(evt.target.lastChild, "is-valid");
+                    domClass.remove(evt.target.lastChild, "is-invalid");
                 }
             }).on('dp.change', function (evt) {
                 // on change
-                domClass.add(query(evt.target).parents(".commentFormQuestionare")[0], "has-success");
-                domClass.remove(query(evt.target).parents(".commentFormQuestionare")[0], "has-error");
+                domClass.add(evt.target.lastChild, "is-valid");
+                domClass.remove(evt.target.lastChild, "is-invalid");
             });
             // if isRangeField is set to true for range Domain value then assign maximum and minimum value to the date time picker
             if (isRangeField) {

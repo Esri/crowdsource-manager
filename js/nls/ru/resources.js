@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Ваша учетная запись не лицензирована на использование не публичных Настраиваемых приложений. Обратитесь к администратору организации, чтобы получить тип пользователя, в который входит Essential Apps или лицензия дополнительного модуля Essential Apps.",
       "title": "Не лицензировано"
-    }
+    },
+    "warningMessageTitle": "Ограниченная поддержка браузера",
+    "warningMessageAGOL": "Вы используете устаревший браузер. Некоторые части приложения могут работать не оптимально или вообще не работать в этом браузере. Поддержка этого браузера в дальнейшем не планируется.</br></br>Используйте последние версии <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> или <edge-link>Microsoft Edge</edge-link>.</br></br>Дополнительную информацию см. в документации. Предоставьте обратную связь с помощью <feedback-link>GeoNet, Esri Community</feedback-link>.",
+    "warningMessageEnterprise": "Вы используете не поддерживающийся браузер. Некоторые функции этого приложения могут работать не оптимально в этом браузере.</br></br>Используйте последние версии <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link>, or <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Владелец",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Показать все",
     "showSelectedButtonTooltip": "Показать выбранные",
     "selectAllButtonTooltip": "Выбрать все",
-    "clearSelectionButtonTooltip": "Очистить выборку",
-    "invalidFeatureMessage": "Не удалось выбрать ${invalidFeatureCount} некорректных объектов."
+    "clearSelectionButtonTooltip": "Очистить выборку"
   },
   "timeSlider": {
     "timeSliderLabel": "Временной диапазон",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Поиск в этом слое",
+    "clearSearchIconTooltip": "Очистить поиск",
     "noResultFoundText": "Результаты не найдены",
     "searchInEditModeAlert": "Во время редактирования поиск недоступен"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Обновить",
-    "confirmManualRefreshText": "Все выборки и несохраненные изменения будут удалены"
+    "confirmManualRefreshText": "Все выборки и несохраненные изменения будут удалены",
+    "confirmHardRefreshText": "Все фильтры, выборки и несохраненные изменения будут удалены"
   },
   "help": {
     "helpIconTooltip": "Справка"

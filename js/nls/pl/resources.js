@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Twoje konto nie jest licencjonowane do korzystania z aplikacji konfigurowalnych, które nie są publiczne. Poproś administratora instytucji o przypisanie typu użytkownika, który obejmuje licencję na kluczowe aplikacje lub licencję na kluczowe aplikacje dodatkowe.",
       "title": "Nie licencjonowano"
-    }
+    },
+    "warningMessageTitle": "Ograniczona obsługa przeglądarki",
+    "warningMessageAGOL": "Korzystasz z nieaktualnej przeglądarki. Niektóre części tej aplikacji mogą nie działać w optymalny sposób lub wcale w tej przeglądarce. W przyszłości ta przeglądarka nie będzie obsługiwana.</br></br>Używaj najnowszych wersji przeglądarek <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> lub <edge-link>Microsoft Edge</edge-link>.</br></br>Więcej informacji o obsługiwanych przeglądarkach można znaleźć w dokumentacji. Opublikuj swoją opinię w <feedback-link>GeoNet, społeczności Esri</feedback-link>.",
+    "warningMessageEnterprise": "Używasz przeglądarki, która nie jest już obsługiwana. Niektóre części tej aplikacji mogą nie działać w tej przeglądarce optymalnie lub wcale.</br></br>Używaj najnowszych wersji przeglądarek <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> lub <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Właściciel",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Pokaż wszystko",
     "showSelectedButtonTooltip": "Pokaż wybrane",
     "selectAllButtonTooltip": "Zaznacz wszystkie",
-    "clearSelectionButtonTooltip": "Wyczyść pole wyboru",
-    "invalidFeatureMessage": "Nie można wybrać następującej liczby nieprawidłowych obiektów: ${invalidFeatureCount}."
+    "clearSelectionButtonTooltip": "Wyczyść pole wyboru"
   },
   "timeSlider": {
     "timeSliderLabel": "Zakres czasu",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Przeszukaj tę warstwę",
+    "clearSearchIconTooltip": "Wyczyść wyszukiwanie",
     "noResultFoundText": "Nie znaleziono wyników",
     "searchInEditModeAlert": "Wyszukiwanie jest niedostępne podczas edycji"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Odśwież",
-    "confirmManualRefreshText": "Wszystkie selekcje i niezapisane zmiany zostaną odrzucone"
+    "confirmManualRefreshText": "Wszystkie selekcje i niezapisane zmiany zostaną odrzucone",
+    "confirmHardRefreshText": "Wszystkie filtry, wybrane elementy i niezapisane zmiany zostaną odrzucone"
   },
   "help": {
     "helpIconTooltip": "Pomoc"

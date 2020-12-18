@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Tiliäsi ei ole lisensoitu käyttämään muunneltavissa olevia sovelluksia, jotka eivät ole julkisia. Pyydä organisaatiosi pääkäyttäjää määrittämään sinulle käyttäjätyyppi, joka sisältää keskeiset sovellukset tai keskeisten sovellusten lisäosan lisenssin.",
       "title": "Ei lisenssiä"
-    }
+    },
+    "warningMessageTitle": "Rajoitettu selaimen tuki",
+    "warningMessageAGOL": "Käytät vanhentunutta selainta. Jotkin tämän sovelluksen osat eivät ehkä toimi parhaalla mahdollisella tavalla tai ollenkaan tässä selaimessa. Tämän selaimen tuki päättyy myöhemmin.</br></br>Käytä <chrome-link>Google Chromen</chrome-link>, <firefox-link>Mozilla Firefoxin</firefox-link>, <safari-link>Apple Safarin</safari-link> tai <edge-link>Microsoft Edgen</edge-link> uusinta versiota.</br></br>Lisätietoja selaimen tuesta on dokumentaatiossa. Anna palautteesi <feedback-link>Esrin GeoNet-yhteisön, Esri Communityn </feedback-link> kautta.",
+    "warningMessageEnterprise": "Käytät selainta, jota ei enää tueta. Jotkin tämän sovelluksen osat eivät ehkä toimi parhaalla mahdollisella tavalla tai ollenkaan tässä selaimessa.</br></br>Käytä <chrome-link>Google Chromen</chrome-link>, <firefox-link>Mozilla Firefoxin</firefox-link>, <safari-link>Apple Safarin</safari-link> tai <edge-link>Microsoft Edgen</edge-link> uusinta versiota."
   },
   "webMapList": {
     "owner": "Omistaja",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Näytä kaikki",
     "showSelectedButtonTooltip": "Näytä valitut kohteet",
     "selectAllButtonTooltip": "Valitse kaikki",
-    "clearSelectionButtonTooltip": "Tyhjennä valinta",
-    "invalidFeatureMessage": "${invalidFeatureCount} virheellisen kohteen valinta ei onnistu."
+    "clearSelectionButtonTooltip": "Tyhjennä valinta"
   },
   "timeSlider": {
     "timeSliderLabel": "Aikaväli",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Hae tätä karttatasoa",
+    "clearSearchIconTooltip": "Tyhjennä haku",
     "noResultFoundText": "Tuloksia ei löytynyt",
     "searchInEditModeAlert": "Haku ei ole käytettävissä muokkauksen aikana"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Päivitä",
-    "confirmManualRefreshText": "Kaikki valinnat ja tallentamattomat muutokset ohitetaan"
+    "confirmManualRefreshText": "Kaikki valinnat ja tallentamattomat muutokset ohitetaan",
+    "confirmHardRefreshText": "Kaikki suodattimet, valinnat ja tallentamattomat muutokset ohitetaan"
   },
   "help": {
     "helpIconTooltip": "Ohje"

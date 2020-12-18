@@ -790,6 +790,18 @@ table {
     font-size: 15px;
 }
 
+/** nav tabs custom css **/
+
+.nav-tabs.nav-justified>.nav-item>a.nav-link.active {
+    color: #495057;
+    border-top: 1px solid #a9a9a9;
+    background-color: #f0f0f0;
+    border-color: #a9a9a9 #a9a9a9 #fff;
+    cursor : default;
+}
+
+/** nav tabs custom css ends **/
+
 .esriCTEditFeatureButton, .esriCTCommentButton {
     height: 22px;
     width: 22px;
@@ -976,6 +988,21 @@ table {
     padding-right: 0px;
 }
 
+/** Css referred for webmaplist 
+    As this classes are removed from bootstrap 4.5.3 **/
+
+.media-body, .media-left, .media-right {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.media-heading {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+/** ----- ends**/
+
 .esriCTWebMapImg {
     height: 80px;
     width: 120px;
@@ -1136,7 +1163,7 @@ table {
 .esriCTModelDialog .modal-body {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-    height: 250px;
+    height: 300px;
     margin-bottom: 15px;
 }
 
@@ -1161,6 +1188,27 @@ table {
     font-size: 18px;
     text-shadow: none;
 }
+
+.esriCTSupportedBrowsersImage {
+    text-align: center;
+}
+
+#browser-logo-list {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    padding: 0;
+  }
+
+  .browser-logo {
+    display: inline-block;
+    margin: 0 auto;
+  }
+
+  .browser-logo img {
+    width: 3rem;
+    height: auto;
+  }
 
 
 /** Help Dialog panel ends**/
@@ -1457,15 +1505,11 @@ input.esriCTRadioButton {
     display: none;
 }
 
-.esriCTTabAnchor {
+#esriCTTabAnchor {
     width: 100%;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-}
-
-.esriCTTabAnchor2 {
-    width: 100%;
 }
 
 .esriCTCommentTabTextContainer {
@@ -1871,13 +1915,13 @@ input.esriCTRadioButton {
     overflow: hidden;
 }
 
-.carousel-inner > .item {
+.carousel-inner > .carousel-item {
     width: calc(100% - 88px);
     height: 100%;
     margin: 0 44px;
 }
 
-.carousel-inner > .item > img, .carousel-inner > .item > video, .esriViewPopup .gallery .frame img {
+.carousel-inner > .carousel-item > img, .carousel-inner > .carousel-item > video, .esriViewPopup .gallery .frame img {
     max-width: 100%;
     max-height: 100%;
     margin: auto;
@@ -1915,7 +1959,7 @@ input.esriCTRadioButton {
     display: none;
 }
 
-.carousel-control.mediaLeft {
+.carousel-control-prev.mediaLeft {
     left: 0px;
     top: calc(50% - 22px);
     background-position: center center;
@@ -1928,7 +1972,7 @@ input.esriCTRadioButton {
     opacity: 1 !important;
 }
 
-.carousel-control.mediaRight {
+.carousel-control-next.mediaRight {
     left: auto;
     right: 0;
     top: calc(50% - 22px);
@@ -1942,7 +1986,7 @@ input.esriCTRadioButton {
     opacity: 1 !important;
 }
 
-.mediaLeft.carousel-control.disableLeftArrow, .mediaRight.carousel-control.disableRightArrow {
+.mediaLeft.carousel-control-prev.disableLeftArrow, .mediaRight.carousel-control-next.disableRightArrow {
     cursor: default !important;
     opacity: 0.4 !important;
     display: none;
@@ -2299,3 +2343,64 @@ input.esriCTRadioButton {
 
 
 /** Basemap gallery section ends **/
+
+/** DateTimepicker calender table section
+   This css is removed from bootstrap 4.5.2 css */
+
+
+.table-condensed>tbody>tr>td, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>td, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>thead>tr>th {
+    padding: 5px;
+}
+
+
+/** DateTimepicker calender table section ends **/
+
+
+/** Input group addon css 
+   This css is removed from bootstrap 4.5.3 css **/
+
+.input-group {
+    display: table;
+    border-collapse: separate;
+}
+
+.input-group[class*="col-"] {
+    float: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.input-group .form-control {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.input-group .form-control,
+.input-group-addon,
+.input-group-btn {
+    display: table-cell;
+}
+
+.input-group-addon,
+.input-group-btn {
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.input-group-addon {
+    padding: 6px 12px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+    color: #4c4c4c;
+    background-color: #efefef;
+    border: 1px solid #959595;
+    border-radius: 0;
+}
+
+
+/* Input group addon css ends */
