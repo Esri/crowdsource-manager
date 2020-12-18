@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Din konto har ikke licens til at bruge Konfigurérbare apps, der ikke er offentlige. Bed din organisationsadministrator om at knytte dig til en brugertype, der omfatter Essential Apps eller en add-on Essential Apps-licens.",
       "title": "Ikke licenseret"
-    }
+    },
+    "warningMessageTitle": "Begrænset browserstøtte",
+    "warningMessageAGOL": "Du anvender en browser, der er udfaset. Nogle dele af denne applikation fungerer muligvis ikke optimalt - eller fungerer slet ikke - i denne browser. Understøttelse af denne browser vil blive udfaset i nær fremtid.</br></br>Brug de nyeste versioner af <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> eller <edge-link>Microsoft Edge</edge-link>.</br></br>For yderligere oplysninger om browserunderstøttelse, se vores dokumentation. Send din feedback via <feedback-link>GeoNet, Esri-fællesskabet</feedback-link>.",
+    "warningMessageEnterprise": "Du anvender en browser, der ikke længere understøttes. Nogle dele af denne applikation fungerer muligvis ikke optimalt i denne browser, eller de fungerer slet ikke.</br></br>Brug de nyeste versioner af <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> eller <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Ejer",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Show All",
     "showSelectedButtonTooltip": "Vis valgte",
     "selectAllButtonTooltip": "Vælg alle",
-    "clearSelectionButtonTooltip": "Ryd markering",
-    "invalidFeatureMessage": "Kan ikke markere ${invalidFeatureCount} ugyldige objekter."
+    "clearSelectionButtonTooltip": "Ryd markering"
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsinterval",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Søg i dette lag",
+    "clearSearchIconTooltip": "Ryd søgningen",
     "noResultFoundText": "Ingen resultater",
     "searchInEditModeAlert": "Søgning er utilgængelig under redigering"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Opdatér",
-    "confirmManualRefreshText": "Alle markeringer og ikke-gemte ændringer vil gå tabt"
+    "confirmManualRefreshText": "Alle markeringer og ikke-gemte ændringer vil gå tabt",
+    "confirmHardRefreshText": "Alle filtre, markeringer og ikke-gemte ændringer vil gå tabt"
   },
   "help": {
     "helpIconTooltip": "Hjælp"

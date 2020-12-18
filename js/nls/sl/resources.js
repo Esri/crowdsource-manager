@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Vaš račun ni licenciran za uporabo konfigurabilnih aplikacij, ki niso javne. Prosite administratorja v vaši organizaciji, da vam dodeli tip uporabnika, ki vsebuje aplikacije Essential Apps ali licenco za dodatne aplikacije Essential Apps.",
       "title": "Brez licence"
-    }
+    },
+    "warningMessageTitle": "Omejena podpora brskalnika",
+    "warningMessageAGOL": "Uporabljate zastarel brskalnik. Nekateri deli te aplikacije v tem brskalniku morda ne bodo delovali optimalno oz. sploh ne bodo delovali. Ta brskalnik v prihodnosti ne bo več podprt.</br></br>Prosimo, uporabljajte najnovejše različice <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> ali <edge-link>Microsoft Edge</edge-link>.</br></br>Za več informacij o podpori brskalnika si oglejte našo dokumentacijo. Posredujte povratne informacije prek <feedback-link>GeoNet, skupnosti podjetja Esri</feedback-link>.",
+    "warningMessageEnterprise": "Uporabljate brskalnik, ki več ni podprt. Nekateri deli te aplikacije v tem brskalniku morda ne bodo delovali optimalno oz. sploh ne bodo delovali.</br></br>Prosimo, uporabljajte najnovejše različice <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> ali <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Lastnik",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Pokaži vse",
     "showSelectedButtonTooltip": "Prikaži izbrano",
     "selectAllButtonTooltip": "Izberi vse",
-    "clearSelectionButtonTooltip": "Počisti izbiro",
-    "invalidFeatureMessage": "Ni mogoče izbrati ${invalidFeatureCount} neveljavnega geoobjekta/geoobjektov."
+    "clearSelectionButtonTooltip": "Počisti izbiro"
   },
   "timeSlider": {
     "timeSliderLabel": "Časovni razpon",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Preišči ta sloj",
+    "clearSearchIconTooltip": "Počisti iskanje",
     "noResultFoundText": "Ni najdenih rezultatov",
     "searchInEditModeAlert": "Iskanje med urejanjem ni na voljo"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Osveži",
-    "confirmManualRefreshText": "Vse izbire in neshranjene spremembe bodo zavržene"
+    "confirmManualRefreshText": "Vse izbire in neshranjene spremembe bodo zavržene",
+    "confirmHardRefreshText": "Vsi filtri, izbire in neshranjene spremembe bodo zavržene"
   },
   "help": {
     "helpIconTooltip": "Pomoč"

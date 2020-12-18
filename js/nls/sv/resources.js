@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Ditt konto har ingen licens för att använda konfigurerbara appar som inte är tillgängliga för allmänheten. Be din organisations administratör att tilldela dig en användartyp som omfattar Essential Apps eller en tilläggslicens för Essential Apps.",
       "title": "Inte licensierad"
-    }
+    },
+    "warningMessageTitle": "Begränsat webbläsarstöd",
+    "warningMessageAGOL": "Du använder en webbläsare som är inaktuell. Vissa delar av applikationen kanske inte fungerar optimalt eller inte alls i den här webbläsaren. Stöd för den här webbläsaren kommer att upphöra i framtiden.</br></br>Använd de senaste versionerna av <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> eller <edge-link>Microsoft Edge</edge-link>.</br></br>För mer information om webbläsarstöd, se vår dokumentation. Lämna din återkoppling via <feedback-link>GeoNet, Esris community</feedback-link>.",
+    "warningMessageEnterprise": "Du använder en webbläsare som inte längre stöds. Vissa delar av den här applikationen kanske inte fungerar optimalt eller inte alls i den här webbläsaren.</br></br>Använd de senaste versionerna av <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> eller <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Ägare",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Visa alla",
     "showSelectedButtonTooltip": "Visa valda",
     "selectAllButtonTooltip": "Markera alla",
-    "clearSelectionButtonTooltip": "Rensa val",
-    "invalidFeatureMessage": "Det gick inte att välja ${invalidFeatureCount} ogiltigt/ogiltiga geoobjekt."
+    "clearSelectionButtonTooltip": "Rensa val"
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsintervall",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Sök i det här lagret",
+    "clearSearchIconTooltip": "Rensa sökningen",
     "noResultFoundText": "Inga resultat hittades",
     "searchInEditModeAlert": "Sökfunktionen är inte tillgänglig vid redigering"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Uppdatera",
-    "confirmManualRefreshText": "Alla urval och osparade ändringar ignoreras"
+    "confirmManualRefreshText": "Alla urval och osparade ändringar ignoreras",
+    "confirmHardRefreshText": "Alla filter, urval och osparade ändringar ignoreras"
   },
   "help": {
     "helpIconTooltip": "Hjälp"

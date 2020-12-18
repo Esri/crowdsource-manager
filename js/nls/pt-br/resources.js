@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Sua conta não está licenciada para utilizar Aplicativos Configuráveis que não sejam públicos. Solicite ao administrador da sua organização que lhe atribua um tipo de usuário que inclua os Aplicativos Fundamentais ou uma licença complementar dos Aplicativos Fundamentais.",
       "title": "Não Licenciado"
-    }
+    },
+    "warningMessageTitle": "Suporte de navegador limitado",
+    "warningMessageAGOL": "Você está utilizando um navegador que está descontinuado. Algumas partes deste aplicativo podem não funcionar de maneira ideal ou totalmente neste navegador. O suporte para este navegador será descontinuado no futuro.</br></br>Utilize as versões mais recentes do <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link>, ou <edge-link>Microsoft Edge</edge-link>.</br></br>Para obter mais informações sobre o suporte do navegador, consulte nossa documentação. Forneça seu comentário pela <feedback-link>GeoNet, a Comunidade da Esri </feedback-link>.",
+    "warningMessageEnterprise": "Você está usando um navegador que não é mais suportado. Algumas partes deste aplicativo podem não funcionar de maneira ideal ou de forma alguma neste navegador.</br></br>Utilize as versões mais recentes do <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link>, ou <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Proprietário",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Mostrar Todos",
     "showSelectedButtonTooltip": "Mostrar Selecionados",
     "selectAllButtonTooltip": "Selecionar Tudo",
-    "clearSelectionButtonTooltip": "Limpar Seleção",
-    "invalidFeatureMessage": "Não foi possível selecionar ${invalidFeatureCount} feições inválidas."
+    "clearSelectionButtonTooltip": "Limpar Seleção"
   },
   "timeSlider": {
     "timeSliderLabel": "Intervalo de tempo",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Pesquisar esta camada",
+    "clearSearchIconTooltip": "Limpar a pesquisa",
     "noResultFoundText": "Nenhum resultado encontrado",
     "searchInEditModeAlert": "Pesquisa indisponível durante edição"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Atualizar",
-    "confirmManualRefreshText": "Todas as seleções e alterações não salvas serão descartadas"
+    "confirmManualRefreshText": "Todas as seleções e alterações não salvas serão descartadas",
+    "confirmHardRefreshText": "Todos os filtros, seleções e alterações não salvas serão descartadas"
   },
   "help": {
     "helpIconTooltip": "Ajuda"

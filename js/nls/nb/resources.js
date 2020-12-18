@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Kontoen din er ikke lisensiert til å bruke konfigurerbare apper som ikke er offentlige. Be administratoren for organisasjonen om å tilordne deg en brukertype som omfatter Essential Apps eller en tilleggslisens for Essential Apps.",
       "title": "Ikke lisensiert"
-    }
+    },
+    "warningMessageTitle": "Begrenset nettleserstøtte",
+    "warningMessageAGOL": "Du bruker en nettleser som er avskrevet. Enkelte deler av denne applikasjonen fungerer kanskje ikke optimalt eller i det hele tatt i denne nettleseren. Det vil ikke være støtte for denne nettleseren i fremtiden.</br></br>Bruk de nyeste versjonene av <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> eller <edge-link>Microsoft Edge</edge-link>.</br></br>Se dokumentasjonen hvis du vil ha mer informasjon om nettleserstøtte. Gi tilbakemelding via <feedback-link>GeoNet, Esri Community</feedback-link>.",
+    "warningMessageEnterprise": "Du bruker en nettleser som ikke støttes lenger. Enkelte deler av denne applikasjonen fungerer kanskje ikke optimalt eller i det hele tatt i denne nettleseren.</br></br>Bruk de nyeste versjonene av <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> eller <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Eier",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Vis alle",
     "showSelectedButtonTooltip": "Vis valgte",
     "selectAllButtonTooltip": "Merk alle",
-    "clearSelectionButtonTooltip": "Fjern utvalg",
-    "invalidFeatureMessage": "Kan ikke velge ${invalidFeatureCount} ugyldig(e) geoobjekt(er)."
+    "clearSelectionButtonTooltip": "Fjern utvalg"
   },
   "timeSlider": {
     "timeSliderLabel": "Tidsrom",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Søk i dette laget",
+    "clearSearchIconTooltip": "Nullstill søket",
     "noResultFoundText": "Fant ingen resultater",
     "searchInEditModeAlert": "Søk er ikke tilgjengelig under redigering"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Oppdater",
-    "confirmManualRefreshText": "Alle utvalg og endringer som ikke er lagret, forkastes"
+    "confirmManualRefreshText": "Alle utvalg og endringer som ikke er lagret, forkastes",
+    "confirmHardRefreshText": "Alle filtre, valg og endringer som ikke er lagret, forkastes"
   },
   "help": {
     "helpIconTooltip": "Hjelp"

@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Ваш обліковий запис не має ліцензії на використання настроюваних додатків, які не є публічними Попросіть адміністратора вашої організації призначити вам тип користувача, що включає основні додатки або додаткову ліцензію на основні додатки.",
       "title": "Немає ліцензії"
-    }
+    },
+    "warningMessageTitle": "Обмежена підтримка браузера",
+    "warningMessageAGOL": "Ви користуєтеся застарілим браузером. Деякі елементи цього додатку можуть працювати невідповідним чином або ж взагалі не працювати в цьому браузері. В майбутньому підтримку цього браузеру буде припинено.</br></br>Користуйтеся останніми версіями <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> або <edge-link>Microsoft Edge</edge-link>.</br></br>Додаткову інформацію про підтримку браузера див. у нашій документації. Відправте нам свій відгук через <feedback-link>GeoNet, спільнота Esri Community</feedback-link>.",
+    "warningMessageEnterprise": "Ви користуєтеся браузером, який більше не підтримується. Деякі елементи цього додатку можуть працювати невідповідним чином або ж взагалі не працювати в цьому браузері.</br></br>Користуйтеся останніми версіями <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> або <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Власник",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Показати всі",
     "showSelectedButtonTooltip": "Показати вибрані",
     "selectAllButtonTooltip": "Вибрати всі",
-    "clearSelectionButtonTooltip": "Очистити вибір",
-    "invalidFeatureMessage": "Не вдалося вибрати ${invalidFeatureCount} недійсну функцію(-ї)."
+    "clearSelectionButtonTooltip": "Очистити вибір"
   },
   "timeSlider": {
     "timeSliderLabel": "Діапазон часу",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Шукати цей шар",
+    "clearSearchIconTooltip": "Очистити пошук",
     "noResultFoundText": "Результати не знайдено",
     "searchInEditModeAlert": "Пошук недоступний під час редагування"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Оновити",
-    "confirmManualRefreshText": "Всі вибори та незбережені зміни будуть скасовані"
+    "confirmManualRefreshText": "Всі вибори та незбережені зміни будуть скасовані",
+    "confirmHardRefreshText": "Всі фільтри, вибрані та незбережені зміни будуть скасовані"
   },
   "help": {
     "helpIconTooltip": "Довідка"

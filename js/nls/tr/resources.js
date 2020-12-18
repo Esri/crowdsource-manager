@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Hesabınız herkese açık olmayan Yapılandırılabilir Uygulamaları kullanmak için lisanslandırılmamış. Lütfen kuruluş yöneticinizden Temel Uygulamalar veya eklenti Temel Uygulamalar lisansı içeren bir kullanıcı türü atamasını isteyin.",
       "title": "Lisanslı Değil"
-    }
+    },
+    "warningMessageTitle": "Sınırlı tarayıcı desteği",
+    "warningMessageAGOL": "Artık kullanımdan kaldırılmış bir tarayıcı kullanıyorsunuz. Bu uygulamanın bazı bölümleri bu tarayıcıda en iyi şekilde veya hiç çalışmayabilir. Bu tarayıcı için destek yakın gelecekte sonlandırılacaktır.</br></br>Lütfen <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> veya <edge-link>Microsoft Edge</edge-link>'in en son versiyonlarını kullanın.</br></br>Tarayıcı desteği hakkında daha fazla bilgi için belgelerimize bakın. Geri bildirimlerinizi <feedback-link>Esri Topluluğu GeoNet</feedback-link> üzerinden iletin.",
+    "warningMessageEnterprise": "Artık desteklenmeyen bir tarayıcı kullanıyorsunuz. Bu uygulamanın bazı bölümleri bu tarayıcıda en iyi şekilde veya hiç çalışmayabilir.</br></br>Lütfen <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> veya <edge-link>Microsoft Edge</edge-link>'in en son versiyonlarını kullanın."
   },
   "webMapList": {
     "owner": "Sahibi",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Tümünü Göster",
     "showSelectedButtonTooltip": "Seçileni Göster",
     "selectAllButtonTooltip": "Tümünü Seç",
-    "clearSelectionButtonTooltip": "Seçimi Temizle",
-    "invalidFeatureMessage": "Geçersiz detay(lar) ${invalidFeatureCount} seçilemiyor."
+    "clearSelectionButtonTooltip": "Seçimi Temizle"
   },
   "timeSlider": {
     "timeSliderLabel": "Zaman aralığı",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Bu katmanı ara",
+    "clearSearchIconTooltip": "Aramayı temizle",
     "noResultFoundText": "Sonuç bulunamadı",
     "searchInEditModeAlert": "Düzenleme sırasında arama yapılamaz"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Yenile",
-    "confirmManualRefreshText": "Tüm seçimler ve kaydedilmemiş değişiklikler silinecek"
+    "confirmManualRefreshText": "Tüm seçimler ve kaydedilmemiş değişiklikler silinecek",
+    "confirmHardRefreshText": "Tüm filtreler, seçimler ve kaydedilmemiş değişiklikler silinecek"
   },
   "help": {
     "helpIconTooltip": "Yardım"

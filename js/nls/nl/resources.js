@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Uw account heeft geen licentie om configureerbare apps te gebruiken die niet openbaar zijn. Vraag uw organisatiebeheerder om u een gebruikerstype toe te wijzen dat Essential Apps of een add-on Essential Apps-licentie bevat.",
       "title": "Geen licentie"
-    }
+    },
+    "warningMessageTitle": "Beperkte browserondersteuning",
+    "warningMessageAGOL": "U gebruikt een verouderde browser. Sommige onderdelen van deze applicatie werken mogelijk niet optimaal of helemaal niet in deze browser. Ondersteuning voor deze browser wordt stopgezet in de toekomst.</br></br>Gebruik de nieuwste versies van <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> of <edge-link>Microsoft Edge</edge-link>.</br></br>Zie onze documentatie voor meer informatie over browserondersteuning. Voer uw feedback in via <feedback-link>GeoNet, de Esri Community</feedback-link>.",
+    "warningMessageEnterprise": "U gebruikt een browser die niet meer wordt ondersteund. Sommige onderdelen van deze applicatie werken mogelijk niet optimaal of helemaal niet in deze browser.</br></br>Gebruik de nieuwste versie van <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> of <edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
     "owner": "Eigenaar",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Show All",
     "showSelectedButtonTooltip": "Geef geselecteerde weer",
     "selectAllButtonTooltip": "Alles selecteren",
-    "clearSelectionButtonTooltip": "Selectie wissen",
-    "invalidFeatureMessage": "Kan geen ${invalidFeatureCount} ongeldig(e) object(en) selecteren."
+    "clearSelectionButtonTooltip": "Selectie wissen"
   },
   "timeSlider": {
     "timeSliderLabel": "Tijdsbereik",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Deze laag zoeken",
+    "clearSearchIconTooltip": "De zoekopdracht wissen",
     "noResultFoundText": "Geen resultaten gevonden",
     "searchInEditModeAlert": "Zoeken onbeschikbaar tijdens het bewerken"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Vernieuwen",
-    "confirmManualRefreshText": "Alle selecties en onopgeslagen wijzigingen worden genegeerd"
+    "confirmManualRefreshText": "Alle selecties en onopgeslagen wijzigingen worden genegeerd",
+    "confirmHardRefreshText": "Alle filters, selecties en onopgeslagen wijzigingen worden genegeerd"
   },
   "help": {
     "helpIconTooltip": "Help"

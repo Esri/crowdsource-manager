@@ -21,7 +21,10 @@ define({
     "licenseError": {
       "message": "Jūsu kontam nav licences, lai izmantotu konfigurējamās lietotnes, kas nav publiskas. Pieprasiet savas organizācijas administratoram piešķirt jums lietotāja veidu, kurā iekļauts lietotņu komplekts Essential Apps vai papildinājumlietotņu Essential Apps licence.",
       "title": "Nav licences"
-    }
+    },
+    "warningMessageTitle": "Ierobežots pārlūkprogrammas atbalsts",
+    "warningMessageAGOL": "Jūs izmantojiet novecojušu pārlūkprogrammu. Šajā pārlūkprogrammā dažas no lietotnes iespējām var nedarboties kā paredzēts vai nedarboties vispār. Nākotnē tiks pārtraukts šīs pārlūkprogrammas atbalsts.</br></br>Lūdzu, izmantojiet <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link>, vai <edge-link>Microsoft Edge</edge-link> jaunākās versijas.</br></br>Papildinformāciju par pārlūkprogrammu atbalstu meklējiet mūsu dokumentācijā. Sniedziet savas atsauksmes, izmantojot <feedback-link>GeoNet, Esri kopienu</feedback-link>.",
+    "warningMessageEnterprise": "Jūs izmantojat pārlūkprogrammu, kas vairs netiek atbalstīta. Šajā pārlūkprogrammā dažas šīs lietotnes daļas var nedarboties kā paredzēts vai nedarboties vispār.</br></br>Lūdzu, izmantojiet <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link>, vai <edge-link>Microsoft Edge</edge-link> jaunākās versijas."
   },
   "webMapList": {
     "owner": "Īpašnieks",
@@ -101,8 +104,7 @@ define({
     "showAllButtonTooltip": "Rādīt visus",
     "showSelectedButtonTooltip": "Rādīt izvēlētos",
     "selectAllButtonTooltip": "Izvēlieties visu",
-    "clearSelectionButtonTooltip": "Notīrīt izvēlēto",
-    "invalidFeatureMessage": "Neizdevās atlasīt šādu skaitu nederīgu elementu: ${invalidFeatureCount}."
+    "clearSelectionButtonTooltip": "Notīrīt izvēlēto"
   },
   "timeSlider": {
     "timeSliderLabel": "Laika diapazons",
@@ -133,12 +135,14 @@ define({
   },
   "search": {
     "searchIconTooltip": "Meklēt šo slāni",
+    "clearSearchIconTooltip": "Notīrīt meklēto",
     "noResultFoundText": "Rezultāti nav atrasti",
     "searchInEditModeAlert": "Rediģējot meklēšana nav pieejama"
   },
   "manualRefresh": {
     "manualRefreshIconTooltip": "Atjaunot",
-    "confirmManualRefreshText": "Visas atlases un nesaglabātās izmaiņas tiks atmestas"
+    "confirmManualRefreshText": "Visas atlases un nesaglabātās izmaiņas tiks atmestas",
+    "confirmHardRefreshText": "Visi filtri, atlases un nesaglabātās izmaiņas tiks atmestas"
   },
   "help": {
     "helpIconTooltip": "Palīdzība"
