@@ -314,7 +314,9 @@ define([
                     }
                     this._attachEventToAddCommentButton();
                     this.showCommentsTab();
-                    domAttr.set(dom.byId("commentsTotalCount"), "innerHTML", "(" + 0 + ")"); //ignore jslint
+                    if (dom.byId("commentsTotalCount")) {
+                        domAttr.set(dom.byId("commentsTotalCount"), "innerHTML", "(" + 0 + ")"); //ignore jslint
+                    }
                     this.appUtils.hideLoadingIndicator();
                 }
             }), lang.hitch(this, function () {
@@ -387,7 +389,9 @@ define([
                 this._createCommentButton(commentContentPaneContainer, this._entireCommentsArr[i][1].features[0]);
             }
             this.showCommentsTab();
-            domAttr.set(dom.byId("commentsTotalCount"), "innerHTML", "(" + this._entireCommentsArr.length + ")");
+            if (dom.byId("commentsTotalCount")) {
+                domAttr.set(dom.byId("commentsTotalCount"), "innerHTML", "(" + this._entireCommentsArr.length + ")");
+            }
             this.appUtils.hideLoadingIndicator();
         },
 
@@ -716,9 +720,11 @@ define([
                 this._displayAddCommentsButton();
                 this.isCommentFormOpen = false;
                 this.isFormOpen(false);
-                domStyle.set(this.commentsContainer, "display", "block");
-                //Scroll to top position when clicked cancel need ID to use scrollTop
-                dom.byId("tabContent").scrollTop = 0;
+                if (this.commentsContainer) {
+                    domStyle.set(this.commentsContainer, "display", "block");
+                    //Scroll to top position when clicked cancel need ID to use scrollTop
+                    dom.byId("tabContent").scrollTop = 0;
+                }
                 this.appUtils.hideLoadingIndicator();
             });
             this._commentformInstance.onCommentFormSubmitted = lang.hitch(this, function () {
@@ -727,10 +733,12 @@ define([
                 this._displayAddCommentsButton();
                 this.isCommentFormOpen = false;
                 this.isFormOpen(false);
-                //update comment list
-                domConstruct.empty(this.commentsContainer);
-                domStyle.set(this.commentsContainer, "display", "block");
-                this._showComments(this.multipleFeatures[0], this.commentsContainer);
+                if (this.commentsContainer) {
+                    //update comment list
+                    domConstruct.empty(this.commentsContainer);
+                    domStyle.set(this.commentsContainer, "display", "block");
+                    this._showComments(this.multipleFeatures[0], this.commentsContainer);
+                }
                 // this.appUtils.hideLoadingIndicator();
             });
             this._showPanel(dom.byId("commentformContainer"));
