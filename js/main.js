@@ -113,6 +113,7 @@ define([
         _initialLoad: true, //flag to check if refresh layer event is fired for the first time
         _basemapGallery: null, // to store the object of basemap gallery widget
         _legend: null,  // to store the object of legend gallery widget
+        _canAutoRefresh: false, //status of whether todo the auto update after edit mode is turned off
         _lastSelectedNonEditableFeature: null,
         clearSelectionButtonClickedHandle: null,
         selectAllButtonClickedHandle: null,
@@ -664,6 +665,15 @@ define([
                     this._timeInfo = details.operationalLayerDetails.layerObject.timeInfo;
                     this._isManualRefreshedClicked = false;
                     this._isFilterRefreshClicked = false;
+                    //Reset the flags related to auto refresh functionality
+                    if (this._dataViewerWidget && this._dataViewerWidget.isEditMode) {
+                        this._dataViewerWidget.isEditMode = false;
+                    }
+                    if (this._detailsPanelWidget && this._detailsPanelWidget.isCommentsFormOpen) {
+                        this._detailsPanelWidget.isCommentsFormOpen = false;
+                    }
+                    this._canAutoRefresh = false;
+                    this.prevSelectedFeature = null;
                     this._destroyBasemapGalleryWidget();
                     this._destroyLegendWidget();
                     //destroy time slider instance
@@ -1351,8 +1361,10 @@ define([
             });
             // to get notified when data viewer is loaded
             this._dataViewerWidget.onDataViewerLoaded = lang.hitch(this, function () {
-                if (this.isAutoRefresh && this.prevSelectedFeatureOID) {
-                    this._dataViewerWidget.selectFeatureInDataViewer(this.prevSelectedFeatureOID);
+                if (this.prevSelectedFeature &&
+                    this._dataViewerWidget._getSelectedFeatures().length === 0) {
+                    this._dataViewerWidget.highlightSelectedFeature(this.prevSelectedFeature);
+                    this.prevSelectedFeature = null;
                 }
             });
         },
@@ -1481,7 +1493,7 @@ define([
                         }));
                         this._refinedOperationalLayer.isExplicitlyFeaturesAdded = true;
                         this._removeFeatureLayerHandle();
-                        this._onFeatureLayerUpdateEnd();
+                        this._onFeatureLayerUpdateEnd(false);
                     }));
                 }
             }));
@@ -1560,7 +1572,27 @@ define([
             return deferred.promise;
         },
 
-        _onFeatureLayerUpdateEnd: function () {
+        _onFeatureLayerUpdateEnd: function (isAutoUpdate) {
+            var features = [];
+            //Refresh the application only if it is not in edit mode
+            // and the comments form is not open
+            if (this._dataViewerWidget &&
+                this._dataViewerWidget.isEditMode ||
+                (this._detailsPanelWidget && this._detailsPanelWidget.isCommentsFormOpen)) {
+                //Before aborting the update operation, update the flag value
+                //this will trigger the auto update once user comes out of the edit mode
+                //this flag will be set to true only if the layers update method is called automatically
+                if (this.appConfig.enableAutoRefresh && isAutoUpdate) {
+                    this._canAutoRefresh = true;
+                }
+                ApplicationUtils.hideLoadingIndicator();
+                return;
+            }
+            //Get the selected features from data viewer
+            //This will be used to retain the state of data viewer after auto refresh
+            if (this._dataViewerWidget) {
+                features = this._dataViewerWidget._getSelectedFeatures();
+            }
             if (this._isShowSelectedClicked) {
                 this._isShowSelectedClicked = false;
                 this._dataViewerWidget.createDataViewerUI(false);
@@ -1600,6 +1632,17 @@ define([
                     this._createDataViewer();
                 }
             }
+            //If auto refresh flag is turned on and layer has refresh interval set,
+            //then perform the update operation and maintain the state of data viewer
+            //and column filter
+            if (this.appConfig.enableAutoRefresh && this._refinedOperationalLayer &&
+                this._refinedOperationalLayer.hasOwnProperty("refreshInterval") &&
+                this._refinedOperationalLayer.refreshInterval) {
+                //updateRequired flag will be set to false on the initial load and
+                //also once the refresh is being performed
+                ApplicationUtils.showLoadingIndicator();
+                this._autoRefreshApp(features);
+            }
         },
 
         /**
@@ -1613,14 +1656,10 @@ define([
                 if (this._refreshHandle) {
                     this._refreshHandle.remove();
                 }
-                this._dataViewerFeatureLayerUpdateEndHandle = on(this._refinedOperationalLayer, "update-end", lang.hitch(this, this._onFeatureLayerUpdateEnd));
-                //Bind the refresh event for a layer
-                if (this.appConfig.enableAutoRefresh) {
-                    this._refreshHandle = on(this._refinedOperationalLayer, "refresh-tick",
-                        lang.hitch(this, function () {
-                            this._autoRefreshApp();
-                        }));
-                }
+                this._dataViewerFeatureLayerUpdateEndHandle = on(this._refinedOperationalLayer, "update-end",
+                    lang.hitch(this, function () {
+                        this._onFeatureLayerUpdateEnd(true);
+                    }));
             }
         },
 
@@ -1628,32 +1667,34 @@ define([
          * This function is auto refreshes application
          * @memberOf widgets/main/main
          */
-        _autoRefreshApp: function () {
-            //Refresh the application only if it is not in edit mode
-            // and the comments form is not open
-            if (this._dataViewerWidget.isEditMode ||
-                (this._detailsPanelWidget && this._detailsPanelWidget.isCommentsFormOpen)) {
-                    return;
-            }
-            this.isAutoRefresh = true;
-            var selectedFeatures = this._dataViewerWidget._getSelectedFeatures();
+        _autoRefreshApp: function (selectedFeatures) {
             //If a single feature was selected before app refresh
             //keep the selected feature object id and reselect
             //the feature once app refreshes
             if (selectedFeatures.length === 1) {
-                this.prevSelectedFeatureOID =
-                    selectedFeatures[0].attributes[this._refinedOperationalLayer.objectIdField];
+                this.prevSelectedFeature = selectedFeatures[0];
             } else {
-                this.prevSelectedFeatureOID = null;
+                //If ap requires auto refresh and before the refresh action
+                //multiple features where selected then use the previously selected
+                //feature instance from details panel and use the same 
+                this.prevSelectedFeature = this._detailsPanelWidget &&
+                    this._detailsPanelWidget.multipleFeatures &&
+                    this._detailsPanelWidget.multipleFeatures.length > 0
+                    ? this._detailsPanelWidget.multipleFeatures[
+                    this._detailsPanelWidget.multipleFeatures.length - 1]
+                    : null;
             }
-            //After getting all the desired data, refresh the application
-            this._applicationHeader.refreshApplication();
             //update the button state if data viewer was in show selected mode
             var showAllButton = dom.byId("showAllMainButton");
             if (selectedFeatures.length > 0 && domClass.contains(showAllButton, "esriCTShowAllIcon")) {
                 domClass.replace(showAllButton, "esriCTShowSelectedIconEnabled", "esriCTShowAllIcon");
                 domAttr.set(showAllButton, "title", this.appConfig.i18n.dataviewer.showSelectedButtonTooltip);
             }
+            //Hide the loading indicator after sometime to make sure
+            //all the processes are completed
+            setTimeout(lang.hitch(this, function () {
+                ApplicationUtils.hideLoadingIndicator();
+            }), 500);
         },
 
         /**
@@ -1791,8 +1832,12 @@ define([
             });
 
             this._detailsPanelWidget.onMultipleFeatureEditCancel = lang.hitch(this, function (feature) {
-                //highlight selected features row in table
-                this._dataViewerWidget.highlightSelectedFeature(feature);
+                //Highlight the previously selected feature only if the auto update flag is
+                //set to false
+                if (!this._canAutoRefresh) {
+                    //highlight selected features row in table
+                    this._dataViewerWidget.highlightSelectedFeature(feature);
+                }
             });
 
             this._detailsPanelWidget.popupEditModeEnabled = lang.hitch(this, function (isEditMode) {
@@ -1819,6 +1864,26 @@ define([
                 // If search widget exist, handle its visibility
                 if (((this._applicationHeader) && (!this._dataViewerWidget)) || ((this._applicationHeader) && (this._dataViewerWidget) && (!this._dataViewerWidget.isShowSelectedClicked))) {
                     this._applicationHeader._handleSearchIconVisibility(featureLength);
+                }
+                //Once the popup is closed
+                //check if auto refresh flag is set to true
+                //If yes, do the auto refresh
+                if (this._canAutoRefresh && !isEditMode) {
+                    this._canAutoRefresh = false;
+                    this._onFeatureLayerUpdateEnd(false);
+                }
+            });
+
+            this._detailsPanelWidget.onCommentFormToggle = lang.hitch(this, function (isOpen) {
+                if (!isOpen && this._canAutoRefresh) {
+                    //Once the comment form is closed and auto refresh flag is true
+                    //call the update function after sometime 
+                    //this makes sure the comment form is closed and there are no
+                    //conflicts in the update functionality
+                    this._canAutoRefresh = false;
+                    setTimeout(lang.hitch(this, function () {
+                        this._onFeatureLayerUpdateEnd(false);
+                    }), 1000);
                 }
             });
         },

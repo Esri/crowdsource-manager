@@ -282,6 +282,7 @@ define([
                     // Close the popup form after submitting new feature
                     this._hidePanel(this.popupFormContainer);
                     this._showPanel(this.popupInfoParentContainer);
+                    this.popupEditModeEnabled(false);
                 }
                 this.onFeatureUpdated(feature, this.isShowSelectedClicked);
             });
