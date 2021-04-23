@@ -267,6 +267,7 @@ define([
 
             this._commentsWidgetObj.isFormOpen = lang.hitch(this, function (isOpen) {
                 this.isCommentsFormOpen = isOpen;
+                this.onCommentFormToggle(isOpen);
             });
         },
 
