@@ -1,7 +1,7 @@
 [Thumbnail]: crowdsource-manager.png "Crowdsource Manager"
 
 [supported browsers]: http://doc.arcgis.com/en/arcgis-online/reference/browsers.htm
-[New to Github? Get started here.]: http://htmlpreview.github.com/?https://github.com/Esri/esri.github.com/blob/master/help/esri-getting-to-know-github.html
+[New to Github? Get started here.]: https://guides.github.com/activities/hello-world/
 [Want more info on this app? Check out the documentation.]: http://solutions.arcgis.com/local-government/help/crowdsource-manager/
 [ArcGIS for Local Government maps and apps]: http://solutions.arcgis.com/local-government
 [Local Government GitHub repositories]: http://esri.github.io/#Local-Government
