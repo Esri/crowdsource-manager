@@ -94,7 +94,7 @@ define([
         _features: [], // store features that are selected
         _featureObjectID: null, // store objectid of feature selected
         _isRowFound: false, // keeps track whether row is available in grid when user selects feature from map
-        _manualRefreshDataObj: {}, // keep the track of last sorting and the column number on which sorting performed
+        manualRefreshDataObj: {}, // keep the track of last sorting and the column number on which sorting performed
         _filterRefreshDataObj: {}, // keep the track of last horizontal position to regain data-viewer position after filter applied
         isEditMode: false, // to keep track whether popup panel is in edit mode or not
         _rowScrollTimer: null, // Timer to select row when stacked feature is selected
@@ -540,15 +540,13 @@ define([
             this._bindDataViewerScrollEvent();
             // if last table sorting column number and sorting order is set before
             // manual refresh invoke the sorting function with the same parameters to sort them
-            if (this.isManualRefreshedClicked) {
-                if (this._manualRefreshDataObj && this._manualRefreshDataObj.columnNumber && this._manualRefreshDataObj.sortingOrder) {
-                    this._sortByColumn(this._manualRefreshDataObj.columnNumber, this._manualRefreshDataObj.sortingOrder);
-                }
-                // if last table vertical position captured before manual refresh invoke the scroll top
-                // function to bring the focus of table at same position
-                if (this._manualRefreshDataObj && this._manualRefreshDataObj.lastVerticalScrollPosition && (!this.updatedFeature)) {
-                    this._scrollToActivatedFeature(0, true);
-                }
+            if (this.manualRefreshDataObj && this.manualRefreshDataObj.columnNumber && this.manualRefreshDataObj.sortingOrder) {
+                this._sortByColumn(this.manualRefreshDataObj.columnNumber, this.manualRefreshDataObj.sortingOrder);
+            }
+            // if last table vertical position captured before manual refresh invoke the scroll top
+            // function to bring the focus of table at same position
+            if (this.manualRefreshDataObj && this.manualRefreshDataObj.lastVerticalScrollPosition && (!this.updatedFeature)) {
+                this._scrollToActivatedFeature(0, true);
             }
             // filter applied is applied on the layer and data-viewer refreshed
             if (this.isFilterRefreshClicked) {
@@ -1187,18 +1185,20 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _sortByColumn: function (columnNumber, sortingOrder) {
+            this._manualRefreshDataObj = {};
             // if the sorting flag is set as "ASC" the sort in ascending order
             // otherwise sort in descending order
             if (sortingOrder === "ASC") {
-                this._manualRefreshDataObj.sortingOrder = "ASC";
+                this.manualRefreshDataObj.sortingOrder = "ASC";
                 this._setAscIconEnable(columnNumber);
                 $('table').trigger('sorton', [[[columnNumber, 0]]]);
             } else {
-                this._manualRefreshDataObj.sortingOrder = "DESC";
+                this.manualRefreshDataObj.sortingOrder = "DESC";
                 this._setDescIconEnable(columnNumber);
                 $('table').trigger('sorton', [[[columnNumber, 1]]]);
             }
-            this._manualRefreshDataObj.columnNumber = columnNumber;
+            this.manualRefreshDataObj.columnNumber = columnNumber;
+            this.storeDataForManualRefresh();
             this._scrollToActivatedFeature(0, false);
             this._hideFilterContainer();
         },
@@ -1262,10 +1262,10 @@ define([
             //For Shift+click to be executed, only one row should be selected before used clicks using shift
             var selectedRow = query(".esriCTRowHighlighted", this._table);
             if (selectedRow && selectedRow.length === 1) {
-                this.firstClickedIndex = parseInt(domAttr.get(selectedRow[0], "index"), 10);
+                this.firstClickedIndex = selectedRow[0].rowIndex;
             }
             if (this.firstClickedIndex !== null && this.firstClickedIndex >= 0) {
-                this.lastClickedIndex = parseInt(domAttr.get(currentTargetObj, "index"), 10);
+                this.lastClickedIndex = currentTargetObj.rowIndex;
             }
             //If first and last click values are not null, it means shift+click has occurred
             if (this.firstClickedIndex !== null && this.lastClickedIndex !== null) {
@@ -1280,15 +1280,15 @@ define([
                 this.shiftButtonClicked = true;
                 //Select all the rows in between first and last click variable
                 //Exclude first and last rows as they are already selected 
-                for (var i= this.firstClickedIndex; i <= this.lastClickedIndex; i++) {
-                    rowToSelect = $("tr[index=" + "'" + i + "'" + "]");
-                    if (rowToSelect.length > 0 && !domClass.contains(rowToSelect[0], "esriCTRowHighlighted")) {
+                for (var i = this.firstClickedIndex; i <= this.lastClickedIndex; i++) {
+                    var rowToSelect = this._table.rows[i];
+                    if (!domClass.contains(rowToSelect, "esriCTRowHighlighted")) {
 
                         // #291: highlight row in the table
-                        domClass.add(rowToSelect[0], "esriCTRowHighlighted");
+                        domClass.add(rowToSelect, "esriCTRowHighlighted");
 
                         // #291: highlight feature on map
-                        var objid = domAttr.get(rowToSelect[0], "objid");
+                        var objid = domAttr.get(rowToSelect, "objid");
                         array.forEach(this._features, lang.hitch(this, function (feature) {
                             if (feature.attributes[this.selectedOperationalLayer.objectIdField] === parseInt(objid)) {
                                 if (feature.hasOwnProperty('geometry')) {
@@ -1326,7 +1326,6 @@ define([
                 this._enableExportToCSVButton();
                 this.enableClearSelectionIcon();
             }
-            
         },
 
         /**
@@ -1715,8 +1714,8 @@ define([
             if ($('.esriCTDataViewerContainer tr:eq(' + rowNumber + ')').offset() && $('.esriCTDataViewerContainer tr:eq(' + rowNumber + ')').offset().top) {
                 // if last vertical scroll position is set before manual refresh then set scroll
                 // position same as it was earlier else set the scroll top to the selected row
-                if (this._manualRefreshDataObj && this._manualRefreshDataObj.lastVerticalScrollPosition && manualRefreshScroll) {
-                    scrollTopValue = this._manualRefreshDataObj.lastVerticalScrollPosition;
+                if (this.manualRefreshDataObj && this.manualRefreshDataObj.lastVerticalScrollPosition && manualRefreshScroll) {
+                    scrollTopValue = this.manualRefreshDataObj.lastVerticalScrollPosition;
                 } else {
                     // Get row position by index
                     scrollTopValue = $('.esriCTDataViewerContainer tr:eq(' + rowNumber + ')').offset().top;
@@ -1927,9 +1926,9 @@ define([
         */
         storeDataForManualRefresh: function () {
             var manualRefreshDataObj = {};
-            manualRefreshDataObj.lastVerticalScrollPosition = (this._manualRefreshDataObj && this._manualRefreshDataObj.lastVerticalScrollPosition) ? this._manualRefreshDataObj.lastVerticalScrollPosition : 0;
-            manualRefreshDataObj.lastSelectedField = (this._manualRefreshDataObj && this._manualRefreshDataObj.columnNumber) ? this._manualRefreshDataObj.columnNumber : "";
-            manualRefreshDataObj.lastSelectedFieldOrder = (this._manualRefreshDataObj && this._manualRefreshDataObj.sortingOrder) ? this._manualRefreshDataObj.sortingOrder : "";
+            manualRefreshDataObj.lastVerticalScrollPosition = (this.manualRefreshDataObj && this.manualRefreshDataObj.lastVerticalScrollPosition) ? this.manualRefreshDataObj.lastVerticalScrollPosition : 0;
+            manualRefreshDataObj.columnNumber = (this.manualRefreshDataObj && this.manualRefreshDataObj.columnNumber) ? this.manualRefreshDataObj.columnNumber : "";
+            manualRefreshDataObj.sortingOrder = (this.manualRefreshDataObj && this.manualRefreshDataObj.sortingOrder) ? this.manualRefreshDataObj.sortingOrder : "";
             this.updateManualRefreshData(manualRefreshDataObj);
         },
 
@@ -1970,7 +1969,7 @@ define([
             // binding on scroll event on data viewer parent container
             on(this.dataViewerContainer, "scroll", lang.hitch(this, function (event) {
                 this.hideWebMapList();
-                this._manualRefreshDataObj.lastVerticalScrollPosition = event.currentTarget.scrollTop;
+                this.manualRefreshDataObj.lastVerticalScrollPosition = event.currentTarget.scrollTop;
                 this._filterRefreshDataObj.lastHorizontalScrollPosition = event.currentTarget.scrollLeft;
                 this._hideFilterContainer();
                 var currPos = $(this.dataViewerContainer).scrollLeft();

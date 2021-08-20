@@ -630,6 +630,7 @@ define([
                 setTimeout(lang.hitch(this, function () {
                     ApplicationUtils.showLoadingIndicator();
                     ApplicationUtils.hideOverlayContainer();
+                    this._manualRefreshDataObj = {};
                     this._reorderLayers = true;
                     this._initialLoad = true;
                     $(".esriCTSignOutOption").addClass("esriCTHidden");
@@ -1243,7 +1244,7 @@ define([
                 "appUtils": ApplicationUtils,
                 "selectedOperationalLayer": this._refinedOperationalLayer,
                 "isManualRefreshedClicked": this._isManualRefreshedClicked,
-                "manualRefreshDataObj": this._manualRefreshDataObj,
+                "manualRefreshDataObj": lang.clone(this._manualRefreshDataObj),
                 "updatedFeature": this.updatedFeature,
                 "isFilterRefreshClicked": this._isFilterRefreshClicked,
                 "filterRefreshDataObj": this._filterRefreshDataObj
