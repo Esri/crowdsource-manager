@@ -540,7 +540,7 @@ define([
             this._bindDataViewerScrollEvent();
             // if last table sorting column number and sorting order is set before
             // manual refresh invoke the sorting function with the same parameters to sort them
-            if (this.manualRefreshDataObj && this.manualRefreshDataObj.columnNumber && this.manualRefreshDataObj.sortingOrder) {
+            if (this.manualRefreshDataObj && this.manualRefreshDataObj.hasOwnProperty('columnNumber') && this.manualRefreshDataObj.sortingOrder) {
                 this._sortByColumn(this.manualRefreshDataObj.columnNumber, this.manualRefreshDataObj.sortingOrder);
             }
             // if last table vertical position captured before manual refresh invoke the scroll top
@@ -804,11 +804,15 @@ define([
                 entireFeatureDataArr.push(dataSet);
             }
             // to sort features in desc order i.e, newest on top
-            entireFeatureDataArr.sort(lang.hitch(this, function (a, b) {
-                a = a[objectIdIndex];
-                b = b[objectIdIndex];
-                return a === b ? 0 : (a < b ? 1 : -1);
-            }));
+            if (!this.manualRefreshDataObj || !this.manualRefreshDataObj.hasOwnProperty('columnNumber') ||
+                this.manualRefreshDataObj.columnNumber === '' || !this.manualRefreshDataObj.sortingOrder) {
+                entireFeatureDataArr.sort(lang.hitch(this, function (a, b) {
+                    a = a[objectIdIndex];
+                    b = b[objectIdIndex];
+                    return a === b ? 0 : (a < b ? 1 : -1);
+                }));
+            }
+
             // Pass entire data for creation of a data-viewer table
             this._createTableRows(entireFeatureDataArr, objectIdIndex);
             //If url parameter contains feature id, check if feature exists and select the same
@@ -1185,6 +1189,9 @@ define([
         * @memberOf widgets/data-viewer/data-viewer
         */
         _sortByColumn: function (columnNumber, sortingOrder) {
+            if (columnNumber === '') {
+                return;
+            }
             this._manualRefreshDataObj = {};
             // if the sorting flag is set as "ASC" the sort in ascending order
             // otherwise sort in descending order
@@ -1927,7 +1934,7 @@ define([
         storeDataForManualRefresh: function () {
             var manualRefreshDataObj = {};
             manualRefreshDataObj.lastVerticalScrollPosition = (this.manualRefreshDataObj && this.manualRefreshDataObj.lastVerticalScrollPosition) ? this.manualRefreshDataObj.lastVerticalScrollPosition : 0;
-            manualRefreshDataObj.columnNumber = (this.manualRefreshDataObj && this.manualRefreshDataObj.columnNumber) ? this.manualRefreshDataObj.columnNumber : "";
+            manualRefreshDataObj.columnNumber = (this.manualRefreshDataObj && (this.manualRefreshDataObj.columnNumber || this.manualRefreshDataObj.columnNumber === 0)) ? this.manualRefreshDataObj.columnNumber : "";
             manualRefreshDataObj.sortingOrder = (this.manualRefreshDataObj && this.manualRefreshDataObj.sortingOrder) ? this.manualRefreshDataObj.sortingOrder : "";
             this.updateManualRefreshData(manualRefreshDataObj);
         },
