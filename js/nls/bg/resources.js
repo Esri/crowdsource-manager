@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -17,154 +17,154 @@
 */
 define({
   "map": {
-    "error": "Impossible de créer la carte",
+    "error": "Не може да се създаде карта",
     "licenseError": {
-      "message": "La licence de votre compte ne permet pas d’utiliser des applications configurables non publiques. Demandez à l’administrateur de votre organisation de vous attribuer un type d’utilisateur qui inclut une licence Essential Apps ou une licence Essential Apps additionnelle.",
-      "title": "Pas de licence"
+      "message": "Вашият акаунт не е лицензиран да използва Configurable Apps, които не са публични. Помолете администратора на Вашата организация да Ви направи тип потребител, който включва основни приложения или допълнителен лиценз за основни приложения.",
+      "title": "Не е лицензиран"
     },
-    "warningMessageTitle": "Prise en charge limitée du navigateur",
-    "warningMessageAGOL": "Vous utilisez un navigateur obsolète. Certaines parties de cette application risquent de ne pas fonctionner de manière optimale ou de ne pas fonctionner du tout dans ce navigateur. Ce navigateur ne sera plus pris en charge à l’avenir.</br></br>Utilisez les dernières versions de <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> ou <edge-link>Microsoft Edge</edge-link>.</br></br>Pour plus d’informations sur les navigateurs pris en charge, consultez la documentation. Envoyez vos commentaires via <feedback-link>GeoNet, la communauté Esri</feedback-link>.",
-    "warningMessageEnterprise": "Vous utilisez un navigateur qui n’est plus pris en charge. Certaines parties de cette application risquent de ne pas fonctionner de manière optimale ou de ne pas fonctionner du tout dans ce navigateur.</br></br>Utilisez les dernières versions de <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> ou <edge-link>Microsoft Edge</edge-link>."
+    "warningMessageTitle": "Ограничена поддръжка на браузър",
+    "warningMessageAGOL": "Използвате остарял браузър. Някои части на това приложение може да не работят оптимално или изобщо да не работят с този браузър. Поддръжката на този браузър ще бъде преустановена в бъдеще. </br></br>Използвайте последните версии на<chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> или<edge-link>Microsoft Edge</edge-link>.</br></br>За повече информация относно поддръжката на браузъра вижте нашата документация. Напишете ни Вашия отзив през <feedback-link>GeoNet, Esri Community</feedback-link>.",
+    "warningMessageEnterprise": "Използвате браузър, който вече не се поддържа. Някои части на това приложение може да не работят оптимално или изобщо да не работят с този браузър.</br></br>Използвайте последните версии на <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> или<edge-link>Microsoft Edge</edge-link>."
   },
   "webMapList": {
-    "owner": "Propriétaire",
-    "created": "Date de création",
-    "modified": "Date de modification",
-    "description": "Description",
-    "snippet": "Résumé",
-    "licenseInfo": "Restrictions d'accès et d'utilisation",
-    "accessInformation": "Crédits",
-    "tags": "Balises",
-    "numViews": "Nombre de vues",
-    "avgRating": "Evaluation",
-    "noWebMapInGroup": "Le groupe configuré n'est pas valide ou aucun élément n'a encore été partagé avec ce groupe",
-    "infoBtnToolTip": "Informations sur la carte",
-    "openWebmapList": "Ouvrir le volet",
-    "closeWebmapList": "Fermer le volet"
+    "owner": "Собственик",
+    "created": "Дата на създаване",
+    "modified": "Дата на промяна",
+    "description": "Описание",
+    "snippet": "Обобщение",
+    "licenseInfo": "Достъп и използване на ограничения",
+    "accessInformation": "Кредити",
+    "tags": "Тагове",
+    "numViews": "Брой гледания",
+    "avgRating": "Оценка",
+    "noWebMapInGroup": "Конфигурираната група е невалидна или все още не са споделени елементи с тази група",
+    "infoBtnToolTip": "Информация за карта",
+    "openWebmapList": "Отваряне на панел",
+    "closeWebmapList": "Затваряне на панел"
   },
   "geoform": {
-    "enterInformation": "Détails",
-    "selectAttachments": "Pièces jointes",
-    "selectFileText": "Parcourir",
-    "enterLocation": "Emplacement",
-    "reportItButton": "Envoyer",
-    "cancelButton": "Annuler",
-    "requiredField": "(requis)",
-    "selectDefaultText": "Sélectionner&hellip;",
-    "invalidInputValue": "Entrez une valeur valide.",
-    "noFieldsConfiguredMessage": "Les champs de couche ne sont pas configurés pour capturer les données",
-    "invalidSmallNumber": "Entrez un entier",
-    "invalidNumber": "Entrez un entier",
-    "invalidFloat": "Entrez un nombre",
-    "invalidDouble": "Entrez un nombre",
-    "requiredFields": "Indiquez des valeurs pour tous les champs requis",
-    "selectLocation": "Sélectionnez l'emplacement de votre rapport",
-    "numericRangeHintMessage": "${openStrong}Hint:${closeStrong} Valeur minimum ${minValue} et valeur maximum ${maxValue}",
-    "dateRangeHintMessage": "${openStrong}Hint:${closeStrong} Date minimum ${minValue} et date maximum ${maxValue}",
-    "errorsInApplyEdits": "Impossible d’envoyer le rapport.",
-    "attachmentSelectedMsg": "pièce(s) jointe(s) sélectionnée(s)",
-    "attachmentUploadStatus": "Échec du chargement de ${failed} sur ${total} pièce(s) jointe(s).",
-    "attachmentDeleteStatus": "Échec de la suppression de ${failed} sur ${total} pièce(s) jointe(s).",
-    "featureUpdateStatus": "Échec de la mise à jour de ${failed} sur ${total} entités(s).",
-    "geoLocationError": "Localisant actuel non disponible",
-    "geoLocationOutOfExtent": "L'étendue courante est en dehors de l'étendue du fond de carte",
-    "submitButtonTooltip": "Enregistrer",
-    "cancelButtonTooltip": "Annuler",
-    "geoformBackButtonTooltip": "Revenir à la liste des rapports",
-    "updateFeaturesConfirmationMsg": "${count} entités vont être mises à jour",
-    "attachmentHeaderText": "Pièces jointes",
-    "unknownPopupAttachment": "FICHIER",
-    "unableToEditPopupMessage": "Vous n’êtes pas autorisé à effectuer cette action.",
-    "invalidFeatureCreatorMessage": "Vous n’êtes pas autorisé à mettre à jour cette entité.",
-    "userSpecificFeatureUpdateMessage": "Seules les entités créées par ${username} ont été mises à jour.",
-    "anonymousUserText": "Anonyme"
+    "enterInformation": "Подробни данни",
+    "selectAttachments": "Прикачени файлове",
+    "selectFileText": "Зареждане",
+    "enterLocation": "Местоположение",
+    "reportItButton": "Изпращане",
+    "cancelButton": "Отказ",
+    "requiredField": "(задължително)",
+    "selectDefaultText": "Избор",
+    "invalidInputValue": "Моля, въведете валидна стойност.",
+    "noFieldsConfiguredMessage": "Полетата на слоевете не са конфигурирани за прихващане на данни",
+    "invalidSmallNumber": "Моля, въведете цяло число",
+    "invalidNumber": "Моля, въведете цяло число",
+    "invalidFloat": "Моля, въведете число",
+    "invalidDouble": "Моля, въведете число",
+    "requiredFields": "Моля, посочете стойности за всички задължителни полета",
+    "selectLocation": "Моля, изберете местоположението за отчета",
+    "numericRangeHintMessage": "${openStrong}Съвет:${closeStrong} Минимална стойност${minValue} и максимална стойност${maxValue}",
+    "dateRangeHintMessage": "${openStrong}Съвет:${closeStrong} Минимална дата ${minValue} и максимална дата ${maxValue}",
+    "errorsInApplyEdits": "Отчетът не може да бъде изпратен.",
+    "attachmentSelectedMsg": "избран(и) прикачен(и) файл(ове)",
+    "attachmentUploadStatus": "Неуспешно качване на ${failed} от ${total} прикачен(и) файл(а).",
+    "attachmentDeleteStatus": "Неуспешно изтриване на ${failed} от ${total} прикачен(и) файл(а).",
+    "featureUpdateStatus": "Неуспешно качване на ${failed} от ${total} обект(а).",
+    "geoLocationError": "Текущото местоположение не е налично",
+    "geoLocationOutOfExtent": "Текущото местоположение е извън обхвата на базовата карта",
+    "submitButtonTooltip": "Запазване",
+    "cancelButtonTooltip": "Отказ",
+    "geoformBackButtonTooltip": "Връщане към списъка с отчети",
+    "updateFeaturesConfirmationMsg": "Ще се актуализират ${count} обекта",
+    "attachmentHeaderText": "Прикачени файлове",
+    "unknownPopupAttachment": "ФАЙЛ",
+    "unableToEditPopupMessage": "Нямате разрешение да извършите това действие.",
+    "invalidFeatureCreatorMessage": "Нямате право да редактирате този обект.",
+    "userSpecificFeatureUpdateMessage": "Актуализирани са само обектите, създадени от ${username}.",
+    "anonymousUserText": "Анонимен"
   },
   "mapViewer": {
-    "zoomInToolTip": "Zoom avant",
-    "zoomOutToolTip": "Zoom arrière"
+    "zoomInToolTip": "Приближаване",
+    "zoomOutToolTip": "Отдалечаване"
   },
   "applicationHeader": {
-    "signInOption": "Connexion",
-    "signOutOption": "Déconnexion",
-    "pleaseSignInText": "Connectez-vous"
+    "signInOption": "Регистрация",
+    "signOutOption": "Отписване",
+    "pleaseSignInText": "Моля, влезте"
   },
   "dataviewer": {
-    "noIssuesReported": "Aucun rapport disponible",
-    "noFeatureGeometry": "Impossible d'afficher l'entité",
-    "ascendingFlagTitle": "Trier par ordre croissant",
-    "descendingFlagTitle": "Trier par ordre décroissant",
-    "filterLabel": "Filtre",
-    "valueRadioButtonLabel": "Valeur",
-    "uniqueRadioButtonLabel": "Unique",
-    "selectLayerToBegin": "Sélectionnez une catégorie pour commencer",
-    "layerFeatureCount": "${selectedFeatureCount} sélectionnées / ${featureCount} enregistrements",
-    "exportToCsvSuccessMessage": "Le fichier CSV a été exporté.",
-    "exportToCsvErrorMessage": "Une erreur s’est produite lors de l’exportation des entités sélectionnées vers le fichier CSV. Réessayez ultérieurement.",
-    "exportToCSVButtonTooltip": "Exporter au format CSV",
-    "showAllButtonTooltip": "Afficher tout",
-    "showSelectedButtonTooltip": "Afficher la sélection",
-    "selectAllButtonTooltip": "Sélectionner tout",
-    "clearSelectionButtonTooltip": "Effacer la sélection"
+    "noIssuesReported": "Няма налични отчети",
+    "noFeatureGeometry": "Обектът не може да се покаже",
+    "ascendingFlagTitle": "Сортиране по възходящ ред",
+    "descendingFlagTitle": "Сортиране по низходящ ред",
+    "filterLabel": "Филтър",
+    "valueRadioButtonLabel": "Стойност",
+    "uniqueRadioButtonLabel": "Уникални",
+    "selectLayerToBegin": "Изберете категория, за да започнете",
+    "layerFeatureCount": "${selectedFeatureCount} избрани/ ${featureCount} записа",
+    "exportToCsvSuccessMessage": "CSV файлът е експортиран успешно.",
+    "exportToCsvErrorMessage": "Грешка при експортиране на избрани обекти в CSV файл. Моля, опитайте отново.",
+    "exportToCSVButtonTooltip": "Експортиране в CSV",
+    "showAllButtonTooltip": "Показване на всички",
+    "showSelectedButtonTooltip": "Показване на избраните",
+    "selectAllButtonTooltip": "Избиране на всички",
+    "clearSelectionButtonTooltip": "Изчистване на избора"
   },
   "timeSlider": {
-    "timeSliderLabel": "Période",
-    "timeSliderInEditModeAlert": "Le curseur temporel est indisponible pendant la mise à jour"
+    "timeSliderLabel": "Времеви диапазон",
+    "timeSliderInEditModeAlert": "Плъзгачът на времето не е наличен при редактиране"
   },
   "comment": {
-    "commentsFormSubmitButton": "Enregistrer",
-    "commentsFormCancelButton": "Annuler",
-    "errorInSubmittingComment": "Impossible d'enregistrer les mises à jour.",
-    "emptyCommentMessage": "Valeur requise",
+    "commentsFormSubmitButton": "Запазване",
+    "commentsFormCancelButton": "Отказ",
+    "errorInSubmittingComment": "Редакциите не могат да бъдат запазени.",
+    "emptyCommentMessage": "Изисква се стойност",
     "placeHolderText": "",
-    "noCommentsAvailableText": "Aucun enregistrement disponible",
-    "remainingTextCount": "${0} caractère(s) restant(s)",
-    "showNoText": "Non",
-    "selectAttachments": "Pièces jointes",
-    "selectFileText": "Parcourir",
-    "attachmentSelectedMsg": "pièce(s) jointe(s) sélectionnée(s)",
-    "attachmentHeaderText": "Pièces jointes",
-    "addRecordText": "Ajouter un enregistrement",
-    "unknownCommentAttachment": "FICHIER",
-    "unableToAddOrEditCommentMessage": "Vous n’êtes pas autorisé à effectuer cette action."
+    "noCommentsAvailableText": "Не са начлични записи",
+    "remainingTextCount": "остава(т) ${0} символ(а)",
+    "showNoText": "Не",
+    "selectAttachments": "Прикачени файлове",
+    "selectFileText": "Зареждане",
+    "attachmentSelectedMsg": "избран(и) прикачен файл(ове)",
+    "attachmentHeaderText": "Прикачени файлове",
+    "addRecordText": "Добавяне на запис",
+    "unknownCommentAttachment": "ФАЙЛ",
+    "unableToAddOrEditCommentMessage": "Нямате разрешение да извършите това действие."
   },
   "main": {
-    "noGroup": "Aucun groupe configuré",
-    "basemapGalleryText": "Bibliothèque de fonds de carte",
-    "legendText": "Légende",
-    "featureNotFoundMessage": "Entité demandée introuvable"
+    "noGroup": "Няма конфигурирана група",
+    "basemapGalleryText": "Галерия с базови карти",
+    "legendText": "Легенда",
+    "featureNotFoundMessage": "Искания обект не е намерен"
   },
   "search": {
-    "searchIconTooltip": "Rechercher dans cette couche",
-    "clearSearchIconTooltip": "Effacer la recherche",
-    "noResultFoundText": "Aucun résultat trouvé",
-    "searchInEditModeAlert": "La recherche est indisponible pendant la mise à jour"
+    "searchIconTooltip": "Търсене в този слой",
+    "clearSearchIconTooltip": "Изчистване на търсенето",
+    "noResultFoundText": "Няма намерени резултати",
+    "searchInEditModeAlert": "Търсенето не е налично при редактиране"
   },
   "manualRefresh": {
-    "manualRefreshIconTooltip": "Actualiser",
-    "confirmManualRefreshText": "Toutes les sélections et les modifications non enregistrées seront ignorées",
-    "confirmHardRefreshText": "Tous les filtres, toutes les sélections et toutes les modifications non enregistrées seront effacés"
+    "manualRefreshIconTooltip": "Обновяване",
+    "confirmManualRefreshText": "Всички избори и незаписани промени ще бъдат отхвърлени",
+    "confirmHardRefreshText": "Всички филтри, избори и незаписани промени ще бъдат отхвърлени"
   },
   "help": {
-    "helpIconTooltip": "Aide"
+    "helpIconTooltip": "Помощ"
   },
   "filter": {
-    "noFeatureFoundText": "Aucune entité trouvée pour cette valeur.",
-    "distinctQueryFailed": "Aucune valeur distincte trouvée pour le champ.",
-    "andText": "et",
-    "filterInEditModeAlert": "Les filtres sont indisponibles pendant la mise à jour.",
-    "dropdownSelectOption": "Sélectionner",
-    "filterInShowSelectedEditModeAlert": "Les filtres sont indisponibles en mode Afficher les entités sélectionnées."
+    "noFeatureFoundText": "Няма намерен обект за тази стойност.",
+    "distinctQueryFailed": "Не са намерени различни стойности за полето.",
+    "andText": "и",
+    "filterInEditModeAlert": "Филтрите не са налични при редактиране.",
+    "dropdownSelectOption": "Избор",
+    "filterInShowSelectedEditModeAlert": "Филтрите не са налични в режим „Показване на избраните“."
   },
   "detailsPanel": {
-    "editContentText": "Mettre à jour l'enregistrement"
+    "editContentText": "Редактиране на запис"
   },
   "signOutPage": {
-    "signOutMessage": "Vous avez été déconnecté",
-    "reSignInMessage": "Cliquez ici pour vous connecter"
+    "signOutMessage": "Вие успешно се отписахте",
+    "reSignInMessage": "Натиснете тук, за да влезете"
   },
   "selectionOptions": {
-    "selectionOptionsIconTooltip": "Options de sélection",
-    "showAllOptionText": "Afficher tout",
-    "showSelectedOptionText": "Afficher les entités sélectionnées"
+    "selectionOptionsIconTooltip": "Опции за избор",
+    "showAllOptionText": "Показване на всички",
+    "showSelectedOptionText": "Показване на избраните"
   }
 });
