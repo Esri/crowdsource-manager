@@ -59,6 +59,8 @@ define([
         _isCodedValueColumn: false, // boolean value to watch a coded domain value field
         _isTypeIdfield: false, // boolean value to watch a Type Id  value field
         _openFilterParam: [],
+        inputs: [],
+        _expression: "",
 
         /**
         * This function is called when widget is constructed
@@ -78,11 +80,24 @@ define([
         _checkForFilters: function () {
             if (!this.appConfig._filterObject) {
                 this.appConfig._filterObject = {};
+                this.inputs = [];
                 array.forEach(this.itemInfo.itemData.operationalLayers, lang.hitch(this, function (layer) {
-                    if (this.selectedOperationalLayer.id === layer.id && layer.definitionEditor) {
-                        this.appConfig._filterObject = layer.definitionEditor;
-                        this._parameterizedExpression = this.appConfig._filterObject.parameterizedExpression;
-                        return true;
+                    //For new map viewer maps, programmatically create definition editor for layer
+                    if (this.itemInfo.itemData.authoringApp === "ArcGISMapViewer") {
+                        if (this.selectedOperationalLayer.id === layer.id && layer.layerObject.getDefinitionExpression()) {
+                            this._createDefinitionEditor(layer.layerObject.getDefinitionExpression());
+                            this.appConfig._filterObject.inputs = this.inputs;
+                            console.log(this.inputs);
+                            this.appConfig._filterObject.parameterizedExpression = this._expression;
+                            this._parameterizedExpression = this.appConfig._filterObject.parameterizedExpression;
+                            return true;
+                        }
+                    } else {
+                        if (this.selectedOperationalLayer.id === layer.id && layer.definitionEditor) {
+                            this.appConfig._filterObject = layer.definitionEditor;
+                            this._parameterizedExpression = this.appConfig._filterObject.parameterizedExpression;
+                            return true;
+                        }
                     }
                 }));
                 this._resetFilterObjectParameters();
@@ -90,6 +105,358 @@ define([
                 this._parameterizedExpression = this.appConfig._filterObject.parameterizedExpression;
             }
             this._createFilterOptionContainer();
+            this._toggleFilterIcon();
+        },
+
+        /**
+        *This function is used to display filter icon for new webmap layers
+        * @memberOf widgets/filter/filter
+        */
+        _toggleFilterIcon: function () {
+            if (this.itemInfo.itemData.authoringApp === "ArcGISMapViewer") {
+                array.forEach(this.appConfig._filterObject.inputs, lang.hitch(this, function (input, index) {
+                    filterIcon = query(".esriCTFilterIcon." + input.parameters[0].fieldName)[0];
+                    if (filterIcon && domClass.contains(filterIcon, "esriCTHiddenColumn")) {
+                        domClass.remove(filterIcon, "esriCTHiddenColumn");
+                        if ((this.appConfig && this.appConfig.enableFilter) ||
+                            (this.appConfig._filterObject && this.appConfig._filterObject.inputs[index] &&
+                                this.appConfig._filterObject.inputs[index].parameters[0].enableFilter)) {
+                            if (filterIcon && domClass.contains(filterIcon, "esriCTDisableFilterIcon")) {
+                                domClass.replace(filterIcon, "esriCTFilterIcon", "esriCTDisableFilterIcon");
+                            }
+                        } else {
+                            if (filterIcon && domClass.contains(filterIcon, "esriCTFilterIcon")) {
+                                domClass.replace(filterIcon, "esriCTDisableFilterIcon", "esriCTFilterIcon");
+                            }
+                        }
+                    }
+                }));
+            }
+        },
+
+        /**
+        * This function will create Definition Editor
+        * @memberOf widgets/filter/filter
+        */
+        _createDefinitionEditor: function (layerDefinitionExpression) {
+            var layerDefinitionExp = layerDefinitionExpression;
+            var outerSplitterArray = [], expressionValue, outerSplitBy = "";
+            // split and check if multiple filters are applied
+            layerDefinitionExp = layerDefinitionExpression.split("}'").join("}").split("'{").join("{");
+            layerDefinitionExp = layerDefinitionExp.split("}").join("}'").split("{").join("'{");
+            layerDefinitionExp = layerDefinitionExp.split("}'%'").join("}%'").split("'%'{").join("'%{");
+            if (layerDefinitionExp.split(") AND (").length > 1) {
+                // if 'yes' then slice substring to set values accordingly
+                expressionValue = layerDefinitionExp.substring(1, (layerDefinitionExp.length - 1));
+                // if the expression is an 'ANY' expression
+                // if 'yes' then slice substring to set values accordingly
+                outerSplitterArray = expressionValue.split(") AND (");
+                outerSplitBy = ") AND (";
+                this._createParametrizedExpression(outerSplitterArray, outerSplitBy);
+            } else if (layerDefinitionExp.split(") OR (").length > 1) {
+                expressionValue = layerDefinitionExp.substring(1, (layerDefinitionExp.length - 1));
+                // split the layer Definition Expression to set values to set current definition expression
+                outerSplitterArray = expressionValue.split(") OR (");
+                outerSplitBy = ") OR (";
+                this._createParametrizedExpression(outerSplitterArray, outerSplitBy);
+            } else {
+                // if it is a single parameter expression
+                outerSplitterArray[0] = layerDefinitionExp;
+                this._createParametrizedExpression(outerSplitterArray);
+            }
+        },
+
+        /**
+        * This function will create Parametrized expression for the layer
+        * @memberOf widgets/filter/filter
+        */
+        _createParametrizedExpression: function (outerSplitterArray, outerSplitBy) {
+            var outerSplitterNewArray = [], innerSplitterArray = [], innerSplitBy, returnedString, x = 0;
+            for (x = 0; x < outerSplitterArray.length; x++) {
+                if (outerSplitterArray[x].split(" OR ").length > 1) {
+                    innerSplitterArray = outerSplitterArray[x].split(" OR ");
+                    innerSplitBy = " OR ";
+                    returnedString = this._getSubParametrizedExpression(innerSplitterArray, innerSplitBy);
+                    if (lang.trim(returnedString) !== "") {
+                        outerSplitterNewArray.push(returnedString);
+                    }
+                } else if (outerSplitterArray[x].split(" AND ").length > 1) {
+                    innerSplitterArray = outerSplitterArray[x].split(" AND ");
+                    innerSplitBy = " AND ";
+                    returnedString = this._getSubParametrizedExpression(innerSplitterArray, innerSplitBy);
+                    if (lang.trim(returnedString) !== "") {
+                        outerSplitterNewArray.push(returnedString);
+                    }
+                } else {
+                    returnedString = this._getSubParametrizedExpression([outerSplitterArray[x]]);
+                    if (lang.trim(returnedString) !== "") {
+                        outerSplitterNewArray.push(returnedString);
+                    }
+                }
+            }
+
+            if (outerSplitterNewArray.length > 1) {
+                this._expression = outerSplitterNewArray.join(outerSplitBy);
+                this._expression = "(" + this._expression + ")";
+            } else {
+                // if expressionArray length is equal to 1 and not empty, else set the expression to '1=1'
+                this._expression = (outerSplitterNewArray[0] && outerSplitterNewArray[0] !== "") ?
+                    outerSplitterNewArray[0] : "1=1";
+            }
+        },
+
+        /**
+        *This function will set a sub part of definition expression for the layer
+        * @memberOf widgets/filter/filter
+        */
+        _getSubParametrizedExpression: function (innerSplitterArray, innerSplitBy) {
+            var innerSplitterNewArray = [], i = 0, j = 0, returningString = "";
+            var v1, v2, subExp, operator;
+            var numberFieldTypes = ["esriFieldTypeOID", "esriFieldTypeSmallInteger", "esriFieldTypeInteger",
+                "esriFieldTypeSingle", "esriFieldTypeDouble"];
+
+            for (i = 0; i < innerSplitterArray.length; i++) {
+                var d, m, p, v, lastIndex;
+                //skip date, include/exclude and blank/not blank filters
+                if (!(innerSplitterArray[i].includes("timestamp") || innerSplitterArray[i].match(" IS NOT NULL") ||
+                    innerSplitterArray[i].match(" IS NULL") || this._getOperatorName(innerSplitterArray[i]) === "IN" ||
+                    this._getOperatorName(innerSplitterArray[i]) === "NOT IN")) {
+                    if ((this._getOperatorName(innerSplitterArray[i]) === "BETWEEN") ||
+                        (this._getOperatorName(innerSplitterArray[i]) === "NOT BETWEEN")) {
+                        if (innerSplitBy === " AND ") {
+                            v1 = innerSplitterArray[i].split(" BETWEEN ")[1] ||
+                                innerSplitterArray[i].split(" NOT BETWEEN ")[1];
+                            v2 = innerSplitterArray[i + 1];
+                            var getFieldName = innerSplitterArray[i].substring(0, innerSplitterArray[i].indexOf(" "));
+                            var getFieldInfo = this.selectedOperationalLayer.getField(getFieldName);
+                            if (v1 && v2 && getFieldInfo && numberFieldTypes.indexOf(getFieldInfo.type) !== -1) {
+                                v1 = Number(v1) ? Number(v1) : v1;
+                                v2 = Number(v2) ? Number(v2) : v2;
+                            }
+                            if (getFieldInfo && v1 && v2) {
+                                operator = this._getOperatorNlsName(getFieldInfo, [v1, v2],
+                                    [innerSplitterArray[i], innerSplitterArray[i + 1]].join(innerSplitBy));
+                                subExp = this._createDefinitionInputEditorObj(getFieldInfo, [v1, v2], operator);
+                                this.inputs.push(subExp);
+                                innerSplitterNewArray.push(innerSplitterArray[i].replace(v1, "{" +
+                                    subExp.parameters[0].parameterId + "}"));
+                                innerSplitterNewArray.push(innerSplitterArray[i + 1].replace(v2, "{" +
+                                    subExp.parameters[1].parameterId + "}"));
+                            }
+                        } else {
+                            var getFieldName = innerSplitterArray[i].substring(0, innerSplitterArray[i].indexOf(" "));
+                            var getFieldInfo = this.selectedOperationalLayer.getField(getFieldName);
+                            v = innerSplitterArray[i].split(" BETWEEN ")[1].split(" AND ") ||
+                                innerSplitterArray[i].split(" NOT BETWEEN ")[1].split(" AND ");
+                            if (v && getFieldInfo && numberFieldTypes.indexOf(getFieldInfo.type) !== -1) {
+                                v = array.map(v, function (value) {
+                                    return Number(value) ? Number(value) : value;
+                                });
+                            }
+                            if (getFieldInfo && v) {
+                                operator = this._getOperatorNlsName(getFieldInfo, v, innerSplitterArray[i]);
+                                subExp = this._createDefinitionInputEditorObj(getFieldInfo, v, operator);
+                                this.inputs.push(subExp);
+                                innerSplitterArray[i] = innerSplitterArray[i].replace(v[0], "{" +
+                                    subExp.parameters[0].parameterId + "}");
+                                innerSplitterArray[i] = innerSplitterArray[i].replace(v[1], "{" +
+                                    subExp.parameters[1].parameterId + "}");
+                                innerSplitterNewArray.push(innerSplitterArray[i]);
+                            }
+                        }
+
+                    } else {
+                        //extracts field name
+                        var getFieldName = innerSplitterArray[i].substring(0, innerSplitterArray[i].indexOf(" "));
+                        var getFieldInfo = this.selectedOperationalLayer.getField(getFieldName);
+                        if (innerSplitterArray[i].indexOf("'") !== -1) {
+                            d = innerSplitterArray[i].indexOf("'");
+                            m = d;
+                            p = innerSplitterArray[i].lastIndexOf("'");
+                            v = innerSplitterArray[i].substring(m + 1, p);
+                            v = v.replace(/''/g, "'");
+                            innerSplitterArray[i] = getFieldName + " " + this._getOperatorName(innerSplitterArray[i]) +
+                                " " + "'" + v + "'";
+                            if (this._getOperatorName(innerSplitterArray[i]) === "LIKE" ||
+                                this._getOperatorName(innerSplitterArray[i]) === "NOT LIKE") {
+                                //remove % from value
+                                if (v.includes('%')) {
+                                    v = v.replace('%', '');
+                                    lastIndex = v.lastIndexOf('%');
+                                    if (lastIndex !== -1) {
+                                        v = v.substring(0, lastIndex);
+                                    }
+                                }
+                            }
+                            operator = this._getOperatorNlsName(getFieldInfo, [v], innerSplitterArray[i]);
+                            subExp = this._createDefinitionInputEditorObj(getFieldInfo, [v], operator);
+                            this.inputs.push(subExp);
+                            innerSplitterNewArray.push(innerSplitterArray[i].replace(v, "{" +
+                                subExp.parameters[0].parameterId + "}"));
+                        } else {
+                            v = innerSplitterArray[i].substring(innerSplitterArray[i].lastIndexOf(" ") + 1,
+                                innerSplitterArray[i].length);
+                            if (v && getFieldInfo && numberFieldTypes.indexOf(getFieldInfo.type) !== -1) {
+                                v = Number(v) ? Number(v) : v;
+                            }
+                            if (getFieldInfo && v) {
+                                operator = this._getOperatorNlsName(getFieldInfo, [v], innerSplitterArray[i]);
+                                subExp = this._createDefinitionInputEditorObj(getFieldInfo, [v], operator);
+                                this.inputs.push(subExp);
+                                innerSplitterNewArray.push(innerSplitterArray[i].replace(v, "{" +
+                                    subExp.parameters[0].parameterId + "}"));
+                            }
+                        }
+                    }
+                }
+                else {
+                    innerSplitterNewArray.push(innerSplitterArray[i]);
+                }
+            }
+            if (innerSplitBy) {
+                returningString = innerSplitterNewArray.join(innerSplitBy);
+            } else {
+                if (innerSplitterNewArray.length > 0) {
+                    returningString = innerSplitterNewArray[0];
+                } else {
+                    returningString = "";
+                }
+            }
+            return returningString;
+        },
+
+        /**
+        *This function is used to get condition name used in filter
+        * @memberOf widgets/filter/filter
+        */
+        _getOperatorName: function (subExp) {
+            var firstSpaceIndex = subExp.indexOf(" ");
+            var condition = subExp.substring(firstSpaceIndex + 1, subExp.indexOf(" ", firstSpaceIndex + 1));
+            if (condition === "NOT") {
+                condition = "NOT "
+                var firstNotIndex = subExp.indexOf("NOT");
+                firstSpaceIndex = subExp.indexOf(" ", firstNotIndex);
+                condition = condition + subExp.substring(firstSpaceIndex + 1, subExp.indexOf(" ", firstSpaceIndex + 1));
+            }
+            return condition;
+        },
+
+        /**
+        *This function is used to get nls string for condition used in filter 
+        * @memberOf widgets/filter/filter
+        */
+        _getOperatorNlsName: function (field, v, subExp) {
+            var operator = "";
+            var numberFieldTypes = ["esriFieldTypeOID", "esriFieldTypeSmallInteger", "esriFieldTypeInteger",
+                "esriFieldTypeSingle", "esriFieldTypeDouble"];
+            if (["esriFieldTypeString", "esriFieldTypeGUID"].indexOf(field.type) !== -1) {
+                if (subExp.match(field.name + " \x3d " + "'" + v[0] + "'")) {
+                    operator = this.appConfig.i18n.filter.operatorIs;
+                    return operator;
+                }
+                if (subExp.match(field.name + " \x3c\x3e " + "'" + v[0] + "'")) {
+                    operator = this.appConfig.i18n.filter.operatorIsNot;
+                    return operator;
+                }
+                if (subExp.match(field.name + " LIKE " + "'" + v[0] + "%'")) {
+                    operator = this.appConfig.i18n.filter.stringOperatorStartsWith;
+                    return operator;
+                }
+                if (subExp.match(field.name + " LIKE " + "'%" + v[0] + "'")) {
+                    operator = this.appConfig.i18n.filter.stringOperatorEndsWith;
+                    return operator;
+                }
+                if (subExp.match(field.name + " LIKE " + "'%" + v[0] + "%'")) {
+                    operator = this.appConfig.i18n.filter.stringOperatorContains;
+                    return operator;
+                }
+                if (subExp.match(field.name + " NOT LIKE " + "'%" + v[0] + "%'")) {
+                    operator = this.appConfig.i18n.filter.stringOperatorDoesNotContain;
+                    return operator;
+                }
+                if (subExp.match(field.name + " IS NULL")) {
+                    operator = this.appConfig.i18n.filter.operatorIsBlank;
+                    return operator;
+                }
+                if (subExp.match(field.name + " IS NOT NULL")) {
+                    operator = this.appConfig.i18n.filter.operatorIsNotBlank;
+                    return operator;
+                }
+            }
+
+            if (numberFieldTypes.indexOf(field.type) !== -1) {
+                if (!(this._getOperatorName(subExp) === "BETWEEN" || this._getOperatorName(subExp) === "NOT BETWEEN")) {
+                    if (subExp.match(field.name + " \x3d " + v[0])) {
+                        operator = this.appConfig.i18n.filter.operatorIs;
+                        return operator;
+                    }
+                    if (subExp.match(field.name + " \x3c\x3e " + v[0])) {
+                        operator = this.appConfig.i18n.filter.operatorIsNot;
+                        return operator;
+                    }
+                    if (subExp.match(field.name + " \x3e\x3d " + v[0])) {
+                        operator = this.appConfig.i18n.filter.numberOperatorIsAtLeast;
+                        return operator;
+                    }
+                    if (subExp.match(field.name + " \x3c " + v[0])) {
+                        operator = this.appConfig.i18n.filter.numberOperatorIsLessThan;
+                        return operator;
+                    }
+                    if (subExp.match(field.name + " \x3c\x3d " + v[0])) {
+                        operator = this.appConfig.i18n.filter.numberOperatorIsAtMost;
+                        return operator;
+                    }
+                    if (subExp.match(field.name + " \x3e " + v[0])) {
+                        operator = this.appConfig.i18n.filter.numberOperatorIsGreaterThan;
+                        return operator;
+                    }
+                    if (subExp.match(field.name + " IS NULL")) {
+                        operator = this.appConfig.i18n.filter.operatorIsBlank;
+                        return operator;
+                    }
+                    if (subExp.match(field.name + " IS NOT NULL")) {
+                        operator = this.appConfig.i18n.filter.operatorIsNotBlank;
+                        return operator;
+                    }
+                } else {
+                    if (subExp.match(field.name + " BETWEEN " + v[0] + " AND " + v[1])) {
+                        operator = this.appConfig.i18n.filter.numberOperatorIsBetween;
+                        return operator;
+                    }
+                    if (subExp.match(field.name + " NOT BETWEEN " + v[0] + " AND " + v[1])) {
+                        operator = this.appConfig.i18n.filter.numberOperatorIsNotBetween;
+                        return operator;
+                    }
+                }
+            }
+            return operator;
+        },
+
+        /**
+        *This function is used to create Definition Inputs
+        * @memberOf widgets/filter/filter
+        */
+        _createDefinitionInputEditorObj: function (fieldInfo, defaultValueArray, operator) {
+            var id = 0;
+            if (this.inputs.length > 0) {
+                id = this.inputs[this.inputs.length - 1].parameters;
+                id = id[id.length - 1].parameterId;
+            }
+            var obj = {
+                hint: "",
+                prompt: operator,
+                parameters: []
+            };
+            array.forEach(defaultValueArray, lang.hitch(this, function (v, i) {
+                obj.parameters.push({
+                    defaultValue: v,
+                    fieldName: fieldInfo.name,
+                    parameterId: this.inputs.length === 0 ? id : id + 1,
+                    type: fieldInfo.type
+                });
+                id = id + 1;
+            }));
+            return obj;
         },
 
         /**
@@ -250,8 +617,11 @@ define([
                 // initializing date picker instance
                 this._createDateField(container, dateFieldObj, displayColumn);
             }
-            hintFilterContainer = domConstruct.create("div", { "class": "esriCTHintFilterContainer" }, baseFilterOptionDiv);
-            domConstruct.create("div", { "innerHTML": "Hint: " + definitionEditorInput.hint }, hintFilterContainer);
+            //don't create hint container if hint is not available
+            if (definitionEditorInput.hint !== "") {
+                hintFilterContainer = domConstruct.create("div", { "class": "esriCTHintFilterContainer" }, baseFilterOptionDiv);
+                domConstruct.create("div", { "innerHTML": "Hint: " + definitionEditorInput.hint }, hintFilterContainer);
+            }
             // check active filter nodes
             this._checkFieldActiveNodes(displayColumn);
         },
@@ -1261,15 +1631,20 @@ define([
                 map(Function.prototype.call, String.prototype.trim);
 
             array.forEach(singleQuoteValueArr, lang.hitch(this, function (singleQuoteValue, index) {
-                var searchString, changeString, result, regex;
+                var searchString, changeString, result, regex, splittedArr;
                 regex = /'(.*)'/g;
                 result = regex.exec(singleQuoteValue);
                 if (result && result.length >= 2) {
-                    searchString = result[1];
-                    changeString = searchString.replace(/'/g, "''");
-                    currentExpression =
-                        currentExpression.replace(mainSplitArr[index],
-                            mainSplitArr[index].replace(searchString, changeString));
+                    //for include and exclude filters
+                    if (result[1].split("','").length > 1) {
+                        splittedArr = result[1].split("','");
+                    } else {
+                        searchString = result[1];
+                        changeString = searchString.replace(/'/g, "''");
+                        currentExpression =
+                            currentExpression.replace(mainSplitArr[index],
+                                mainSplitArr[index].replace(searchString, changeString));
+                    }
                 } else {
                     if (mainSplitArr[index].includes(isNotNullReplaceStr)) {
                         currentExpression =
