@@ -220,7 +220,10 @@ define([
         _getNewDefinitionExpression: function () {
             var layerObject, i, definitionExpression = null, searchDefinitionExpression;
             // After user search for a particular value that definition expression, including the default one if merged together and returned
-            if (this.itemInfo.itemData.applicationProperties && this.itemInfo.itemData.applicationProperties.viewing.search && this.itemInfo.itemData.applicationProperties.viewing.search.enabled) {
+            if (this.itemInfo.itemData.applicationProperties &&
+                this.itemInfo.itemData.applicationProperties.viewing.search &&
+                this.itemInfo.itemData.applicationProperties.viewing.search.enabled &&
+                this.itemInfo.itemData.applicationProperties.viewing.search.layers) {
                 for (i = 0; i < this.itemInfo.itemData.applicationProperties.viewing.search.layers.length; i++) {
                     if (this.selectedOperationalLayerID === this.itemInfo.itemData.applicationProperties.viewing.search.layers[i].id) {
                         layerObject = this.itemInfo.itemData.applicationProperties.viewing.search.layers[i];
@@ -298,7 +301,11 @@ define([
             domClass.add(this.searchOptions, "esriCTHidden");
             this.searchBox.value = "";
             this._mixinSearchParameter(searchParameter);
-            if (this.itemInfo && this.itemInfo.itemData.applicationProperties && this.itemInfo.itemData.applicationProperties.viewing && this.itemInfo.itemData.applicationProperties.viewing.search && this.itemInfo.itemData.applicationProperties.viewing.search.enabled) {
+            if (this.itemInfo && this.itemInfo.itemData.applicationProperties &&
+                this.itemInfo.itemData.applicationProperties.viewing &&
+                this.itemInfo.itemData.applicationProperties.viewing.search &&
+                this.itemInfo.itemData.applicationProperties.viewing.search.enabled &&
+                this.itemInfo.itemData.applicationProperties.viewing.search.layers) {
                 for (i = 0; i < this.itemInfo.itemData.applicationProperties.viewing.search.layers.length; i++) {
                     //if selected layer is enabled for search set the enableSearch flag to true
                     if (this.selectedOperationalLayerID === this.itemInfo.itemData.applicationProperties.viewing.search.layers[i].id) {
