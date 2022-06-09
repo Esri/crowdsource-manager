@@ -109,28 +109,38 @@ define([
         },
 
         /**
-        *This function is used to display filter icon for new webmap layers
+        * This function is used to display filter icon for new webmap layers
         * @memberOf widgets/filter/filter
         */
         _toggleFilterIcon: function () {
             if (this.itemInfo.itemData.authoringApp === "ArcGISMapViewer") {
                 array.forEach(this.appConfig._filterObject.inputs, lang.hitch(this, function (input, index) {
-                    filterIcon = query(".esriCTFilterIcon." + input.parameters[0].fieldName)[0];
-                    if (filterIcon && domClass.contains(filterIcon, "esriCTHiddenColumn")) {
-                        domClass.remove(filterIcon, "esriCTHiddenColumn");
-                        if ((this.appConfig && this.appConfig.enableFilter) ||
-                            (this.appConfig._filterObject && this.appConfig._filterObject.inputs[index] &&
-                                this.appConfig._filterObject.inputs[index].parameters[0].enableFilter)) {
-                            if (filterIcon && domClass.contains(filterIcon, "esriCTDisableFilterIcon")) {
-                                domClass.replace(filterIcon, "esriCTFilterIcon", "esriCTDisableFilterIcon");
-                            }
-                        } else {
-                            if (filterIcon && domClass.contains(filterIcon, "esriCTFilterIcon")) {
-                                domClass.replace(filterIcon, "esriCTDisableFilterIcon", "esriCTFilterIcon");
-                            }
-                        }
-                    }
+                    var filterIconDivOriginal = query(".esriCTFilterIcon." + input.parameters[0].fieldName)[0];
+                    var filterIconDiv = query(".esriCTFilterIcon." + input.parameters[0].fieldName)[1];
+                    this._toggleFilterIconClasses(filterIconDivOriginal, index);
+                    this._toggleFilterIconClasses(filterIconDiv, index);
                 }));
+            }
+        },
+
+        /**
+        * This function is used to toggle filter icon classes based on conditions
+        * @memberOf widgets/filter/filter
+        */
+        _toggleFilterIconClasses: function (filterIcon, index) {
+            if (filterIcon && domClass.contains(filterIcon, "esriCTHiddenColumn")) {
+                domClass.remove(filterIcon, "esriCTHiddenColumn");
+                if ((this.appConfig && this.appConfig.enableFilter) ||
+                    (this.appConfig._filterObject && this.appConfig._filterObject.inputs[index] &&
+                        this.appConfig._filterObject.inputs[index].parameters[0].enableFilter)) {
+                    if (filterIcon && domClass.contains(filterIcon, "esriCTDisableFilterIcon")) {
+                        domClass.replace(filterIcon, "esriCTFilterIcon", "esriCTDisableFilterIcon");
+                    }
+                } else {
+                    if (filterIcon && domClass.contains(filterIcon, "esriCTFilterIcon")) {
+                        domClass.replace(filterIcon, "esriCTDisableFilterIcon", "esriCTFilterIcon");
+                    }
+                }
             }
         },
 
