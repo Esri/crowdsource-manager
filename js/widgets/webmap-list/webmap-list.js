@@ -918,7 +918,7 @@ define([
          */
         _checkDisplayPropertyOfFields: function (popupInfo, fields) {
             var i, j;
-            if (!popupInfo) {
+            if (!popupInfo || !popupInfo.fieldInfos) {
                 return false;
             }
             for (i = 0; i < popupInfo.fieldInfos.length; i++) {
