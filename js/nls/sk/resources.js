@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "a",
     "filterInEditModeAlert": "Filtre nie sú k dispozícii počas úprav",
     "dropdownSelectOption": "Vybrať",
-    "filterInShowSelectedEditModeAlert": "Filtre nie sú k dispozícii v režime „Zobraziť vybrané“."
+    "filterInShowSelectedEditModeAlert": "Filtre nie sú k dispozícii v režime „Zobraziť vybrané“.",
+    "operatorIs": "Je",
+    "operatorIsNot": "Nie je",
+    "stringOperatorStartsWith": "Začína s",
+    "stringOperatorEndsWith": "Končí na",
+    "stringOperatorContains": "Obsahuje",
+    "stringOperatorDoesNotContain": "Neobsahuje",
+    "operatorIsBlank": "Je prázdne",
+    "operatorIsNotBlank": "Nie je prázdne",
+    "numberOperatorIsAtLeast": "Je najmenej",
+    "numberOperatorIsLessThan": "Je menej ako",
+    "numberOperatorIsAtMost": "Je najviac",
+    "numberOperatorIsGreaterThan": "Je väčší ako",
+    "numberOperatorIsBetween": "Je medzi",
+    "numberOperatorIsNotBetween": "Nie je medzi"
   },
   "detailsPanel": {
     "editContentText": "Upraviť záznam"

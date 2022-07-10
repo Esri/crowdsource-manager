@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "és",
     "filterInEditModeAlert": "A szűrők szerkesztés közben nem érhetők el.",
     "dropdownSelectOption": "Kiválasztás",
-    "filterInShowSelectedEditModeAlert": "A szűrők a „Kiválasztott elemek megjelenítése” módban nem érhetők el."
+    "filterInShowSelectedEditModeAlert": "A szűrők a „Kiválasztott elemek megjelenítése” módban nem érhetők el.",
+    "operatorIs": "Ez",
+    "operatorIsNot": "Nem",
+    "stringOperatorStartsWith": "Ezzel kezdődik",
+    "stringOperatorEndsWith": "Erre végződik",
+    "stringOperatorContains": "Tartalmazza",
+    "stringOperatorDoesNotContain": "Nem tartalmazza",
+    "operatorIsBlank": "Üres",
+    "operatorIsNotBlank": "Nem üres",
+    "numberOperatorIsAtLeast": "Legalább",
+    "numberOperatorIsLessThan": "Kisebb, mint",
+    "numberOperatorIsAtMost": "Legfeljebb",
+    "numberOperatorIsGreaterThan": "Nagyobb, mint",
+    "numberOperatorIsBetween": "Ezek között",
+    "numberOperatorIsNotBetween": "Nem ezek között"
   },
   "detailsPanel": {
     "editContentText": "Rekord szerkesztése"

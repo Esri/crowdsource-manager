@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "และ",
     "filterInEditModeAlert": "ฟิลเตอร์ไม่ทำงานเมื่อมีการแก้ไข",
     "dropdownSelectOption": "เลือก",
-    "filterInShowSelectedEditModeAlert": "ฟิลเตอร์ไม่ทำงาน เมื่ออยู่ในโหมดแสดงการเลือก"
+    "filterInShowSelectedEditModeAlert": "ฟิลเตอร์ไม่ทำงาน เมื่ออยู่ในโหมดแสดงการเลือก",
+    "operatorIs": "เป็น",
+    "operatorIsNot": "ไม่",
+    "stringOperatorStartsWith": "เริ่มต้นด้วย",
+    "stringOperatorEndsWith": "ลงท้ายด้วย",
+    "stringOperatorContains": "ประกอบด้วย",
+    "stringOperatorDoesNotContain": "ไม่มีอยู่",
+    "operatorIsBlank": "ว่าง",
+    "operatorIsNotBlank": "ไม่ว่าง",
+    "numberOperatorIsAtLeast": "มีอย่างน้อย",
+    "numberOperatorIsLessThan": "น้อยกว่า",
+    "numberOperatorIsAtMost": "มีอย่างมาก",
+    "numberOperatorIsGreaterThan": "มากกว่า",
+    "numberOperatorIsBetween": "อยู่ระหว่าง",
+    "numberOperatorIsNotBetween": "ไม่อยู่ระหว่าง"
   },
   "detailsPanel": {
     "editContentText": "แก้ไขเรคคอร์ท"

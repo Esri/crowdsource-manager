@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "dan",
     "filterInEditModeAlert": "Filter tidak tersedia saat pengeditan.",
     "dropdownSelectOption": "Pilih",
-    "filterInShowSelectedEditModeAlert": "Filter tidak tersedia di mode 'Show Selected' (Tampilkan yang Dipilih)."
+    "filterInShowSelectedEditModeAlert": "Filter tidak tersedia di mode 'Show Selected' (Tampilkan yang Dipilih).",
+    "operatorIs": "Adalah",
+    "operatorIsNot": "Tidak",
+    "stringOperatorStartsWith": "Mulai dengan",
+    "stringOperatorEndsWith": "Akhiri dengan",
+    "stringOperatorContains": "Berisi",
+    "stringOperatorDoesNotContain": "Tidak berisi",
+    "operatorIsBlank": "Kosong",
+    "operatorIsNotBlank": "Tidak kosong",
+    "numberOperatorIsAtLeast": "Paling sedikit",
+    "numberOperatorIsLessThan": "Kurang dari",
+    "numberOperatorIsAtMost": "Paling banyak",
+    "numberOperatorIsGreaterThan": "Lebih besar dari",
+    "numberOperatorIsBetween": "Ada di antara",
+    "numberOperatorIsNotBetween": "Tidak ada di antara"
   },
   "detailsPanel": {
     "editContentText": "Edit rekaman (record)"

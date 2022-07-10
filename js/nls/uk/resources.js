@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "та",
     "filterInEditModeAlert": "Фільтри недоступні під час редагування.",
     "dropdownSelectOption": "Вибрати",
-    "filterInShowSelectedEditModeAlert": "Фільтри недоступні у режимі «Показати вибрані»."
+    "filterInShowSelectedEditModeAlert": "Фільтри недоступні у режимі «Показати вибрані».",
+    "operatorIs": "Становить",
+    "operatorIsNot": "Не становить",
+    "stringOperatorStartsWith": "Починається з",
+    "stringOperatorEndsWith": "Закінчується на",
+    "stringOperatorContains": "Містить",
+    "stringOperatorDoesNotContain": "Не містить",
+    "operatorIsBlank": "Порожнє",
+    "operatorIsNotBlank": "Не порожнє",
+    "numberOperatorIsAtLeast": "Щонайменше",
+    "numberOperatorIsLessThan": "Менше ніж",
+    "numberOperatorIsAtMost": "Щонайбільше",
+    "numberOperatorIsGreaterThan": "Більше ніж",
+    "numberOperatorIsBetween": "Між",
+    "numberOperatorIsNotBetween": "Не між"
   },
   "detailsPanel": {
     "editContentText": "Редагувати запис"

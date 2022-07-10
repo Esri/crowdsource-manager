@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "ir",
     "filterInEditModeAlert": "Redaguojant filtrai nepasiekiami.",
     "dropdownSelectOption": "Pasirinkite",
-    "filterInShowSelectedEditModeAlert": "Naudojant režimą „Rodyti pažymėtus“, filtrai nepasiekiami."
+    "filterInShowSelectedEditModeAlert": "Naudojant režimą „Rodyti pažymėtus“, filtrai nepasiekiami.",
+    "operatorIs": "Yra",
+    "operatorIsNot": "Nėra",
+    "stringOperatorStartsWith": "Prasideda su",
+    "stringOperatorEndsWith": "Baigiasi su",
+    "stringOperatorContains": "Apima",
+    "stringOperatorDoesNotContain": "Neapima",
+    "operatorIsBlank": "Yra tuščia",
+    "operatorIsNotBlank": "Nėra tuščia",
+    "numberOperatorIsAtLeast": "Yra mažiausiai",
+    "numberOperatorIsLessThan": "Yra mažiau nei",
+    "numberOperatorIsAtMost": "Yra daugiausiai",
+    "numberOperatorIsGreaterThan": "Yra daugiau nei",
+    "numberOperatorIsBetween": "Yra tarp",
+    "numberOperatorIsNotBetween": "Nėra tarp"
   },
   "detailsPanel": {
     "editContentText": "Redaguoti įrašą"
