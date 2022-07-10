@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "un",
     "filterInEditModeAlert": "Rediģēšanas laikā filtri nav pieejami.",
     "dropdownSelectOption": "Izvēlēties",
-    "filterInShowSelectedEditModeAlert": "Režīmā 'Rādīt izvēlētos' filtri nav pieejami."
+    "filterInShowSelectedEditModeAlert": "Režīmā 'Rādīt izvēlētos' filtri nav pieejami.",
+    "operatorIs": "Ir",
+    "operatorIsNot": "Nav",
+    "stringOperatorStartsWith": "Sākas ar",
+    "stringOperatorEndsWith": "Beidzas ar",
+    "stringOperatorContains": "Satur",
+    "stringOperatorDoesNotContain": "Nesatur",
+    "operatorIsBlank": "Ir tukšs",
+    "operatorIsNotBlank": "Nav tukšs",
+    "numberOperatorIsAtLeast": "Ir vismaz",
+    "numberOperatorIsLessThan": "Ir mazāks nekā",
+    "numberOperatorIsAtMost": "Ir ne vairāk kā",
+    "numberOperatorIsGreaterThan": "Ir lielāks par",
+    "numberOperatorIsBetween": "Ir starp",
+    "numberOperatorIsNotBetween": "Nav starp"
   },
   "detailsPanel": {
     "editContentText": "Rediģēt ierakstu"

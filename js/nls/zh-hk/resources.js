@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "和",
     "filterInEditModeAlert": "編輯時無法使用篩選器。",
     "dropdownSelectOption": "選擇",
-    "filterInShowSelectedEditModeAlert": "無法在「顯示所選」模式中使用篩選器。"
+    "filterInShowSelectedEditModeAlert": "無法在「顯示所選」模式中使用篩選器。",
+    "operatorIs": "等於",
+    "operatorIsNot": "不是",
+    "stringOperatorStartsWith": "開頭為",
+    "stringOperatorEndsWith": "結尾是",
+    "stringOperatorContains": "包含",
+    "stringOperatorDoesNotContain": "不包含",
+    "operatorIsBlank": "為空白",
+    "operatorIsNotBlank": "非空白",
+    "numberOperatorIsAtLeast": "至少",
+    "numberOperatorIsLessThan": "小於",
+    "numberOperatorIsAtMost": "至多",
+    "numberOperatorIsGreaterThan": "大於",
+    "numberOperatorIsBetween": "介於",
+    "numberOperatorIsNotBetween": "不介於"
   },
   "detailsPanel": {
     "editContentText": "編輯記錄"

@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "ja",
     "filterInEditModeAlert": "Suodattimet eivät ole käytettävissä muokkauksen aikana.",
     "dropdownSelectOption": "Valitse",
-    "filterInShowSelectedEditModeAlert": "Suodattimet eivät ole käytettävissä Näytä valitut kohteet -tilassa."
+    "filterInShowSelectedEditModeAlert": "Suodattimet eivät ole käytettävissä Näytä valitut kohteet -tilassa.",
+    "operatorIs": "On",
+    "operatorIsNot": "Ei ole",
+    "stringOperatorStartsWith": "Alkaa merkillä",
+    "stringOperatorEndsWith": "Päättyy merkkiin",
+    "stringOperatorContains": "Sisältää",
+    "stringOperatorDoesNotContain": "Ei sisällä",
+    "operatorIsBlank": "On tyhjä",
+    "operatorIsNotBlank": "Ei ole tyhjä",
+    "numberOperatorIsAtLeast": "On vähintään",
+    "numberOperatorIsLessThan": "On pienempi kuin",
+    "numberOperatorIsAtMost": "On enintään",
+    "numberOperatorIsGreaterThan": "On suurempi kuin",
+    "numberOperatorIsBetween": "On väliltä",
+    "numberOperatorIsNotBetween": "Ei ole väliltä"
   },
   "detailsPanel": {
     "editContentText": "Muokkaa tietuetta"

@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "및",
     "filterInEditModeAlert": "편집 중에 필터를 사용할 수 없습니다.",
     "dropdownSelectOption": "선택",
-    "filterInShowSelectedEditModeAlert": "'선택한 항목 보기' 모드에서는 필터를 사용할 수 없습니다."
+    "filterInShowSelectedEditModeAlert": "'선택한 항목 보기' 모드에서는 필터를 사용할 수 없습니다.",
+    "operatorIs": "다음과 같음",
+    "operatorIsNot": "다음과 같지 않음",
+    "stringOperatorStartsWith": "다음으로 시작함",
+    "stringOperatorEndsWith": "다음으로 끝남",
+    "stringOperatorContains": "포함함",
+    "stringOperatorDoesNotContain": "다음을 포함하지 않음",
+    "operatorIsBlank": "비어 있음",
+    "operatorIsNotBlank": "비어 있지 않음",
+    "numberOperatorIsAtLeast": "다음 이상임",
+    "numberOperatorIsLessThan": "다음보다 작음",
+    "numberOperatorIsAtMost": "다음 이하임",
+    "numberOperatorIsGreaterThan": "다음보다 큼",
+    "numberOperatorIsBetween": "다음 사이에 속함",
+    "numberOperatorIsNotBetween": "다음 사이에 속하지 않음"
   },
   "detailsPanel": {
     "editContentText": "레코드 편집"

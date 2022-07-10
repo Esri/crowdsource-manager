@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "và",
     "filterInEditModeAlert": "Bộ lọc không khả dụng khi đang chỉnh sửa.",
     "dropdownSelectOption": "Chọn",
-    "filterInShowSelectedEditModeAlert": "Bộ lọc không khả dụng trong chế độ \"Hiện Mục được Chọn\"."
+    "filterInShowSelectedEditModeAlert": "Bộ lọc không khả dụng trong chế độ \"Hiện Mục được Chọn\".",
+    "operatorIs": "Là",
+    "operatorIsNot": "Không phải",
+    "stringOperatorStartsWith": "Bắt đầu với",
+    "stringOperatorEndsWith": "Kết thúc bằng",
+    "stringOperatorContains": "Chứa",
+    "stringOperatorDoesNotContain": "Không chứa",
+    "operatorIsBlank": "Trống",
+    "operatorIsNotBlank": "Không trống",
+    "numberOperatorIsAtLeast": "Tối thiểu",
+    "numberOperatorIsLessThan": "Nhỏ hơn",
+    "numberOperatorIsAtMost": "Tối đa",
+    "numberOperatorIsGreaterThan": "Lớn hơn",
+    "numberOperatorIsBetween": "Nằm giữa",
+    "numberOperatorIsNotBetween": "Không nằm giữa"
   },
   "detailsPanel": {
     "editContentText": "Chỉnh sửa bản ghi"

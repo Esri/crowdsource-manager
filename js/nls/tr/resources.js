@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "ve",
     "filterInEditModeAlert": "Düzenleme sırasında filtre kullanılamaz.",
     "dropdownSelectOption": "Seç",
-    "filterInShowSelectedEditModeAlert": "'Seçileni Göster' modunda filtre kullanılamaz."
+    "filterInShowSelectedEditModeAlert": "'Seçileni Göster' modunda filtre kullanılamaz.",
+    "operatorIs": "Olan",
+    "operatorIsNot": "Değil",
+    "stringOperatorStartsWith": "Şununla başlar",
+    "stringOperatorEndsWith": "Şununla biter",
+    "stringOperatorContains": "İçerir",
+    "stringOperatorDoesNotContain": "Şunu içermez",
+    "operatorIsBlank": "Boş",
+    "operatorIsNotBlank": "Boş değil",
+    "numberOperatorIsAtLeast": "En az",
+    "numberOperatorIsLessThan": "Şundan daha az",
+    "numberOperatorIsAtMost": "En fazla",
+    "numberOperatorIsGreaterThan": "Şundan büyük",
+    "numberOperatorIsBetween": "Arasında",
+    "numberOperatorIsNotBetween": "Arasında değil"
   },
   "detailsPanel": {
     "editContentText": "Kaydı düzenle"

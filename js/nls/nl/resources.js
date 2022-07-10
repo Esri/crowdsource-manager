@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "en",
     "filterInEditModeAlert": "Filters niet beschikbaar tijdens het bewerken.",
     "dropdownSelectOption": "Selecteren",
-    "filterInShowSelectedEditModeAlert": "Filters niet beschikbaar in modus 'Geef geselecteerde weer'."
+    "filterInShowSelectedEditModeAlert": "Filters niet beschikbaar in modus 'Geef geselecteerde weer'.",
+    "operatorIs": "Is",
+    "operatorIsNot": "Is niet",
+    "stringOperatorStartsWith": "Begint met",
+    "stringOperatorEndsWith": "Eindigt met",
+    "stringOperatorContains": "Bevat",
+    "stringOperatorDoesNotContain": "Bevat niet",
+    "operatorIsBlank": "Is leeg",
+    "operatorIsNotBlank": "Is niet leeg",
+    "numberOperatorIsAtLeast": "Is minimaal",
+    "numberOperatorIsLessThan": "Is kleiner dan",
+    "numberOperatorIsAtMost": "Is maximaal",
+    "numberOperatorIsGreaterThan": "Is groter dan",
+    "numberOperatorIsBetween": "Ligt tussen",
+    "numberOperatorIsNotBetween": "Ligt niet tussen"
   },
   "detailsPanel": {
     "editContentText": "Record bewerken"

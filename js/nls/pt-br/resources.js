@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "e",
     "filterInEditModeAlert": "Filtros indisponíveis durante edição.",
     "dropdownSelectOption": "Selecionar",
-    "filterInShowSelectedEditModeAlert": "Filtros indisponíveis no modo 'Mostrar Selecionado'."
+    "filterInShowSelectedEditModeAlert": "Filtros indisponíveis no modo 'Mostrar Selecionado'.",
+    "operatorIs": "É",
+    "operatorIsNot": "Não é",
+    "stringOperatorStartsWith": "Iniciar com",
+    "stringOperatorEndsWith": "Fnaliza com",
+    "stringOperatorContains": "Contém",
+    "stringOperatorDoesNotContain": "Não contém",
+    "operatorIsBlank": "Está em branco",
+    "operatorIsNotBlank": "Não está em branco",
+    "numberOperatorIsAtLeast": "É pelo menos",
+    "numberOperatorIsLessThan": "É menos do que",
+    "numberOperatorIsAtMost": "É na maioria",
+    "numberOperatorIsGreaterThan": "É maior que",
+    "numberOperatorIsBetween": "Está entre",
+    "numberOperatorIsNotBetween": "Não está entre"
   },
   "detailsPanel": {
     "editContentText": "Editar registro"

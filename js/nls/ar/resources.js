@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "و",
     "filterInEditModeAlert": "لا تتوفر عوامل التصفية أثناء التحرير.",
     "dropdownSelectOption": "تحديد",
-    "filterInShowSelectedEditModeAlert": "لا تتوفر عوامل التصفية في وضع 'العرض المُحدد'"
+    "filterInShowSelectedEditModeAlert": "لا تتوفر عوامل التصفية في وضع 'العرض المُحدد'",
+    "operatorIs": "يكون",
+    "operatorIsNot": "ليس",
+    "stringOperatorStartsWith": "يبدأ بـ",
+    "stringOperatorEndsWith": "ينتهي بـ",
+    "stringOperatorContains": "يتضمن",
+    "stringOperatorDoesNotContain": "لا يحتوي على",
+    "operatorIsBlank": "خالٍ",
+    "operatorIsNotBlank": "غير خالٍ",
+    "numberOperatorIsAtLeast": "على الأقل",
+    "numberOperatorIsLessThan": "أقل من",
+    "numberOperatorIsAtMost": "على الأكثر",
+    "numberOperatorIsGreaterThan": "أكبر من",
+    "numberOperatorIsBetween": "بين",
+    "numberOperatorIsNotBetween": "ليس بين"
   },
   "detailsPanel": {
     "editContentText": "تحرير التسجيل"

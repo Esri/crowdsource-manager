@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "ja",
     "filterInEditModeAlert": "Filtrid pole töötlemise ajal saadaval.",
     "dropdownSelectOption": "Vali",
-    "filterInShowSelectedEditModeAlert": "Filtrid pole režiimis „Kuva valitud” saadaval."
+    "filterInShowSelectedEditModeAlert": "Filtrid pole režiimis „Kuva valitud” saadaval.",
+    "operatorIs": "On",
+    "operatorIsNot": "Ei ole",
+    "stringOperatorStartsWith": "Algab:",
+    "stringOperatorEndsWith": "Lõpeb:",
+    "stringOperatorContains": "Sisaldab",
+    "stringOperatorDoesNotContain": "Ei sisalda",
+    "operatorIsBlank": "On tühi",
+    "operatorIsNotBlank": "Ei ole tühi",
+    "numberOperatorIsAtLeast": "On vähemalt",
+    "numberOperatorIsLessThan": "On vähem kui",
+    "numberOperatorIsAtMost": "On kuni",
+    "numberOperatorIsGreaterThan": "On suurem kui",
+    "numberOperatorIsBetween": "On vahemikus",
+    "numberOperatorIsNotBetween": "Ei ole vahemikus"
   },
   "detailsPanel": {
     "editContentText": "Muuda kirjet"

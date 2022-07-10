@@ -153,7 +153,21 @@ define({
     "andText": "и",
     "filterInEditModeAlert": "Филтрите не са налични при редактиране.",
     "dropdownSelectOption": "Избор",
-    "filterInShowSelectedEditModeAlert": "Филтрите не са налични в режим „Показване на избраните“."
+    "filterInShowSelectedEditModeAlert": "Филтрите не са налични в режим „Показване на избраните“.",
+    "operatorIs": "е",
+    "operatorIsNot": "Не е",
+    "stringOperatorStartsWith": "Започва с",
+    "stringOperatorEndsWith": "Завършва на",
+    "stringOperatorContains": "Съдържа",
+    "stringOperatorDoesNotContain": "Не съдържа",
+    "operatorIsBlank": "е празно",
+    "operatorIsNotBlank": "не е празно",
+    "numberOperatorIsAtLeast": "е най-малко",
+    "numberOperatorIsLessThan": "е по-малко от",
+    "numberOperatorIsAtMost": "е най-много",
+    "numberOperatorIsGreaterThan": "е по-голямо от",
+    "numberOperatorIsBetween": "е между",
+    "numberOperatorIsNotBetween": "не е между"
   },
   "detailsPanel": {
     "editContentText": "Редактиране на запис"

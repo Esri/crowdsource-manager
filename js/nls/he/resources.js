@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "וגם",
     "filterInEditModeAlert": "מסננים אינם זמינים בעת עריכה.",
     "dropdownSelectOption": "בחר",
-    "filterInShowSelectedEditModeAlert": "מסננים אינם זמינים במצב 'הצג נבחרים'."
+    "filterInShowSelectedEditModeAlert": "מסננים אינם זמינים במצב 'הצג נבחרים'.",
+    "operatorIs": "הוא",
+    "operatorIsNot": "אינו",
+    "stringOperatorStartsWith": "מתחיל ב-",
+    "stringOperatorEndsWith": "מסתיים ב-",
+    "stringOperatorContains": "מכיל",
+    "stringOperatorDoesNotContain": "לא מכיל",
+    "operatorIsBlank": "הוא ריק",
+    "operatorIsNotBlank": "הוא לא ריק",
+    "numberOperatorIsAtLeast": "הוא לפחות",
+    "numberOperatorIsLessThan": "הוא פחות מ-",
+    "numberOperatorIsAtMost": "הוא הכי הרבה",
+    "numberOperatorIsGreaterThan": "הוא גדול מ-",
+    "numberOperatorIsBetween": "הוא בין",
+    "numberOperatorIsNotBetween": "הוא לא בין"
   },
   "detailsPanel": {
     "editContentText": "ערוך רשומה"

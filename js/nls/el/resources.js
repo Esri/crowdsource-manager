@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "και",
     "filterInEditModeAlert": "Τα φίλτρα δεν είναι διαθέσιμα κατά την επεξεργασία.",
     "dropdownSelectOption": "Επιλογή",
-    "filterInShowSelectedEditModeAlert": "Τα φίλτρα δεν είναι διαθέσιμα στη λειτουργία \"Εμφάνιση επιλεγμένων\"."
+    "filterInShowSelectedEditModeAlert": "Τα φίλτρα δεν είναι διαθέσιμα στη λειτουργία \"Εμφάνιση επιλεγμένων\".",
+    "operatorIs": "Είναι",
+    "operatorIsNot": "Δεν ειναι",
+    "stringOperatorStartsWith": "Αρχίζει με",
+    "stringOperatorEndsWith": "Τελειώνει με",
+    "stringOperatorContains": "Περιέχει",
+    "stringOperatorDoesNotContain": "Δεν περιέχει",
+    "operatorIsBlank": "Είναι κενό",
+    "operatorIsNotBlank": "Δεν είναι κενό",
+    "numberOperatorIsAtLeast": "Είναι τουλάχιστον",
+    "numberOperatorIsLessThan": "Είναι μικρότερο από",
+    "numberOperatorIsAtMost": "Είναι το μέγιστο",
+    "numberOperatorIsGreaterThan": "Είναι μεγαλύτερο από",
+    "numberOperatorIsBetween": "Είναι μεταξύ",
+    "numberOperatorIsNotBetween": "Δεν είναι μεταξύ"
   },
   "detailsPanel": {
     "editContentText": "Επεξεργασία εγγραφής"
