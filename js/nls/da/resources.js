@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "og",
     "filterInEditModeAlert": "Filtre er utilgængelige under redigering.",
     "dropdownSelectOption": "Vælg",
-    "filterInShowSelectedEditModeAlert": "Filtre er utilgængelige i 'Vis udvalgte'-tilstand."
+    "filterInShowSelectedEditModeAlert": "Filtre er utilgængelige i 'Vis udvalgte'-tilstand.",
+    "operatorIs": "Er",
+    "operatorIsNot": "Er ikke",
+    "stringOperatorStartsWith": "Starter med",
+    "stringOperatorEndsWith": "Slutter med",
+    "stringOperatorContains": "Indeholder",
+    "stringOperatorDoesNotContain": "Indeholder ikke",
+    "operatorIsBlank": "Er tom",
+    "operatorIsNotBlank": "Er ikke tom",
+    "numberOperatorIsAtLeast": "Er mindst",
+    "numberOperatorIsLessThan": "Er mindre end",
+    "numberOperatorIsAtMost": "Er højst",
+    "numberOperatorIsGreaterThan": "Er større end",
+    "numberOperatorIsBetween": "Er mellem",
+    "numberOperatorIsNotBetween": "Er ikke mellem"
   },
   "detailsPanel": {
     "editContentText": "Redigér post"

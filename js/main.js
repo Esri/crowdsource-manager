@@ -630,6 +630,7 @@ define([
                 setTimeout(lang.hitch(this, function () {
                     ApplicationUtils.showLoadingIndicator();
                     ApplicationUtils.hideOverlayContainer();
+                    this._manualRefreshDataObj = {};
                     this._reorderLayers = true;
                     this._initialLoad = true;
                     $(".esriCTSignOutOption").addClass("esriCTHidden");
@@ -1048,7 +1049,8 @@ define([
                 }
 
             }
-            if (this.appConfig.enableFilter || !opLayerInfo.definitionEditor) {
+            if (this.appConfig.enableFilter || (!opLayerInfo.definitionEditor &&
+                this._itemInfo.itemData.authoringApp === "WebMapViewer")) {
                 //set definition expression configured in webmap
                 if (opLayerInfo.layerDefinition && opLayerInfo.layerDefinition.definitionExpression) {
                     existingDefinitionExpression = opLayerInfo.layerDefinition.definitionExpression;
@@ -1243,7 +1245,7 @@ define([
                 "appUtils": ApplicationUtils,
                 "selectedOperationalLayer": this._refinedOperationalLayer,
                 "isManualRefreshedClicked": this._isManualRefreshedClicked,
-                "manualRefreshDataObj": this._manualRefreshDataObj,
+                "manualRefreshDataObj": lang.clone(this._manualRefreshDataObj),
                 "updatedFeature": this.updatedFeature,
                 "isFilterRefreshClicked": this._isFilterRefreshClicked,
                 "filterRefreshDataObj": this._filterRefreshDataObj
@@ -2047,25 +2049,27 @@ define([
          */
         _extractStaticExpression: function (opLayerInfo) {
             var arrayList = [], parameterizedExpression, expressionArray = [], expressionValue, andExpression = false, newExpression = "";
-            parameterizedExpression = opLayerInfo.definitionEditor.parameterizedExpression;
-            // split and check if multiple filters are applied
-            if (parameterizedExpression.split(") AND (").length > 1) {
-                // if the expression is an 'ALL' expression
-                andExpression = true;
-                // if 'yes' then slice substring to set values accordingly
-                expressionValue = parameterizedExpression.substring(1, (parameterizedExpression.length - 1));
-                // split the parameterizedExpression to set values to set current definition expression
-                arrayList = expressionValue.split(") AND (");
-            } else if (parameterizedExpression.split(") OR (").length > 1) {
-                // if the expression is an 'ANY' expression
-                andExpression = false;
-                // if 'yes' then slice substring to set values accordingly
-                expressionValue = parameterizedExpression.substring(1, (parameterizedExpression.length - 1));
-                // split the parameterizedExpression to set values to set current definition expression
-                arrayList = expressionValue.split(") OR (");
-            } else {
-                // if it is a single parameter expression
-                arrayList[0] = parameterizedExpression;
+            if (opLayerInfo.definitionEditor && opLayerInfo.definitionEditor.parameterizedExpression) {
+                parameterizedExpression = opLayerInfo.definitionEditor.parameterizedExpression;
+                // split and check if multiple filters are applied
+                if (parameterizedExpression.split(") AND (").length > 1) {
+                    // if the expression is an 'ALL' expression
+                    andExpression = true;
+                    // if 'yes' then slice substring to set values accordingly
+                    expressionValue = parameterizedExpression.substring(1, (parameterizedExpression.length - 1));
+                    // split the parameterizedExpression to set values to set current definition expression
+                    arrayList = expressionValue.split(") AND (");
+                } else if (parameterizedExpression.split(") OR (").length > 1) {
+                    // if the expression is an 'ANY' expression
+                    andExpression = false;
+                    // if 'yes' then slice substring to set values accordingly
+                    expressionValue = parameterizedExpression.substring(1, (parameterizedExpression.length - 1));
+                    // split the parameterizedExpression to set values to set current definition expression
+                    arrayList = expressionValue.split(") OR (");
+                } else {
+                    // if it is a single parameter expression
+                    arrayList[0] = parameterizedExpression;
+                }
             }
             array.forEach(arrayList, lang.hitch(this, function (arrayElement) {
                 // for dynamic filtering option

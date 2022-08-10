@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "и",
     "filterInEditModeAlert": "Во время редактирования фильтры недоступны.",
     "dropdownSelectOption": "Выбрать",
-    "filterInShowSelectedEditModeAlert": "В режиме Показать выбранные фильтры недоступны."
+    "filterInShowSelectedEditModeAlert": "В режиме Показать выбранные фильтры недоступны.",
+    "operatorIs": "Является",
+    "operatorIsNot": "Не является",
+    "stringOperatorStartsWith": "Начинается с",
+    "stringOperatorEndsWith": "Заканчивается на",
+    "stringOperatorContains": "Содержат",
+    "stringOperatorDoesNotContain": "Не содержит",
+    "operatorIsBlank": "Пустой",
+    "operatorIsNotBlank": "Не пустой",
+    "numberOperatorIsAtLeast": "Не менее",
+    "numberOperatorIsLessThan": "Меньше чем",
+    "numberOperatorIsAtMost": "Не более",
+    "numberOperatorIsGreaterThan": "Больше чем",
+    "numberOperatorIsBetween": "Между",
+    "numberOperatorIsNotBetween": "Не между"
   },
   "detailsPanel": {
     "editContentText": "Редактировать запись"

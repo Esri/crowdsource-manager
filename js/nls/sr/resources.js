@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "i",
     "filterInEditModeAlert": "Filteri nisu dostupni za vreme uređivanja.",
     "dropdownSelectOption": "Odaberi",
-    "filterInShowSelectedEditModeAlert": "Filteri nisu dostupni u režimu „Prikaži izabrano”."
+    "filterInShowSelectedEditModeAlert": "Filteri nisu dostupni u režimu „Prikaži izabrano”.",
+    "operatorIs": "Je",
+    "operatorIsNot": "Nije",
+    "stringOperatorStartsWith": "Počinje sa",
+    "stringOperatorEndsWith": "Završava se sa",
+    "stringOperatorContains": "Sadrži",
+    "stringOperatorDoesNotContain": "Ne sadrži",
+    "operatorIsBlank": "Prazno je",
+    "operatorIsNotBlank": "Nije prazno",
+    "numberOperatorIsAtLeast": "Je najmanje",
+    "numberOperatorIsLessThan": "Je manje od",
+    "numberOperatorIsAtMost": "Je najviše",
+    "numberOperatorIsGreaterThan": "Je veće od",
+    "numberOperatorIsBetween": "Je između",
+    "numberOperatorIsNotBetween": "Nije između"
   },
   "detailsPanel": {
     "editContentText": "Izmeni zapis"

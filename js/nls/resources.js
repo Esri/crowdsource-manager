@@ -154,7 +154,21 @@ define({
             andText: "and", // Displayed in filter UI when "is between" case is applied to its field
             filterInEditModeAlert: "Filters unavailable while editing.", // Displayed when user tries to applies filter in edit mode
             dropdownSelectOption: "Select", // Displayed as a first option in a filter dropdown
-            filterInShowSelectedEditModeAlert: "Filters unavailable in 'Show Selected' mode." // Displayed when user tries to applies filter in 'Show Selected' mode
+            filterInShowSelectedEditModeAlert: "Filters unavailable in 'Show Selected' mode.", // Displayed when user tries to applies filter in 'Show Selected' mode,
+            operatorIs: "Is",
+            operatorIsNot: "Is not",
+            stringOperatorStartsWith: "Starts with",
+            stringOperatorEndsWith: "Ends with",
+            stringOperatorContains: "Contains",
+            stringOperatorDoesNotContain: "Does not contain",
+            operatorIsBlank: "Is blank",
+            operatorIsNotBlank: "Is not blank",
+            numberOperatorIsAtLeast: "Is at least",
+            numberOperatorIsLessThan: "Is less than",
+            numberOperatorIsAtMost: "Is at most",
+            numberOperatorIsGreaterThan: "Is greater than",
+            numberOperatorIsBetween: "Is between",
+            numberOperatorIsNotBetween: "Is not between"
         },
         detailsPanel: {
             editContentText: "Edit record" // Displayed on hover of edit toggle button
@@ -170,6 +184,7 @@ define({
         }
     }),
     "ar": 1,
+    "bg": 1,
     "bs": 1,
     "ca": 1,
     "cs": 1,

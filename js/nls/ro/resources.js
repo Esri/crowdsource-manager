@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "şi",
     "filterInEditModeAlert": "Filtrele nu sunt disponibile în timpul editării.",
     "dropdownSelectOption": "Selectare",
-    "filterInShowSelectedEditModeAlert": "Filtrele nu sunt disponibile în modul „Afişare elemente selectate”."
+    "filterInShowSelectedEditModeAlert": "Filtrele nu sunt disponibile în modul „Afişare elemente selectate”.",
+    "operatorIs": "Este",
+    "operatorIsNot": "Nu este",
+    "stringOperatorStartsWith": "Începe cu",
+    "stringOperatorEndsWith": "Se termină cu",
+    "stringOperatorContains": "Conține",
+    "stringOperatorDoesNotContain": "Nu conține",
+    "operatorIsBlank": "Este necompletat",
+    "operatorIsNotBlank": "Nu este necompletat",
+    "numberOperatorIsAtLeast": "Are cel puțin",
+    "numberOperatorIsLessThan": "Are mai puțin de",
+    "numberOperatorIsAtMost": "Are cel mult",
+    "numberOperatorIsGreaterThan": "Este mai mare decât",
+    "numberOperatorIsBetween": "Este între",
+    "numberOperatorIsNotBetween": "Nu este între"
   },
   "detailsPanel": {
     "editContentText": "Editare înregistrare"

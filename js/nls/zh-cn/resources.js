@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "且",
     "filterInEditModeAlert": "编辑期间过滤功能不可用。",
     "dropdownSelectOption": "选择",
-    "filterInShowSelectedEditModeAlert": "“显示选定项”模式下过滤功能不可用。"
+    "filterInShowSelectedEditModeAlert": "“显示选定项”模式下过滤功能不可用。",
+    "operatorIs": "是",
+    "operatorIsNot": "不等于",
+    "stringOperatorStartsWith": "开头是",
+    "stringOperatorEndsWith": "结尾是",
+    "stringOperatorContains": "包含",
+    "stringOperatorDoesNotContain": "不包含",
+    "operatorIsBlank": "为空",
+    "operatorIsNotBlank": "不为空",
+    "numberOperatorIsAtLeast": "最小为",
+    "numberOperatorIsLessThan": "小于",
+    "numberOperatorIsAtMost": "最大为",
+    "numberOperatorIsGreaterThan": "大于",
+    "numberOperatorIsBetween": "介于",
+    "numberOperatorIsNotBetween": "不介于"
   },
   "detailsPanel": {
     "editContentText": "编辑记录"

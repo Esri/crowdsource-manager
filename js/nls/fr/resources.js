@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "et",
     "filterInEditModeAlert": "Les filtres sont indisponibles pendant la mise à jour.",
     "dropdownSelectOption": "Sélectionner",
-    "filterInShowSelectedEditModeAlert": "Les filtres sont indisponibles en mode Afficher les entités sélectionnées."
+    "filterInShowSelectedEditModeAlert": "Les filtres sont indisponibles en mode Afficher les entités sélectionnées.",
+    "operatorIs": "Est",
+    "operatorIsNot": "N’est pas",
+    "stringOperatorStartsWith": "Commence par",
+    "stringOperatorEndsWith": "Se termine par",
+    "stringOperatorContains": "Contient",
+    "stringOperatorDoesNotContain": "Ne contient pas",
+    "operatorIsBlank": "Est vide",
+    "operatorIsNotBlank": "N’est pas vide",
+    "numberOperatorIsAtLeast": "Est au moins",
+    "numberOperatorIsLessThan": "Est inférieur à",
+    "numberOperatorIsAtMost": "Est au plus",
+    "numberOperatorIsGreaterThan": "Est supérieur à",
+    "numberOperatorIsBetween": "Est entre",
+    "numberOperatorIsNotBetween": "N’est pas entre"
   },
   "detailsPanel": {
     "editContentText": "Mettre à jour l'enregistrement"

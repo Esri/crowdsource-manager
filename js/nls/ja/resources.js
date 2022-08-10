@@ -1,4 +1,4 @@
-/*global define */
+﻿/*global define */
 /*jslint sloppy:true */
 /*
 | Copyright 2014 Esri
@@ -153,7 +153,21 @@ define({
     "andText": "および",
     "filterInEditModeAlert": "編集中はフィルターを使用できません。",
     "dropdownSelectOption": "選択",
-    "filterInShowSelectedEditModeAlert": "[選択レイヤーの表示] モードではフィルターを使用できません。"
+    "filterInShowSelectedEditModeAlert": "[選択レイヤーの表示] モードではフィルターを使用できません。",
+    "operatorIs": "に等しい",
+    "operatorIsNot": "に等しくない",
+    "stringOperatorStartsWith": "で始まる",
+    "stringOperatorEndsWith": "で終わる",
+    "stringOperatorContains": "含む",
+    "stringOperatorDoesNotContain": "含まない",
+    "operatorIsBlank": "空白",
+    "operatorIsNotBlank": "空白でない",
+    "numberOperatorIsAtLeast": "以上",
+    "numberOperatorIsLessThan": "より小さい",
+    "numberOperatorIsAtMost": "以下",
+    "numberOperatorIsGreaterThan": "より大きい",
+    "numberOperatorIsBetween": "の間にある",
+    "numberOperatorIsNotBetween": "の間にない"
   },
   "detailsPanel": {
     "editContentText": "レコードの編集"

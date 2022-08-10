@@ -238,7 +238,12 @@ define([
                     // if not then it will remove that layer from array
                     for (j = 0; j < operationalLayerCount; j++) {
                         removeLayerFromList = true;
-                        if (response[i][1].itemInfo.itemData.operationalLayers[j].visibility && response[i][1].itemInfo.itemData.operationalLayers[j].resourceInfo && response[i][1].itemInfo.itemData.operationalLayers[j].layerObject) {
+                        //With new MapViewer 'visibility' is an optional property with an implicit default of true
+                        var layerVisibility = true;
+                        if (response[i][1].itemInfo.itemData.operationalLayers[j].hasOwnProperty('visibility') && !response[i][1].itemInfo.itemData.operationalLayers[j].visibility) {
+                            layerVisibility = false;
+                        }
+                        if (layerVisibility && response[i][1].itemInfo.itemData.operationalLayers[j].resourceInfo && response[i][1].itemInfo.itemData.operationalLayers[j].layerObject) {
                             // check if layer is having valid capabilities and valid popup info
                             if (this._validateLayerCapabilities(response[i][1].itemInfo.itemData.operationalLayers[j].resourceInfo.capabilities)) {
                                 if (this._validatePopupFields(response[i][1].itemInfo.itemData.operationalLayers[j].popupInfo, response[i][1].itemInfo.itemData.operationalLayers[j].layerObject.fields)) {
@@ -780,7 +785,7 @@ define([
         _validatePopupFields: function (popupInfo, fields) {
             var i, j;
             // check if popup-info is available if not then return false
-            if (popupInfo) {
+            if (popupInfo && popupInfo.fieldInfos && fields) {
                 for (i = 0; i < popupInfo.fieldInfos.length; i++) {
                     for (j = 0; j < fields.length; j++) {
                         if (popupInfo.fieldInfos[i].fieldName === fields[j].name) {
@@ -913,7 +918,7 @@ define([
          */
         _checkDisplayPropertyOfFields: function (popupInfo, fields) {
             var i, j;
-            if (!popupInfo) {
+            if (!popupInfo || !popupInfo.fieldInfos) {
                 return false;
             }
             for (i = 0; i < popupInfo.fieldInfos.length; i++) {
