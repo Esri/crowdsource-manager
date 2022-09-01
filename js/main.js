@@ -2280,7 +2280,9 @@ define([
                 lang.hitch(this, function (layer) {
                     isNonEditableLayer = false;
                     showLegend = true;
-                    capabilities = layer.resourceInfo.capabilities;
+                    if (layer && layer.resourceInfo && layer.resourceInfo.capabilities) {
+                        capabilities = layer.resourceInfo.capabilities;
+                    }
                     if (capabilities) {
                         isNonEditableLayer = capabilities.indexOf("Create") === -1 && (capabilities.indexOf("Editing") === -1 ||
                             capabilities.indexOf("Update") === -1);
