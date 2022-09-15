@@ -1564,7 +1564,7 @@ define([
                 array.forEach(this.selectedOperationalLayer.types, lang.hitch(this, function (type) {
                     if (type.domains && type.domains[displayColumn] && type.domains[displayColumn].codedValues && type.domains[displayColumn].codedValues.length > 0) {
                         array.forEach(type.domains[displayColumn].codedValues, lang.hitch(this, function (codedValue) {
-                            if (codedValue.code === code && value.indexOf(codedValue.name) === -1) {
+                            if (codedValue.code === code) {
                                 value.push(codedValue.name);
                             }
                         }));
