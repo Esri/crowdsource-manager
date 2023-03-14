@@ -84,7 +84,7 @@ define({
     "zoomOutToolTip": "Отдалечаване"
   },
   "applicationHeader": {
-    "signInOption": "Регистрация",
+    "signInOption": "Вписване",
     "signOutOption": "Отписване",
     "pleaseSignInText": "Моля, влезте"
   },
